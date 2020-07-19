@@ -38,6 +38,7 @@ return [
                         'host'     => getenv('DB_HOSTNAME'),
                         'username' => getenv('DB_USER'),
                         'password' => getenv('DB_PASSWORD'),
+                        'port'     => getenv('DB_PORT'),
                     ]),
                     'table'     => 'log_error',
                     'column'    => [
@@ -109,6 +110,7 @@ return [
                             'host'     => getenv('DB_HOSTNAME'),
                             'username' => getenv('DB_USER'),
                             'password' => getenv('DB_PASSWORD'),
+                            'port'     => getenv('DB_PORT'),
                         ]),
                         'table'     => 'log_audit',
                         'column'    => [
