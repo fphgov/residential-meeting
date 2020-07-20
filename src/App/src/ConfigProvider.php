@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use Laminas\ServiceManager\Factory\InvokableFactory;
+
 /**
  * The configuration provider for the App module
  *
@@ -20,7 +22,8 @@ class ConfigProvider
     public function __invoke(): array
     {
         return [
-            'dependencies' => $this->getDependencies(),
+            'dependencies'  => $this->getDependencies(),
+            'input_filters' => $this->getInputFilters()
         ];
     }
 
@@ -34,10 +37,22 @@ class ConfigProvider
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
             'factories'  => [
-                Handler\User\ListHandler::class => Handler\User\ListHandlerFactory::class,
+                Handler\User\ListHandler::class    => Handler\User\ListHandlerFactory::class,
+                Handler\Project\ListHandler::class => Handler\Project\ListHandlerFactory::class,
+                Handler\Project\GetHandler::class  => Handler\Project\GetHandlerFactory::class,
+                Handler\Project\AddHandler::class  => Handler\Project\AddHandlerFactory::class,
                 
                 Service\UserServiceInterface::class => Service\UserServiceFactory::class,
                 Service\ProjectServiceInterface::class => Service\ProjectServiceFactory::class,
+            ],
+        ];
+    }
+
+    public function getInputFilters(): array
+    {
+        return [
+            'factories' => [
+                InputFilter\ProjectInputFilter::class => InvokableFactory::class,
             ],
         ];
     }

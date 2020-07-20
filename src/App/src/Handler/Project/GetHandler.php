@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class ListHandler implements RequestHandlerInterface
+final class GetHandler implements RequestHandlerInterface
 {
     /** @var ProjectServiceInterface **/
     private $projectService;
@@ -22,8 +22,12 @@ final class ListHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $projects = $this->projectService->getRepository()->findAll();
+        $hashId = $request->getAttribute('hashId');
 
-        return new JsonResponse($projects);
+        $project = $this->projectService->getRepository()->findOneBy([
+            'hashId' => $hashId
+        ]);
+
+        return new JsonResponse($project);
     }
 }

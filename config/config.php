@@ -13,6 +13,9 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
+    \Laminas\I18n\ConfigProvider::class,
+    \Laminas\InputFilter\ConfigProvider::class,
+    \Laminas\Filter\ConfigProvider::class,
     \Zend\Validator\ConfigProvider::class,
     \Laminas\Db\ConfigProvider::class,
     \Laminas\Log\ConfigProvider::class,

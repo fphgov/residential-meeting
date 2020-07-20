@@ -26,6 +26,8 @@
         "laminas/laminas-config-aggregator": "^1.2",
         "laminas/laminas-db": "^2.11@dev",
         "laminas/laminas-diactoros": "^2.3.0",
+        "laminas/laminas-i18n": "^2.10@dev",
+        "laminas/laminas-inputfilter": "^2.10@dev",
         "laminas/laminas-log": "^2.12@dev",
         "laminas/laminas-servicemanager": "^3.4",
         "laminas/laminas-stdlib": "^3.2.1",

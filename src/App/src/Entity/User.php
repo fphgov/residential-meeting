@@ -15,7 +15,7 @@ use JsonSerializable;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="users")
  */
-final class User implements JsonSerializable
+class User implements JsonSerializable
 {
     const DISABLE_SHOW_DEFAULT = [
         'password',

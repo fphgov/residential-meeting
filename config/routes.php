@@ -15,11 +15,21 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
 
     $app->get('/api/user', [
         Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
         App\Handler\User\ListHandler::class
     ], 'api.user');
-    
-    $app->get('/api/projects', [
+
+    $app->get('/api/project/{hashId}', [
+        App\Handler\Project\GetHandler::class
+    ], 'api.project.get');
+
+    $app->post('/api/project', [
         Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        App\Handler\Project\AddHandler::class
+    ], 'api.project.add');
+    
+    $app->get('/api/project', [
         App\Handler\Project\ListHandler::class
-    ], 'api.projects');
+    ], 'api.project.all');
 };

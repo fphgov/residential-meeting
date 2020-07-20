@@ -15,7 +15,7 @@ use JsonSerializable;
  * @ORM\Entity(repositoryClass="App\Repository\CampaignRepository")
  * @ORM\Table(name="campaigns")
  */
-final class Campaign implements JsonSerializable
+class Campaign implements JsonSerializable
 {
     const DISABLE_SHOW_DEFAULT = [
         'createdAt',

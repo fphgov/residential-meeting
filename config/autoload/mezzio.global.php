@@ -22,4 +22,10 @@ return [
             'template_error' => 'error::error',
         ],
     ],
+
+    'input_filters' => [
+        'abstract_factories' => [
+            Laminas\InputFilter\InputFilterAbstractServiceFactory::class,
+        ],
+    ],
 ];

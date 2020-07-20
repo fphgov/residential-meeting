@@ -17,6 +17,7 @@ return [
             \Doctrine\ORM\EntityManagerInterface::class => \Roave\PsrContainerDoctrine\EntityManagerFactory::class,
             
             App\Middleware\AuditMiddleware::class => App\Middleware\AuditMiddlewareFactory::class,
+            App\Middleware\UserMiddleware::class  => App\Middleware\UserMiddlewareFactory::class,
         ],
         'delegators' => [
             Laminas\Stratigility\Middleware\ErrorHandler::class => [

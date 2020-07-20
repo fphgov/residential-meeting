@@ -7,15 +7,15 @@ namespace App\Handler\Project;
 use App\Service\ProjectServiceInterface;
 use Interop\Container\ContainerInterface;
 
-final class ListHandlerFactory
+final class GetHandlerFactory
 {
     /**
      * @param ContainerInterface $container
-     * @return ListHandler
+     * @return GetHandler
      */
-    public function __invoke(ContainerInterface $container): ListHandler
+    public function __invoke(ContainerInterface $container): GetHandler
     {
-        return new ListHandler(
+        return new GetHandler(
             $container->get(ProjectServiceInterface::class)
         );
     }
