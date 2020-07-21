@@ -45,13 +45,15 @@ final class AddHandler implements RequestHandlerInterface
         }
 
         try {
-            $this->projectService->addProject($user, $this->inputFilter->getValues());
+            $project = $this->projectService->addProject($user, $this->inputFilter->getValues());
         } catch (\Exception $e) {
-            var_dump($e); die();
+            return new JsonResponse([
+                'errors' => $e->getMessages()
+            ], 500);
         }
 
         return new JsonResponse([
-            'data' => 'ok',
+            'data' => $project,
         ]);
     }
 }

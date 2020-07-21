@@ -32,9 +32,10 @@ final class ProjectService implements ProjectServiceInterface
         $this->projectRepository = $this->em->getRepository(Project::class);
     }
 
-    public function addProject(User $submitter, array $filteredParams)
+    public function addProject(User $submitter, array $filteredParams): ?Project
     {
         $uuid4 = Uuid::uuid4();
+        $date  = new \DateTime();
 
         $project = new Project();
 
@@ -44,14 +45,16 @@ final class ProjectService implements ProjectServiceInterface
         $project->setTitle($filteredParams['title']);
         $project->setDescription($filteredParams['description']);
         $project->setCost($filteredParams['cost']);
-        $project->setStatus('');
-        $project->setLocation('');
-        $project->setCreatedAt(new \DateTime());
-        $project->setUpdatedAt(new \DateTime());
+        $project->setStatus(Project::STATUS_RECEIVED);
+        $project->setLocation($filteredParams['location']);
+        $project->setPublished(false);
+        $project->setCreatedAt($date);
+        $project->setUpdatedAt($date);
 
         $this->em->persist($project);
-
         $this->em->flush();
+
+        return $project;
     }
 
     public function getRepository(): EntityRepository

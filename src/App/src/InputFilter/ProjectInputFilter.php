@@ -42,6 +42,21 @@ class ProjectInputFilter extends InputFilter
                 new Filter\StripTags(),
             ],
         ]);
+        
+        $this->add([
+            'name'              => 'location',
+            'allow_empty'       => false,
+            'validators'        => [
+                new Validator\StringLength([
+                    'min' => 1,
+                    'max' => 100,
+                ]),
+            ],
+            'filters'           => [
+                new Filter\StringTrim(),
+                new Filter\StripTags(),
+            ],
+        ]);
 
         $this->add([
             'name'              => 'cost',

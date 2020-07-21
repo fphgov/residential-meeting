@@ -17,7 +17,7 @@ use function substr;
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  * @ORM\Table(name="projects")
  */
-class Project implements JsonSerializable
+class Project implements JsonSerializable, ProjectInterface
 {
     const DISABLE_SHOW_DEFAULT = [
         'id',
@@ -66,10 +66,10 @@ class Project implements JsonSerializable
     private $cost = 0;
     
     /**
-     * @ORM\Column(name="status", type="string")
-     * @var string
+     * @ORM\Column(name="status", type="integer")
+     * @var int
      */
-    private $status;
+    private $status = 0;
 
     /**
      * @ORM\Column(name="location", type="string")
@@ -152,7 +152,7 @@ class Project implements JsonSerializable
 
     public function getPublished(): bool
     {
-        return $this->published;
+        return (bool)$this->published;
     }
 
     public function setLocation(string $location)
@@ -165,12 +165,12 @@ class Project implements JsonSerializable
         return $this->location;
     }
     
-    public function setStatus(string $status)
+    public function setStatus(int $status)
     {
         $this->status = $status;
     }
 
-    public function getStatus(): string
+    public function getStatus(): int
     {
         return $this->status;
     }
