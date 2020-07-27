@@ -39,3 +39,7 @@ phpunit.xml
 # Docker
 docker/data/mysql/*
 docker/data/nginx/logs/*.*
+
+public/**/*
+!public/index.php
+!public/.htaccess

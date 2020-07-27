@@ -2,6 +2,8 @@ FROM php:7-fpm-alpine
 
 ARG WITH_XDEBUG=true
 
+ENV DOCKER_WITH_XDEBUG=$WITH_XDEBUG
+
 RUN apk add --no-cache --update git wget mysql-client libzip-dev
 
 RUN apk add --no-cache --update zlib-dev icu-dev g++ libxml2-dev && docker-php-ext-configure intl && docker-php-ext-install intl
@@ -25,7 +27,7 @@ RUN apk add --no-cache cmake freetype libpng libjpeg-turbo freetype-dev libpng-d
   docker-php-ext-install -j${NPROC} gd
 
 # Install Xdebug
-RUN if [ $WITH_XDEBUG = "true" ]; then \
+RUN if [ $DOCKER_WITH_XDEBUG = "true" ]; then \
   apk add --no-cache $PHPIZE_DEPS && pecl install xdebug; \
   docker-php-ext-enable xdebug; \
   echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
