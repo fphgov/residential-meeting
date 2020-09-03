@@ -15,14 +15,8 @@ use JsonSerializable;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="users")
  */
-class User implements JsonSerializable
+class User implements JsonSerializable, UserInterface
 {
-    const DISABLE_SHOW_DEFAULT = [
-        'password',
-        'createdAt',
-        'updatedAt',
-    ];
-
     use Entity;
     use EntityMeta;
 

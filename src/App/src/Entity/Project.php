@@ -11,7 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use JsonSerializable;
 
-use function substr;
+use function explode;
+use function implode;
+use function array_slice;
+use function min;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
@@ -19,20 +22,29 @@ use function substr;
  */
 class Project implements JsonSerializable, ProjectInterface
 {
-    const DISABLE_SHOW_DEFAULT = [
-        'id',
-        'updatedAt',
-    ];
-
     use Entity;
     use EntityMeta;
 
     /**
      * @ORM\ManyToOne(targetEntity="Campaign")
-     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id")
      * @var Campaign
      */
     private $campaign;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CampaignTheme")
+     * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id")
+     * @var CampaignTheme
+     */
+    private $campaignTheme;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CampaignLocation")
+     * @ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id")
+     * @var CampaignLocation
+     */
+    private $campaignLocation;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
@@ -58,24 +70,18 @@ class Project implements JsonSerializable, ProjectInterface
      * @var string
      */
     private $description;
-    
+
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true})
      * @var int
      */
     private $cost = 0;
-    
+
     /**
      * @ORM\Column(name="status", type="integer")
      * @var int
      */
     private $status = 0;
-
-    /**
-     * @ORM\Column(name="location", type="string")
-     * @var string
-     */
-    private $location;
 
     /**
      * @ORM\Column(name="published", type="boolean")
@@ -94,15 +100,25 @@ class Project implements JsonSerializable, ProjectInterface
     {
         $this->submitter = $submitter;
     }
-    
-    public function getCampaign(): ?Campaign
+
+    public function getCampaign(): Campaign
     {
         return $this->campaign;
     }
 
-    public function setCampaign(Campaign $campaign = null)
+    public function setCampaign(Campaign $campaign)
     {
         $this->campaign = $campaign;
+    }
+
+    public function getCampaignTheme(): CampaignTheme
+    {
+        return $this->campaignTheme;
+    }
+
+    public function setCampaignTheme(CampaignTheme $campaignTheme)
+    {
+        $this->campaignTheme = $campaignTheme;
     }
 
     public function getHashId(): string
@@ -134,7 +150,7 @@ class Project implements JsonSerializable, ProjectInterface
     {
         return $this->description;
     }
-    
+
     public function setCost(int $cost)
     {
         $this->cost = $cost;
@@ -155,16 +171,16 @@ class Project implements JsonSerializable, ProjectInterface
         return (bool)$this->published;
     }
 
-    public function setLocation(string $location)
+    public function getCampaignLocation(): CampaignLocation
     {
-        $this->location = $location;
+        return $this->campaignLocation;
     }
 
-    public function getLocation(): string
+    public function setCampaignLocation(CampaignLocation $campaignLocation)
     {
-        return $this->location;
+        $this->campaignLocation = $campaignLocation;
     }
-    
+
     public function setStatus(int $status)
     {
         $this->status = $status;
@@ -178,7 +194,14 @@ class Project implements JsonSerializable, ProjectInterface
     public function getShortDescription(): string
     {
         $description = $this->getDescription();
-        $description = strip_tags(substr($description, 0, 60));
+
+        $description = strip_tags($description);
+
+        $descriptions = explode(" ", $description);
+        $descriptions = array_slice($descriptions, 0, min(22, count($descriptions) - 1));
+
+        $description = implode(" ", $descriptions);
+        $description = $description . ' ...';
 
         $this->short_description = $description;
 

@@ -12,4 +12,9 @@ interface ProjectInterface {
         self::STATUS_RECEIVED => 'received',
         self::STATUS_CHECKED  => 'checked',
     ];
+
+    const DISABLE_SHOW_DEFAULT = [
+        'id',
+        'updatedAt',
+    ];
 }

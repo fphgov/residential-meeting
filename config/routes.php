@@ -19,6 +19,10 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\User\ListHandler::class
     ], 'api.user');
 
+    $app->get('/app/api/project', [
+        App\Handler\Project\ListHandler::class
+    ], 'api.project.all');
+
     $app->get('/app/api/project/{hashId}', [
         App\Handler\Project\GetHandler::class
     ], 'api.project.get');
@@ -28,8 +32,4 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Middleware\UserMiddleware::class,
         App\Handler\Project\AddHandler::class
     ], 'api.project.add');
-
-    $app->get('/app/api/project', [
-        App\Handler\Project\ListHandler::class
-    ], 'api.project.all');
 };

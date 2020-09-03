@@ -15,13 +15,8 @@ use JsonSerializable;
  * @ORM\Entity(repositoryClass="App\Repository\CampaignRepository")
  * @ORM\Table(name="campaigns")
  */
-class Campaign implements JsonSerializable
+class Campaign implements JsonSerializable, CampaignInterface
 {
-    const DISABLE_SHOW_DEFAULT = [
-        'createdAt',
-        'updatedAt',
-    ];
-
     use Entity;
     use EntityMeta;
 
@@ -36,7 +31,7 @@ class Campaign implements JsonSerializable
      * @var string
      */
     private $description;
-    
+
     public function setTitle(string $title)
     {
         $this->title = $title;

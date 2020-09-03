@@ -22,7 +22,9 @@ final class ListHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $projects = $this->projectService->getRepository()->findAll();
+        $projects = $this->projectService->getRepository()->findby([], [
+            'createdAt' => 'DESC',
+        ]);
 
         return new JsonResponse($projects);
     }

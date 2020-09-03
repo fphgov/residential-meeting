@@ -37,7 +37,7 @@ final class AddHandler implements RequestHandlerInterface
         $user = $request->getAttribute(UserMiddleware::class);
 
         $this->inputFilter->setData($request->getParsedBody());
-        
+
         if (! $this->inputFilter->isValid()) {
             return new JsonResponse([
                 'errors' => $this->inputFilter->getMessages()
@@ -48,7 +48,7 @@ final class AddHandler implements RequestHandlerInterface
             $project = $this->projectService->addProject($user, $this->inputFilter->getValues());
         } catch (\Exception $e) {
             return new JsonResponse([
-                'errors' => $e->getMessages()
+                'errors' => $e->getMessage()
             ], 500);
         }
 
