@@ -5,43 +5,34 @@ declare(strict_types=1);
 namespace Jwt\Handler;
 
 use App\Entity\User;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer\Key;
+use Laminas\Diactoros\Response\JsonResponse;
+use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Token as TokenInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Zend\Diactoros\Response\JsonResponse;
 
-use function time;
 use function password_verify;
 
 class TokenHandler implements RequestHandlerInterface
 {
-    /**
-     * @var EntityManager $em
-     */
+    /** @var EntityManagerInterface */
     protected $em;
 
-    /**
-     * @var Builder $builder
-     */
-    private $builder;
-
-    /**
-     * @var array config
-     */
+    /** @var array */
     private $config;
 
-    public function __construct(EntityManagerInterface $em, Builder $builder, array $config)
+    public function __construct(EntityManagerInterface $em, array $config)
     {
-        $this->em      = $em;
-        $this->builder = $builder;
-        $this->config  = $config;
+        $this->em     = $em;
+        $this->config = $config;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $postBody = $request->getParsedBody();
 
@@ -52,7 +43,7 @@ class TokenHandler implements RequestHandlerInterface
         }
 
         $user = $userRepository->findOneBy(['email' => $postBody['email']]);
-        
+
         if (! $user) {
             return $this->badAuthentication();
         }
@@ -65,35 +56,44 @@ class TokenHandler implements RequestHandlerInterface
             'firstname' => $user->getFirstname(),
             'lastname'  => $user->getLastname(),
             'email'     => $user->getEmail(),
+            'role'      => $user->getRole(),
         ];
 
         $token = $this->generateToken($userData);
 
         return new JsonResponse([
-            'token' => (string)$token,
+            'token' => $token->toString(),
         ], 200);
     }
 
-    private function badAuthentication() {
+    private function badAuthentication(): JsonResponse
+    {
         return new JsonResponse([
             'message' => 'Hibás bejelentkezési adatok',
         ], 400);
     }
 
-    private function generateToken($claim = [])
+    /** @var array claim */
+    private function generateToken(array $claim = []): TokenInterface
     {
-        $time   = time();
-        $signer = new Sha256();
-        $key    = new Key($this->config['auth']['secret']);
+        $configuration = Configuration::forSymmetricSigner(
+            new Sha256(),
+            InMemory::plainText($this->config['auth']['secret'])
+        );
 
-        return $this->builder
+        $time = new DateTimeImmutable();
+
+        $usedAfter = $time->modify('+' . $this->config['nbf'] . ' minute');
+        $expiresAt = $time->modify('+' . $this->config['exp'] . ' hour');
+
+        return $configuration->builder()
                     ->issuedBy($this->config['iss']) // Configures the issuer (iss claim)
                     ->permittedFor($this->config['aud']) // Configures the issuer (iss claim)
-                    ->identifiedBy($this->config['jti'], true) // Configures the audience (aud claim)
+                    ->identifiedBy($this->config['jti']) // Configures the audience (aud claim)
                     ->issuedAt($time) // Configures the time that the token was issued (iat claim)
-                    ->canOnlyBeUsedAfter($time + (int)$this->config['nbf']) // Configures the time that the token can be used (nbf claim)
-                    ->expiresAt($time + (int)$this->config['exp']) // Configures the expiration time of the token (exp claim)
+                    ->canOnlyBeUsedAfter($usedAfter) // Configures the time that the token can be used (nbf claim)
+                    ->expiresAt($expiresAt) // Configures the expiration time of the token (exp claim)
                     ->withClaim('user', $claim)
-                    ->getToken($signer, $key); // Retrieves the generated token
+                    ->getToken($configuration->signer(), $configuration->signingKey());
     }
 }

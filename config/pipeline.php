@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use Laminas\Stratigility\Middleware\ErrorHandler;
+use Mail\Action\MailAction;
 use Mezzio\Application;
+use Mezzio\Cors\Middleware\CorsMiddleware;
 use Mezzio\Handler\NotFoundHandler;
 use Mezzio\Helper\ServerUrlMiddleware;
 use Mezzio\Helper\UrlHelperMiddleware;
@@ -13,7 +15,6 @@ use Mezzio\Router\Middleware\ImplicitHeadMiddleware;
 use Mezzio\Router\Middleware\ImplicitOptionsMiddleware;
 use Mezzio\Router\Middleware\MethodNotAllowedMiddleware;
 use Mezzio\Router\Middleware\RouteMiddleware;
-use Tuupola\Middleware\CorsMiddleware;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -43,6 +44,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // - $app->pipe('/api', $apiMiddleware);
     // - $app->pipe('/docs', $apiDocMiddleware);
     // - $app->pipe('/files', $filesMiddleware);
+    $app->pipe(CorsMiddleware::class);
 
     // Register the routing middleware in the middleware pipeline.
     // This middleware registers the Mezzio\Router\RouteResult request attribute.
@@ -56,7 +58,6 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // after the Implicit*Middleware.
     $app->pipe(ImplicitHeadMiddleware::class);
     // $app->pipe(ImplicitOptionsMiddleware::class);
-    $app->pipe(CorsMiddleware::class);
     $app->pipe(MethodNotAllowedMiddleware::class);
 
     // Seed the UrlHelper with the routing results:
@@ -68,6 +69,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // - route-based authentication
     // - route-based validation
     // - etc.
+    $app->pipe(MailAction::class);
 
     // Register the dispatch middleware in the middleware pipeline
     $app->pipe(DispatchMiddleware::class);

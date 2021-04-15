@@ -4,32 +4,39 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-interface UserInterface {
-    const DISABLE_SHOW_DEFAULT = [
+interface UserInterface
+{
+    public const DISABLE_SHOW_DEFAULT = [
         'password',
         'createdAt',
         'updatedAt',
     ];
 
-    public function setFirstname(string $firstname);
+    public function setUserPreference(UserPreference $userPreference);
+
+    public function getUserPreference(): UserPreference;
+
+    public function setLuteceId(string $luteceId): void;
+
+    public function getLuteceId(): string;
+
+    public function setFirstname(string $firstname): void;
 
     public function getFirstname(): string;
 
-    public function setLastname(string $lastname);
+    public function setLastname(string $lastname): void;
 
     public function getLastname(): string;
 
-    public function setEmail(string $email);
+    public function setEmail(string $email): void;
 
     public function getEmail(): string;
 
-    public function setPassword(string $password);
+    public function setPassword(string $password): void;
 
     public function getPassword(): string;
 
-    public function setRole(string $role);
+    public function setRole(string $role): void;
 
     public function getRole(): ?string;
-
-    public function generateToken(): string;
 }

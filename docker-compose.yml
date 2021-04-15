@@ -10,6 +10,7 @@ services:
       - 3306:3306
     volumes:
       - ./docker/data/mysql:/var/lib/mysql
+      - ./docker/config/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
     networks:
       - default
 
@@ -19,12 +20,13 @@ services:
       dockerfile: docker/config/webapp/Dockerfile
     container_name: participatory_webapp
     expose:
-      - 9001
-    ports:
-      - 9001:9001
+      - 9003
     volumes:
       - .:/var/www/html
-      - ./docker/config/webapp/php/ini/memory.ini:/usr/local/etc/php/conf.d/memory.ini
+      - ./docker/config/webapp/php/ini/limitation.ini:/usr/local/etc/php/conf.d/limitation.ini
+      - ./docker/config/webapp/php/ini/security.ini:/usr/local/etc/php/conf.d/security.ini
+      - ./docker/config/webapp/php/ini/upload.ini:/usr/local/etc/php/conf.d/upload.ini
+      - ./docker/config/webapp/php/ini/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 1m30s
@@ -43,10 +45,12 @@ services:
       - default
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ./docker/config/nginx:/etc/nginx/conf.d
       - ./docker/data/nginx/logs:/var/log/nginx
       - ./:/var/www/html
+      - ./docker/config/cert:/opt/cert
     restart: always
     depends_on:
       - db

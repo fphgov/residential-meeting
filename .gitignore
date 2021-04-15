@@ -40,6 +40,19 @@ phpunit.xml
 docker/data/mysql/*
 docker/data/nginx/logs/*.*
 
+docker/config/cert/*
+!docker/config/cert/.gitkeep
+
 public/**/*
 !public/index.php
 !public/.htaccess
+
+supervisord.log
+supervisord.pid
+
+.vscode
+.scannerwork
+.phpunit.result.cache
+.actrc
+mysql-hide
+.htpasswd

@@ -4,7 +4,7 @@ CREATE TABLE `log_audit` (
   `priority` int(11) NOT NULL,
   `priorityName` varchar(45) DEFAULT '',
   `message` longtext NOT NULL,
-  `extra_email` varchar(45) DEFAULT '',
+  `extra` longtext,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -14,6 +14,6 @@ CREATE TABLE `log_error` (
   `priority` int(11) NOT NULL,
   `priorityName` varchar(45) DEFAULT '',
   `message` longtext NOT NULL,
-  `extra_email` varchar(45) DEFAULT '',
+  `extra` longtext,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

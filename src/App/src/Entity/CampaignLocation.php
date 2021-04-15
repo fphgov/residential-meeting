@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\EntityInterface;
-use App\Traits\Entity;
-use App\Traits\EntityMeta;
+use App\Traits\EntityActiveTrait;
+use App\Traits\EntityMetaTrait;
+use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
@@ -16,35 +16,40 @@ use JsonSerializable;
  */
 class CampaignLocation implements JsonSerializable, CampaignLocationInterface
 {
-    const DISABLE_SHOW_DEFAULT = [
+    use EntityActiveTrait;
+    use EntityMetaTrait;
+    use EntityTrait;
+
+    public const DISABLE_SHOW_DEFAULT = [
         'id',
         'updatedAt',
     ];
 
-    use Entity;
-    use EntityMeta;
-
     /**
      * @ORM\ManyToOne(targetEntity="Campaign")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=true)
+     *
      * @var Campaign
      */
     private $campaign;
 
     /**
      * @ORM\Column(name="code", type="string")
+     *
      * @var string
      */
     private $code;
 
     /**
      * @ORM\Column(name="name", type="string")
+     *
      * @var string
      */
     private $name;
 
     /**
      * @ORM\Column(name="description", type="text")
+     *
      * @var string
      */
     private $description;
@@ -54,7 +59,7 @@ class CampaignLocation implements JsonSerializable, CampaignLocationInterface
         return $this->campaign;
     }
 
-    public function setCampaign(Campaign $campaign)
+    public function setCampaign(Campaign $campaign): void
     {
         $this->campaign = $campaign;
     }
@@ -64,7 +69,7 @@ class CampaignLocation implements JsonSerializable, CampaignLocationInterface
         return $this->code;
     }
 
-    public function setCode(string $code)
+    public function setCode(string $code): void
     {
         $this->code = $code;
     }
@@ -74,7 +79,7 @@ class CampaignLocation implements JsonSerializable, CampaignLocationInterface
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -84,7 +89,7 @@ class CampaignLocation implements JsonSerializable, CampaignLocationInterface
         return $this->description;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }

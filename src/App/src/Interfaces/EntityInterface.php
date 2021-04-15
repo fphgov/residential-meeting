@@ -6,7 +6,7 @@ namespace App\Interfaces;
 
 interface EntityInterface
 {
-    const DISABLE_DEFAULT_SET = [
+    public const DISABLE_DEFAULT_SET = [
         'id',
         'image',
         'password',
@@ -14,15 +14,15 @@ interface EntityInterface
         'updatedAt',
     ];
 
-    public function getId();
+    public function getId(): int;
 
-    public function setId($id);
+    public function setId(int $id): void;
 
-    public function setProps($datas);
+    public function setProps(array $datas): void;
 
-    public function getProps();
+    public function getProps(): array;
 
-    public function jsonSerialize();
+    public function jsonSerialize(): array;
 
-    public function toArray();
+    public function toArray(): array;
 }

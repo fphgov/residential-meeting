@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use Laminas\Db\TableGateway\Feature\GlobalAdapterFeature;
 use Laminas\Form\Element;
 use Laminas\Form\Form as LaminasForm;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\InputFilter\InputFilterProviderInterface;
 use Laminas\Validator;
-use Laminas\Filter;
-
-use function is_int;
 
 class ProjectForm extends LaminasForm implements InputFilterProviderInterface
 {
-    public function __construct($name = null)
+    public function __construct(?string $name = null)
     {
         $name = $name ?? 'project-form';
         parent::__construct($name);
@@ -27,50 +23,50 @@ class ProjectForm extends LaminasForm implements InputFilterProviderInterface
         $this->setAttribute('method', 'post')->setHydrator(new ClassMethodsHydrator());
 
         $this->add([
-            'type'       => Element\Text::class,
-            'name'       => 'title',
-            'options'    => [
+            'type'    => Element\Text::class,
+            'name'    => 'title',
+            'options' => [
                 'label' => 'Title',
             ],
         ]);
 
         $this->add([
-            'type'       => Element\Text::class,
-            'name'       => 'description',
-            'options'    => [
+            'type'    => Element\Text::class,
+            'name'    => 'description',
+            'options' => [
                 'label' => 'Description',
             ],
         ]);
 
         $this->add([
-            'type'       => Element\Text::class,
-            'name'       => 'cost',
-            'options'    => [
+            'type'    => Element\Text::class,
+            'name'    => 'cost',
+            'options' => [
                 'label' => 'Cost',
             ],
         ]);
 
         $this->add([
-            'type'       => Element\Text::class,
-            'name'       => 'status',
-            'options'    => [
+            'type'    => Element\Text::class,
+            'name'    => 'status',
+            'options' => [
                 'label' => 'Status',
             ],
         ]);
 
         $this->add([
-            'type'       => Element\Text::class,
-            'name'       => 'location',
-            'options'    => [
+            'type'    => Element\Text::class,
+            'name'    => 'location',
+            'options' => [
                 'label' => 'Location',
             ],
         ]);
     }
 
-    public function getInputFilterSpecification()
+    public function getInputFilterSpecification(): array
     {
         return [
-            'title' => [
+            'title'       => [
                 'required'   => true,
                 'validators' => [
                     new Validator\NotEmpty(),
@@ -91,19 +87,19 @@ class ProjectForm extends LaminasForm implements InputFilterProviderInterface
                     new Validator\NotEmpty(),
                 ],
             ],
-            'cost' => [
+            'cost'        => [
                 'required'   => true,
                 'validators' => [
                     new Validator\NotEmpty(),
                 ],
             ],
-            'status' => [
+            'status'      => [
                 'required'   => true,
                 'validators' => [
                     new Validator\NotEmpty(),
                 ],
             ],
-            'location' => [
+            'location'    => [
                 'required'   => true,
                 'validators' => [
                     new Validator\NotEmpty(),

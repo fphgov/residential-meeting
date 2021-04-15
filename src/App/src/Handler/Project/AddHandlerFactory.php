@@ -11,10 +11,6 @@ use Laminas\InputFilter\InputFilterPluginManager;
 
 final class AddHandlerFactory
 {
-    /**
-     * @param ContainerInterface $container
-     * @return AddHandler
-     */
     public function __invoke(ContainerInterface $container): AddHandler
     {
         /** @var InputFilterPluginManager $pluginManager */

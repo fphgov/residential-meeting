@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Handler\User;
 
 use App\Service\UserServiceInterface;
-use App\Middleware\UserMiddleware;
-use Jwt\Handler\JwtAuthMiddleware;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,8 +22,8 @@ final class ListHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $user = $request->getAttribute(UserMiddleware::class);
+        $users = $this->userService->getRepository()->findby([]);
 
-        return new JsonResponse($user);
+        return new JsonResponse($users);
     }
 }

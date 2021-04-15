@@ -25,7 +25,7 @@ final class GetHandler implements RequestHandlerInterface
         $hashId = $request->getAttribute('hashId');
 
         $project = $this->projectService->getRepository()->findOneBy([
-            'hashId' => $hashId
+            'hashId' => $hashId,
         ]);
 
         return new JsonResponse($project);

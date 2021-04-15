@@ -2,22 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Middleware\CorsMiddlewareFactory;
-use Tuupola\Middleware\CorsMiddleware;
+use Mezzio\Cors\Configuration\ConfigurationInterface;
 
 return [
-    'cors' => [
-        // "origin" => ["http://localhost"],
-        "origin" => ["*"],
-        "methods" => ["GET", "POST", "PUT"],
-        "headers.allow" => ["Authorization", "Content-Type", "Accept", "X-Requested-With", "Origin", "Referer", "User-Agent"],
-        "headers.expose" => [],
-        "credentials" => false,
-        "cache" => 0,
-    ],
-    'dependencies' => [
-        'factories'  => [
-            CorsMiddleware::class => CorsMiddlewareFactory::class,
-        ]
+    ConfigurationInterface::CONFIGURATION_IDENTIFIER => [
+        'allowed_origins' => [ConfigurationInterface::ANY_ORIGIN],
+        'allowed_headers' => ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'], // No custom headers allowed
+        'allowed_max_age' => '3600', // 60 minutes
+        'credentials_allowed' => false, // Disallow cookies
+        'exposed_headers' => [], // No headers are exposed
     ],
 ];

@@ -12,7 +12,6 @@ use Laminas\InputFilter\InputFilterPluginManager;
 final class ProjectServiceFactory
 {
     /**
-     * @param ContainerInterface $container
      * @return ProjectService
      */
     public function __invoke(ContainerInterface $container)
@@ -20,7 +19,7 @@ final class ProjectServiceFactory
         /** @var InputFilterPluginManager $pluginManager */
         $pluginManager = $container->get(InputFilterPluginManager::class);
         $inputFilter   = $pluginManager->get(ProjectInputFilter::class);
-        
+
         return new ProjectService(
             $inputFilter,
             $container->get(EntityManagerInterface::class)

@@ -4,171 +4,100 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\EntityInterface;
-use App\Traits\Entity;
-use App\Traits\EntityMeta;
+use App\Traits\EntityMetaTrait;
+use App\Traits\EntityTrait;
+use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
 use JsonSerializable;
 
+use function array_slice;
+use function count;
 use function explode;
 use function implode;
-use function array_slice;
 use function min;
+use function strip_tags;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  * @ORM\Table(name="projects")
  */
-class Project implements JsonSerializable, ProjectInterface
+class Project implements JsonSerializable, IdeaInterface
 {
-    use Entity;
-    use EntityMeta;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Campaign")
-     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id")
-     * @var Campaign
-     */
-    private $campaign;
+    use EntityMetaTrait;
+    use EntityTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
      * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id")
+     *
      * @var CampaignTheme
      */
     private $campaignTheme;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CampaignLocation")
-     * @ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id")
-     * @var CampaignLocation
+     * @ORM\OneToMany(targetEntity="Idea", mappedBy="project")
      */
-    private $campaignLocation;
+    private $ideas;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="submitter_id", referencedColumnName="id")
-     * @var User
+     * @ORM\ManyToMany(targetEntity="Tag")
+     * @ORM\JoinTable(name="projects_tags",
+     *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+     * )
      */
-    private $submitter;
-
-    /**
-     * @ORM\Column(name="hash_id", type="string")
-     * @var string
-     */
-    private $hashId;
+    private $tags;
 
     /**
      * @ORM\Column(name="title", type="string")
+     *
      * @var string
      */
     private $title;
 
     /**
      * @ORM\Column(name="description", type="text")
+     *
      * @var string
      */
     private $description;
 
     /**
+     * @ORM\Column(name="location", type="string")
+     *
+     * @var string
+     */
+    private $location;
+
+    /**
+     * @ORM\Column(name="solution", type="text")
+     *
+     * @var string
+     */
+    private $solution;
+
+    /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true})
+     *
      * @var int
      */
     private $cost = 0;
 
     /**
      * @ORM\Column(name="status", type="integer")
+     *
      * @var int
      */
     private $status = 0;
-
-    /**
-     * @ORM\Column(name="published", type="boolean")
-     * @var bool
-     */
-    private $published = 0;
-
-    private $short_description = '';
-
-    public function getSubmitter(): User
-    {
-        return $this->submitter;
-    }
-
-    public function setSubmitter(User $submitter)
-    {
-        $this->submitter = $submitter;
-    }
-
-    public function getCampaign(): Campaign
-    {
-        return $this->campaign;
-    }
-
-    public function setCampaign(Campaign $campaign)
-    {
-        $this->campaign = $campaign;
-    }
 
     public function getCampaignTheme(): CampaignTheme
     {
         return $this->campaignTheme;
     }
 
-    public function setCampaignTheme(CampaignTheme $campaignTheme)
+    public function setCampaignTheme(CampaignTheme $campaignTheme): void
     {
         $this->campaignTheme = $campaignTheme;
-    }
-
-    public function getHashId(): string
-    {
-        return $this->hashId;
-    }
-
-    public function setHashId(string $hashId)
-    {
-        $this->hashId = $hashId;
-    }
-
-    public function setTitle(string $title)
-    {
-        $this->title = $title;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function setDescription(string $description)
-    {
-        $this->description = $description;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function setCost(int $cost)
-    {
-        $this->cost = $cost;
-    }
-
-    public function getCost(): int
-    {
-        return (int)$this->cost;
-    }
-
-    public function setPublished(bool $published)
-    {
-        $this->published = $published;
-    }
-
-    public function getPublished(): bool
-    {
-        return (bool)$this->published;
     }
 
     public function getCampaignLocation(): CampaignLocation
@@ -181,7 +110,77 @@ class Project implements JsonSerializable, ProjectInterface
         $this->campaignLocation = $campaignLocation;
     }
 
-    public function setStatus(int $status)
+    public function getIdeas(): array
+    {
+        $ideas = [];
+        foreach ($this->ideas->getValues() as $idea) {
+            $ideas[] = $idea->getId();
+        }
+
+        return $ideas;
+    }
+
+    public function getTags(): array
+    {
+        // $tags = [];
+        // foreach ($this->tags->getValues() as $tag) {
+        //     $tags[] = $tag->getId();
+        // }
+
+        return $this->tags->getValues();
+    }
+
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setLocation(string $location): void
+    {
+        $this->location = $location;
+    }
+
+    public function getLocation(): string
+    {
+        return $this->location;
+    }
+
+    public function setSolution(string $solution): void
+    {
+        $this->solution = $solution;
+    }
+
+    public function getSolution(): string
+    {
+        return $this->solution;
+    }
+
+    public function setCost(int $cost): void
+    {
+        $this->cost = $cost;
+    }
+
+    public function getCost(): int
+    {
+        return (int) $this->cost;
+    }
+
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
@@ -200,10 +199,8 @@ class Project implements JsonSerializable, ProjectInterface
         $descriptions = explode(" ", $description);
         $descriptions = array_slice($descriptions, 0, min(22, count($descriptions) - 1));
 
-        $description = implode(" ", $descriptions);
-        $description = $description . ' ...';
-
-        $this->short_description = $description;
+        $description  = implode(" ", $descriptions);
+        $description .= ' ...';
 
         return $description;
     }

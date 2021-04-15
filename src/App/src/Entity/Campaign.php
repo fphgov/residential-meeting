@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\EntityInterface;
-use App\Traits\Entity;
-use App\Traits\EntityMeta;
+use App\Traits\EntityActiveTrait;
+use App\Traits\EntityMetaTrait;
+use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
 use JsonSerializable;
 
 /**
@@ -17,26 +16,27 @@ use JsonSerializable;
  */
 class Campaign implements JsonSerializable, CampaignInterface
 {
-    use Entity;
-    use EntityMeta;
+    use EntityActiveTrait;
+    use EntityMetaTrait;
+    use EntityTrait;
 
     /**
      * @ORM\Column(name="title", type="string")
+     *
      * @var string
      */
     private $title;
 
     /**
      * @ORM\Column(name="description", type="text")
+     *
      * @var string
      */
     private $description;
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
-
-        return $this;
     }
 
     public function getTitle(): string
@@ -44,11 +44,9 @@ class Campaign implements JsonSerializable, CampaignInterface
         return $this->title;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
-
-        return $this;
     }
 
     public function getDescription(): string

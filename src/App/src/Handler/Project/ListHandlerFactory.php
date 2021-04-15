@@ -9,10 +9,6 @@ use Interop\Container\ContainerInterface;
 
 final class ListHandlerFactory
 {
-    /**
-     * @param ContainerInterface $container
-     * @return ListHandler
-     */
     public function __invoke(ContainerInterface $container): ListHandler
     {
         return new ListHandler(

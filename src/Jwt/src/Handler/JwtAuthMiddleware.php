@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace Jwt\Handler;
 
-use Tuupola\Middleware\JwtAuthentication;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Tuupola\Middleware\JwtAuthentication;
 
 class JwtAuthMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var JwtAuthentication $auth
-     */
+    /** @var JwtAuthentication */
     private $auth;
 
     public function __construct(JwtAuthentication $auth)
@@ -25,7 +23,7 @@ class JwtAuthMiddleware implements MiddlewareInterface
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
-    ) : ResponseInterface {
+    ): ResponseInterface {
         return $this->auth->process($request, $handler);
     }
 }

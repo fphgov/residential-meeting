@@ -33,7 +33,7 @@ return [
                 'priority' => Laminas\Log\Logger::ALERT,
                 'options'  => [
                     'db'        => new Laminas\Db\Adapter\Adapter([
-                        'driver'   => 'Mysqli',
+                        'driver'   => getenv('DB_DRIVER'),
                         'database' => getenv('DB_DATABASE'),
                         'host'     => getenv('DB_HOSTNAME'),
                         'username' => getenv('DB_USER'),
@@ -47,7 +47,7 @@ return [
                         'priorityName' => 'priorityName',
                         'message'      => 'message',
                         'extra'        => [
-                            'email' => 'extra_email',
+                            'extra' => 'extra',
                         ],
                     ],
                     'formatter' => [
@@ -105,7 +105,7 @@ return [
                     'priority' => Laminas\Log\Logger::ALERT,
                     'options'  => [
                         'db'        => new Laminas\Db\Adapter\Adapter([
-                            'driver'   => 'Mysqli',
+                            'driver'   => getenv('DB_DRIVER'),
                             'database' => getenv('DB_DATABASE'),
                             'host'     => getenv('DB_HOSTNAME'),
                             'username' => getenv('DB_USER'),
@@ -119,7 +119,7 @@ return [
                             'priorityName' => 'priorityName',
                             'message'      => 'message',
                             'extra'        => [
-                                'email' => 'extra_email',
+                                'extra' => 'extra',
                             ],
                         ],
                         'formatter' => [

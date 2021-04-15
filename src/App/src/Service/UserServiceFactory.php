@@ -10,7 +10,6 @@ use Interop\Container\ContainerInterface;
 final class UserServiceFactory
 {
     /**
-     * @param ContainerInterface $container
      * @return UserService
      */
     public function __invoke(ContainerInterface $container)

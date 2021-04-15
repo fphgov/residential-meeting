@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Jwt\Handler;
 
-use Tuupola\Middleware\JwtAuthentication;
 use Psr\Container\ContainerInterface;
+use RuntimeException;
+use Tuupola\Middleware\JwtAuthentication;
+
+use function getenv;
 
 class JwtAuthMiddlewareFactory
 {
@@ -14,11 +17,11 @@ class JwtAuthMiddlewareFactory
         $config = $container->has('config') ? $container->get('config') : [];
 
         if (! isset($config['jwt'])) {
-            throw new Exception('Missing JWT configuration');
+            throw new RuntimeException('Missing JWT configuration');
         }
 
         $auth = new JwtAuthentication([
-            "secure"    => true,
+            "secure"    => getenv('NODE_ENV') !== 'development',
             "relaxed"   => ["localhost"],
             "secret"    => $config['jwt']['auth']['secret'],
             "attribute" => JwtAuthMiddleware::class,

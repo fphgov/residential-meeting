@@ -34,9 +34,7 @@ class ConfigProvider
     public function getDependencies()
     {
         return [
-            'invokables' => [
-
-            ],
+            'invokables' => [],
             'factories'  => [
                 Handler\JwtAuthMiddleware::class => Handler\JwtAuthMiddlewareFactory::class,
                 Handler\TokenHandler::class      => Handler\TokenHandlerFactory::class,

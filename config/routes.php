@@ -7,29 +7,66 @@ use Mezzio\MiddlewareFactory;
 use Psr\Container\ContainerInterface;
 
 return static function (Application $app, MiddlewareFactory $factory, ContainerInterface $container) : void {
-    $app->get('/app/api/ping', App\Handler\PingHandler::class, 'api.ping');
+    $app->get('/app/api/ping', App\Handler\PingHandler::class, 'app.api.ping');
+
+    $app->get('/app/api/options', [
+        App\Handler\Setting\GetHandler::class
+    ], 'app.api.options.get');
 
     $app->post('/app/api/login', [
         Jwt\Handler\TokenHandler::class,
-    ], 'api.login');
+    ], 'app.api.login');
 
     $app->get('/app/api/user', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
         App\Handler\User\ListHandler::class
-    ], 'api.user');
+    ], 'app.api.user');
 
     $app->get('/app/api/project', [
         App\Handler\Project\ListHandler::class
-    ], 'api.project.all');
+    ], 'app.api.project.all');
 
     $app->get('/app/api/project/{hashId}', [
         App\Handler\Project\GetHandler::class
-    ], 'api.project.get');
+    ], 'app.api.project.get');
+
+    // Admin
+    if (getenv('NODE_ENV') === 'development') {
+        $app->post('/admin/api/login', [
+            Jwt\Handler\TokenHandler::class,
+        ], 'admin.api.login');
+    } else {
+        $app->post('/admin/api/login', [
+            \Middlewares\Recaptcha::class,
+            Jwt\Handler\TokenHandler::class,
+        ], 'admin.api.login');
+    }
+
+    if (getenv('NODE_ENV') === 'development') {
+        $app->get('/admin/api/cache/clear', [
+            App\Handler\Tools\ClearCacheHandler::class
+        ], 'admin.api.cache.clear');
+    } else {
+        $app->get('/admin/api/cache/clear', [
+            Jwt\Handler\JwtAuthMiddleware::class,
+            App\Middleware\UserMiddleware::class,
+            \Mezzio\Authorization\AuthorizationMiddleware::class,
+            App\Handler\Tools\ClearCacheHandler::class
+        ], 'admin.api.cache.clear');
+    }
+
+    $app->get('/admin/api/dashboard', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Dashboard\GetHandler::class
+    ], 'admin.api.dashboard.get');
 
     $app->post('/app/api/project', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
         App\Handler\Project\AddHandler::class
-    ], 'api.project.add');
+    ], 'admin.api.project.add');
 };

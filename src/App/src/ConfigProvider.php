@@ -23,7 +23,7 @@ class ConfigProvider
     {
         return [
             'dependencies'  => $this->getDependencies(),
-            'input_filters' => $this->getInputFilters()
+            'input_filters' => $this->getInputFilters(),
         ];
     }
 
@@ -37,12 +37,13 @@ class ConfigProvider
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
             'factories'  => [
-                Handler\User\ListHandler::class    => Handler\User\ListHandlerFactory::class,
-                Handler\Project\ListHandler::class => Handler\Project\ListHandlerFactory::class,
-                Handler\Project\GetHandler::class  => Handler\Project\GetHandlerFactory::class,
-                Handler\Project\AddHandler::class  => Handler\Project\AddHandlerFactory::class,
-                
-                Service\UserServiceInterface::class => Service\UserServiceFactory::class,
+                Handler\User\ListHandler::class        => Handler\User\ListHandlerFactory::class,
+                Handler\Project\ListHandler::class     => Handler\Project\ListHandlerFactory::class,
+                Handler\Project\GetHandler::class      => Handler\Project\GetHandlerFactory::class,
+                Handler\Project\AddHandler::class      => Handler\Project\AddHandlerFactory::class,
+                Handler\Setting\GetHandler::class      => Handler\Setting\GetHandlerFactory::class,
+                Service\NoticeServiceInterface::class  => Service\NoticeServiceFactory::class,
+                Service\UserServiceInterface::class    => Service\UserServiceFactory::class,
                 Service\ProjectServiceInterface::class => Service\ProjectServiceFactory::class,
             ],
         ];

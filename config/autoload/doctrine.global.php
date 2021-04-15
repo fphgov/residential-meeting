@@ -7,8 +7,9 @@ return [
         'connection' => [
             'orm_default' => [
                 'params' => [
-                    'url' => 'mysql://'. getenv('DB_USER') .':'. getenv('DB_PASSWORD') .'@'. getenv('DB_HOSTNAME') . '/' . getenv('DB_DATABASE'),
-                    'charset'  => 'utf8mb4',
+                    'url'           => 'mysql://'. getenv('DB_USER') .':'. getenv('DB_PASSWORD') .'@'. getenv('DB_HOSTNAME') . '/' . getenv('DB_DATABASE'),
+                    'charset'       => getenv('DB_CHARSET'),
+                    'configuration' => []
                 ],
             ],
         ],

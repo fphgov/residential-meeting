@@ -13,13 +13,18 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
+    \Mezzio\Authorization\ConfigProvider::class,
+    \Mezzio\Authorization\Acl\ConfigProvider::class,
+    \Mezzio\Cors\ConfigProvider::class,
+    \Mezzio\Authentication\ConfigProvider::class,
+    \Laminas\Validator\ConfigProvider::class,
     \Laminas\I18n\ConfigProvider::class,
     \Laminas\InputFilter\ConfigProvider::class,
     \Laminas\Filter\ConfigProvider::class,
-    \Zend\Validator\ConfigProvider::class,
+    \Laminas\Validator\ConfigProvider::class,
     \Laminas\Db\ConfigProvider::class,
     \Laminas\Log\ConfigProvider::class,
-    \Zend\Router\ConfigProvider::class,
+    \Laminas\Mail\ConfigProvider::class,
     \Laminas\HttpHandlerRunner\ConfigProvider::class,
     \Mezzio\Router\FastRouteRouter\ConfigProvider::class,
     // Include cache configuration
@@ -33,8 +38,9 @@ $aggregator = new ConfigAggregator([
         ? \Mezzio\Swoole\ConfigProvider::class
         : function(){ return[]; },
     // Default App module config
-    Jwt\ConfigProvider::class,
     App\ConfigProvider::class,
+    Jwt\ConfigProvider::class,
+    Mail\ConfigProvider::class,
     // Load application config in a pre-defined order in such a way that local settings
     // overwrite global settings. (Loaded as first to last):
     //   - `global.php`

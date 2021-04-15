@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use Psr\Container\ContainerInterface;
-use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\Log\Logger;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Psr\Container\ContainerInterface;
 
 class AuditMiddlewareFactory
 {

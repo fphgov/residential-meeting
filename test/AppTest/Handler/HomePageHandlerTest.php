@@ -7,8 +7,8 @@ namespace AppTest\Handler;
 use App\Handler\HomePageHandler;
 use Laminas\Diactoros\Response\JsonResponse;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ServerRequestInterface;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Psr\Http\Message\ServerRequestInterface;
 
 class HomePageHandlerTest extends TestCase
 {
@@ -20,11 +20,11 @@ class HomePageHandlerTest extends TestCase
 
     public function testReturnsJsonResponseProvided()
     {
-        $homePage = new HomePageHandler();
+        $homePage        = new HomePageHandler();
         $serverRequester = $this->prophesize(ServerRequestInterface::class);
 
         $response = $homePage->handle(
-           $serverRequester->reveal()
+            $serverRequester->reveal()
         );
 
         $this->assertInstanceOf(JsonResponse::class, $response);
