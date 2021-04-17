@@ -21,7 +21,7 @@ use function strip_tags;
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  * @ORM\Table(name="projects")
  */
-class Project implements JsonSerializable, IdeaInterface
+class Project implements JsonSerializable, ProjectInterface
 {
     use EntityMetaTrait;
     use EntityTrait;
@@ -77,11 +77,11 @@ class Project implements JsonSerializable, IdeaInterface
     private $solution;
 
     /**
-     * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true})
+     * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
      *
-     * @var int
+     * @var int|null
      */
-    private $cost = 0;
+    private $cost;
 
     /**
      * @ORM\Column(name="status", type="integer")
@@ -89,6 +89,8 @@ class Project implements JsonSerializable, IdeaInterface
      * @var int
      */
     private $status = 0;
+
+    private $shortDescription = '';
 
     public function getCampaignTheme(): CampaignTheme
     {
@@ -122,11 +124,6 @@ class Project implements JsonSerializable, IdeaInterface
 
     public function getTags(): array
     {
-        // $tags = [];
-        // foreach ($this->tags->getValues() as $tag) {
-        //     $tags[] = $tag->getId();
-        // }
-
         return $this->tags->getValues();
     }
 
@@ -170,14 +167,14 @@ class Project implements JsonSerializable, IdeaInterface
         return $this->solution;
     }
 
-    public function setCost(int $cost): void
+    public function setCost(?int $cost = null): void
     {
         $this->cost = $cost;
     }
 
-    public function getCost(): int
+    public function getCost(): ?int
     {
-        return (int) $this->cost;
+        return $this->cost !== null ? (int) $this->cost : null;
     }
 
     public function setStatus(int $status): void
@@ -201,6 +198,8 @@ class Project implements JsonSerializable, IdeaInterface
 
         $description  = implode(" ", $descriptions);
         $description .= ' ...';
+
+        $this->shortDescription = $description;
 
         return $description;
     }

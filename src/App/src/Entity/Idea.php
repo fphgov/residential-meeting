@@ -77,11 +77,11 @@ class Idea implements JsonSerializable, IdeaInterface
     private $comment;
 
     /**
-     * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true})
+     * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
      *
-     * @var int
+     * @var int|null
      */
-    private $cost = 0;
+    private $cost;
 
     /**
      * @ORM\Column(name="status", type="integer")
@@ -167,14 +167,14 @@ class Idea implements JsonSerializable, IdeaInterface
         return $this->comment;
     }
 
-    public function setCost(int $cost): void
+    public function setCost(int $cost = null): void
     {
         $this->cost = $cost;
     }
 
-    public function getCost(): int
+    public function getCost(): ?int
     {
-        return (int) $this->cost;
+        return $this->cost !== null ? (int) $this->cost : null;
     }
 
     public function setStatus(int $status): void

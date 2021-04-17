@@ -8,6 +8,7 @@ interface ProjectInterface
 {
     public const DISABLE_SHOW_DEFAULT = [
         'id',
+        'campaignLocation',
         'updatedAt',
     ];
 }

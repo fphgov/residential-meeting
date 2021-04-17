@@ -26,6 +26,9 @@ final class ListHandler implements RequestHandlerInterface
             'createdAt' => 'DESC',
         ]);
 
-        return new JsonResponse($projects);
+        return new JsonResponse([
+            'projects' => $projects,
+            'count'    => count($projects),
+        ]);
     }
 }
