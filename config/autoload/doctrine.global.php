@@ -2,6 +2,13 @@
 
 declare(strict_types=1);
 
+use DoctrineExtensions\Query\Mysql;
+
+$rtel = new \Doctrine\ORM\Tools\ResolveTargetEntityListener;
+
+$rtel->addResolveTargetEntity(App\Entity\ApplicantInterface::class, App\Entity\Applicant::class, []);
+$rtel->addResolveTargetEntity(App\Entity\UserInterface::class, App\Entity\User::class, []);
+
 return [
     'doctrine' => [
         'connection' => [
@@ -10,6 +17,13 @@ return [
                     'url'           => 'mysql://'. getenv('DB_USER') .':'. getenv('DB_PASSWORD') .'@'. getenv('DB_HOSTNAME') . '/' . getenv('DB_DATABASE'),
                     'charset'       => getenv('DB_CHARSET'),
                     'configuration' => []
+                ],
+            ],
+        ],
+        'event_manager' => [
+            'orm_default' => [
+                'subscribers' => [
+                    $rtel
                 ],
             ],
         ],

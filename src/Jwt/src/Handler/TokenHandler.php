@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Jwt\Handler;
 
 use App\Entity\User;
+use App\Model\PBKDF2Password;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -15,8 +16,6 @@ use Lcobucci\JWT\Token as TokenInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
-use function password_verify;
 
 class TokenHandler implements RequestHandlerInterface
 {
@@ -48,7 +47,9 @@ class TokenHandler implements RequestHandlerInterface
             return $this->badAuthentication();
         }
 
-        if (! password_verify($postBody['password'], $user->getPassword())) {
+        $passwordModel = new PBKDF2Password($user->getPassword(), PBKDF2Password::PW_REPRESENTATION_STORABLE);
+
+        if (! $passwordModel->verify($postBody['password'])) {
             return $this->badAuthentication();
         }
 

@@ -12,10 +12,12 @@ $options = getopt("p:");
 
 chdir(__DIR__ . '/../');
 
+use App\Model\PBKDF2Password;
+
 require 'vendor/autoload.php';
 
-$config = include 'config/config.php';
+$passwordModel = new PBKDF2Password($options['p'], PBKDF2Password::PW_REPRESENTATION_CLEARTEXT);
 
-$hash = password_hash($options['p'], PASSWORD_BCRYPT, $config['password']);
+$storablePassword = $passwordModel->getStorableRepresentation();
 
-echo $hash . "\n";
+echo $storablePassword . "\n";

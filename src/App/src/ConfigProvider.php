@@ -37,14 +37,15 @@ class ConfigProvider
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
             'factories'  => [
-                Handler\User\ListHandler::class        => Handler\User\ListHandlerFactory::class,
-                Handler\Project\ListHandler::class     => Handler\Project\ListHandlerFactory::class,
-                Handler\Project\GetHandler::class      => Handler\Project\GetHandlerFactory::class,
-                Handler\Project\AddHandler::class      => Handler\Project\AddHandlerFactory::class,
-                Handler\Setting\GetHandler::class      => Handler\Setting\GetHandlerFactory::class,
-                Service\NoticeServiceInterface::class  => Service\NoticeServiceFactory::class,
-                Service\UserServiceInterface::class    => Service\UserServiceFactory::class,
-                Service\ProjectServiceInterface::class => Service\ProjectServiceFactory::class,
+                Handler\User\ListHandler::class              => Handler\User\ListHandlerFactory::class,
+                Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
+                Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
+                Handler\Project\AddHandler::class            => Handler\Project\AddHandlerFactory::class,
+                Handler\Setting\GetHandler::class            => Handler\Setting\GetHandlerFactory::class,
+                Service\NoticeServiceInterface::class        => Service\NoticeServiceFactory::class,
+                Service\UserServiceInterface::class          => Service\UserServiceFactory::class,
+                Service\ProjectServiceInterface::class       => Service\ProjectServiceFactory::class,
+                Service\PasswordStoreServiceInterface::class => Service\PasswordStoreServiceFactory::class,
             ],
         ];
     }
