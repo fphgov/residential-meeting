@@ -16,5 +16,8 @@ return [
                 'replayTo' => getenv('APP_NOTIFICATION_MAIL_REPLAYTO'),
             ],
         ],
+        'pagination' => [
+            'maxPageSize' => getenv('APP_PAGINATION_MAX_PAGE_SIZE'),
+        ]
     ],
 ];

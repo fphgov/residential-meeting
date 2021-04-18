@@ -23,13 +23,13 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\User\ListHandler::class
     ], 'app.api.user');
 
-    $app->get('/app/api/project', [
+    $app->get('/app/api/projects', [
         App\Handler\Project\ListHandler::class
-    ], 'app.api.project.all');
+    ], 'app.api.project.list');
 
-    $app->get('/app/api/project/{hashId}', [
+    $app->get('/app/api/projects/{id}', [
         App\Handler\Project\GetHandler::class
-    ], 'app.api.project.get');
+    ], 'app.api.project.show');
 
     // Admin
     if (getenv('NODE_ENV') === 'development') {

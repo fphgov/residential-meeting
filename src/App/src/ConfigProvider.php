@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App;
 
+use Laminas\Hydrator;
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Mezzio\Hal\Metadata\RouteBasedCollectionMetadata;
+use Mezzio\Hal\Metadata\RouteBasedResourceMetadata;
+use Mezzio\Hal\Metadata\MetadataMap;
 
 /**
  * The configuration provider for the App module
@@ -22,8 +26,9 @@ class ConfigProvider
     public function __invoke(): array
     {
         return [
-            'dependencies'  => $this->getDependencies(),
-            'input_filters' => $this->getInputFilters(),
+            'dependencies'     => $this->getDependencies(),
+            'input_filters'    => $this->getInputFilters(),
+            MetadataMap::class => $this->getHalMetadataMap(),
         ];
     }
 
@@ -55,6 +60,24 @@ class ConfigProvider
         return [
             'factories' => [
                 InputFilter\ProjectInputFilter::class => InvokableFactory::class,
+            ],
+        ];
+    }
+
+    public function getHalMetadataMap(): array
+    {
+        return [
+            [
+                '__class__'      => RouteBasedResourceMetadata::class,
+                'resource_class' => Entity\Project::class,
+                'route'          => 'app.api.project.show',
+                'extractor'      => Hydrator\ClassMethodsHydrator::class,
+            ],
+            [
+                '__class__'           => RouteBasedCollectionMetadata::class,
+                'collection_class'    => Entity\ProjectCollection::class,
+                'collection_relation' => 'projects',
+                'route'               => 'app.api.project.list',
             ],
         ];
     }

@@ -6,7 +6,7 @@ use DoctrineExtensions\Query\Mysql;
 
 $rtel = new \Doctrine\ORM\Tools\ResolveTargetEntityListener;
 
-$rtel->addResolveTargetEntity(App\Entity\ApplicantInterface::class, App\Entity\Applicant::class, []);
+$rtel->addResolveTargetEntity(App\Entity\SettingsInterface::class, App\Entity\Settings::class, []);
 $rtel->addResolveTargetEntity(App\Entity\UserInterface::class, App\Entity\User::class, []);
 
 return [

@@ -102,16 +102,6 @@ class Project implements JsonSerializable, ProjectInterface
         $this->campaignTheme = $campaignTheme;
     }
 
-    public function getCampaignLocation(): CampaignLocation
-    {
-        return $this->campaignLocation;
-    }
-
-    public function setCampaignLocation(CampaignLocation $campaignLocation)
-    {
-        $this->campaignLocation = $campaignLocation;
-    }
-
     public function getIdeas(): array
     {
         $ideas = [];

@@ -96,8 +96,6 @@ trait EntityTrait
 
     public function jsonSerialize(): array
     {
-       // $props = $this->getProps();
-
         return $this->getProps();
     }
 

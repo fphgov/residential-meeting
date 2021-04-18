@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Handler\Project;
 
-use App\Service\ProjectServiceInterface;
+use App\Entity\Project;
+use Doctrine\ORM\EntityManagerInterface;
+use Mezzio\Hal\HalResponseFactory;
+use Mezzio\Hal\ResourceGenerator;
+use Mezzio\Router\Exception\RuntimeException;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,22 +16,39 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class GetHandler implements RequestHandlerInterface
 {
-    /** @var ProjectServiceInterface **/
-    private $projectService;
+    /** @var EntityManagerInterface */
+    protected $entityManager;
 
-    public function __construct(ProjectServiceInterface $projectService)
-    {
-        $this->projectService = $projectService;
+    /** @var HalResponseFactory */
+    protected $responseFactory;
+
+    /** @var ResourceGenerator */
+    protected $resourceGenerator;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        HalResponseFactory $responseFactory,
+        ResourceGenerator $resourceGenerator
+    ) {
+        $this->entityManager     = $entityManager;
+        $this->responseFactory   = $responseFactory;
+        $this->resourceGenerator = $resourceGenerator;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $hashId = $request->getAttribute('hashId');
+        $entityRepository = $this->entityManager->getRepository(Project::class);
 
-        $project = $this->projectService->getRepository()->findOneBy([
-            'hashId' => $hashId,
-        ]);
+        $result = $entityRepository->find($request->getAttribute('id'));
 
-        return new JsonResponse($project);
+        if ($result === null) {
+            return new JsonResponse([
+                'errors' => 'Not Found',
+            ], 404);
+        }
+
+        $resource = $this->resourceGenerator->fromObject($result, $request);
+
+        return $this->responseFactory->createResponse($request, $resource);
     }
 }

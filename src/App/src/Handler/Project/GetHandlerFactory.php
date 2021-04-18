@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Handler\Project;
 
-use App\Service\ProjectServiceInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Mezzio\Hal\HalResponseFactory;
+use Mezzio\Hal\ResourceGenerator;
 use Interop\Container\ContainerInterface;
 
 final class GetHandlerFactory
@@ -12,7 +14,9 @@ final class GetHandlerFactory
     public function __invoke(ContainerInterface $container): GetHandler
     {
         return new GetHandler(
-            $container->get(ProjectServiceInterface::class)
+            $container->get(EntityManagerInterface::class),
+            $container->get(HalResponseFactory::class),
+            $container->get(ResourceGenerator::class),
         );
     }
 }
