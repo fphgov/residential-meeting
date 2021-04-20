@@ -69,7 +69,7 @@ class ConfigProvider
         return [
             [
                 '__class__'      => RouteBasedResourceMetadata::class,
-                'resource_class' => Entity\Project::class,
+                'resource_class' => Entity\ProjectListDTO::class,
                 'route'          => 'app.api.project.show',
                 'extractor'      => Hydrator\ClassMethodsHydrator::class,
             ],

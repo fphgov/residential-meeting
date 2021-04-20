@@ -13,7 +13,10 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\Table(name="users")
+ * @ORM\Table(
+ *     name="users",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="ix_username_email", columns={"username","email"})}
+ * )
  */
 class User implements JsonSerializable, UserInterface
 {

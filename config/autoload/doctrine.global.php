@@ -11,6 +11,13 @@ $rtel->addResolveTargetEntity(App\Entity\UserInterface::class, App\Entity\User::
 
 return [
     'doctrine' => [
+        'configuration' => [
+            'orm_default' => [
+                'string_functions' => [
+                    'GROUP_CONCAT' => Mysql\GroupConcat::class,
+                ],
+            ]
+        ],
         'connection' => [
             'orm_default' => [
                 'params' => [

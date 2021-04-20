@@ -6,7 +6,10 @@ namespace App\Handler\Project;
 
 use App\Entity\Project;
 use App\Entity\ProjectCollection;
+use App\Entity\Tag;
+use App\Entity\CampaignTheme;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\Expr\Join;
 use Mezzio\Hal\HalResponseFactory;
 use Mezzio\Hal\ResourceGenerator;
 use Mezzio\Hal\ResourceGenerator\Exception\OutOfBoundsException;
@@ -48,11 +51,16 @@ final class ListHandler implements RequestHandlerInterface
 
         $queryParams = $request->getQueryParams();
         $query       = $queryParams['query'] ?? '';
+        $tag         = $queryParams['tag'] ?? '';
+        $theme       = $queryParams['theme'] ?? '';
         $page        = $queryParams['page'] ?? 1;
 
-        $qb = $repository
-                ->createQueryBuilder('p')
-                ->orderBy('p.id', 'DESC');
+        $qb = $repository->createQueryBuilder('p')
+            ->select('NEW ProjectListDTO(p.id, ct.name, ct.rgb, p.title, p.description, p.location, GROUP_CONCAT(t.id), GROUP_CONCAT(t.name)) as project')
+            ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
+            ->leftJoin('p.tags', 't')
+            ->groupBy('p.id')
+            ->orderBy('p.id', 'DESC');
 
         if (intval($query) !== 0) {
             $qb->where('p.id = :id')->setParameter('id', $query);
@@ -63,14 +71,25 @@ final class ListHandler implements RequestHandlerInterface
                 ->orWhere('p.solution LIKE :solution')->setParameter('solution', "%" . $query . "%");
         }
 
+        if ($tag) {
+            $qb->andWhere('t.id = :tags');
+            $qb->setParameter('tags', $tag);
+        }
+
+        if ($theme && $theme != 0) {
+            $qb->andWhere('ct.id = :themes');
+            $qb->setParameter('themes', $theme);
+        }
+
         $qb->setMaxResults(1);
 
-        $collection = new ProjectCollection($qb);
+        $paginator = new ProjectCollection($qb);
+        $paginator->setUseOutputWalkers(false);
 
-        $collection->getQuery()->setFirstResult($this->pageCount * $page)->setMaxResults($this->pageCount);
+        $paginator->getQuery()->setFirstResult($this->pageCount * $page)->setMaxResults($this->pageCount);
 
         try {
-            $resource = $this->resourceGenerator->fromObject($collection, $request);
+            $resource = $this->resourceGenerator->fromObject($paginator, $request);
         } catch (ResourceGenerator\Exception\OutOfBoundsException $e) {
             return new JsonResponse([
                 'errors' => 'Bad Request',
