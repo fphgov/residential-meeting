@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use DoctrineExtensions\Query\Mysql;
+use Ramsey\Uuid\Doctrine\UuidType;
 
 $rtel = new \Doctrine\ORM\Tools\ResolveTargetEntityListener;
 
@@ -11,6 +12,9 @@ $rtel->addResolveTargetEntity(App\Entity\UserInterface::class, App\Entity\User::
 
 return [
     'doctrine' => [
+        'types'            => [
+            UuidType::NAME => UuidType::class,
+        ],
         'configuration' => [
             'orm_default' => [
                 'string_functions' => [

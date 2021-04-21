@@ -51,6 +51,7 @@
         "middlewares/recaptcha": "^2.0",
         "phpoffice/phpspreadsheet": "^1.16",
         "ramsey/uuid": "^4.0@dev",
+        "ramsey/uuid-doctrine": "^1.6",
         "roave/psr-container-doctrine": "dev-master",
         "tuupola/cors-middleware": "dev-master",
         "tuupola/slim-jwt-auth": "3.x-dev",

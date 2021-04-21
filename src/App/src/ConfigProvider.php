@@ -47,6 +47,9 @@ class ConfigProvider
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
                 Handler\Project\AddHandler::class            => Handler\Project\AddHandlerFactory::class,
                 Handler\Setting\GetHandler::class            => Handler\Setting\GetHandlerFactory::class,
+                Handler\Media\GetHandler::class              => Handler\Media\GetHandlerFactory::class,
+                Handler\Media\DownloadHandler::class         => Handler\Media\DownloadHandlerFactory::class,
+                Service\MediaServiceInterface::class         => Service\MediaServiceFactory::class,
                 Service\NoticeServiceInterface::class        => Service\NoticeServiceFactory::class,
                 Service\UserServiceInterface::class          => Service\UserServiceFactory::class,
                 Service\ProjectServiceInterface::class       => Service\ProjectServiceFactory::class,
@@ -67,6 +70,12 @@ class ConfigProvider
     public function getHalMetadataMap(): array
     {
         return [
+            [
+                '__class__'      => RouteBasedResourceMetadata::class,
+                'resource_class' => Entity\Project::class,
+                'route'          => 'app.api.project.show',
+                'extractor'      => Hydrator\ClassMethodsHydrator::class,
+            ],
             [
                 '__class__'      => RouteBasedResourceMetadata::class,
                 'resource_class' => Entity\ProjectListDTO::class,

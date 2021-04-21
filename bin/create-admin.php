@@ -14,6 +14,7 @@ chdir(__DIR__ . '/../');
 
 use App\Entity\User;
 use App\Model\PBKDF2Password;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
 require 'vendor/autoload.php';

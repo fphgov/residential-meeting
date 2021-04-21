@@ -6,7 +6,7 @@ use Mezzio\Application;
 use Mezzio\MiddlewareFactory;
 use Psr\Container\ContainerInterface;
 
-return static function (Application $app, MiddlewareFactory $factory, ContainerInterface $container) : void {
+return static function (Application $app, MiddlewareFactory $factory, ContainerInterface $container): void {
     $app->get('/app/api/ping', App\Handler\PingHandler::class, 'app.api.ping');
 
     $app->get('/app/api/options', [
@@ -30,6 +30,14 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     $app->get('/app/api/projects/{id}', [
         App\Handler\Project\GetHandler::class
     ], 'app.api.project.show');
+
+    $app->get('/app/api/media/{id}', [
+        App\Handler\Media\GetHandler::class
+    ], 'app.api.media.show');
+
+    $app->get('/app/api/media/download/{id}', [
+        App\Handler\Media\DownloadHandler::class
+    ], 'app.api.media.download');
 
     // Admin
     if (getenv('NODE_ENV') === 'development') {

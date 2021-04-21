@@ -49,6 +49,15 @@ class Project implements JsonSerializable, ProjectInterface
     private $tags;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Media")
+     * @ORM\JoinTable(name="projects_medias",
+     *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
+     * )
+     */
+    private $medias;
+
+    /**
      * @ORM\Column(name="title", type="string")
      *
      * @var string
@@ -90,7 +99,12 @@ class Project implements JsonSerializable, ProjectInterface
      */
     private $status = 0;
 
-    private $shortDescription = '';
+    /**
+     * @ORM\Column(name="video", type="string", nullable=true)
+     *
+     * @var string
+     */
+    private $video;
 
     public function getCampaignTheme(): CampaignTheme
     {
@@ -100,6 +114,16 @@ class Project implements JsonSerializable, ProjectInterface
     public function setCampaignTheme(CampaignTheme $campaignTheme): void
     {
         $this->campaignTheme = $campaignTheme;
+    }
+
+    public function getMedias(): array
+    {
+        $medias = [];
+        foreach ($this->medias->getValues() as $media) {
+            $medias[] = $media->getId();
+        }
+
+        return $medias;
     }
 
     public function getIdeas(): array
@@ -157,6 +181,16 @@ class Project implements JsonSerializable, ProjectInterface
         return $this->solution;
     }
 
+    public function setVideo(?string $video = null): void
+    {
+        $this->video = $video;
+    }
+
+    public function getVideo(): ?string
+    {
+        return $this->video;
+    }
+
     public function setCost(?int $cost = null): void
     {
         $this->cost = $cost;
@@ -175,22 +209,5 @@ class Project implements JsonSerializable, ProjectInterface
     public function getStatus(): int
     {
         return $this->status;
-    }
-
-    public function getShortDescription(): string
-    {
-        $description = $this->getDescription();
-
-        $description = strip_tags($description);
-
-        $descriptions = explode(" ", $description);
-        $descriptions = array_slice($descriptions, 0, min(22, count($descriptions) - 1));
-
-        $description  = implode(" ", $descriptions);
-        $description .= ' ...';
-
-        $this->shortDescription = $description;
-
-        return $description;
     }
 }
