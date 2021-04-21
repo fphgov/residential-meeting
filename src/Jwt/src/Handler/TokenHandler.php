@@ -44,6 +44,10 @@ class TokenHandler implements RequestHandlerInterface
         $user = $userRepository->findOneBy(['email' => $postBody['email']]);
 
         if (! $user) {
+            $user = $userRepository->findOneBy(['username' => $postBody['email']]);
+        }
+
+        if (! $user) {
             return $this->badAuthentication();
         }
 
