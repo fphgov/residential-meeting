@@ -30,7 +30,7 @@ final class DownloadHandler implements RequestHandlerInterface
 
         if ($mediaInfo === null) {
             return new JsonResponse([
-                'errors' => 'Not Found',
+                'errors' => 'Nem található',
             ], 404);
         }
 

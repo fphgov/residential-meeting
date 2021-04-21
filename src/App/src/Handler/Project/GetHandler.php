@@ -43,7 +43,7 @@ final class GetHandler implements RequestHandlerInterface
 
         if ($result === null) {
             return new JsonResponse([
-                'errors' => 'Not Found',
+                'errors' => 'Nem található',
             ], 404);
         }
 

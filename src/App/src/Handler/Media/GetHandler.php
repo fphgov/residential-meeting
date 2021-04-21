@@ -30,7 +30,7 @@ final class GetHandler implements RequestHandlerInterface
 
         if ($media === null) {
             return new JsonResponse([
-                'errors' => 'Not Found',
+                'errors' => 'Nem található',
             ], 404);
         }
 
