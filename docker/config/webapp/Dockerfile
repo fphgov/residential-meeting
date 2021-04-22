@@ -50,13 +50,13 @@ RUN /usr/bin/crontab /etc/crontabs/docker-crontab
 
 EXPOSE 9001
 
-RUN sed -i 's/9000/9002/' /usr/local/etc/php-fpm.d/zz-docker.conf
+RUN sed -i 's/9000/9004/' /usr/local/etc/php-fpm.d/zz-docker.conf
 RUN sed -i 's/pm.max_children = 5/pm.max_children = 816/' /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i 's/pm.start_servers = 2/pm.start_servers = 15/' /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 15/' /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 25/' /usr/local/etc/php-fpm.d/www.conf
 
-EXPOSE 9003
+EXPOSE 9004
 
 COPY supervisord.conf /etc/supervisord.conf
 
