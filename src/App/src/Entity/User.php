@@ -78,7 +78,14 @@ class User implements JsonSerializable, UserInterface
      *
      * @var string
      */
-    private $role;
+    private $role = 'user';
+
+    /**
+     * @ORM\Column(name="hash", type="string", unique=true, nullable=true)
+     *
+     * @var string|null
+     */
+    private $hash;
 
     public function setUserPreference(UserPreference $userPreference)
     {
@@ -158,6 +165,16 @@ class User implements JsonSerializable, UserInterface
     public function getRole(): ?string
     {
         return $this->role;
+    }
+
+    public function setHash(?string $hash = null): void
+    {
+        $this->hash = $hash;
+    }
+
+    public function getHash(): ?string
+    {
+        return $this->hash;
     }
 
     public function generateToken(): string

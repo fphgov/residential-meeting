@@ -17,6 +17,10 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         Jwt\Handler\TokenHandler::class,
     ], 'app.api.login');
 
+    $app->get('/app/api/user/activate/{hash}', [
+        App\Handler\User\ActivateHandler::class
+    ], 'app.api.user.activate');
+
     $app->get('/app/api/user', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,

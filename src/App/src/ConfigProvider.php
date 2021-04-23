@@ -43,17 +43,17 @@ class ConfigProvider
             ],
             'factories'  => [
                 Handler\User\ListHandler::class              => Handler\User\ListHandlerFactory::class,
+                Handler\User\ActivateHandler::class          => Handler\User\ActivateHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
                 Handler\Project\AddHandler::class            => Handler\Project\AddHandlerFactory::class,
                 Handler\Setting\GetHandler::class            => Handler\Setting\GetHandlerFactory::class,
                 Handler\Media\GetHandler::class              => Handler\Media\GetHandlerFactory::class,
                 Handler\Media\DownloadHandler::class         => Handler\Media\DownloadHandlerFactory::class,
+                Service\MailQueueServiceInterface::class     => Service\MailQueueServiceFactory::class,
                 Service\MediaServiceInterface::class         => Service\MediaServiceFactory::class,
-                Service\NoticeServiceInterface::class        => Service\NoticeServiceFactory::class,
                 Service\UserServiceInterface::class          => Service\UserServiceFactory::class,
                 Service\ProjectServiceInterface::class       => Service\ProjectServiceFactory::class,
-                Service\PasswordStoreServiceInterface::class => Service\PasswordStoreServiceFactory::class,
             ],
         ];
     }

@@ -20,6 +20,9 @@ final class ProjectService implements ProjectServiceInterface
     /** @var EntityManagerInterface */
     protected $em;
 
+    /** @var EntityRepository */
+    private $projectRepository;
+
     public function __construct(
         InputFilterInterface $inputFilter,
         EntityManagerInterface $em

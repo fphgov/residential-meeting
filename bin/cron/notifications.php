@@ -10,7 +10,7 @@ if (PHP_SAPI !== 'cli') {
 
 chdir(__DIR__ . '/../../');
 
-use App\Service\NoticeServiceInterface;
+use App\Service\MailQueueServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 require 'vendor/autoload.php';
@@ -18,23 +18,14 @@ require 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createUnsafeMutable(dirname(__DIR__, 2));
 $dotenv->load();
 
-$config = include 'config/config.php';
 $container = require 'config/container.php';
 
-$em            = $container->get(EntityManagerInterface::class);
-$noticeService = $container->get(NoticeServiceInterface::class);
+$em               = $container->get(EntityManagerInterface::class);
+$mailQueueService = $container->get(MailQueueServiceInterface::class);
 
-// $applicantRepository = $em->getRepository(Applicant::class);
+try {
+    $mailQueueService->process();
+    sleep(1);
+} catch (\Throwable $th) {
 
-// $applicants = $applicantRepository->findBy([
-//     'notified' => false,
-// ], [], (int) $config['app']['notification']['frequency']);
-
-// foreach($applicants as $applicant) {
-//     try {
-//         $noticeService->sendEmail($applicant);
-//         sleep(1);
-//     } catch (\Throwable $th) {
-//         error_log($applicant->getHumanId());
-//     }
-// }
+}

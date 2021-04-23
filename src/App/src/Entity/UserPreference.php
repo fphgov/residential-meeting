@@ -63,7 +63,7 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     private $nickname;
 
     /**
-     * @ORM\Column(name="created", type="date")
+     * @ORM\Column(name="created", type="date", nullable=true)
      *
      * @var string
      */
@@ -146,12 +146,12 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
         return $this->policy;
     }
 
-    public function setCreated(DateTime $created): void
+    public function setCreated(?DateTime $created = null): void
     {
         $this->created = $created;
     }
 
-    public function getCreated(): DateTime
+    public function getCreated(): ?DateTime
     {
         return $this->created;
     }
