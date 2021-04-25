@@ -23,7 +23,7 @@ class MailQueue implements JsonSerializable, MailQueueInterface
     use EntityTrait;
 
     /**
-     * @ORM\Column(name="mailAdapter", type="text")
+     * @ORM\Column(name="mail_adapter", type="text")
      *
      * @var MailAdapter|string
      */

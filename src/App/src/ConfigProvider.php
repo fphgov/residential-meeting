@@ -44,6 +44,9 @@ class ConfigProvider
             'factories'  => [
                 Handler\User\ListHandler::class              => Handler\User\ListHandlerFactory::class,
                 Handler\User\ActivateHandler::class          => Handler\User\ActivateHandlerFactory::class,
+                Handler\User\ForgotAccountHandler::class     => Handler\User\ForgotAccountHandlerFactory::class,
+                Handler\User\ForgotPasswordHandler::class    => Handler\User\ForgotPasswordHandlerFactory::class,
+                Handler\User\ResetPasswordHandler::class     => Handler\User\ResetPasswordHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
                 Handler\Project\AddHandler::class            => Handler\Project\AddHandlerFactory::class,

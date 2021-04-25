@@ -10,13 +10,6 @@ use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
-use function array_slice;
-use function count;
-use function explode;
-use function implode;
-use function min;
-use function strip_tags;
-
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  * @ORM\Table(name="projects")

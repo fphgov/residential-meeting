@@ -58,6 +58,10 @@ class ProjectListDTO
 
     public function getTags(): array
     {
+        if ($this->tagId === null || $this->tagName === null) {
+            return [];
+        }
+
         $tagIds   = explode(',', $this->tagId);
         $tagNames = explode(',', $this->tagName);
 

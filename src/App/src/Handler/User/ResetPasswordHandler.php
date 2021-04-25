@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Exception;
 
-final class ActivateHandler implements RequestHandlerInterface
+final class ResetPasswordHandler implements RequestHandlerInterface
 {
     /** @var UserServiceInterface **/
     private $userService;
@@ -23,16 +23,18 @@ final class ActivateHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $body = $request->getParsedBody(); // TODO: filter
+
         try {
-            $this->userService->activate($request->getAttribute('hash'));
+            $this->userService->resetPassword($body['hash'], $body['password']);
         } catch (Exception $e) {
             return new JsonResponse([
-                'message' => 'Fiókja már aktíválva van vagy ismeretlen aktiváló kulcs',
+                'message' => 'Ismeretlen jelszó visszaállító kulcs',
             ], 404);
         }
 
         return new JsonResponse([
-            'message' => 'Sikeres aktiválás',
+            'message' => 'Sikeres jelszó beállítás',
         ]);
     }
 }
