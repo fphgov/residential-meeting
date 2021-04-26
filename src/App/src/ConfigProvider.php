@@ -47,6 +47,7 @@ class ConfigProvider
                 Handler\User\ForgotAccountHandler::class     => Handler\User\ForgotAccountHandlerFactory::class,
                 Handler\User\ForgotPasswordHandler::class    => Handler\User\ForgotPasswordHandlerFactory::class,
                 Handler\User\ResetPasswordHandler::class     => Handler\User\ResetPasswordHandlerFactory::class,
+                Handler\User\RegistrationHandler::class      => Handler\User\RegistrationHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
                 Handler\Project\AddHandler::class            => Handler\Project\AddHandlerFactory::class,
@@ -65,7 +66,8 @@ class ConfigProvider
     {
         return [
             'factories' => [
-                InputFilter\ProjectInputFilter::class => InvokableFactory::class,
+                InputFilter\ProjectInputFilter::class     => InvokableFactory::class,
+                InputFilter\UserRegistrationFilter::class => InputFilter\UserRegistrationFilterFactory::class,
             ],
         ];
     }

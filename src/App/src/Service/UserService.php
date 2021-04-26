@@ -135,10 +135,8 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
-    public function addUser(array $filteredParams)
+    public function registration(array $filteredParams)
     {
-        // TODO: filter
-
         $date = new DateTime();
 
         $user           = new User();
@@ -146,16 +144,14 @@ final class UserService implements UserServiceInterface
         $password       = new PBKDF2Password($filteredParams['password']);
 
         $userPreference->setUser($user);
-        $userPreference->setAddress($filteredParams['address']);
-        $userPreference->setBirthyear($filteredParams['birthyear']);
-        $userPreference->setLiveInCity($filteredParams['liveInCity']);
-        $userPreference->setPostalCode($filteredParams['postalCode']);
+        $userPreference->setBirthyear((int)$filteredParams['birthyear']);
+        $userPreference->setPostalCode((string)$filteredParams['postal_code']);
+        $userPreference->setLiveInCity((bool)$filteredParams['live_in_city']);
+        $userPreference->setHearAbout($filteredParams['hear_about']);
         $userPreference->setNickname($filteredParams['nickname']);
-        $userPreference->setpolicy($filteredParams['policy']);
+        $userPreference->setPrivacy((bool)$filteredParams['privacy']);
         $userPreference->setCreatedAt($date);
         $userPreference->setUpdatedAt($date);
-
-        $user->setId(999);
 
         $user->setUserPreference($userPreference);
         $user->setHash($user->generateToken());
@@ -209,7 +205,7 @@ final class UserService implements UserServiceInterface
 
         try {
             $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('Jelszó emlékeztető az Ötlet.budapest.hu-n lévő fiókra');
+            $this->mailAdapter->message->setSubject('A fiók jelszavánának visszaállítása');
 
             $tplData = [
                 'name'             => $user->getFirstname(),

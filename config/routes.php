@@ -17,6 +17,17 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         Jwt\Handler\TokenHandler::class,
     ], 'app.api.login');
 
+    if (getenv('NODE_ENV') === 'development') {
+        $app->post('/app/api/user/registration', [
+            App\Handler\User\RegistrationHandler::class
+        ], 'app.api.user.registration');
+    } else {
+        $app->post('/app/api/user/registration', [
+            \Middlewares\Recaptcha::class,
+            App\Handler\User\RegistrationHandler::class
+        ], 'app.api.user.registration');
+    }
+
     $app->get('/app/api/user/activate/{hash}', [
         App\Handler\User\ActivateHandler::class
     ], 'app.api.user.activate');

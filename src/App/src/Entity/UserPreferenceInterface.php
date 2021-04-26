@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use DateTime;
+
 interface UserPreferenceInterface
 {
     public const DISABLE_SHOW_DEFAULT = [
@@ -14,10 +16,6 @@ interface UserPreferenceInterface
     public function setUser(User $user): void;
 
     public function getUser(): User;
-
-    public function setAddress(string $address): void;
-
-    public function getAddress(): string;
 
     public function setBirthyear(?int $birthday = null): void;
 
@@ -35,7 +33,15 @@ interface UserPreferenceInterface
 
     public function getNickname(): string;
 
-    public function setpolicy(bool $policy): void;
+    public function setPrivacy(bool $privacy): void;
 
-    public function getpolicy(): bool;
+    public function getPrivacy(): bool;
+
+    public function setHearAbout(string $hearAbout): void;
+
+    public function getHearAbout(): string;
+
+    public function setCreated(?DateTime $created = null): void;
+
+    public function getCreated(): ?DateTime;
 }

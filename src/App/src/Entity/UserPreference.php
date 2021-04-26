@@ -28,13 +28,6 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     private $user;
 
     /**
-     * @ORM\Column(name="address", type="string")
-     *
-     * @var string
-     */
-    private $address;
-
-    /**
      * @ORM\Column(name="birthyear", type="smallint", nullable=true)
      *
      * @var int
@@ -46,7 +39,7 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
      *
      * @var bool
      */
-    private $liveInCity;
+    private $liveInCity = false;
 
     /**
      * @ORM\Column(name="postal_code", type="text", length=4, nullable=true)
@@ -63,6 +56,13 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     private $nickname;
 
     /**
+     * @ORM\Column(name="hear_about", type="string")
+     *
+     * @var string
+     */
+    private $hearAbout;
+
+    /**
      * @ORM\Column(name="created", type="date", nullable=true)
      *
      * @var string
@@ -70,11 +70,11 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     private $created;
 
     /**
-     * @ORM\Column(name="policy", type="boolean")
+     * @ORM\Column(name="privacy", type="boolean")
      *
      * @var bool
      */
-    private $policy;
+    private $privacy;
 
     public function setUser(User $user): void
     {
@@ -84,16 +84,6 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     public function getUser(): User
     {
         return $this->user;
-    }
-
-    public function setAddress(string $address): void
-    {
-        $this->address = $address;
-    }
-
-    public function getAddress(): string
-    {
-        return $this->address;
     }
 
     public function setBirthyear(?int $birthyear = null): void
@@ -136,14 +126,24 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
         return $this->nickname;
     }
 
-    public function setpolicy(bool $policy): void
+    public function setHearAbout(string $hearAbout): void
     {
-        $this->policy = $policy;
+        $this->hearAbout = $hearAbout;
     }
 
-    public function getpolicy(): bool
+    public function getHearAbout(): string
     {
-        return $this->policy;
+        return $this->hearAbout;
+    }
+
+    public function setPrivacy(bool $privacy): void
+    {
+        $this->privacy = $privacy;
+    }
+
+    public function getPrivacy(): bool
+    {
+        return $this->privacy;
     }
 
     public function setCreated(?DateTime $created = null): void
