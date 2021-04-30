@@ -32,6 +32,13 @@ class User implements JsonSerializable, UserInterface
     private $userPreference;
 
     /**
+     * @ORM\OneToOne(targetEntity="Vote", mappedBy="user")
+     *
+     * @var Vote
+     */
+    private $vote;
+
+    /**
      * @ORM\Column(name="username", type="string")
      *
      * @var string
@@ -95,6 +102,16 @@ class User implements JsonSerializable, UserInterface
     public function getUserPreference(): UserPreference
     {
         return $this->userPreference;
+    }
+
+    public function setVote(?Vote $vote = null)
+    {
+        $this->vote = $vote;
+    }
+
+    public function getVote(): ?Vote
+    {
+        return $this->vote;
     }
 
     public function setLuteceId(string $luteceId): void

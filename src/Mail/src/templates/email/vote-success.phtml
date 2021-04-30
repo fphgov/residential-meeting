@@ -1,0 +1,28 @@
+<p>Üdvözöljük <?=$name;?>!</p>
+
+<p>Ezt az e-mailt azért kapta, mert az <a href="https://otlet.budapest.hu" target="_blank" rel="noopener">Ötlet.budapest.hu</a>-n sikeresen leadta szavazatát.</p>
+
+<p>Ön az alábbi projektekre szavazott:</p>
+
+<p>
+    <b><?=$votes['CARE']['title'];?></b><br />
+
+    <?=$votes['CARE']['description'];?>
+</p>
+
+<p>
+    <b><?=$votes['GREEN']['title'];?></b><br />
+
+    <?=$votes['GREEN']['description'];?>
+</p>
+
+<p>
+    <b><?=$votes['WHOLE']['title'];?></b><br />
+
+    <?=$votes['WHOLE']['description'];?>
+</p>
+
+<p>
+    Üdvözlettel:<br />
+    <?=$infoMunicipality;?>
+</p>

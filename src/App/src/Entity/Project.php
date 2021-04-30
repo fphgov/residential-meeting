@@ -10,6 +10,14 @@ use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
+use function array_slice;
+use function count;
+use function explode;
+use function min;
+use function implode;
+use function strip_tags;
+use function trim;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  * @ORM\Table(name="projects")
@@ -202,5 +210,20 @@ class Project implements JsonSerializable, ProjectInterface
     public function getStatus(): int
     {
         return $this->status;
+    }
+
+    public function getShortDescription(): string
+    {
+        $description = $this->description;
+
+        $description = strip_tags($description);
+
+        $descriptions = explode(" ", $description);
+        $descriptions = array_slice($descriptions, 0, min(22, count($descriptions) - 1));
+
+        $description  = trim(implode(" ", $descriptions));
+        $description .= ' ...';
+
+        return $description;
     }
 }

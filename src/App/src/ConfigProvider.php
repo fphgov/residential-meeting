@@ -48,6 +48,7 @@ class ConfigProvider
                 Handler\User\ForgotPasswordHandler::class    => Handler\User\ForgotPasswordHandlerFactory::class,
                 Handler\User\ResetPasswordHandler::class     => Handler\User\ResetPasswordHandlerFactory::class,
                 Handler\User\RegistrationHandler::class      => Handler\User\RegistrationHandlerFactory::class,
+                Handler\User\VoteHandler::class              => Handler\User\VoteHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
                 Handler\Project\AddHandler::class            => Handler\Project\AddHandlerFactory::class,
@@ -58,6 +59,7 @@ class ConfigProvider
                 Service\MediaServiceInterface::class         => Service\MediaServiceFactory::class,
                 Service\UserServiceInterface::class          => Service\UserServiceFactory::class,
                 Service\ProjectServiceInterface::class       => Service\ProjectServiceFactory::class,
+                Service\VoteServiceInterface::class          => Service\VoteServiceFactory::class,
             ],
         ];
     }
@@ -68,6 +70,7 @@ class ConfigProvider
             'factories' => [
                 InputFilter\ProjectInputFilter::class     => InvokableFactory::class,
                 InputFilter\UserRegistrationFilter::class => InputFilter\UserRegistrationFilterFactory::class,
+                InputFilter\VoteFilter::class             => InputFilter\VoteFilterFactory::class,
             ],
         ];
     }

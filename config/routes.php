@@ -50,6 +50,12 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\User\ListHandler::class
     ], 'app.api.user');
 
+    $app->post('/app/api/user/vote', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        App\Handler\User\VoteHandler::class
+    ], 'app.api.user.vote');
+
     $app->get('/app/api/projects', [
         App\Handler\Project\ListHandler::class
     ], 'app.api.project.list');

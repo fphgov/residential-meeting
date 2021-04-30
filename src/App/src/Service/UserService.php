@@ -191,7 +191,7 @@ final class UserService implements UserServiceInterface
 
             $this->mailQueueService->add($this->mailAdapter);
         } catch (Throwable $e) {
-            error_log($e);
+            error_log($e->getMessage());
 
             $this->audit->err('New user notification no added to MailQueueService', [
                 'extra' => $user->getId(),
@@ -218,7 +218,7 @@ final class UserService implements UserServiceInterface
 
             $this->mailQueueService->add($this->mailAdapter);
         } catch (Throwable $e) {
-            error_log($e);
+            error_log($e->getMessage());
 
             $this->audit->err('User forgot password notification no added to MailQueueService', [
                 'extra' => $user->getId(),
@@ -245,7 +245,7 @@ final class UserService implements UserServiceInterface
 
             $this->mailQueueService->add($this->mailAdapter);
         } catch (Throwable $e) {
-            error_log($e);
+            error_log($e->getMessage());
 
             $this->audit->err('User forgot account notification no added to MailQueueService', [
                 'extra' => $user->getId(),
