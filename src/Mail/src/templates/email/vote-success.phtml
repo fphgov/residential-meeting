@@ -1,26 +1,12 @@
-<p>Üdvözöljük <?=$name;?>!</p>
+<p>Kedves <?=$name;?>!</p>
 
-<p>Ezt az e-mailt azért kapta, mert az <a href="https://otlet.budapest.hu" target="_blank" rel="noopener">Ötlet.budapest.hu</a>-n sikeresen leadta szavazatát.</p>
+<p>Sikeresen leadta szavazatát a fővárosi részvételi költségvetésben az <a href="https://otlet.budapest.hu" target="_blank" rel="noopener">Ötlet.budapest.hu</a>-n. Ön az alábbi projektekre szavazott:</p>
 
-<p>Ön az alábbi projektekre szavazott:</p>
+<p>Zöld Budapest: <b><?=$votes['GREEN']['title'];?></b></p>
+<p>Gondoskodó Budapest: <b><?=$votes['CARE']['title'];?></b></p>
+<p>Egész Budapest: <b><?=$votes['WHOLE']['title'];?></b></p>
 
-<p>
-    <b><?=$votes['CARE']['title'];?></b><br />
-
-    <?=$votes['CARE']['description'];?>
-</p>
-
-<p>
-    <b><?=$votes['GREEN']['title'];?></b><br />
-
-    <?=$votes['GREEN']['description'];?>
-</p>
-
-<p>
-    <b><?=$votes['WHOLE']['title'];?></b><br />
-
-    <?=$votes['WHOLE']['description'];?>
-</p>
+<p>Köszönjük, hogy aktívan részt vesz Budapest fejlesztésében, és élt szavazati jogával a fővárosi részvételi költségvetés első évében!<br />Kérjük, bíztassa ismerőseit is, hogy szavazzanak a legjobb ötletekre.</p>
 
 <p>
     Üdvözlettel:<br />

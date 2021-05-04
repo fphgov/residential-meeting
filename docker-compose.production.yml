@@ -1,7 +1,7 @@
 version: '3.5'
 
 services:
-  db:
+  pdb:
     image: mysql:5.7
     container_name: participatory_db
     command: --explicit_defaults_for_timestamp --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -36,7 +36,7 @@ services:
       retries: 3
     env_file: .env
     depends_on:
-      - db
+      - pdb
     networks:
       - proxy
 
@@ -54,7 +54,7 @@ services:
       - ./:/var/www/html
       - ./docker/config/cert:/opt/cert
     depends_on:
-      - db
+      - pdb
       - webapp
 
 networks:

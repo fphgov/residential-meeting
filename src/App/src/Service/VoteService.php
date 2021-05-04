@@ -83,7 +83,7 @@ final class VoteService implements UserServiceInterface
 
         try {
             $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('Sikeresen leadta szavazatait');
+            $this->mailAdapter->message->setSubject('Köszönjük szavazatát!');
 
             $tplData = [
                 'name'             => $user->getFirstname(),
@@ -92,15 +92,12 @@ final class VoteService implements UserServiceInterface
                 'votes'            => [
                     'CARE' => [
                         'title'       => $vote->getProjectCare()->getTitle(),
-                        'description' => $vote->getProjectCare()->getDescription(),
                     ],
                     'GREEN' => [
                         'title'       => $vote->getProjectGreen()->getTitle(),
-                        'description' => $vote->getProjectGreen()->getDescription(),
                     ],
                     'WHOLE' => [
                         'title'       => $vote->getProjectWhole()->getTitle(),
-                        'description' => $vote->getProjectWhole()->getDescription(),
                     ],
                 ]
             ];
