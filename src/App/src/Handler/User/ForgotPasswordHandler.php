@@ -29,7 +29,7 @@ final class ForgotPasswordHandler implements RequestHandlerInterface
             $this->userService->forgotPassword($body['email']);
         } catch (Exception $e) {
             return new JsonResponse([
-                'message' => 'Ismeretlen aktiváló kulcs',
+                'message' => 'Ismeretlen hiba',
             ], 404);
         }
 
