@@ -18,7 +18,6 @@ use Laminas\Log\Logger;
 use Throwable;
 
 use function error_log;
-use function str_replace;
 
 final class UserService implements UserServiceInterface
 {
@@ -183,9 +182,9 @@ final class UserService implements UserServiceInterface
 
             $tplData = [
                 'name'             => $user->getFirstname(),
-                'infoMunicipality' => str_replace('"', '', $this->config['app']['municipality']),
-                'infoEmail'        => str_replace('"', '', $this->config['app']['email']),
-                'activation'       => str_replace('"', '', $this->config['app']['url']) . '/profil/aktivalas/' . $user->getHash(),
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'activation'       => $this->config['app']['url'] . '/profil/aktivalas/' . $user->getHash(),
             ];
 
             $this->mailAdapter->setTemplate('email/user-created', $tplData);
@@ -210,9 +209,9 @@ final class UserService implements UserServiceInterface
 
             $tplData = [
                 'name'             => $user->getFirstname(),
-                'infoMunicipality' => str_replace('"', '', $this->config['app']['municipality']),
-                'infoEmail'        => str_replace('"', '', $this->config['app']['email']),
-                'forgotLink'       => str_replace('"', '', $this->config['app']['url']) . '/profil/jelszo/' . $user->getHash(),
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'forgotLink'       => $this->config['app']['url'] . '/profil/jelszo/' . $user->getHash(),
             ];
 
             $this->mailAdapter->setTemplate('email/user-password-recovery', $tplData);
@@ -237,8 +236,8 @@ final class UserService implements UserServiceInterface
 
             $tplData = [
                 'name'             => $user->getFirstname(),
-                'infoMunicipality' => str_replace('"', '', $this->config['app']['municipality']),
-                'infoEmail'        => str_replace('"', '', $this->config['app']['email']),
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
                 'username'         => $user->getUsername(),
             ];
 
