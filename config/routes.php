@@ -60,6 +60,10 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Project\ListHandler::class
     ], 'app.api.project.list');
 
+    $app->get('/app/api/statistics', [
+        App\Handler\Project\StatisticsHandler::class
+    ], 'app.api.project.statistics');
+
     $app->get('/app/api/projects/{id}', [
         App\Handler\Project\GetHandler::class
     ], 'app.api.project.show');

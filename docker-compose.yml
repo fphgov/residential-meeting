@@ -20,7 +20,7 @@ services:
       dockerfile: docker/config/webapp/Dockerfile
     container_name: participatory_webapp
     expose:
-      - 9003
+      - 9004
     volumes:
       - .:/var/www/html
       - ./docker/config/webapp/php/ini/limitation.ini:/usr/local/etc/php/conf.d/limitation.ini

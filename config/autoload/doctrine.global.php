@@ -18,6 +18,7 @@ return [
         'configuration' => [
             'orm_default' => [
                 'string_functions' => [
+                    'IF'           => Mysql\IfElse::class,
                     'GROUP_CONCAT' => Mysql\GroupConcat::class,
                 ],
             ]

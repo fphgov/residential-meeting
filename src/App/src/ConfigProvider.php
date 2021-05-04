@@ -52,6 +52,7 @@ class ConfigProvider
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
                 Handler\Project\AddHandler::class            => Handler\Project\AddHandlerFactory::class,
+                Handler\Project\StatisticsHandler::class     => Handler\Project\StatisticsHandlerFactory::class,
                 Handler\Setting\GetHandler::class            => Handler\Setting\GetHandlerFactory::class,
                 Handler\Media\GetHandler::class              => Handler\Media\GetHandlerFactory::class,
                 Handler\Media\DownloadHandler::class         => Handler\Media\DownloadHandlerFactory::class,
@@ -91,10 +92,22 @@ class ConfigProvider
                 'extractor'      => Hydrator\ClassMethodsHydrator::class,
             ],
             [
+                '__class__'      => RouteBasedResourceMetadata::class,
+                'resource_class' => Entity\ProjectStatisticsDTO::class,
+                'route'          => 'app.api.project.show',
+                'extractor'      => Hydrator\ClassMethodsHydrator::class,
+            ],
+            [
                 '__class__'           => RouteBasedCollectionMetadata::class,
                 'collection_class'    => Entity\ProjectCollection::class,
                 'collection_relation' => 'projects',
                 'route'               => 'app.api.project.list',
+            ],
+            [
+                '__class__'           => RouteBasedCollectionMetadata::class,
+                'collection_class'    => Entity\ProjectStatisticsCollection::class,
+                'collection_relation' => 'projects',
+                'route'               => 'app.api.project.statistics',
             ],
         ];
     }
