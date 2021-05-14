@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Jwt\Handler;
 
 use App\Entity\User;
+use App\Entity\Vote;
 use App\Model\PBKDF2Password;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,6 +37,7 @@ class TokenHandler implements RequestHandlerInterface
         $postBody = $request->getParsedBody();
 
         $userRepository = $this->em->getRepository(User::class);
+        $voteRepository = $this->em->getRepository(Vote::class);
 
         if (! isset($postBody['email']) || ! isset($postBody['password'])) {
             return $this->badAuthentication();
@@ -57,11 +59,32 @@ class TokenHandler implements RequestHandlerInterface
             return $this->badAuthentication();
         }
 
+        $votes = $voteRepository->findOneBy([
+            'user' => $user->getId()
+        ]);
+
         $userData = [
             'firstname' => $user->getFirstname(),
             'lastname'  => $user->getLastname(),
             'email'     => $user->getEmail(),
             'role'      => $user->getRole(),
+            'votes'     => [
+                'rk_vote_CARE'  => [
+                    'id'          => $votes->getProjectCare()->getId(),
+                    'title'       => $votes->getProjectCare()->getTitle(),
+                    'description' => $votes->getProjectCare()->getDescription(),
+                ],
+                'rk_vote_GREEN' => [
+                    'id'          => $votes->getProjectGreen()->getId(),
+                    'title'       => $votes->getProjectGreen()->getTitle(),
+                    'description' => $votes->getProjectGreen()->getDescription(),
+                ],
+                'rk_vote_WHOLE' => [
+                    'id'          => $votes->getProjectWhole()->getId(),
+                    'title'       => $votes->getProjectWhole()->getTitle(),
+                    'description' => $votes->getProjectWhole()->getDescription(),
+                ]
+            ],
             'voted'     => $user->getVote() !== null,
         ];
 
