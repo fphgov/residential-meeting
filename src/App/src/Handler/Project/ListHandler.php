@@ -60,7 +60,7 @@ final class ListHandler implements RequestHandlerInterface
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
             ->leftJoin('p.tags', 't')
             ->groupBy('p.id')
-            ->orderBy('p.id', 'DESC');
+            ->orderBy('p.title', 'ASC');
 
         if (intval($query) !== 0) {
             $qb->where('p.id = :id')->setParameter('id', $query);
