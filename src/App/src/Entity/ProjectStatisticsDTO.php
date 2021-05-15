@@ -16,6 +16,7 @@ use JsonSerializable;
 class ProjectStatisticsDTO implements JsonSerializable
 {
     private $id;
+    private $campaignThemeId;
     private $campaignThemeName;
     private $campaignThemeRgb;
     private $title;
@@ -25,6 +26,7 @@ class ProjectStatisticsDTO implements JsonSerializable
 
     public function __construct(
         int $id,
+        $campaignThemeId,
         $campaignThemeName,
         $campaignThemeRgb,
         $title,
@@ -33,6 +35,7 @@ class ProjectStatisticsDTO implements JsonSerializable
         $votedWhole
     ) {
         $this->id = $id;
+        $this->campaignThemeId = $campaignThemeId;
         $this->campaignThemeName = $campaignThemeName;
         $this->campaignThemeRgb = $campaignThemeRgb;
         $this->title = $title;
@@ -49,6 +52,7 @@ class ProjectStatisticsDTO implements JsonSerializable
     public function getCampaignTheme(): array
     {
         return [
+            'id' => $this->campaignThemeId,
             'name' => $this->campaignThemeName,
             'rgb'  => $this->campaignThemeRgb,
         ];

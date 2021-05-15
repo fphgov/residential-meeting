@@ -33,7 +33,7 @@ final class StatisticsHandler implements RequestHandlerInterface
         $repository = $this->em->getRepository(Project::class);
 
         $qb = $repository->createQueryBuilder('p')
-            ->select('NEW ProjectStatisticsDTO(p.id, ct.name, ct.rgb, p.title, COUNT(care.id), COUNT(green.id), COUNT(whole.id)) as ps')
+            ->select('NEW ProjectStatisticsDTO(p.id, ct.id, ct.name, ct.rgb, p.title, COUNT(care.id), COUNT(green.id), COUNT(whole.id)) as ps')
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
             ->leftJoin(Vote::class, 'care', Join::WITH, 'care.projectCare = p.id')
             ->leftJoin(Vote::class, 'green', Join::WITH, 'green.projectGreen = p.id')
