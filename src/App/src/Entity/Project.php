@@ -151,7 +151,7 @@ class Project implements JsonSerializable, ProjectInterface
         return $this->tags->getValues();
     }
 
-    public function getLocations(): array
+    public function getCampaignLocations(): array
     {
         return $this->campaignLocations->getValues();
     }
