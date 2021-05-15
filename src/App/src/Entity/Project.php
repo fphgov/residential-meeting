@@ -50,6 +50,15 @@ class Project implements JsonSerializable, ProjectInterface
     private $tags;
 
     /**
+     * @ORM\ManyToMany(targetEntity="CampaignLocation")
+     * @ORM\JoinTable(name="projects_campaign_locations",
+     *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id")}
+     * )
+     */
+    private $campaignLocations;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Media")
      * @ORM\JoinTable(name="projects_medias",
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
@@ -140,6 +149,11 @@ class Project implements JsonSerializable, ProjectInterface
     public function getTags(): array
     {
         return $this->tags->getValues();
+    }
+
+    public function getLocations(): array
+    {
+        return $this->campaignLocations->getValues();
     }
 
     public function setTitle(string $title): void

@@ -53,12 +53,14 @@ final class ListHandler implements RequestHandlerInterface
         $query       = $queryParams['query'] ?? '';
         $tag         = $queryParams['tag'] ?? '';
         $theme       = $queryParams['theme'] ?? '';
+        $location    = $queryParams['location'] ?? '';
         $page        = $queryParams['page'] ?? 1;
 
         $qb = $repository->createQueryBuilder('p')
             ->select('NEW ProjectListDTO(p.id, ct.name, ct.rgb, p.title, p.description, p.location, GROUP_CONCAT(t.id), GROUP_CONCAT(t.name)) as project')
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
             ->leftJoin('p.tags', 't')
+            ->leftJoin('p.campaignLocations', 'l')
             ->groupBy('p.id')
             ->orderBy('p.title', 'ASC');
 
@@ -79,6 +81,11 @@ final class ListHandler implements RequestHandlerInterface
         if ($theme && $theme != 0) {
             $qb->andWhere('ct.id = :themes');
             $qb->setParameter('themes', $theme);
+        }
+
+        if ($location && $location != 0) {
+            $qb->andWhere('l.id = :location');
+            $qb->setParameter('location', $location);
         }
 
         $qb->setMaxResults(1);
