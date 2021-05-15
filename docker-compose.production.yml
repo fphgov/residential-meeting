@@ -52,7 +52,6 @@ services:
       - ./docker/config/nginx:/etc/nginx/conf.d
       - ./docker/data/nginx/logs:/var/log/nginx
       - ./:/var/www/html
-      - ./docker/config/cert:/opt/cert
     depends_on:
       - pdb
       - webapp
