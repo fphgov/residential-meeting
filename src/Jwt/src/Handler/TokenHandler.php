@@ -59,16 +59,21 @@ class TokenHandler implements RequestHandlerInterface
             return $this->badAuthentication();
         }
 
-        $votes = $voteRepository->findOneBy([
-            'user' => $user->getId()
-        ]);
-
         $userData = [
             'firstname' => $user->getFirstname(),
             'lastname'  => $user->getLastname(),
             'email'     => $user->getEmail(),
             'role'      => $user->getRole(),
-            'votes'     => [
+            'votes'     => null,
+            'voted'     => $user->getVote() !== null,
+        ];
+
+        $votes = $voteRepository->findOneBy([
+            'user' => $user->getId()
+        ]);
+
+        if ($votes !== null) {
+            $userData['votes'] = [
                 'rk_vote_CARE'  => [
                     'id'          => $votes->getProjectCare()->getId(),
                     'title'       => $votes->getProjectCare()->getTitle(),
@@ -84,9 +89,8 @@ class TokenHandler implements RequestHandlerInterface
                     'title'       => $votes->getProjectWhole()->getTitle(),
                     'description' => $votes->getProjectWhole()->getDescription(),
                 ]
-            ],
-            'voted'     => $user->getVote() !== null,
-        ];
+                ];
+        }
 
         $token = $this->generateToken($userData);
 

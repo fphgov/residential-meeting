@@ -91,13 +91,13 @@ final class VoteService implements UserServiceInterface
                 'infoEmail'        => $this->config['app']['email'],
                 'votes'            => [
                     'CARE' => [
-                        'title'       => $vote->getProjectCare()->getTitle(),
+                        'title' => $vote->getProjectCare()->getTitle(),
                     ],
                     'GREEN' => [
-                        'title'       => $vote->getProjectGreen()->getTitle(),
+                        'title' => $vote->getProjectGreen()->getTitle(),
                     ],
                     'WHOLE' => [
-                        'title'       => $vote->getProjectWhole()->getTitle(),
+                        'title' => $vote->getProjectWhole()->getTitle(),
                     ],
                 ]
             ];
