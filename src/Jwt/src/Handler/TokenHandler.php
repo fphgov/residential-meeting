@@ -53,6 +53,10 @@ class TokenHandler implements RequestHandlerInterface
             return $this->badAuthentication();
         }
 
+        if (! $user->getActive()) {
+            return $this->badAuthentication();
+        }
+
         $passwordModel = new PBKDF2Password($user->getPassword(), PBKDF2Password::PW_REPRESENTATION_STORABLE);
 
         if (! $passwordModel->verify($postBody['password'])) {
@@ -102,7 +106,7 @@ class TokenHandler implements RequestHandlerInterface
     private function badAuthentication(): JsonResponse
     {
         return new JsonResponse([
-            'message' => 'Hibás bejelentkezési adatok',
+            'message' => 'Hibás bejelentkezési adatok vagy inaktív fiók',
         ], 400);
     }
 
