@@ -106,6 +106,8 @@ final class UserService implements UserServiceInterface
         }
 
         if (! $user->getActive()) {
+            $this->sendActivationEmail($user);
+
             throw new UserNotActiveException((string)$user->getId());
         }
 
@@ -127,6 +129,8 @@ final class UserService implements UserServiceInterface
         }
 
         if (! $user->getActive()) {
+            $this->sendActivationEmail($user);
+
             throw new UserNotActiveException((string)$user->getId());
         }
 
@@ -167,12 +171,12 @@ final class UserService implements UserServiceInterface
         $this->em->persist($user);
         $this->em->flush();
 
-        $this->newUserMail($user);
+        $this->sendActivationEmail($user);
 
         return $user;
     }
 
-    private function newUserMail(User $user)
+    private function sendActivationEmail(User $user)
     {
         $this->mailAdapter->clear();
 

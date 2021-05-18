@@ -16,7 +16,7 @@ use Exception;
 final class ForgotPasswordHandler implements RequestHandlerInterface
 {
     private const RES_MESSAGE       = 'Amennyiben a rendszerünkben szerepel a fiók és ez aktív, úgy a megadott e-mailre kiküldtük a fiók emlékezetőt.';
-    private const RES_ERROR_MESSAGE = 'Rendszerhiba. A problémát rögzítettük és próbáljuk a lehető legrövidebb időn belűl javítani.';
+    private const RES_ERROR_MESSAGE = 'Váratlan hiba történt. A problémát rögzítettük és próbáljuk a lehető legrövidebb időn belűl javítani.';
 
     /** @var UserServiceInterface **/
     private $userService;
@@ -41,7 +41,7 @@ final class ForgotPasswordHandler implements RequestHandlerInterface
         } catch (UserNotActiveException $e) {
             return new JsonResponse([
                 'message' => self::RES_MESSAGE,
-            ], 402);
+            ]);
         } catch (Exception $e) {
             $this->audit->err('Forgot account exception', [
                 'extra' => $e->getMessage(),
@@ -49,7 +49,7 @@ final class ForgotPasswordHandler implements RequestHandlerInterface
 
             return new JsonResponse([
                 'message' => self::RES_ERROR_MESSAGE,
-            ], 500);
+            ], 400);
         }
 
         return new JsonResponse([
