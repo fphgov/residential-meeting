@@ -30,7 +30,7 @@ final class ForgotPasswordHandler implements RequestHandlerInterface
             $this->userService->forgotPassword($body['email']);
         } catch (UserNotActiveException $e) {
             return new JsonResponse([
-                'message' => 'Amennyiben van a rendszerünkben ilyen fiók és aktív, úgy a megadott e-mailre kiküldtük a fiók emlékezetőt.',
+                'message' => 'Amennyiben a rendszerünkben szerepel a fiók és ez aktív, úgy a megadott e-mailre kiküldtük a fiók emlékezetőt.',
             ], 402);
         } catch (Exception $e) {
             return new JsonResponse([
