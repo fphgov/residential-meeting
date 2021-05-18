@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Handler\User;
 
 use App\Service\UserServiceInterface;
+use App\Exception\UserNotActiveException;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,6 +28,10 @@ final class ForgotAccountHandler implements RequestHandlerInterface
 
         try {
             $this->userService->forgotAccount($body['email']);
+        } catch (UserNotActiveException $e) {
+            return new JsonResponse([
+                'message' => 'Amennyiben van a rendszerünkben ilyen fiók és aktív, úgy a megadott e-mailre kiküldtük a fiók emlékezetőt.',
+            ], 402);
         } catch (Exception $e) {
             return new JsonResponse([
                 'message' => 'Ismeretlen hiba',
@@ -34,7 +39,7 @@ final class ForgotAccountHandler implements RequestHandlerInterface
         }
 
         return new JsonResponse([
-            'message' => 'Sikeres aktiválás',
+            'message' => 'Sikeres fiók emlékeztető',
         ]);
     }
 }

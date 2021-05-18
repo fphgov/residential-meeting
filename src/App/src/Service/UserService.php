@@ -106,7 +106,7 @@ final class UserService implements UserServiceInterface
         }
 
         if (! $user->getActive()) {
-            throw new UserNotActiveException($user->getId());
+            throw new UserNotActiveException((string)$user->getId());
         }
 
         $user->setHash($user->generateToken());
@@ -127,7 +127,7 @@ final class UserService implements UserServiceInterface
         }
 
         if (! $user->getActive()) {
-            throw new UserNotActiveException($user->getId());
+            throw new UserNotActiveException((string)$user->getId());
         }
 
         $this->forgotAccountMail($user);
