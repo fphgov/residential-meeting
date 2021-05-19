@@ -106,6 +106,7 @@ final class UserService implements UserServiceInterface
         }
 
         if (! $user->getActive()) {
+            $user->setHash($user->generateToken());
             $this->sendActivationEmail($user);
 
             throw new UserNotActiveException((string)$user->getId());
@@ -129,6 +130,7 @@ final class UserService implements UserServiceInterface
         }
 
         if (! $user->getActive()) {
+            $user->setHash($user->generateToken());
             $this->sendActivationEmail($user);
 
             throw new UserNotActiveException((string)$user->getId());
