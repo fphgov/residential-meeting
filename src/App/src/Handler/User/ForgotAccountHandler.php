@@ -6,6 +6,7 @@ namespace App\Handler\User;
 
 use App\Service\UserServiceInterface;
 use App\Exception\UserNotActiveException;
+use App\Exception\UserNotFoundException;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Log\Logger;
 use Psr\Http\Message\ResponseInterface;
@@ -39,6 +40,10 @@ final class ForgotAccountHandler implements RequestHandlerInterface
         try {
             $this->userService->forgotAccount($body['email']);
         } catch (UserNotActiveException $e) {
+            return new JsonResponse([
+                'message' => self::RES_MESSAGE,
+            ]);
+        } catch (UserNotFoundException $e) {
             return new JsonResponse([
                 'message' => self::RES_MESSAGE,
             ]);

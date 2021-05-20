@@ -6,6 +6,7 @@ namespace App\Handler\User;
 
 use App\Service\UserServiceInterface;
 use App\Exception\UserNotActiveException;
+use App\Exception\UserNotFoundException;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Log\Logger;
 use Psr\Http\Message\ResponseInterface;
@@ -15,7 +16,7 @@ use Exception;
 
 final class ForgotPasswordHandler implements RequestHandlerInterface
 {
-    private const RES_MESSAGE       = 'Amennyiben a rendszerünkben szerepel a fiók és ez aktív, úgy a megadott e-mailre kiküldtük a fiók emlékezetőt.';
+    private const RES_MESSAGE       = 'Amennyiben a rendszerünkben szerepel a fiók és ez aktív, úgy a megadott e-mailre kiküldtük a jelszó emlékezetőt.';
     private const RES_ERROR_MESSAGE = 'Váratlan hiba történt. A problémát rögzítettük és próbáljuk a lehető legrövidebb időn belűl javítani.';
 
     /** @var UserServiceInterface **/
@@ -39,6 +40,10 @@ final class ForgotPasswordHandler implements RequestHandlerInterface
         try {
             $this->userService->forgotPassword($body['email']);
         } catch (UserNotActiveException $e) {
+            return new JsonResponse([
+                'message' => self::RES_MESSAGE,
+            ]);
+        } catch (UserNotFoundException $e) {
             return new JsonResponse([
                 'message' => self::RES_MESSAGE,
             ]);
