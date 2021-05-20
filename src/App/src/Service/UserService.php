@@ -102,7 +102,7 @@ final class UserService implements UserServiceInterface
         ]);
 
         if (! ($user instanceof User)) {
-            throw new UserNotFoundException($hash);
+            throw new UserNotFoundException($email);
         }
 
         if (! $user->getActive()) {
