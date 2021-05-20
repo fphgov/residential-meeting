@@ -16,7 +16,7 @@ use Exception;
 
 final class ForgotPasswordHandler implements RequestHandlerInterface
 {
-    private const RES_MESSAGE       = 'Amennyiben a rendszerünkben szerepel a fiók és ez aktív, úgy a megadott e-mailre kiküldtük a jelszó emlékezetőt.';
+    private const RES_MESSAGE       = 'Amennyiben a rendszerünkben szerepel a fiók és ez aktív, úgy a megadott e-mailre kiküldtük a jelszó emlékeztetőt.';
     private const RES_ERROR_MESSAGE = 'Váratlan hiba történt. A problémát rögzítettük és próbáljuk a lehető legrövidebb időn belűl javítani.';
 
     /** @var UserServiceInterface **/
