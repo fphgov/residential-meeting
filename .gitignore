@@ -45,6 +45,7 @@ docker/config/cert/*
 
 public/**/*
 !public/index.php
+!public/static.php
 !public/.htaccess
 
 supervisord.log
