@@ -42,6 +42,8 @@ class ConfigProvider
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
             'factories'  => [
+                Handler\Dashboard\GetHandler::class          => Handler\Dashboard\GetHandlerFactory::class,
+                Handler\Dashboard\ChangeHandler::class       => Handler\Dashboard\ChangeHandlerFactory::class,
                 Handler\User\ListHandler::class              => Handler\User\ListHandlerFactory::class,
                 Handler\User\ActivateHandler::class          => Handler\User\ActivateHandlerFactory::class,
                 Handler\User\ForgotAccountHandler::class     => Handler\User\ForgotAccountHandlerFactory::class,
@@ -60,6 +62,7 @@ class ConfigProvider
                 Service\MediaServiceInterface::class         => Service\MediaServiceFactory::class,
                 Service\UserServiceInterface::class          => Service\UserServiceFactory::class,
                 Service\ProjectServiceInterface::class       => Service\ProjectServiceFactory::class,
+                Service\SettingServiceInterface::class       => Service\SettingServiceFactory::class,
                 Service\VoteServiceInterface::class          => Service\VoteServiceFactory::class,
             ],
         ];

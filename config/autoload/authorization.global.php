@@ -22,7 +22,7 @@ return [
             'admin.api.login',
             'admin.api.cache.clear',
             'admin.api.dashboard.get',
-            // 'admin.api.dashboard.set',
+            'admin.api.dashboard.set',
         ],
         'allow'     => [
             'guest'     => [
@@ -41,7 +41,7 @@ return [
             'admin' => [
                 'admin.api.cache.clear',
                 'admin.api.dashboard.get',
-                // 'admin.api.dashboard.set',
+                'admin.api.dashboard.set',
             ],
             'developer' => [
 

@@ -108,6 +108,13 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Dashboard\GetHandler::class
     ], 'admin.api.dashboard.get');
 
+    $app->post('/admin/api/dashboard', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Dashboard\ChangeHandler::class
+    ], 'admin.api.dashboard.set');
+
     $app->post('/app/api/project', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
