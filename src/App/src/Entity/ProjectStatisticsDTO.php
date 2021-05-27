@@ -23,6 +23,7 @@ class ProjectStatisticsDTO implements JsonSerializable
     private $votedCare;
     private $votedGreen;
     private $votedWhole;
+    private int $plusVoted = 0;
 
     public function __construct(
         int $id,
@@ -34,14 +35,14 @@ class ProjectStatisticsDTO implements JsonSerializable
         $votedGreen,
         $votedWhole
     ) {
-        $this->id = $id;
-        $this->campaignThemeId = $campaignThemeId;
+        $this->id                = $id;
+        $this->campaignThemeId   = $campaignThemeId;
         $this->campaignThemeName = $campaignThemeName;
-        $this->campaignThemeRgb = $campaignThemeRgb;
-        $this->title = $title;
-        $this->votedCare = $votedCare;
-        $this->votedGreen = $votedGreen;
-        $this->votedWhole = $votedWhole;
+        $this->campaignThemeRgb  = $campaignThemeRgb;
+        $this->title             = $title;
+        $this->votedCare         = $votedCare;
+        $this->votedGreen        = $votedGreen;
+        $this->votedWhole        = $votedWhole;
     }
 
     public function getId(): int
@@ -75,7 +76,12 @@ class ProjectStatisticsDTO implements JsonSerializable
             $voted = $this->votedWhole;
         }
 
-        return (int)$voted;
+        return $this->plusVoted + (int)$voted;
+    }
+
+    public function setPlusVoted(int $vote): void
+    {
+        $this->plusVoted = $vote;
     }
 
     public function jsonSerialize(): array

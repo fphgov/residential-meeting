@@ -6,6 +6,7 @@ namespace App\Handler\Project;
 
 use App\Entity\Project;
 use App\Entity\Vote;
+use App\Entity\OfflineVote;
 use Doctrine\ORM\EntityManagerInterface;
 use Mezzio\Hal\HalResponseFactory;
 use Mezzio\Hal\ResourceGenerator;
@@ -38,11 +39,13 @@ final class GetHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $entityRepository = $this->entityManager->getRepository(Project::class);
-        $voteRepository   = $this->entityManager->getRepository(Vote::class);
+        $entityRepository      = $this->entityManager->getRepository(Project::class);
+        $voteRepository        = $this->entityManager->getRepository(Vote::class);
+        $offlineVoteRepository = $this->entityManager->getRepository(OfflineVote::class);
 
         $result = $entityRepository->find($request->getAttribute('id'));
         $count  = $voteRepository->numberOfVotes((int)$request->getAttribute('id'));
+        $count  += $offlineVoteRepository->numberOfVotes((int)$request->getAttribute('id'));
 
         if ($result === null) {
             return new JsonResponse([

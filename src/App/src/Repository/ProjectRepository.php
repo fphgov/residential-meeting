@@ -18,6 +18,7 @@ final class ProjectRepository extends EntityRepository
                 $selectables[$project->getCampaignTheme()->getId()] = [
                     'id'    => $project->getCampaignTheme()->getId(),
                     'name'  => $project->getCampaignTheme()->getName(),
+                    'code'  => $project->getCampaignTheme()->getCode(),
                     'elems' => []
                 ];
             }
