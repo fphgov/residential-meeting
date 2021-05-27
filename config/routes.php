@@ -115,10 +115,24 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Dashboard\ChangeHandler::class
     ], 'admin.api.dashboard.set');
 
-    $app->post('/app/api/project', [
+    $app->post('/admin/api/project', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
         \Mezzio\Authorization\AuthorizationMiddleware::class,
         App\Handler\Project\AddHandler::class
     ], 'admin.api.project.add');
+
+    $app->get('/admin/api/vote', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Project\ListAdminHandler::class
+    ], 'admin.api.vote.list');
+
+    $app->post('/admin/api/vote', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Vote\AddHandler::class
+    ], 'admin.api.vote.add');
 };

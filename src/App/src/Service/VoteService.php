@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\Vote;
+use App\Entity\OfflineVote;
 use App\Entity\Project;
 use App\Service\MailQueueServiceInterface;
 use DateTime;
@@ -17,7 +18,7 @@ use Throwable;
 
 use function error_log;
 
-final class VoteService implements UserServiceInterface
+final class VoteService implements VoteServiceInterface
 {
     /** @var array */
     private $config;
@@ -50,6 +51,29 @@ final class VoteService implements UserServiceInterface
         $this->mailAdapter      = $mailAdapter;
         $this->mailQueueService = $mailQueueService;
         $this->voteRepository   = $this->em->getRepository(Vote::class);
+    }
+
+    public function addOfflineVote(User $user, array $filteredParams)
+    {
+        $date = new DateTime();
+
+        $vote = new OfflineVote();
+
+        $care  = $this->em->getReference(Project::class, $filteredParams['rk_vote_CARE']);
+        $green = $this->em->getReference(Project::class, $filteredParams['rk_vote_GREEN']);
+        $whole = $this->em->getReference(Project::class, $filteredParams['rk_vote_WHOLE']);
+
+        $vote->setUser($user);
+        $vote->setProjectCare($care);
+        $vote->setProjectGreen($green);
+        $vote->setProjectWhole($whole);
+        $vote->setCreatedAt($date);
+        $vote->setUpdatedAt($date);
+
+        $this->em->persist($vote);
+        $this->em->flush();
+
+        return $vote;
     }
 
     public function voting(User $user, array $filteredParams)

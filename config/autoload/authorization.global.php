@@ -23,6 +23,8 @@ return [
             'admin.api.cache.clear',
             'admin.api.dashboard.get',
             'admin.api.dashboard.set',
+            'admin.api.vote.list',
+            'admin.api.vote.add',
         ],
         'allow'     => [
             'guest'     => [
@@ -36,11 +38,13 @@ return [
                 'app.api.user',
             ],
             'editor' => [
+                'admin.api.dashboard.get',
                 'admin.api.login',
+                'admin.api.vote.list',
+                'admin.api.vote.add',
             ],
             'admin' => [
                 'admin.api.cache.clear',
-                'admin.api.dashboard.get',
                 'admin.api.dashboard.set',
             ],
             'developer' => [
