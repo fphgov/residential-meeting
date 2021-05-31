@@ -20,6 +20,8 @@ return [
                 'string_functions' => [
                     'IF'           => Mysql\IfElse::class,
                     'GROUP_CONCAT' => Mysql\GroupConcat::class,
+                    'DATE_FORMAT'  => Mysql\DateFormat::class,
+                    'CONCAT_WS'    => Mysql\ConcatWs::class,
                 ],
             ]
         ],

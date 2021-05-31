@@ -129,6 +129,13 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Project\ListAdminHandler::class
     ], 'admin.api.vote.list');
 
+    $app->get('/admin/api/vote/stat', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Project\ListAdminHandler::class
+    ], 'admin.api.vote.stat');
+
     $app->post('/admin/api/vote', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
