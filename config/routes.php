@@ -115,6 +115,13 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Dashboard\ChangeHandler::class
     ], 'admin.api.dashboard.set');
 
+    $app->post('/admin/api/account/password', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Account\PasswordChangeHandler::class,
+    ], 'admin.api.account.password.change');
+
     $app->post('/admin/api/project', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,

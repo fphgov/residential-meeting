@@ -42,6 +42,7 @@ class ConfigProvider
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
             'factories'  => [
+                Handler\Account\PasswordChangeHandler::class => Handler\Account\PasswordChangeHandlerFactory::class,
                 Handler\Dashboard\GetHandler::class          => Handler\Dashboard\GetHandlerFactory::class,
                 Handler\Dashboard\ChangeHandler::class       => Handler\Dashboard\ChangeHandlerFactory::class,
                 Handler\User\ListHandler::class              => Handler\User\ListHandlerFactory::class,

@@ -23,6 +23,7 @@ return [
             'admin.api.cache.clear',
             'admin.api.dashboard.get',
             'admin.api.dashboard.set',
+            'admin.api.account.password.change',
             'admin.api.vote.list',
             'admin.api.vote.add',
         ],
@@ -40,6 +41,7 @@ return [
             'editor' => [
                 'admin.api.dashboard.get',
                 'admin.api.login',
+                'admin.api.account.password.change',
                 'admin.api.vote.list',
                 'admin.api.vote.add',
             ],
