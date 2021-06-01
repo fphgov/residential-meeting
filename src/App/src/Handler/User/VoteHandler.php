@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handler\User;
 
-use App\Service\UserServiceInterface;
+use App\Service\VoteServiceInterface;
 use App\InputFilter\VoteFilter;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -14,14 +14,14 @@ use Exception;
 
 final class VoteHandler implements RequestHandlerInterface
 {
-    /** @var UserServiceInterface **/
+    /** @var VoteServiceInterface **/
     private $voteService;
 
     /** @var VoteFilter **/
     private $voteFilter;
 
     public function __construct(
-        UserServiceInterface $voteService,
+        VoteServiceInterface $voteService,
         VoteFilter $voteFilter
     ) {
         $this->voteService = $voteService;

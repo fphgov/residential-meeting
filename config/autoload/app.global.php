@@ -15,6 +15,7 @@ return [
                 'subject'  => getenv('APP_NOTIFICATION_MAIL_SUBJECT'),
                 'replayTo' => getenv('APP_NOTIFICATION_MAIL_REPLAYTO'),
             ],
+            'force' => (string)getenv('APP_NOTIFICATION_FORCE') === "true",
         ],
         'pagination' => [
             'maxPageSize' => (int)getenv('APP_PAGINATION_MAX_PAGE_SIZE'),
