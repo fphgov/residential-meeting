@@ -34,7 +34,8 @@ class TokenHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $postBody = $request->getParsedBody();
+        $postBody    = $request->getParsedBody();
+        $routeResult = $request->getAttribute(\Mezzio\Router\RouteResult::class);
 
         $userRepository = $this->em->getRepository(User::class);
         $voteRepository = $this->em->getRepository(Vote::class);
@@ -54,6 +55,13 @@ class TokenHandler implements RequestHandlerInterface
         }
 
         if (! $user->getActive()) {
+            return $this->badAuthentication();
+        }
+
+        if (
+            $routeResult->getMatchedRouteName() === 'admin.api.login' &&
+            in_array($user->getRole(), ['guest', 'user'], true)
+        ) {
             return $this->badAuthentication();
         }
 
