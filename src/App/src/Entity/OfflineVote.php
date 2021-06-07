@@ -29,27 +29,11 @@ class OfflineVote implements JsonSerializable, OfflineVoteInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Project")
-     * @ORM\JoinColumn(name="care_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      *
      * @var Project
      */
-    private $projectCare;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Project")
-     * @ORM\JoinColumn(name="green_id", referencedColumnName="id")
-     *
-     * @var Project
-     */
-    private $projectGreen;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Project")
-     * @ORM\JoinColumn(name="whole_id", referencedColumnName="id")
-     *
-     * @var Project
-     */
-    private $projectWhole;
+    private $project;
 
     public function getUser(): User
     {
@@ -61,33 +45,13 @@ class OfflineVote implements JsonSerializable, OfflineVoteInterface
         $this->user = $user;
     }
 
-    public function setProjectCare(Project $projectCare): void
+    public function setProject(Project $project): void
     {
-        $this->projectCare = $projectCare;
+        $this->project = $project;
     }
 
-    public function getProjectCare(): Project
+    public function getProject(): Project
     {
-        return $this->projectCare;
-    }
-
-    public function setProjectGreen(Project $projectGreen): void
-    {
-        $this->projectGreen = $projectGreen;
-    }
-
-    public function getProjectGreen(): Project
-    {
-        return $this->projectGreen;
-    }
-
-    public function setProjectWhole(Project $projectWhole): void
-    {
-        $this->projectWhole = $projectWhole;
-    }
-
-    public function getProjectWhole(): Project
-    {
-        return $this->projectWhole;
+        return $this->project;
     }
 }

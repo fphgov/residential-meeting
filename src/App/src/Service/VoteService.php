@@ -53,27 +53,30 @@ final class VoteService implements VoteServiceInterface
         $this->voteRepository   = $this->em->getRepository(Vote::class);
     }
 
-    public function addOfflineVote(User $user, array $filteredParams)
+    public function addOfflineVote(User $user, array $filteredParams): void
     {
         $date = new DateTime();
 
+        $project = $this->em->getReference(Project::class, $filteredParams['project']);
+        $count   = (int) $filteredParams['voteCount'];
+
+        for ($i = 0; $i < $count; $i++) {
+            $this->createOfflineVote($user, $project, $date);
+        }
+
+        $this->em->flush();
+    }
+
+    private function createOfflineVote(User $user, Project $project, DateTime $date): void
+    {
         $vote = new OfflineVote();
 
-        $care  = $this->em->getReference(Project::class, $filteredParams['rk_vote_CARE']);
-        $green = $this->em->getReference(Project::class, $filteredParams['rk_vote_GREEN']);
-        $whole = $this->em->getReference(Project::class, $filteredParams['rk_vote_WHOLE']);
-
         $vote->setUser($user);
-        $vote->setProjectCare($care);
-        $vote->setProjectGreen($green);
-        $vote->setProjectWhole($whole);
+        $vote->setProject($project);
         $vote->setCreatedAt($date);
         $vote->setUpdatedAt($date);
 
         $this->em->persist($vote);
-        $this->em->flush();
-
-        return $vote;
     }
 
     public function voting(User $user, array $filteredParams)

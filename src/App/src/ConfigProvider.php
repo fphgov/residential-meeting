@@ -78,6 +78,7 @@ class ConfigProvider
                 InputFilter\ProjectInputFilter::class     => InvokableFactory::class,
                 InputFilter\UserRegistrationFilter::class => InputFilter\UserRegistrationFilterFactory::class,
                 InputFilter\VoteFilter::class             => InputFilter\VoteFilterFactory::class,
+                InputFilter\OfflineVoteFilter::class      => InputFilter\OfflineVoteFilterFactory::class,
             ],
         ];
     }

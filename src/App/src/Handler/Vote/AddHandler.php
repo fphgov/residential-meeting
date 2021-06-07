@@ -50,7 +50,7 @@ final class AddHandler implements RequestHandlerInterface
         }
 
         try {
-            $vote = $this->voteService->addOfflineVote($user, $this->inputFilter->getValues());
+            $this->voteService->addOfflineVote($user, $this->inputFilter->getValues());
         } catch (Exception $e) {
             return new JsonResponse([
                 'errors' => $e->getMessage(),

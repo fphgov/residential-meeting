@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\Project;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\EntityRepository;
 
@@ -17,9 +18,7 @@ final class OfflineVoteRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('v')
                    ->select('COUNT(1)')
-                   ->where('v.projectCare = :id')
-                   ->orWhere('v.projectGreen = :id')
-                   ->orWhere('v.projectWhole = :id')
+                   ->where('v.project = :id')
                    ->setParameter('id', $id);
 
         try {
@@ -34,9 +33,10 @@ final class OfflineVoteRepository extends EntityRepository
     public function getStatistics()
     {
         $qb = $this->createQueryBuilder('v')
-                   ->select('u.id, CONCAT_WS(\' \', u.lastname, u.firstname) as title, DATE_FORMAT(v.createdAt, \'%Y-%m-%d\') as date, COUNT(1) as count')
+                   ->select('u.id, p.title as projectName, CONCAT_WS(\' \', u.lastname, u.firstname) as title, DATE_FORMAT(v.createdAt, \'%Y-%m-%d\') as date, COUNT(1) as count')
                    ->innerJoin(User::class, 'u', Join::WITH, 'u.id = v.user')
-                   ->groupBy('v.user, date')
+                   ->innerJoin(Project::class, 'p', Join::WITH, 'p.id = v.project')
+                   ->groupBy('v.user, date, p.id')
                    ->orderBy('date', 'desc');
 
         $statResult = $qb->getQuery()->getResult();
@@ -52,8 +52,9 @@ final class OfflineVoteRepository extends EntityRepository
 
             $stats[$stat['id']]['title'] = $stat['title'];
             $stats[$stat['id']]['times'][] = [
-                'date'  => $stat['date'],
-                'count' => $stat['count'],
+                'projectName' => $stat['projectName'],
+                'date'        => $stat['date'],
+                'count'       => $stat['count'],
             ];
         }
 
