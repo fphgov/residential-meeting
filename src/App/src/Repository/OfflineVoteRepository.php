@@ -33,11 +33,12 @@ final class OfflineVoteRepository extends EntityRepository
     public function getStatistics()
     {
         $qb = $this->createQueryBuilder('v')
-                   ->select('u.id, p.title as projectName, CONCAT_WS(\' \', u.lastname, u.firstname) as title, DATE_FORMAT(v.createdAt, \'%Y-%m-%d\') as date, COUNT(1) as count')
+                   ->select('u.id, p.id as projectId, p.title as projectName, CONCAT_WS(\' \', u.lastname, u.firstname) as title, DATE_FORMAT(v.createdAt, \'%Y-%m-%d\') as date, COUNT(1) as count')
                    ->innerJoin(User::class, 'u', Join::WITH, 'u.id = v.user')
                    ->innerJoin(Project::class, 'p', Join::WITH, 'p.id = v.project')
                    ->groupBy('v.user, date, p.id')
-                   ->orderBy('date', 'desc');
+                   ->orderBy('date', 'desc')
+                   ->orderBy('p.id', 'asc');
 
         $statResult = $qb->getQuery()->getResult();
 
@@ -52,6 +53,7 @@ final class OfflineVoteRepository extends EntityRepository
 
             $stats[$stat['id']]['title'] = $stat['title'];
             $stats[$stat['id']]['times'][] = [
+                'projectId'   => $stat['projectId'],
                 'projectName' => $stat['projectName'],
                 'date'        => $stat['date'],
                 'count'       => $stat['count'],
