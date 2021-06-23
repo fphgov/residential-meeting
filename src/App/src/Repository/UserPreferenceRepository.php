@@ -6,6 +6,6 @@ namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-final class UserPreferencesRepository extends EntityRepository
+final class UserPreferenceRepository extends EntityRepository
 {
 }

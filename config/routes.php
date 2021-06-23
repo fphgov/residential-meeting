@@ -32,6 +32,10 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\User\ActivateHandler::class
     ], 'app.api.user.activate');
 
+    $app->get('/app/api/user/prize/{hash}', [
+        App\Handler\User\PrizeHandler::class
+    ], 'app.api.user.prize');
+
     $app->post('/app/api/user/forgot/password', [
         App\Handler\User\ForgotPasswordHandler::class
     ], 'app.api.user.forgot.password');

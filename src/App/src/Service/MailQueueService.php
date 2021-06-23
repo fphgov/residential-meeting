@@ -39,6 +39,15 @@ final class MailQueueService implements MailQueueServiceInterface
 
     public function add(MailAdapter $mailAdapter)
     {
+        $this->push($mailAdapter);
+
+        if (isset($this->config['app']['notification']['force'])) {
+            $this->sendMail($mailQueue);
+        }
+    }
+
+    public function push(MailAdapter $mailAdapter)
+    {
         $date = new DateTime();
 
         $mailQueue = new MailQueue();
@@ -48,10 +57,6 @@ final class MailQueueService implements MailQueueServiceInterface
 
         $this->em->persist($mailQueue);
         $this->em->flush();
-
-        if (isset($this->config['app']['notification']['force'])) {
-            $this->sendMail($mailQueue);
-        }
     }
 
     public function process(): void

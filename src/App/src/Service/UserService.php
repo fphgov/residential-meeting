@@ -46,12 +46,13 @@ final class UserService implements UserServiceInterface
         MailAdapter $mailAdapter,
         MailQueueServiceInterface $mailQueueService
     ) {
-        $this->config           = $config;
-        $this->em               = $em;
-        $this->audit            = $audit;
-        $this->mailAdapter      = $mailAdapter;
-        $this->mailQueueService = $mailQueueService;
-        $this->userRepository   = $this->em->getRepository(User::class);
+        $this->config                   = $config;
+        $this->em                       = $em;
+        $this->audit                    = $audit;
+        $this->mailAdapter              = $mailAdapter;
+        $this->mailQueueService         = $mailQueueService;
+        $this->userRepository           = $this->em->getRepository(User::class);
+        $this->userPreferenceRepository = $this->em->getRepository(UserPreference::class);
     }
 
     public function activate(string $hash): void
@@ -68,6 +69,33 @@ final class UserService implements UserServiceInterface
         $user->setActive(true);
 
         $this->em->flush();
+    }
+
+    public function prizeActivate(string $prizeHash): void
+    {
+        $userPreference = $this->userPreferenceRepository->findOneBy([
+            'prizeHash' => $prizeHash
+        ]);
+
+        if (! ($userPreference instanceof UserPreference)) {
+            throw new UserNotFoundException($prizeHash);
+        }
+
+        $userPreference->setPrizeHash(null);
+        $userPreference->setPrize(true);
+
+        $this->em->flush();
+    }
+
+    public function sendPrizeNotification(User $user)
+    {
+        $userPreference = $user->getUserPreference();
+
+        if ($userPreference->getPrizeHash() === null) {
+            $userPreference->setPrizeHash($user->generateToken());
+        }
+
+        $this->sendPrizeActivationEmail($user);
     }
 
     public function resetPassword(string $hash, string $password)
@@ -208,6 +236,35 @@ final class UserService implements UserServiceInterface
             error_log($e->getMessage());
 
             $this->audit->err('New user notification no added to MailQueueService', [
+                'extra' => $user->getId(),
+            ]);
+        }
+    }
+
+    private function sendPrizeActivationEmail(User $user)
+    {
+        $this->mailAdapter->clear();
+
+        try {
+            $this->mailAdapter->message->addTo($user->getEmail());
+            $this->mailAdapter->message->setSubject('Nyereményjáték az Ötlet.budapest.hu-n');
+
+            $userPreference = $user->getUserPreference();
+
+            $tplData = [
+                'name'             => $user->getFirstname(),
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'prizeActivation'  => $this->config['app']['url'] . '/profil/nyeremeny-aktivalas/' . $userPreference->getPrizeHash(),
+            ];
+
+            $this->mailAdapter->setTemplate('email/user-prize', $tplData);
+
+            $this->mailQueueService->push($this->mailAdapter);
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('User prize notification no added to MailQueueService', [
                 'extra' => $user->getId(),
             ]);
         }
