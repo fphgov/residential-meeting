@@ -14,8 +14,9 @@ final class AddHandlerFactory
 {
     public function __invoke(ContainerInterface $container): AddHandler
     {
+        $em = $container->get(EntityManagerInterface::class);
+
         /** @var InputFilterPluginManager $pluginManager */
-        $em            = $container->get(EntityManagerInterface::class);
         $pluginManager = $container->get(InputFilterPluginManager::class);
         $inputFilter   = $pluginManager->get(OfflineVoteFilter::class);
 

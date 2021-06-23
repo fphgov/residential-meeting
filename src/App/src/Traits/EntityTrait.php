@@ -9,6 +9,8 @@ use function explode;
 use function get_class_vars;
 use function implode;
 use function in_array;
+use function is_array;
+use function is_object;
 use function json_decode;
 use function json_encode;
 use function property_exists;
@@ -52,7 +54,7 @@ trait EntityTrait
         }
     }
 
-    public function getProps($depthLvl = 2): array
+    public function getProps(int $depthLvl = 2): array
     {
         $props = [];
 

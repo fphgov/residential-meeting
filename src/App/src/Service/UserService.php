@@ -6,15 +6,15 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\UserPreference;
-use App\Service\MailQueueServiceInterface;
-use App\Model\PBKDF2Password;
-use App\Exception\UserNotFoundException;
 use App\Exception\UserNotActiveException;
+use App\Exception\UserNotFoundException;
+use App\Model\PBKDF2Password;
+use App\Service\MailQueueServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Mail\MailAdapter;
 use Laminas\Log\Logger;
+use Mail\MailAdapter;
 use Throwable;
 
 use function error_log;
@@ -58,10 +58,10 @@ final class UserService implements UserServiceInterface
     public function activate(string $hash): void
     {
         $user = $this->userRepository->findOneBy([
-            'hash' => $hash
+            'hash' => $hash,
         ]);
 
-        if (! ($user instanceof User)) {
+        if (! $user instanceof User) {
             throw new UserNotFoundException($hash);
         }
 
@@ -74,10 +74,10 @@ final class UserService implements UserServiceInterface
     public function prizeActivate(string $prizeHash): void
     {
         $userPreference = $this->userPreferenceRepository->findOneBy([
-            'prizeHash' => $prizeHash
+            'prizeHash' => $prizeHash,
         ]);
 
-        if (! ($userPreference instanceof UserPreference)) {
+        if (! $userPreference instanceof UserPreference) {
             throw new UserNotFoundException($prizeHash);
         }
 
@@ -110,7 +110,7 @@ final class UserService implements UserServiceInterface
             'active' => true,
         ]);
 
-        if (! ($user instanceof User)) {
+        if (! $user instanceof User) {
             throw new UserNotFoundException($hash);
         }
 
@@ -129,7 +129,7 @@ final class UserService implements UserServiceInterface
             'email' => $email,
         ]);
 
-        if (! ($user instanceof User)) {
+        if (! $user instanceof User) {
             throw new UserNotFoundException($email);
         }
 
@@ -137,7 +137,7 @@ final class UserService implements UserServiceInterface
             $user->setHash($user->generateToken());
             $this->sendActivationEmail($user);
 
-            throw new UserNotActiveException((string)$user->getId());
+            throw new UserNotActiveException((string) $user->getId());
         }
 
         $user->setHash($user->generateToken());
@@ -153,7 +153,7 @@ final class UserService implements UserServiceInterface
             'email' => $email,
         ]);
 
-        if (! ($user instanceof User)) {
+        if (! $user instanceof User) {
             throw new UserNotFoundException($email);
         }
 
@@ -161,7 +161,7 @@ final class UserService implements UserServiceInterface
             $user->setHash($user->generateToken());
             $this->sendActivationEmail($user);
 
-            throw new UserNotActiveException((string)$user->getId());
+            throw new UserNotActiveException((string) $user->getId());
         }
 
         $this->forgotAccountMail($user);
@@ -169,7 +169,7 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
-    public function registration(array $filteredParams)
+    public function registration(array $filteredParams): User
     {
         $date = new DateTime();
 
@@ -178,12 +178,12 @@ final class UserService implements UserServiceInterface
         $password       = new PBKDF2Password($filteredParams['password']);
 
         $userPreference->setUser($user);
-        $userPreference->setBirthyear((int)$filteredParams['birthyear']);
-        $userPreference->setPostalCode((string)$filteredParams['postal_code']);
-        $userPreference->setLiveInCity((bool)$filteredParams['live_in_city']);
+        $userPreference->setBirthyear((int) $filteredParams['birthyear']);
+        $userPreference->setPostalCode((string) $filteredParams['postal_code']);
+        $userPreference->setLiveInCity((bool) $filteredParams['live_in_city']);
         $userPreference->setHearAbout($filteredParams['hear_about']);
         $userPreference->setNickname($filteredParams['nickname']);
-        $userPreference->setPrivacy((bool)$filteredParams['privacy']);
+        $userPreference->setPrivacy((bool) $filteredParams['privacy']);
         $userPreference->setCreatedAt($date);
         $userPreference->setUpdatedAt($date);
 
@@ -251,11 +251,13 @@ final class UserService implements UserServiceInterface
 
             $userPreference = $user->getUserPreference();
 
+            $url = $this->config['app']['url'] . '/profil/nyeremeny-aktivalas/' . $userPreference->getPrizeHash();
+
             $tplData = [
                 'name'             => $user->getFirstname(),
                 'infoMunicipality' => $this->config['app']['municipality'],
                 'infoEmail'        => $this->config['app']['email'],
-                'prizeActivation'  => $this->config['app']['url'] . '/profil/nyeremeny-aktivalas/' . $userPreference->getPrizeHash(),
+                'prizeActivation'  => $url,
             ];
 
             $this->mailAdapter->setTemplate('email/user-prize', $tplData);

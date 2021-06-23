@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\User;
-use App\Entity\Vote;
 use App\Entity\OfflineVote;
 use App\Entity\Project;
+use App\Entity\User;
+use App\Entity\Vote;
 use App\Service\MailQueueServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Mail\MailAdapter;
 use Laminas\Log\Logger;
+use Mail\MailAdapter;
 use Throwable;
 
 use function error_log;
@@ -79,7 +79,7 @@ final class VoteService implements VoteServiceInterface
         $this->em->persist($vote);
     }
 
-    public function voting(User $user, array $filteredParams)
+    public function voting(User $user, array $filteredParams): Vote
     {
         $date = new DateTime();
 
@@ -117,7 +117,7 @@ final class VoteService implements VoteServiceInterface
                 'infoMunicipality' => $this->config['app']['municipality'],
                 'infoEmail'        => $this->config['app']['email'],
                 'votes'            => [
-                    'CARE' => [
+                    'CARE'  => [
                         'title' => $vote->getProjectCare()->getTitle(),
                     ],
                     'GREEN' => [
@@ -126,7 +126,7 @@ final class VoteService implements VoteServiceInterface
                     'WHOLE' => [
                         'title' => $vote->getProjectWhole()->getTitle(),
                     ],
-                ]
+                ],
             ];
 
             $this->mailAdapter->setTemplate('email/vote-success', $tplData);

@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace App\Handler\Project;
 
+use App\Entity\CampaignTheme;
 use App\Entity\Project;
 use App\Entity\ProjectCollection;
-use App\Entity\Tag;
-use App\Entity\CampaignTheme;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
+use Laminas\Diactoros\Response\JsonResponse;
 use Mezzio\Hal\HalResponseFactory;
 use Mezzio\Hal\ResourceGenerator;
-use Mezzio\Hal\ResourceGenerator\Exception\OutOfBoundsException;
-use Mezzio\Router\Exception\RuntimeException;
-use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
+use function intval;
 
 final class ListHandler implements RequestHandlerInterface
 {
@@ -66,7 +65,7 @@ final class ListHandler implements RequestHandlerInterface
 
         if (intval($query) !== 0) {
             $qb->where('p.id = :id')->setParameter('id', $query);
-        } else if ($query) {
+        } elseif ($query) {
             $qb
                 ->where('p.title LIKE :title')->setParameter('title', "%" . $query . "%")
                 ->orWhere('p.description LIKE :description')->setParameter('description', "%" . $query . "%")
@@ -78,12 +77,12 @@ final class ListHandler implements RequestHandlerInterface
             $qb->setParameter('tags', $tag);
         }
 
-        if ($theme && $theme != 0) {
+        if ($theme && $theme !== 0) {
             $qb->andWhere('ct.id = :themes');
             $qb->setParameter('themes', $theme);
         }
 
-        if ($location && $location != 0) {
+        if ($location && $location !== 0) {
             $qb->andWhere('l.id = :location');
             $qb->setParameter('location', $location);
         }

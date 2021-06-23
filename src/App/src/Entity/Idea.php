@@ -52,6 +52,8 @@ class Idea implements JsonSerializable, IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="Project", inversedBy="ideas")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
+     *
+     * @var Project
      */
     private $project;
 
@@ -167,7 +169,7 @@ class Idea implements JsonSerializable, IdeaInterface
         return $this->comment;
     }
 
-    public function setCost(int $cost = null): void
+    public function setCost(?int $cost = null): void
     {
         $this->cost = $cost;
     }

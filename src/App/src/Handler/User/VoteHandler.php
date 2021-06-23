@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Handler\User;
 
-use App\Service\VoteServiceInterface;
 use App\InputFilter\VoteFilter;
+use App\Middleware\UserMiddleware;
+use App\Service\VoteServiceInterface;
+use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Exception;
 
 final class VoteHandler implements RequestHandlerInterface
 {
@@ -30,11 +31,11 @@ final class VoteHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $user = $request->getAttribute(\App\Middleware\UserMiddleware::class);
+        $user = $request->getAttribute(UserMiddleware::class);
         $body = $request->getParsedBody();
 
         $existsVote = $this->voteService->getRepository()->findOneBy([
-            'user' => $user->getId()
+            'user' => $user->getId(),
         ]);
 
         if ($existsVote) {

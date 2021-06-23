@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Handler\User;
 
 use App\Service\UserServiceInterface;
+use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Exception;
 
 final class ResetPasswordHandler implements RequestHandlerInterface
 {

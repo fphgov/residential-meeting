@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\UserPreference;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 final class UserRepository extends EntityRepository
 {
-    public function getPrizeNotificationList(int $limit)
+    public function getPrizeNotificationList(int $limit): array
     {
         $qb = $this->createQueryBuilder('u')
                    ->innerJoin(UserPreference::class, 'up', Join::WITH, 'up.user = u.id')

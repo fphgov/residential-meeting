@@ -7,40 +7,40 @@ namespace App\Entity;
 use function array_slice;
 use function count;
 use function explode;
-use function min;
 use function implode;
+use function min;
 use function strip_tags;
 use function trim;
 
 class ProjectListDTO
 {
-    private $id;
-    private $campaignThemeName;
-    private $campaignThemeRgb;
-    private $title;
-    private $description;
-    private $location;
-    private $tagId;
-    private $tagName;
+    private int $id;
+    private string $campaignThemeName;
+    private string $campaignThemeRgb;
+    private string $title;
+    private string $description;
+    private string $location;
+    private int $tagId;
+    private string $tagName;
 
     public function __construct(
         int $id,
-        $campaignThemeName,
-        $campaignThemeRgb,
-        $title,
-        $description,
-        $location,
-        $tagId,
-        $tagName
+        string $campaignThemeName,
+        string $campaignThemeRgb,
+        string $title,
+        string $description,
+        string $location,
+        int $tagId,
+        string $tagName
     ) {
-        $this->id = $id;
+        $this->id                = $id;
         $this->campaignThemeName = $campaignThemeName;
-        $this->campaignThemeRgb = $campaignThemeRgb;
-        $this->title = $title;
-        $this->description = $description;
-        $this->location = $location;
-        $this->tagId = $tagId;
-        $this->tagName = $tagName;
+        $this->campaignThemeRgb  = $campaignThemeRgb;
+        $this->title             = $title;
+        $this->description       = $description;
+        $this->location          = $location;
+        $this->tagId             = $tagId;
+        $this->tagName           = $tagName;
     }
 
     public function getId(): int
@@ -77,7 +77,7 @@ class ProjectListDTO
         return $tags;
     }
 
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }

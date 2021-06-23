@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Handler\Project;
 
-use App\Entity\Project;
 use App\Entity\OfflineVote;
+use App\Entity\Project;
 use Doctrine\ORM\EntityManager;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;

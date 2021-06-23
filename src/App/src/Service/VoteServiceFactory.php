@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Service\MailQueueServiceInterface;
 use App\Middleware\AuditMiddleware;
+use App\Service\MailQueueServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Interop\Container\ContainerInterface;
 use Mail\Action\MailAction;

@@ -6,30 +6,31 @@ namespace App\Model;
 
 use App\Exception\IllegalArgumentException;
 
+use function bin2hex;
 use function count;
+use function hash_pbkdf2;
+use function hex2bin;
+use function implode;
+use function intval;
+use function openssl_random_pseudo_bytes;
+use function preg_match_all;
 use function strpos;
 use function substr;
-use function intval;
-use function implode;
-use function hex2bin;
-use function bin2hex;
-use function hash_pbkdf2;
-use function preg_match_all;
 
 final class PBKDF2Password implements PasswordModelInterface
 {
     public const PROCESS   = 'PBKDF2WITHHMACSHA512';
     public const ALGORITHM = 'sha512';
 
-    private $iterations = 40000;
-    private $salt;
-    private $hash;
+    private int $iterations = 40000;
+    private string $salt;
+    private string $hash;
 
     public function __construct(string $password, int $representation = self::PW_REPRESENTATION_CLEARTEXT)
     {
         if ($representation === self::PW_REPRESENTATION_CLEARTEXT) {
             $this->encrypt($password);
-        } else if ($representation === self::PW_REPRESENTATION_STORABLE) {
+        } elseif ($representation === self::PW_REPRESENTATION_STORABLE) {
             $this->parsePassword($password);
         }
     }
@@ -50,7 +51,7 @@ final class PBKDF2Password implements PasswordModelInterface
 
         $hash = hash_pbkdf2(self::ALGORITHM, $clearTextPassword, $salt, $this->iterations, 256);
 
-        return ($hash === $this->hash);
+        return $hash === $this->hash;
     }
 
     public function getIterations(): string
@@ -68,7 +69,7 @@ final class PBKDF2Password implements PasswordModelInterface
         return $this->salt;
     }
 
-    private function encrypt(string $clearTextPassword)
+    private function encrypt(string $clearTextPassword): void
     {
         $salt = openssl_random_pseudo_bytes(16);
 

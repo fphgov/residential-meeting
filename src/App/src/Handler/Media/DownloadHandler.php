@@ -40,7 +40,7 @@ final class DownloadHandler implements RequestHandlerInterface
 
         return new Response($stream, 200, [
             'Content-Type'              => $mime,
-            'Content-Disposition'       => 'attachment; filename="'. $media->getFilename() .'"',
+            'Content-Disposition'       => 'attachment; filename="' . $media->getFilename() . '"',
             'Content-Transfer-Encoding' => 'Binary',
             'Content-Description'       => 'File Transfer',
             'Pragma'                    => 'public',

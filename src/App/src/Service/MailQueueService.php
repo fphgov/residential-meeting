@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\MailQueue;
-use Mail\MailAdapter;
-use Laminas\Log\Logger;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Laminas\Log\Logger;
+use Mail\MailAdapter;
 use Throwable;
 
 use function usleep;
@@ -63,8 +63,7 @@ final class MailQueueService implements MailQueueServiceInterface
     {
         $mailQueueRepository = $this->em->getRepository(MailQueue::class);
 
-        $limit = isset($this->config['app']['notification']['frequency']) ?
-                       $this->config['app']['notification']['frequency'] : 20;
+        $limit = $this->config['app']['notification']['frequency'] ?? 20;
 
         $this->emails = $mailQueueRepository->findAll([], [], $limit);
 

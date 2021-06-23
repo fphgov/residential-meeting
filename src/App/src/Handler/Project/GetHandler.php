@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Handler\Project;
 
+use App\Entity\OfflineVote;
 use App\Entity\Project;
 use App\Entity\Vote;
-use App\Entity\OfflineVote;
 use Doctrine\ORM\EntityManagerInterface;
+use Laminas\Diactoros\Response\JsonResponse;
 use Mezzio\Hal\HalResponseFactory;
 use Mezzio\Hal\ResourceGenerator;
-use Mezzio\Router\Exception\RuntimeException;
-use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -44,8 +43,8 @@ final class GetHandler implements RequestHandlerInterface
         $offlineVoteRepository = $this->entityManager->getRepository(OfflineVote::class);
 
         $result = $entityRepository->find($request->getAttribute('id'));
-        $count  = $voteRepository->numberOfVotes((int)$request->getAttribute('id'));
-        $count  += $offlineVoteRepository->numberOfVotes((int)$request->getAttribute('id'));
+        $count  = $voteRepository->numberOfVotes((int) $request->getAttribute('id'));
+        $count += $offlineVoteRepository->numberOfVotes((int) $request->getAttribute('id'));
 
         if ($result === null) {
             return new JsonResponse([

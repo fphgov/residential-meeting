@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Handler\User;
 
-use App\Service\UserServiceInterface;
 use App\InputFilter\UserRegistrationFilter;
+use App\Service\UserServiceInterface;
+use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Mail\Header\HeaderName;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Exception;
 
 use function strtolower;
 
