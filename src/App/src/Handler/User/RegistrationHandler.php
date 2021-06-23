@@ -58,7 +58,7 @@ final class RegistrationHandler implements RequestHandlerInterface
         }
 
         try {
-            $this->userService->registration($body);
+            $this->userService->registration($this->userRegistrationFilter->getValues());
         } catch (Exception $e) {
             return new JsonResponse([
                 'message' => 'Sikertelen regisztráció',

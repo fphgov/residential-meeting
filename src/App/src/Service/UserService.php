@@ -159,6 +159,14 @@ final class UserService implements UserServiceInterface
         $userPreference->setCreatedAt($date);
         $userPreference->setUpdatedAt($date);
 
+        $registeredPrize = isset($filteredParams['prize']) && (
+            $filteredParams['prize'] === true ||
+            $filteredParams['prize'] === "true" ||
+            $filteredParams['prize'] === "on"
+        );
+
+        $userPreference->setPrize($registeredPrize);
+
         $user->setUserPreference($userPreference);
         $user->setHash($user->generateToken());
         $user->setUsername($filteredParams['username']);

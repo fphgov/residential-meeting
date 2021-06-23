@@ -76,6 +76,20 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
      */
     private $privacy;
 
+    /**
+     * @ORM\Column(name="prize", type="boolean")
+     *
+     * @var bool
+     */
+    private $prize = false;
+
+    /**
+     * @ORM\Column(name="prizeNotification", type="boolean")
+     *
+     * @var bool
+     */
+    private $prizeNotification = false;
+
     public function setUser(User $user): void
     {
         $this->user = $user;
@@ -144,6 +158,26 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     public function getPrivacy(): bool
     {
         return $this->privacy;
+    }
+
+    public function setPrize(bool $prize): void
+    {
+        $this->prize = $prize;
+    }
+
+    public function getPrize(): bool
+    {
+        return $this->prize;
+    }
+
+    public function setPrizeNotification(bool $prizeNotification): void
+    {
+        $this->prizeNotification = $prizeNotification;
+    }
+
+    public function getPrizeNotification(): bool
+    {
+        return $this->prizeNotification;
     }
 
     public function setCreated(?DateTime $created = null): void

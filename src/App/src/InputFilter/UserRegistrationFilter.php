@@ -386,6 +386,11 @@ class UserRegistrationFilter extends InputFilter
                 ]),
             ],
         ]);
+
+        $this->add([
+            'name'            => 'prize',
+            'allow_empty'     => true,
+        ]);
     }
 }
 /** phpcs:enable */
