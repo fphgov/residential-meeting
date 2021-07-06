@@ -27,7 +27,7 @@ final class PrizeHandler implements RequestHandlerInterface
             $this->userService->prizeActivate($request->getAttribute('hash'));
         } catch (Exception $e) {
             return new JsonResponse([
-                'message' => 'Fiókja már aktíválva van vagy ismeretlen aktiváló kulcs',
+                'message' => 'Jelentkezését a nyereményjátékra már fogadtuk vagy a jelentkezéshez használt kulcs érvénytelen',
             ], 404);
         }
 

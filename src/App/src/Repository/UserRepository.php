@@ -17,8 +17,10 @@ final class UserRepository extends EntityRepository
                    ->where('u.active = :active')
                    ->andWhere('up.prize = :prize')
                    ->andWhere('up.prizeHash IS NULL')
+                   ->andWhere('up.prizeNotified = :prizeNotified')
                    ->setParameter('active', true)
-                   ->setParameter('prize', 0)
+                   ->setParameter('prize', false)
+                   ->setParameter('prizeNotified', false)
                    ->setMaxResults($limit);
 
         return $qb->getQuery()->getResult();

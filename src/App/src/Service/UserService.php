@@ -96,6 +96,10 @@ final class UserService implements UserServiceInterface
         }
 
         $this->sendPrizeActivationEmail($user);
+
+        $userPreference->setPrizeNotified(true);
+
+        $this->em->flush();
     }
 
     public function resetPassword(string $hash, string $password)

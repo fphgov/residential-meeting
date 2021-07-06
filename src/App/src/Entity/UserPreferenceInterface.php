@@ -41,6 +41,18 @@ interface UserPreferenceInterface
 
     public function getHearAbout(): string;
 
+    public function setPrize(bool $prize): void;
+
+    public function getPrize(): bool;
+
+    public function setPrizeNotified(bool $prizeNotified): void;
+
+    public function getPrizeNotified(): bool;
+
+    public function setPrizeHash(?string $prizeHash = null): void;
+
+    public function getPrizeHash(): ?string;
+
     public function setCreated(?DateTime $created = null): void;
 
     public function getCreated(): ?DateTime;
