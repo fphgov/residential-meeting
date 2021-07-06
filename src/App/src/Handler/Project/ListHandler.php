@@ -55,14 +55,23 @@ final class ListHandler implements RequestHandlerInterface
         $theme       = $queryParams['theme'] ?? '';
         $location    = $queryParams['location'] ?? '';
         $page        = $queryParams['page'] ?? 1;
+        $sort        = $queryParams['sort'] ?? 'ASC';
+        $rand        = $queryParams['rand'] ?? '';
 
         $qb = $repository->createQueryBuilder('p')
             ->select('NEW ProjectListDTO(p.id, ct.name, ct.rgb, p.title, p.description, p.location, GROUP_CONCAT(t.id), GROUP_CONCAT(t.name)) as project')
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
             ->leftJoin('p.tags', 't')
             ->leftJoin('p.campaignLocations', 'l')
-            ->groupBy('p.id')
-            ->orderBy('p.title', 'ASC');
+            ->groupBy('p.id');
+
+        if ($rand == '' && is_string($sort) && in_array(strtoupper($sort), ['ASC', 'DESC'], true)) {
+            $qb->orderBy('p.title', $sort);
+        } else if ($rand != '') {
+            $qb->orderBy('RAND('. $rand .')');
+        } else {
+            $qb->orderBy('p.title', 'ASC');
+        }
 
         if (intval($query) !== 0) {
             $qb->where('p.id = :id')->setParameter('id', $query);

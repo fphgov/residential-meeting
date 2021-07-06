@@ -17,12 +17,15 @@ return [
         ],
         'configuration' => [
             'orm_default' => [
-                'string_functions' => [
+                'string_functions'  => [
                     'IF'           => Mysql\IfElse::class,
                     'GROUP_CONCAT' => Mysql\GroupConcat::class,
                     'DATE_FORMAT'  => Mysql\DateFormat::class,
                     'CONCAT_WS'    => Mysql\ConcatWs::class,
                 ],
+                'numeric_functions' => [
+                    'RAND' => Mysql\Rand::class,
+                ]
             ]
         ],
         'connection' => [
