@@ -20,7 +20,7 @@ class ProjectListDTO
     private string $title;
     private string $description;
     private string $location;
-    private int $tagId;
+    private string $tagId;
     private string $tagName;
 
     public function __construct(
@@ -30,7 +30,7 @@ class ProjectListDTO
         string $title,
         string $description,
         string $location,
-        int $tagId,
+        string $tagId,
         string $tagName
     ) {
         $this->id                = $id;
