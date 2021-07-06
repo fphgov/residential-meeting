@@ -6,9 +6,9 @@ namespace App\Entity;
 
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
-use Mail\MailAdapter;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
+use Mail\MailAdapter;
 
 use function serialize;
 use function unserialize;

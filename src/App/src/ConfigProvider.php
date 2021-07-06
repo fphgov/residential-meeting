@@ -6,9 +6,9 @@ namespace App;
 
 use Laminas\Hydrator;
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Mezzio\Hal\Metadata\MetadataMap;
 use Mezzio\Hal\Metadata\RouteBasedCollectionMetadata;
 use Mezzio\Hal\Metadata\RouteBasedResourceMetadata;
-use Mezzio\Hal\Metadata\MetadataMap;
 
 /**
  * The configuration provider for the App module
@@ -52,6 +52,7 @@ class ConfigProvider
                 Handler\User\ResetPasswordHandler::class     => Handler\User\ResetPasswordHandlerFactory::class,
                 Handler\User\RegistrationHandler::class      => Handler\User\RegistrationHandlerFactory::class,
                 Handler\User\VoteHandler::class              => Handler\User\VoteHandlerFactory::class,
+                Handler\User\PrizeHandler::class             => Handler\User\PrizeHandlerFactory::class,
                 Handler\Project\ListAdminHandler::class      => Handler\Project\ListAdminHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,

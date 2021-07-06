@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\User;
 use App\Entity\Project;
-use Doctrine\ORM\Query\Expr\Join;
+use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
+use Throwable;
 
 use function array_values;
 
@@ -22,15 +23,14 @@ final class OfflineVoteRepository extends EntityRepository
                    ->setParameter('id', $id);
 
         try {
-            return (int)$qb->getQuery()->getSingleScalarResult();
-        } catch (\Throwable $th) {
-
+            return (int) $qb->getQuery()->getSingleScalarResult();
+        } catch (Throwable $th) {
         }
 
         return 0;
     }
 
-    public function getStatistics()
+    public function getStatistics(): array
     {
         $qb = $this->createQueryBuilder('v')
                    ->select('u.id, p.id as projectId, p.title as projectName, CONCAT_WS(\' \', u.lastname, u.firstname) as title, DATE_FORMAT(v.createdAt, \'%Y-%m-%d\') as date, COUNT(1) as count')
@@ -51,7 +51,7 @@ final class OfflineVoteRepository extends EntityRepository
                 ];
             }
 
-            $stats[$stat['id']]['title'] = $stat['title'];
+            $stats[$stat['id']]['title']   = $stat['title'];
             $stats[$stat['id']]['times'][] = [
                 'projectId'   => $stat['projectId'],
                 'projectName' => $stat['projectName'],

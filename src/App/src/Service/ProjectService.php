@@ -10,13 +10,9 @@ use App\Entity\WorkflowStateInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Laminas\InputFilter\InputFilterInterface;
 
 final class ProjectService implements ProjectServiceInterface
 {
-    /** @var InputFilterInterface */
-    private $inputFilter;
-
     /** @var EntityManagerInterface */
     protected $em;
 
@@ -24,17 +20,15 @@ final class ProjectService implements ProjectServiceInterface
     private $projectRepository;
 
     public function __construct(
-        InputFilterInterface $inputFilter,
         EntityManagerInterface $em
     ) {
-        $this->inputFilter       = $inputFilter;
         $this->em                = $em;
         $this->projectRepository = $this->em->getRepository(Project::class);
     }
 
     public function addProject(User $submitter, array $filteredParams): ?Project
     {
-        $date  = new DateTime();
+        $date = new DateTime();
 
         $project = new Project();
 

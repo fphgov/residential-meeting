@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Traits\EntityActiveTrait;
-use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\UuidInterface;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
 use JsonSerializable;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
@@ -27,7 +25,7 @@ class Media implements JsonSerializable, MediaInterface
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      *
-     * @var \Ramsey\Uuid\UuidInterface
+     * @var UuidInterface
      */
     private $id;
 
@@ -84,7 +82,7 @@ class Media implements JsonSerializable, MediaInterface
         $this->file = $file;
     }
 
-    public function getFile()
+    public function getFile(): resource
     {
         return $this->file;
     }

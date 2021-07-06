@@ -11,7 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class ActivateHandler implements RequestHandlerInterface
+final class PrizeHandler implements RequestHandlerInterface
 {
     /** @var UserServiceInterface **/
     private $userService;
@@ -24,10 +24,10 @@ final class ActivateHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $this->userService->activate($request->getAttribute('hash'));
+            $this->userService->prizeActivate($request->getAttribute('hash'));
         } catch (Exception $e) {
             return new JsonResponse([
-                'message' => 'Fiókja már aktíválva van vagy ismeretlen aktiváló kulcs.',
+                'message' => 'Jelentkezését a nyereményjátékra már fogadtuk vagy a jelentkezéshez használt kulcs érvénytelen',
             ], 404);
         }
 

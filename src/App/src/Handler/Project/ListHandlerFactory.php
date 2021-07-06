@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Handler\Project;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Interop\Container\ContainerInterface;
 use Mezzio\Hal\HalResponseFactory;
 use Mezzio\Hal\ResourceGenerator;
-use Interop\Container\ContainerInterface;
 
 final class ListHandlerFactory
 {
@@ -17,7 +17,7 @@ final class ListHandlerFactory
 
         return new ListHandler(
             $container->get(EntityManagerInterface::class),
-            isset($config['app']['pagination']['maxPageSize']) ? (int)$config['app']['pagination']['maxPageSize'] : 25,
+            isset($config['app']['pagination']['maxPageSize']) ? (int) $config['app']['pagination']['maxPageSize'] : 25,
             $container->get(HalResponseFactory::class),
             $container->get(ResourceGenerator::class),
         );

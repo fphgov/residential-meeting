@@ -6,7 +6,6 @@ namespace App\Service;
 
 use App\Entity\Media;
 use Doctrine\ORM\EntityManagerInterface;
-use Laminas\Diactoros\Stream;
 
 use function mime_content_type;
 
@@ -21,7 +20,7 @@ final class MediaService implements MediaServiceInterface
         $this->em = $em;
     }
 
-    public function getMedia(string $id)
+    public function getMedia(string $id): Media
     {
         $mediaRepository = $this->em->getRepository(Media::class);
 

@@ -6,15 +6,15 @@ namespace App\Entity;
 
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
-use Doctrine\ORM\PersistentCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
 use function array_slice;
 use function count;
 use function explode;
-use function min;
 use function implode;
+use function min;
 use function strip_tags;
 use function trim;
 
@@ -37,6 +37,8 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Idea", mappedBy="project")
+     *
+     * @var Collection
      */
     private $ideas;
 
@@ -46,6 +48,8 @@ class Project implements JsonSerializable, ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
      * )
+     *
+     * @var Collection
      */
     private $tags;
 
@@ -55,6 +59,8 @@ class Project implements JsonSerializable, ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id")}
      * )
+     *
+     * @var Collection
      */
     private $campaignLocations;
 
@@ -64,6 +70,8 @@ class Project implements JsonSerializable, ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
      * )
+     *
+     * @var Collection
      */
     private $medias;
 

@@ -4,31 +4,23 @@ declare(strict_types=1);
 
 namespace App\Handler\Account;
 
-use App\Model\PBKDF2Password;
 use App\Middleware\UserMiddleware;
+use App\Model\PBKDF2Password;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
-use Mezzio\Router\RouteResult;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-use function password_hash;
-
 final class PasswordChangeHandler implements RequestHandlerInterface
 {
-    /** @var array */
-    private $config;
-
     /** @var EntityManagerInterface */
     private $em;
 
     public function __construct(
-        array $config,
         EntityManagerInterface $em
     ) {
-        $this->config = $config;
-        $this->em     = $em;
+        $this->em = $em;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

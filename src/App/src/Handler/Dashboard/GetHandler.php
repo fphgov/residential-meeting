@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Handler\Dashboard;
 
+use App\Entity\OfflineVote;
 use App\Entity\User;
 use App\Entity\Vote;
-use App\Entity\OfflineVote;
-use App\Service\SettingServiceInterface;
+use App\Repository\OfflineVoteRepository;
 use App\Repository\UserRepository;
 use App\Repository\VoteRepository;
-use App\Repository\OfflineVoteRepository;
+use App\Service\SettingServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -58,7 +58,7 @@ final class GetHandler implements RequestHandlerInterface
                 'countUsers'        => $countUsers,
                 'countVotes'        => $countVotes,
                 'countOfflineVotes' => $countOfflineVotes / 3,
-            ]
+            ],
         ]);
     }
 }

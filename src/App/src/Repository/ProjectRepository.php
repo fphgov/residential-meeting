@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
 
 final class ProjectRepository extends EntityRepository
 {
-    public function getForSelection(?int $campaignTheme = null)
+    public function getForSelection(?int $campaignTheme = null): array
     {
         $filteredProjects = $this->findAll();
 
@@ -19,7 +19,7 @@ final class ProjectRepository extends EntityRepository
                     'id'    => $project->getCampaignTheme()->getId(),
                     'name'  => $project->getCampaignTheme()->getName(),
                     'code'  => $project->getCampaignTheme()->getCode(),
-                    'elems' => []
+                    'elems' => [],
                 ];
             }
 

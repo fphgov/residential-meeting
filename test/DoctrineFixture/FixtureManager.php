@@ -4,16 +4,6 @@ declare(strict_types=1);
 
 namespace DoctrineFixture;
 
-use App\Entity\Applicant;
-use App\Entity\ApplicantInterface;
-use App\Entity\Appointment;
-use App\Entity\AppointmentInterface;
-use App\Entity\Place;
-use App\Entity\PlaceInterface;
-use App\Entity\Reservation;
-use App\Entity\ReservationInterface;
-use App\Entity\Setting;
-use App\Entity\SettingInterface;
 use App\Entity\User;
 use App\Entity\UserInterface;
 use Doctrine\Common\Annotations\AnnotationReader;

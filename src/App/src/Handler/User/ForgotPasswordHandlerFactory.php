@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Handler\User;
 
-use App\Service\UserServiceInterface;
 use App\Middleware\AuditMiddleware;
+use App\Service\UserServiceInterface;
 use Interop\Container\ContainerInterface;
 
 final class ForgotPasswordHandlerFactory

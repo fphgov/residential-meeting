@@ -12,7 +12,6 @@ final class PasswordChangeHandlerFactory
     public function __invoke(ContainerInterface $container): PasswordChangeHandler
     {
         return new PasswordChangeHandler(
-            $container->get('config'),
             $container->get(EntityManagerInterface::class)
         );
     }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Handler\Project;
 
-use App\Entity\Project;
 use App\Entity\CampaignTheme;
-use App\Entity\Vote;
 use App\Entity\OfflineVote;
+use App\Entity\Project;
+use App\Entity\Vote;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -16,6 +16,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 use function array_filter;
+use function array_values;
 use function usort;
 
 final class StatisticsHandler implements RequestHandlerInterface
@@ -35,27 +36,27 @@ final class StatisticsHandler implements RequestHandlerInterface
         $offlineResult = $this->getProjectStatistics(OfflineVote::class);
 
         $result = [];
-        foreach ($onlineResult as $onlineProjectDTO) {
-            $id = $onlineProjectDTO->getId();
-            $tmpDTO = clone $onlineProjectDTO;
+        foreach ($onlineResult as $onlineProjectDto) {
+            $id     = $onlineProjectDto->getId();
+            $tmpDto = clone $onlineProjectDto;
 
-            $offlineProjectDTO = [];
-            $offlineProjectDTO = array_values(array_filter(
+            $offlineProjectDto = [];
+            $offlineProjectDto = array_values(array_filter(
                 $offlineResult,
                 function ($e) use (&$id) {
                     return $e->getId() === $id;
                 }
             ));
 
-            if (! isset($offlineProjectDTO[0])) {
-                $result[] = $tmpDTO;
+            if (! isset($offlineProjectDto[0])) {
+                $result[] = $tmpDto;
 
                 continue;
             }
 
-            $tmpDTO->setPlusVoted($offlineProjectDTO[0]->getVoted());
+            $tmpDto->setPlusVoted($offlineProjectDto[0]->getVoted());
 
-            $result[] = $tmpDTO;
+            $result[] = $tmpDto;
         }
 
         usort($result, fn($a, $b) => $a->getVoted() < $b->getVoted());
@@ -63,11 +64,11 @@ final class StatisticsHandler implements RequestHandlerInterface
         return new JsonResponse([
             '_embedded' => [
                 'projects' => $result,
-            ]
+            ],
         ]);
     }
 
-    private function getProjectStatisticsDTO(string $className)
+    private function getProjectStatisticsDTO(string $className): array
     {
         $repository = $this->em->getRepository(Project::class);
 
@@ -83,7 +84,7 @@ final class StatisticsHandler implements RequestHandlerInterface
         return $qb->getQuery()->getResult();
     }
 
-    private function getProjectStatistics(string $className)
+    private function getProjectStatistics(string $className): array
     {
         $repository = $this->em->getRepository(Project::class);
 

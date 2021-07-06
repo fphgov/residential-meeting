@@ -14,9 +14,12 @@ use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Token as TokenInterface;
+use Mezzio\Router\RouteResult;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
+use function in_array;
 
 class TokenHandler implements RequestHandlerInterface
 {
@@ -35,7 +38,7 @@ class TokenHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $postBody    = $request->getParsedBody();
-        $routeResult = $request->getAttribute(\Mezzio\Router\RouteResult::class);
+        $routeResult = $request->getAttribute(RouteResult::class);
 
         $userRepository = $this->em->getRepository(User::class);
         $voteRepository = $this->em->getRepository(Vote::class);
@@ -81,7 +84,7 @@ class TokenHandler implements RequestHandlerInterface
         ];
 
         $votes = $voteRepository->findOneBy([
-            'user' => $user->getId()
+            'user' => $user->getId(),
         ]);
 
         if ($votes !== null) {
@@ -100,8 +103,8 @@ class TokenHandler implements RequestHandlerInterface
                     'id'          => $votes->getProjectWhole()->getId(),
                     'title'       => $votes->getProjectWhole()->getTitle(),
                     'description' => $votes->getProjectWhole()->getDescription(),
-                ]
-                ];
+                ],
+            ];
         }
 
         $token = $this->generateToken($userData);

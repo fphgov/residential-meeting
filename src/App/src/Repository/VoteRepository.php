@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Throwable;
 
 final class VoteRepository extends EntityRepository
 {
@@ -19,9 +20,8 @@ final class VoteRepository extends EntityRepository
                    ->setParameter('id', $id);
 
         try {
-            return (int)$qb->getQuery()->getSingleScalarResult();
-        } catch (\Throwable $th) {
-
+            return (int) $qb->getQuery()->getSingleScalarResult();
+        } catch (Throwable $th) {
         }
 
         return 0;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\InputFilter;
 
-use Laminas\Filter;
 use Laminas\Db\Adapter\AdapterInterface;
+use Laminas\Filter;
 use Laminas\I18n\Validator\IsInt;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator;

@@ -4,36 +4,29 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use function array_slice;
-use function count;
-use function explode;
-use function min;
-use function implode;
-use function strip_tags;
-use function trim;
 use JsonSerializable;
 
 class ProjectStatisticsDTO implements JsonSerializable
 {
-    private $id;
-    private $campaignThemeId;
-    private $campaignThemeName;
-    private $campaignThemeRgb;
-    private $title;
-    private $votedCare;
-    private $votedGreen;
-    private $votedWhole;
+    private int $id;
+    private int $campaignThemeId;
+    private string $campaignThemeName;
+    private string $campaignThemeRgb;
+    private string $title;
+    private int $votedCare;
+    private int $votedGreen;
+    private int $votedWhole;
     private int $plusVoted = 0;
 
     public function __construct(
         int $id,
-        $campaignThemeId,
-        $campaignThemeName,
-        $campaignThemeRgb,
-        $title,
-        $votedCare,
-        $votedGreen,
-        $votedWhole
+        int $campaignThemeId,
+        string $campaignThemeName,
+        string $campaignThemeRgb,
+        string $title,
+        int $votedCare,
+        int $votedGreen,
+        int $votedWhole
     ) {
         $this->id                = $id;
         $this->campaignThemeId   = $campaignThemeId;
@@ -53,13 +46,13 @@ class ProjectStatisticsDTO implements JsonSerializable
     public function getCampaignTheme(): array
     {
         return [
-            'id' => $this->campaignThemeId,
+            'id'   => $this->campaignThemeId,
             'name' => $this->campaignThemeName,
             'rgb'  => $this->campaignThemeRgb,
         ];
     }
 
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -70,13 +63,13 @@ class ProjectStatisticsDTO implements JsonSerializable
 
         if ($this->votedCare > 0) {
             $voted = $this->votedCare;
-        } else if ($this->votedGreen > 0) {
+        } elseif ($this->votedGreen > 0) {
             $voted = $this->votedGreen;
-        } else if ($this->votedWhole > 0) {
+        } elseif ($this->votedWhole > 0) {
             $voted = $this->votedWhole;
         }
 
-        return $this->plusVoted + (int)$voted;
+        return $this->plusVoted + (int) $voted;
     }
 
     public function setPlusVoted(int $vote): void

@@ -292,4 +292,4 @@ if (array_key_exists($_SERVER['REQUEST_URI'], $ogMetas)) {
 
 $doc = file_get_contents('index.html');
 
-echo preg_replace('/\<meta charset="utf-8">/', $og->getTags($_SERVER['REQUEST_URI']), $doc);
+echo preg_replace('/\<meta charset="utf-8"\/>/', $og->getTags($_SERVER['REQUEST_URI']), $doc);
