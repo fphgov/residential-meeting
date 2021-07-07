@@ -136,7 +136,7 @@ final class VoteService implements VoteServiceInterface
             error_log($e->getMessage());
 
             $this->audit->err('Vote success notification no added to MailQueueService', [
-                'extra' => $user->getId(),
+                'extra' => $user->getId()  . " | " . $e->getMessage(),
             ]);
         }
     }
