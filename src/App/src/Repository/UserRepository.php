@@ -23,7 +23,8 @@ final class UserRepository extends EntityRepository
                    ->setParameter('active', true)
                    ->setParameter('prize', false)
                    ->setParameter('prizeNotified', false)
-                   ->setMaxResults($limit);
+                   ->setMaxResults($limit)
+                   ->orderBy('u.id', 'ASC');
 
         return $qb->getQuery()->getResult();
     }
