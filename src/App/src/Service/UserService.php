@@ -233,7 +233,7 @@ final class UserService implements UserServiceInterface
                 'activation'       => $this->config['app']['url'] . '/profil/aktivalas/' . $user->getHash(),
             ];
 
-            $this->mailAdapter->setTemplate('email/user-created', $tplData);
+            $this->mailAdapter->setTemplate('user-created', $tplData);
 
             $this->mailQueueService->add($this->mailAdapter);
         } catch (Throwable $e) {
@@ -264,9 +264,9 @@ final class UserService implements UserServiceInterface
                 'prizeActivation'  => $url,
             ];
 
-            $this->mailAdapter->setTemplate('email/user-prize', $tplData);
+            $this->mailAdapter->setTemplate('user-prize', $tplData);
 
-            $this->mailQueueService->push($this->mailAdapter);
+            $this->mailQueueService->add($this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
@@ -291,7 +291,7 @@ final class UserService implements UserServiceInterface
                 'forgotLink'       => $this->config['app']['url'] . '/profil/jelszo/' . $user->getHash(),
             ];
 
-            $this->mailAdapter->setTemplate('email/user-password-recovery', $tplData);
+            $this->mailAdapter->setTemplate('user-password-recovery', $tplData);
 
             $this->mailQueueService->add($this->mailAdapter);
         } catch (Throwable $e) {
@@ -318,7 +318,7 @@ final class UserService implements UserServiceInterface
                 'username'         => $user->getUsername(),
             ];
 
-            $this->mailAdapter->setTemplate('email/user-account-recovery', $tplData);
+            $this->mailAdapter->setTemplate('user-account-recovery', $tplData);
 
             $this->mailQueueService->add($this->mailAdapter);
         } catch (Throwable $e) {

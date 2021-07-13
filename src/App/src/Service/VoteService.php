@@ -129,7 +129,7 @@ final class VoteService implements VoteServiceInterface
                 ],
             ];
 
-            $this->mailAdapter->setTemplate('email/vote-success', $tplData);
+            $this->mailAdapter->setTemplate('vote-success', $tplData);
 
             $this->mailQueueService->add($this->mailAdapter);
         } catch (Throwable $e) {

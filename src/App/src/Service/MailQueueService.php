@@ -39,7 +39,10 @@ final class MailQueueService implements MailQueueServiceInterface
 
     public function add(MailAdapter $mailAdapter)
     {
-        if (isset($this->config['app']['notification']['force'])) {
+        if (
+            isset($this->config['app']['notification']['force']) &&
+            $this->config['app']['notification']['force'] === true
+        ) {
             $mailQueue = $this->createMailQueue($mailAdapter);
 
             $this->sendMail($mailQueue);
@@ -60,7 +63,7 @@ final class MailQueueService implements MailQueueServiceInterface
         return $mailQueue;
     }
 
-    public function push(MailAdapter $mailAdapter): MailQueue
+    public function push(MailAdapter $mailAdapter)
     {
         $mailQueue = $this->createMailQueue($mailAdapter);
 
@@ -94,7 +97,7 @@ final class MailQueueService implements MailQueueServiceInterface
             usleep(250000);
         } catch (Throwable $th) {
             $this->audit->err('Mail no sended from mail queue', [
-                'extra' => $mailQueue->getId(),
+                'extra' => $mailQueue->getId() . ' ' . $th->getMessage(),
             ]);
         }
     }
