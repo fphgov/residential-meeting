@@ -44,6 +44,7 @@ final class MailQueueService implements MailQueueServiceInterface
             $this->config['app']['notification']['force'] === true
         ) {
             $mailQueue = $this->createMailQueue($mailAdapter);
+            $mailQueue->setId(0);
 
             $this->sendMail($mailQueue);
         } else {
