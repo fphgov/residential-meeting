@@ -97,6 +97,13 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
      */
     private $prizeNotified = true;
 
+    /**
+     * @ORM\Column(name="prizeNotifiedSec", type="boolean")
+     *
+     * @var bool
+     */
+    private $prizeNotifiedSec = true;
+
     public function setUser(User $user): void
     {
         $this->user = $user;
@@ -185,6 +192,16 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     public function getPrizeNotified(): bool
     {
         return $this->prizeNotified;
+    }
+
+    public function setPrizeNotifiedSec(bool $prizeNotifiedSec): void
+    {
+        $this->prizeNotifiedSec = $prizeNotifiedSec;
+    }
+
+    public function getPrizeNotifiedSec(): bool
+    {
+        return $this->prizeNotifiedSec;
     }
 
     public function setPrizeHash(?string $prizeHash = null): void

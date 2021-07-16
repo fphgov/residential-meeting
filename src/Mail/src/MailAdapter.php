@@ -55,14 +55,14 @@ class MailAdapter
 
         $this->content = new MimeMessage();
 
-        $text = $this->template->render("email/text/$name", $data);
+        // $text = $this->template->render("email/text/$name", $data);
 
-        $bodyText           = new MimePart($text);
-        $bodyText->type     = Mime::TYPE_TEXT;
-        $bodyText->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
-        $bodyText->charset  = 'utf-8';
+        // $bodyText           = new MimePart($text);
+        // $bodyText->type     = Mime::TYPE_TEXT;
+        // $bodyText->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
+        // $bodyText->charset  = 'utf-8';
 
-        $this->content->addPart($bodyText);
+        // $this->content->addPart($bodyText);
 
         $html = $this->template->render("email/html/$name", $data);
 
@@ -111,8 +111,8 @@ class MailAdapter
         $this->message->setBody($this->content);
         $this->message->setEncoding('UTF-8');
 
-        $contentTypeHeader = $this->message->getHeaders()->get('Content-Type');
-        $contentTypeHeader->setType('multipart/related');
+        // $contentTypeHeader = $this->message->getHeaders()->get('Content-Type');
+        // $contentTypeHeader->setType('multipart/related');
 
         $this->transport->send($this->message);
     }

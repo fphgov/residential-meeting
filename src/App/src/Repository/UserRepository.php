@@ -28,4 +28,21 @@ final class UserRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function getPrizeNotificationListSec(int $limit): array
+    {
+        $qb = $this->createQueryBuilder('u')
+                   ->innerJoin(UserPreference::class, 'up', Join::WITH, 'up.user = u.id')
+                   ->innerJoin(Vote::class, 'v', Join::WITH, 'v.user = u.id')
+                   ->where('u.active = :active')
+                   ->andWhere('up.prizeNotified = :prizeNotified')
+                   ->andWhere('up.prizeNotifiedSec = :prizeNotifiedSec')
+                   ->setParameter('active', true)
+                   ->setParameter('prizeNotified', true)
+                   ->setParameter('prizeNotifiedSec', false)
+                   ->setMaxResults($limit)
+                   ->orderBy('u.id', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
 }

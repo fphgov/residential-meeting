@@ -102,6 +102,21 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
+    public function sendPrizeNotificationSec(User $user)
+    {
+        $userPreference = $user->getUserPreference();
+
+        if ($userPreference->getPrizeHash() === null) {
+            $userPreference->setPrizeHash($user->generateToken());
+        }
+
+        $this->sendPrizeActivationEmail($user);
+
+        $userPreference->setPrizeNotifiedSec(true);
+
+        $this->em->flush();
+    }
+
     public function resetPassword(string $hash, string $password)
     {
         $filteredParams = [
