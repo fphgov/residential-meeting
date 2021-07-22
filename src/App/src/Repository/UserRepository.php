@@ -20,9 +20,11 @@ final class UserRepository extends EntityRepository
                    ->andWhere('up.prize = :prize')
                    ->andWhere('up.prizeHash IS NULL')
                    ->andWhere('up.prizeNotified = :prizeNotified')
+                   ->andWhere('up.campaignEmail = :campaignEmail')
                    ->setParameter('active', true)
                    ->setParameter('prize', false)
                    ->setParameter('prizeNotified', false)
+                   ->setParameter('campaignEmail', true)
                    ->setMaxResults($limit)
                    ->orderBy('u.id', 'ASC');
 
@@ -37,9 +39,11 @@ final class UserRepository extends EntityRepository
                    ->where('u.active = :active')
                    ->andWhere('up.prizeNotified = :prizeNotified')
                    ->andWhere('up.prizeNotifiedSec = :prizeNotifiedSec')
+                   ->andWhere('up.campaignEmail = :campaignEmail')
                    ->setParameter('active', true)
                    ->setParameter('prizeNotified', true)
                    ->setParameter('prizeNotifiedSec', false)
+                   ->setParameter('campaignEmail', true)
                    ->setMaxResults($limit)
                    ->orderBy('u.id', 'ASC');
 

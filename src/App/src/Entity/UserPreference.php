@@ -104,6 +104,13 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
      */
     private $prizeNotifiedSec = true;
 
+    /**
+     * @ORM\Column(name="campaignEmail", type="boolean")
+     *
+     * @var bool
+     */
+    private $campaignEmail = false;
+
     public function setUser(User $user): void
     {
         $this->user = $user;
@@ -222,5 +229,15 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     public function getCreated(): ?DateTime
     {
         return $this->created;
+    }
+
+    public function setCampaignEmail(bool $campaignEmail): void
+    {
+        $this->campaignEmail = $campaignEmail;
+    }
+
+    public function getCampaignEmail(): bool
+    {
+        return $this->campaignEmail;
     }
 }
