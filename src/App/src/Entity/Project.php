@@ -124,6 +124,13 @@ class Project implements JsonSerializable, ProjectInterface
      */
     private $video;
 
+    /**
+     * @ORM\Column(name="win", type="boolean", nullable=false)
+     *
+     * @var bool
+     */
+    private $win = false;
+
     public function getCampaignTheme(): CampaignTheme
     {
         return $this->campaignTheme;
@@ -232,6 +239,16 @@ class Project implements JsonSerializable, ProjectInterface
     public function getStatus(): int
     {
         return $this->status;
+    }
+
+    public function setWin(bool $win): void
+    {
+        $this->win = $win;
+    }
+
+    public function getWin(): bool
+    {
+        return $this->win;
     }
 
     public function getShortDescription(): string

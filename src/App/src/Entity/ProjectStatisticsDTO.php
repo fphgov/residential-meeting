@@ -17,6 +17,7 @@ class ProjectStatisticsDTO implements JsonSerializable
     private int $votedGreen;
     private int $votedWhole;
     private int $plusVoted = 0;
+    private bool $win;
 
     public function __construct(
         int $id,
@@ -26,7 +27,8 @@ class ProjectStatisticsDTO implements JsonSerializable
         string $title,
         int $votedCare,
         int $votedGreen,
-        int $votedWhole
+        int $votedWhole,
+        bool $win
     ) {
         $this->id                = $id;
         $this->campaignThemeId   = $campaignThemeId;
@@ -36,6 +38,7 @@ class ProjectStatisticsDTO implements JsonSerializable
         $this->votedCare         = $votedCare;
         $this->votedGreen        = $votedGreen;
         $this->votedWhole        = $votedWhole;
+        $this->win               = $win;
     }
 
     public function getId(): int
@@ -55,6 +58,11 @@ class ProjectStatisticsDTO implements JsonSerializable
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function getWin(): bool
+    {
+        return $this->win;
     }
 
     public function getVoted(): int
@@ -84,6 +92,7 @@ class ProjectStatisticsDTO implements JsonSerializable
             'title'          => $this->getTitle(),
             'campaign_theme' => $this->getCampaignTheme(),
             'voted'          => $this->getVoted(),
+            'win'            => $this->getWin(),
         ];
     }
 }
