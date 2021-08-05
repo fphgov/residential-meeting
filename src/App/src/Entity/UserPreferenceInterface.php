@@ -53,6 +53,10 @@ interface UserPreferenceInterface
 
     public function getPrizeNotifiedSec(): bool;
 
+    public function setPrizeNotifiedThird(bool $prizeNotifiedThird): void;
+
+    public function getPrizeNotifiedThird(): bool;
+
     public function setPrizeHash(?string $prizeHash = null): void;
 
     public function getPrizeHash(): ?string;
