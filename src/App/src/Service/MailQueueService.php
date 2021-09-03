@@ -64,7 +64,7 @@ final class MailQueueService implements MailQueueServiceInterface
         return $mailQueue;
     }
 
-    public function push(MailAdapter $mailAdapter)
+    private function push(MailAdapter $mailAdapter)
     {
         $mailQueue = $this->createMailQueue($mailAdapter);
 

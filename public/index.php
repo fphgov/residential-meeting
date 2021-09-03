@@ -13,7 +13,7 @@ chdir(dirname(__DIR__));
 
 require 'vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createUnsafeImmutable(BASIC_PATH);
+$dotenv = Dotenv\Dotenv::createUnsafeMutable(BASIC_PATH);
 $dotenv->load();
 
 (function () {
