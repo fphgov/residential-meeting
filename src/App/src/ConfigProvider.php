@@ -47,7 +47,6 @@ class ConfigProvider
                 Handler\Dashboard\ChangeHandler::class       => Handler\Dashboard\ChangeHandlerFactory::class,
                 Handler\User\ListHandler::class              => Handler\User\ListHandlerFactory::class,
                 Handler\User\ActivateHandler::class          => Handler\User\ActivateHandlerFactory::class,
-                Handler\User\ForgotAccountHandler::class     => Handler\User\ForgotAccountHandlerFactory::class,
                 Handler\User\ForgotPasswordHandler::class    => Handler\User\ForgotPasswordHandlerFactory::class,
                 Handler\User\ResetPasswordHandler::class     => Handler\User\ResetPasswordHandlerFactory::class,
                 Handler\User\RegistrationHandler::class      => Handler\User\RegistrationHandlerFactory::class,

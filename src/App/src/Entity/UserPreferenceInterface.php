@@ -29,10 +29,6 @@ interface UserPreferenceInterface
 
     public function getPostalCode(): ?string;
 
-    public function setNickname(string $nickname): void;
-
-    public function getNickname(): string;
-
     public function setPrivacy(bool $privacy): void;
 
     public function getPrivacy(): bool;

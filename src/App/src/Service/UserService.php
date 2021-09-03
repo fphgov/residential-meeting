@@ -181,28 +181,6 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
-    public function forgotAccount(string $email)
-    {
-        $user = $this->userRepository->findOneBy([
-            'email' => $email,
-        ]);
-
-        if (! $user instanceof User) {
-            throw new UserNotFoundException($email);
-        }
-
-        if (! $user->getActive()) {
-            $user->setHash($user->generateToken());
-            $this->sendActivationEmail($user);
-
-            throw new UserNotActiveException((string) $user->getId());
-        }
-
-        $this->forgotAccountMail($user);
-
-        $this->em->flush();
-    }
-
     public function registration(array $filteredParams): User
     {
         $date = new DateTime();
@@ -216,7 +194,6 @@ final class UserService implements UserServiceInterface
         $userPreference->setPostalCode((string) $filteredParams['postal_code']);
         $userPreference->setLiveInCity((bool) $filteredParams['live_in_city']);
         $userPreference->setHearAbout($filteredParams['hear_about']);
-        $userPreference->setNickname($filteredParams['nickname']);
         $userPreference->setPrivacy((bool) $filteredParams['privacy']);
         $userPreference->setCreatedAt($date);
         $userPreference->setUpdatedAt($date);
@@ -231,7 +208,6 @@ final class UserService implements UserServiceInterface
 
         $user->setUserPreference($userPreference);
         $user->setHash($user->generateToken());
-        $user->setUsername($filteredParams['username']);
         $user->setFirstname($filteredParams['firstname']);
         $user->setLastname($filteredParams['lastname']);
         $user->setEmail($filteredParams['email']);
@@ -328,33 +304,6 @@ final class UserService implements UserServiceInterface
             error_log($e->getMessage());
 
             $this->audit->err('User forgot password notification no added to MailQueueService', [
-                'extra' => $user->getId() . ' | ' . $e->getMessage(),
-            ]);
-        }
-    }
-
-    private function forgotAccountMail(User $user)
-    {
-        $this->mailAdapter->clear();
-
-        try {
-            $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('Felhasználónév emlékeztető az Ötlet.budapest.hu-n lévő fiókra');
-
-            $tplData = [
-                'name'             => $user->getFirstname(),
-                'infoMunicipality' => $this->config['app']['municipality'],
-                'infoEmail'        => $this->config['app']['email'],
-                'username'         => $user->getUsername(),
-            ];
-
-            $this->mailAdapter->setTemplate('user-account-recovery', $tplData);
-
-            $this->mailQueueService->add($this->mailAdapter);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('User forgot account notification no added to MailQueueService', [
                 'extra' => $user->getId() . ' | ' . $e->getMessage(),
             ]);
         }

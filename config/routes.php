@@ -40,10 +40,6 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\User\ForgotPasswordHandler::class
     ], 'app.api.user.forgot.password');
 
-    $app->post('/app/api/user/forgot/account', [
-        App\Handler\User\ForgotAccountHandler::class
-    ], 'app.api.user.forgot.account');
-
     $app->post('/app/api/user/reset/password', [
         App\Handler\User\ResetPasswordHandler::class
     ], 'app.api.user.reset.password');

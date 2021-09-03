@@ -13,10 +13,7 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\Table(
- *     name="users",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="ix_username_email", columns={"username","email"})}
- * )
+ * @ORM\Table(name="users")
  */
 class User implements JsonSerializable, UserInterface
 {
@@ -37,13 +34,6 @@ class User implements JsonSerializable, UserInterface
      * @var Vote
      */
     private $vote;
-
-    /**
-     * @ORM\Column(name="username", type="string")
-     *
-     * @var string
-     */
-    private $username;
 
     /**
      * @ORM\Column(name="lutece_id", type="string", nullable=true)
@@ -122,16 +112,6 @@ class User implements JsonSerializable, UserInterface
     public function getLuteceId(): string
     {
         return $this->luteceId;
-    }
-
-    public function setUsername(string $username): void
-    {
-        $this->username = $username;
-    }
-
-    public function getUsername(): string
-    {
-        return $this->username;
     }
 
     public function setFirstname(string $firstname): void

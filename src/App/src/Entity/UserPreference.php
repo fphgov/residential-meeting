@@ -49,13 +49,6 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     private $postalCode;
 
     /**
-     * @ORM\Column(name="nickname", type="string")
-     *
-     * @var string
-     */
-    private $nickname;
-
-    /**
      * @ORM\Column(name="hear_about", type="string")
      *
      * @var string
@@ -156,16 +149,6 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     public function getPostalCode(): ?string
     {
         return $this->postalCode;
-    }
-
-    public function setNickname(string $nickname): void
-    {
-        $this->nickname = $nickname;
-    }
-
-    public function getNickname(): string
-    {
-        return $this->nickname;
     }
 
     public function setHearAbout(string $hearAbout): void
