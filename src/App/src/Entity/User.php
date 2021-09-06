@@ -104,12 +104,12 @@ class User implements JsonSerializable, UserInterface
         return $this->vote;
     }
 
-    public function setLuteceId(string $luteceId): void
+    public function setLuteceId(?string $luteceId = null): void
     {
         $this->luteceId = $luteceId;
     }
 
-    public function getLuteceId(): string
+    public function getLuteceId(): ?string
     {
         return $this->luteceId;
     }

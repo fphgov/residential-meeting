@@ -166,6 +166,29 @@ class Project implements JsonSerializable, ProjectInterface
         return $this->tags->getValues();
     }
 
+    public function getTagCollection(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+        }
+
+        return $this;
+    }
+
     public function getCampaignLocations(): array
     {
         return $this->campaignLocations->getValues();

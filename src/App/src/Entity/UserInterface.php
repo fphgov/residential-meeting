@@ -16,9 +16,9 @@ interface UserInterface
 
     public function getUserPreference(): UserPreference;
 
-    public function setLuteceId(string $luteceId): void;
+    public function setLuteceId(?string $luteceId = null): void;
 
-    public function getLuteceId(): string;
+    public function getLuteceId(): ?string;
 
     public function setFirstname(string $firstname): void;
 

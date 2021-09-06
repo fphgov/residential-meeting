@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineFixture;
 
-use App\Entity\User;
-use App\Entity\UserInterface;
+use App\Entity;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
@@ -45,7 +44,8 @@ final class FixtureManager
         $eventManager = new EventManager();
         $rtel         = new ResolveTargetEntityListener();
 
-        $rtel->addResolveTargetEntity(UserInterface::class, User::class, []);
+        $rtel->addResolveTargetEntity(Entity\SettingsInterface::class, Entity\Settings::class, []);
+        $rtel->addResolveTargetEntity(Entity\UserInterface::class, Entity\User::class, []);
 
         $eventManager->addEventListener(Events::loadClassMetadata, $rtel);
 
