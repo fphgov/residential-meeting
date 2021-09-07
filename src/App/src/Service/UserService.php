@@ -208,6 +208,7 @@ final class UserService implements UserServiceInterface
 
         $user->setUserPreference($userPreference);
         $user->setHash($user->generateToken());
+        $user->setUsername($user->generateToken());
         $user->setFirstname($filteredParams['firstname']);
         $user->setLastname($filteredParams['lastname']);
         $user->setEmail($filteredParams['email']);
