@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Handler\User;
 
-use App\InputFilter\UserRegistrationFilter;
 use App\Service\UserServiceInterface;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;

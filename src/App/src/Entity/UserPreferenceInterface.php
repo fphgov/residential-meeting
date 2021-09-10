@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\EntityInterface;
 use DateTime;
 
-interface UserPreferenceInterface
+interface UserPreferenceInterface extends EntityInterface
 {
     public const DISABLE_SHOW_DEFAULT = [
         'createdAt',
         'updatedAt',
     ];
+
+    public const DISABLE_DEFAULT_SET = [];
 
     public function setUser(User $user): void;
 
@@ -60,4 +63,8 @@ interface UserPreferenceInterface
     public function setCreated(?DateTime $created = null): void;
 
     public function getCreated(): ?DateTime;
+
+    public function setCampaignEmail(bool $campaignEmail): void;
+
+    public function getCampaignEmail(): bool;
 }

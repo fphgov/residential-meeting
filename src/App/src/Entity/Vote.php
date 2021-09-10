@@ -20,7 +20,7 @@ class Vote implements JsonSerializable, VoteInterface
 
     /**
      * @ORM\OneToOne(targetEntity="User", inversedBy="vote")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", unique=true)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", unique=true, nullable=false)
      *
      * @var User
      */
@@ -28,7 +28,7 @@ class Vote implements JsonSerializable, VoteInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Project")
-     * @ORM\JoinColumn(name="care_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="care_id", referencedColumnName="id", nullable=false)
      *
      * @var Project
      */
@@ -36,7 +36,7 @@ class Vote implements JsonSerializable, VoteInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Project")
-     * @ORM\JoinColumn(name="green_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="green_id", referencedColumnName="id", nullable=false)
      *
      * @var Project
      */
@@ -44,48 +44,48 @@ class Vote implements JsonSerializable, VoteInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Project")
-     * @ORM\JoinColumn(name="whole_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="whole_id", referencedColumnName="id", nullable=false)
      *
      * @var Project
      */
     private $projectWhole;
 
-    public function getUser(): User
+    public function getUser(): UserInterface
     {
         return $this->user;
     }
 
-    public function setUser(User $user): void
+    public function setUser(UserInterface $user): void
     {
         $this->user = $user;
     }
 
-    public function setProjectCare(Project $projectCare): void
+    public function setProjectCare(ProjectInterface $projectCare): void
     {
         $this->projectCare = $projectCare;
     }
 
-    public function getProjectCare(): Project
+    public function getProjectCare(): ProjectInterface
     {
         return $this->projectCare;
     }
 
-    public function setProjectGreen(Project $projectGreen): void
+    public function setProjectGreen(ProjectInterface $projectGreen): void
     {
         $this->projectGreen = $projectGreen;
     }
 
-    public function getProjectGreen(): Project
+    public function getProjectGreen(): ProjectInterface
     {
         return $this->projectGreen;
     }
 
-    public function setProjectWhole(Project $projectWhole): void
+    public function setProjectWhole(ProjectInterface $projectWhole): void
     {
         $this->projectWhole = $projectWhole;
     }
 
-    public function getProjectWhole(): Project
+    public function getProjectWhole(): ProjectInterface
     {
         return $this->projectWhole;
     }

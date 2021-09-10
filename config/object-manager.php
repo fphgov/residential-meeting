@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
-use Symfony\Component\Console\Helper\HelperSet;
 
 chdir(__DIR__ . '/../');
 

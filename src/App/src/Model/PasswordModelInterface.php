@@ -18,11 +18,13 @@ interface PasswordModelInterface
 
     public const SEPARATOR = ':';
 
+    public function __construct(string $password, int $representation = self::PW_REPRESENTATION_CLEARTEXT);
+
     public function getStorableRepresentation(): string;
 
     public function verify(string $clearTextPassword): bool;
 
-    public function getIterations(): string;
+    public function getIterations(): int;
 
     public function getHash(): string;
 

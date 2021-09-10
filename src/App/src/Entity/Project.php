@@ -29,7 +29,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
-     * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
      *
      * @var CampaignTheme
      */
@@ -38,7 +38,7 @@ class Project implements JsonSerializable, ProjectInterface
     /**
      * @ORM\OneToMany(targetEntity="Idea", mappedBy="project")
      *
-     * @var Collection
+     * @var Collection|Idea[]
      */
     private $ideas;
 
@@ -49,7 +49,7 @@ class Project implements JsonSerializable, ProjectInterface
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
      * )
      *
-     * @var Collection
+     * @var Collection|Tag[]
      */
     private $tags;
 
@@ -60,7 +60,7 @@ class Project implements JsonSerializable, ProjectInterface
      *      inverseJoinColumns={@ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id")}
      * )
      *
-     * @var Collection
+     * @var Collection|CampaignLocation[]
      */
     private $campaignLocations;
 
@@ -71,7 +71,7 @@ class Project implements JsonSerializable, ProjectInterface
      *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
      * )
      *
-     * @var Collection
+     * @var Collection|Media[]
      */
     private $medias;
 
@@ -106,7 +106,7 @@ class Project implements JsonSerializable, ProjectInterface
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
      *
-     * @var int|null
+     * @var string|null
      */
     private $cost;
 
@@ -120,7 +120,7 @@ class Project implements JsonSerializable, ProjectInterface
     /**
      * @ORM\Column(name="video", type="string", nullable=true)
      *
-     * @var string
+     * @var string|null
      */
     private $video;
 
@@ -173,7 +173,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     public function addTag(Tag $tag): self
     {
-        if (!$this->tags->contains($tag)) {
+        if (! $this->tags->contains($tag)) {
             $this->tags[] = $tag;
         }
 
@@ -244,7 +244,7 @@ class Project implements JsonSerializable, ProjectInterface
         return $this->video;
     }
 
-    public function setCost(?int $cost = null): void
+    public function setCost(?string $cost = null): void
     {
         $this->cost = $cost;
     }

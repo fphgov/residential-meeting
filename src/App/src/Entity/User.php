@@ -31,7 +31,7 @@ class User implements JsonSerializable, UserInterface
     /**
      * @ORM\OneToOne(targetEntity="Vote", mappedBy="user")
      *
-     * @var Vote
+     * @var Vote|null
      */
     private $vote;
 
@@ -45,7 +45,7 @@ class User implements JsonSerializable, UserInterface
     /**
      * @ORM\Column(name="lutece_id", type="string", nullable=true)
      *
-     * @var string
+     * @var string|null
      */
     private $luteceId;
 
@@ -101,7 +101,7 @@ class User implements JsonSerializable, UserInterface
         return $this->userPreference;
     }
 
-    public function setVote(?Vote $vote = null)
+    public function setVote(?Vote $vote = null): void
     {
         $this->vote = $vote;
     }

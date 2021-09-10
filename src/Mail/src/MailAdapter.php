@@ -13,7 +13,6 @@ use Laminas\Mime\Part as MimePart;
 use Mezzio\Template\TemplateRendererInterface;
 use Throwable;
 
-use function strip_tags;
 use function error_log;
 use function is_array;
 use function uniqid;
@@ -112,7 +111,10 @@ class MailAdapter
         $this->message->setEncoding('UTF-8');
 
         $contentTypeHeader = $this->message->getHeaders()->get('Content-Type');
-        $contentTypeHeader->setType('multipart/alternative');
+
+        if ($contentTypeHeader instanceof Header\ContentType) {
+            $contentTypeHeader->setType('multipart/alternative');
+        }
 
         $this->transport->send($this->message);
     }

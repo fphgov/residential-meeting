@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
+use App\Entity\UserInterface;
 use App\Entity\UserPreference;
+use App\Entity\UserPreferenceInterface;
 use App\Exception\UserNotActiveException;
 use App\Exception\UserNotFoundException;
 use App\Model\PBKDF2Password;
@@ -39,6 +41,9 @@ final class UserService implements UserServiceInterface
     /** @var EntityRepository */
     private $userRepository;
 
+    /** @var EntityRepository */
+    private $userPreferenceRepository;
+
     public function __construct(
         array $config,
         EntityManagerInterface $em,
@@ -61,7 +66,7 @@ final class UserService implements UserServiceInterface
             'hash' => $hash,
         ]);
 
-        if (! $user instanceof User) {
+        if (! $user instanceof UserInterface) {
             throw new UserNotFoundException($hash);
         }
 
@@ -77,7 +82,7 @@ final class UserService implements UserServiceInterface
             'prizeHash' => $prizeHash,
         ]);
 
-        if (! $userPreference instanceof UserPreference) {
+        if (! $userPreference instanceof UserPreferenceInterface) {
             throw new UserNotFoundException($prizeHash);
         }
 
@@ -87,7 +92,7 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
-    public function sendPrizeNotification(User $user)
+    public function sendPrizeNotification(UserInterface $user): void
     {
         $userPreference = $user->getUserPreference();
 
@@ -102,7 +107,7 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
-    public function sendPrizeNotificationSec(User $user)
+    public function sendPrizeNotificationSec(UserInterface $user): void
     {
         $userPreference = $user->getUserPreference();
 
@@ -117,7 +122,7 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
-    public function sendPrizeNotificationThird(User $user)
+    public function sendPrizeNotificationThird(UserInterface $user): void
     {
         $userPreference = $user->getUserPreference();
 
@@ -132,7 +137,7 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
-    public function resetPassword(string $hash, string $password)
+    public function resetPassword(string $hash, string $password): void
     {
         $filteredParams = [
             'hash'     => $hash,
@@ -144,7 +149,7 @@ final class UserService implements UserServiceInterface
             'active' => true,
         ]);
 
-        if (! $user instanceof User) {
+        if (! $user instanceof UserInterface) {
             throw new UserNotFoundException($hash);
         }
 
@@ -157,13 +162,13 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
-    public function forgotPassword(string $email)
+    public function forgotPassword(string $email): void
     {
         $user = $this->userRepository->findOneBy([
             'email' => $email,
         ]);
 
-        if (! $user instanceof User) {
+        if (! $user instanceof UserInterface) {
             throw new UserNotFoundException($email);
         }
 
@@ -181,7 +186,7 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
-    public function registration(array $filteredParams): User
+    public function registration(array $filteredParams): UserInterface
     {
         $date = new DateTime();
 
@@ -225,7 +230,7 @@ final class UserService implements UserServiceInterface
         return $user;
     }
 
-    private function sendActivationEmail(User $user)
+    private function sendActivationEmail(UserInterface $user): void
     {
         $this->mailAdapter->clear();
 
@@ -252,7 +257,7 @@ final class UserService implements UserServiceInterface
         }
     }
 
-    private function sendPrizeActivationEmail(User $user)
+    private function sendPrizeActivationEmail(UserInterface $user): void
     {
         $this->mailAdapter->clear();
 
@@ -283,7 +288,7 @@ final class UserService implements UserServiceInterface
         }
     }
 
-    private function forgotPasswordMail(User $user)
+    private function forgotPasswordMail(UserInterface $user): void
     {
         $this->mailAdapter->clear();
 

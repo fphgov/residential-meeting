@@ -8,8 +8,8 @@ use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
 use App\Entity\Idea;
 use App\Entity\IdeaInterface;
-use App\Entity\UserInterface;
 use App\Entity\Media;
+use App\Entity\UserInterface;
 use App\Entity\WorkflowStateInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\UploadedFileInterface;
 
 use function basename;
+use function is_array;
 
 final class IdeaService implements IdeaServiceInterface
 {
@@ -75,9 +76,9 @@ final class IdeaService implements IdeaServiceInterface
         return $this->ideaRepository;
     }
 
-    private function addAttachments(Idea $idea, array $files, DateTime $date): void
+    private function addAttachments(IdeaInterface $idea, array $files, DateTime $date): void
     {
-        foreach($files as $file) {
+        foreach ($files as $file) {
             if (! $file instanceof UploadedFileInterface) {
                 continue;
             }

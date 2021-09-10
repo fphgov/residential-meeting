@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Project;
-use App\Entity\User;
+use App\Entity\ProjectInterface;
+use App\Entity\UserInterface;
 use App\Entity\WorkflowStateInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +27,7 @@ final class ProjectService implements ProjectServiceInterface
         $this->projectRepository = $this->em->getRepository(Project::class);
     }
 
-    public function addProject(User $submitter, array $filteredParams): ?Project
+    public function addProject(UserInterface $submitter, array $filteredParams): ?ProjectInterface
     {
         $date = new DateTime();
 

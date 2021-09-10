@@ -16,7 +16,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function in_array;
 use function intval;
+use function is_string;
+use function strtoupper;
 
 final class ListHandler implements RequestHandlerInterface
 {
@@ -64,10 +67,10 @@ final class ListHandler implements RequestHandlerInterface
             ->leftJoin('p.campaignLocations', 'l')
             ->groupBy('p.id');
 
-        if ($rand == '' && is_string($sort) && in_array(strtoupper($sort), ['ASC', 'DESC'], true)) {
+        if ($rand === '' && is_string($sort) && in_array(strtoupper($sort), ['ASC', 'DESC'], true)) {
             $qb->orderBy('p.title', $sort);
-        } else if ($rand != '') {
-            $qb->orderBy('RAND('. $rand .')');
+        } elseif ($rand !== '') {
+            $qb->orderBy('RAND(' . $rand . ')');
         } else {
             $qb->orderBy('p.title', 'ASC');
         }

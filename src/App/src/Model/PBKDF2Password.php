@@ -54,7 +54,7 @@ final class PBKDF2Password implements PasswordModelInterface
         return $hash === $this->hash;
     }
 
-    public function getIterations(): string
+    public function getIterations(): int
     {
         return $this->iterations;
     }

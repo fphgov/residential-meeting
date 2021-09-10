@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-interface UserInterface
+use App\Interfaces\EntityActiveInterface;
+use App\Interfaces\EntityInterface;
+
+interface UserInterface extends EntityInterface, EntityActiveInterface
 {
     public const DISABLE_SHOW_DEFAULT = [
         'userPreference',
@@ -14,13 +17,23 @@ interface UserInterface
         'updatedAt',
     ];
 
+    public const DISABLE_DEFAULT_SET = [];
+
     public function setUserPreference(UserPreference $userPreference): void;
 
     public function getUserPreference(): UserPreference;
 
+    public function setVote(?Vote $vote = null): void;
+
+    public function getVote(): ?Vote;
+
     public function setLuteceId(?string $luteceId = null): void;
 
     public function getLuteceId(): ?string;
+
+    public function setUsername(string $username): void;
+
+    public function getUsername(): string;
 
     public function setFirstname(string $firstname): void;
 
@@ -41,4 +54,10 @@ interface UserInterface
     public function setRole(string $role): void;
 
     public function getRole(): ?string;
+
+    public function setHash(?string $hash = null): void;
+
+    public function getHash(): ?string;
+
+    public function generateToken(): string;
 }

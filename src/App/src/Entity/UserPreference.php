@@ -21,7 +21,7 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
 
     /**
      * @ORM\OneToOne(targetEntity="User", inversedBy="userPreference")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      *
      * @var User
      */
@@ -30,7 +30,7 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     /**
      * @ORM\Column(name="birthyear", type="smallint", nullable=true)
      *
-     * @var int
+     * @var int|null
      */
     private $birthyear;
 
@@ -44,7 +44,7 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     /**
      * @ORM\Column(name="postal_code", type="text", length=4, nullable=true)
      *
-     * @var string
+     * @var string|null
      */
     private $postalCode;
 
@@ -58,7 +58,7 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     /**
      * @ORM\Column(name="created", type="date", nullable=true)
      *
-     * @var string
+     * @var DateTime|null
      */
     private $created;
 

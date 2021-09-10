@@ -7,8 +7,6 @@ namespace App\Entity;
 use App\Traits\EntityTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 use JsonSerializable;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
@@ -20,13 +18,6 @@ use Ramsey\Uuid\UuidInterface;
 class Media implements JsonSerializable, MediaInterface
 {
     use EntityTrait;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Idea", mappedBy="medias")
-     *
-     * @var Collection
-     */
-    private $ideas;
 
     /**
      * @ORM\Id
@@ -48,7 +39,7 @@ class Media implements JsonSerializable, MediaInterface
     /**
      * @ORM\Column(name="type", type="string", nullable=true)
      *
-     * @var null|string
+     * @var string|null
      */
     private $type;
 
@@ -65,11 +56,6 @@ class Media implements JsonSerializable, MediaInterface
      * @var DateTime
      */
     protected $updatedAt;
-
-    public function __construct()
-    {
-        $this->ideas = new ArrayCollection();
-    }
 
     public function getId(): UuidInterface
     {

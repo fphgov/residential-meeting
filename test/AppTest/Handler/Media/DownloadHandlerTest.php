@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AppTest\Handler\Media;
 
-use App\Entity\Media;
 use App\Handler\Media\DownloadHandler;
 use App\Service\MediaServiceInterface;
 use Laminas\Diactoros\Response\JsonResponse;

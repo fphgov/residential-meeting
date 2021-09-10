@@ -20,14 +20,9 @@ class CampaignLocation implements JsonSerializable, CampaignLocationInterface
     use EntityMetaTrait;
     use EntityTrait;
 
-    public const DISABLE_SHOW_DEFAULT = [
-        'id',
-        'updatedAt',
-    ];
-
     /**
      * @ORM\ManyToOne(targetEntity="Campaign")
-     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
      *
      * @var Campaign
      */

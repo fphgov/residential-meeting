@@ -20,8 +20,8 @@ class ProjectListDTO
     private string $title;
     private string $description;
     private string $location;
-    private string $tagId;
-    private string $tagName;
+    private ?string $tagId;
+    private ?string $tagName;
 
     public function __construct(
         int $id,
@@ -30,8 +30,8 @@ class ProjectListDTO
         string $title,
         string $description,
         string $location,
-        string $tagId,
-        string $tagName
+        ?string $tagId = null,
+        ?string $tagName = null
     ) {
         $this->id                = $id;
         $this->campaignThemeName = $campaignThemeName;

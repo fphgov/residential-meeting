@@ -6,8 +6,10 @@ namespace App\Service;
 
 use App\Entity\OfflineVote;
 use App\Entity\Project;
-use App\Entity\User;
+use App\Entity\ProjectInterface;
+use App\Entity\UserInterface;
 use App\Entity\Vote;
+use App\Entity\VoteInterface;
 use App\Service\MailQueueServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,7 +55,7 @@ final class VoteService implements VoteServiceInterface
         $this->voteRepository   = $this->em->getRepository(Vote::class);
     }
 
-    public function addOfflineVote(User $user, array $filteredParams): void
+    public function addOfflineVote(UserInterface $user, array $filteredParams): void
     {
         $date = new DateTime();
 
@@ -67,7 +69,7 @@ final class VoteService implements VoteServiceInterface
         $this->em->flush();
     }
 
-    private function createOfflineVote(User $user, Project $project, DateTime $date): void
+    private function createOfflineVote(UserInterface $user, ProjectInterface $project, DateTime $date): void
     {
         $vote = new OfflineVote();
 
@@ -79,7 +81,7 @@ final class VoteService implements VoteServiceInterface
         $this->em->persist($vote);
     }
 
-    public function voting(User $user, array $filteredParams): Vote
+    public function voting(UserInterface $user, array $filteredParams): VoteInterface
     {
         $date = new DateTime();
 
@@ -104,7 +106,7 @@ final class VoteService implements VoteServiceInterface
         return $vote;
     }
 
-    private function successVote(User $user, Vote $vote)
+    private function successVote(UserInterface $user, VoteInterface $vote): void
     {
         $this->mailAdapter->clear();
 
@@ -136,7 +138,7 @@ final class VoteService implements VoteServiceInterface
             error_log($e->getMessage());
 
             $this->audit->err('Vote success notification no added to MailQueueService', [
-                'extra' => $user->getId()  . " | " . $e->getMessage(),
+                'extra' => $user->getId() . " | " . $e->getMessage(),
             ]);
         }
     }

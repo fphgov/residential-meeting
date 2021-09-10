@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-interface WorkflowStateInterface
+use App\Interfaces\EntityInterface;
+
+interface WorkflowStateInterface extends EntityInterface
 {
     public const STATUS_RECEIVED  = 100;
     public const STATUS_PUBLISHED = 101;
@@ -20,4 +22,6 @@ interface WorkflowStateInterface
         'createdAt',
         'updatedAt',
     ];
+
+    public const DISABLE_DEFAULT_SET = [];
 }

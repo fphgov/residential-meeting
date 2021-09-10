@@ -14,6 +14,8 @@ interface MediaInterface
         'updatedAt',
     ];
 
+    public const DISABLE_DEFAULT_SET = [];
+
     public function getId(): UuidInterface;
 
     public function setId(UuidInterface $id): UuidInterface;

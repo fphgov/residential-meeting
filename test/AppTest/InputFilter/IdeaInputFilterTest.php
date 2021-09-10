@@ -8,7 +8,6 @@ use App\InputFilter\IdeaInputFilter;
 use AppTest\AbstractServiceTest;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use Laminas\Diactoros\Stream;
 
 use function basename;
 use function dirname;
@@ -48,7 +47,7 @@ final class IdeaInputFilterTest extends AbstractServiceTest
         $this->ideaInputFilter = self::$container->get(IdeaInputFilter::class);
     }
 
-    private function ideaInputFilterInit(array $formData)
+    private function ideaInputFilterInit(array $formData): void
     {
         $this->ideaInputFilter->init();
 
@@ -60,7 +59,7 @@ final class IdeaInputFilterTest extends AbstractServiceTest
         $this->ideaInputFilter->setData($formData);
     }
 
-    public function testSubmitValidData()
+    public function testSubmitValidData(): void
     {
         $this->ideaInputFilterInit($this->formValidData);
 
@@ -79,7 +78,7 @@ final class IdeaInputFilterTest extends AbstractServiceTest
         $this->assertInstanceOf(UploadedFileInterface::class, $values['file'][0]);
     }
 
-    public function testSubmitInvalidData()
+    public function testSubmitInvalidData(): void
     {
         $this->ideaInputFilterInit([]);
 
@@ -98,10 +97,11 @@ final class IdeaInputFilterTest extends AbstractServiceTest
 
     /**
      * @dataProvider provideBooleanFilterData
+     * @param mixed $unfilteredData
      */
-    public function testBooleanFilter($result, $unfilteredData)
+    public function testBooleanFilter(bool $result, $unfilteredData): void
     {
-        $formData = $this->formValidData;
+        $formData                = $this->formValidData;
         $formData['participate'] = $unfilteredData;
 
         $this->ideaInputFilterInit($formData);
@@ -112,7 +112,7 @@ final class IdeaInputFilterTest extends AbstractServiceTest
         $this->assertEquals($values['participate'], $result);
     }
 
-    public function provideBooleanFilterData()
+    public function provideBooleanFilterData(): array
     {
         return [
             [true, true],
@@ -129,10 +129,11 @@ final class IdeaInputFilterTest extends AbstractServiceTest
 
     /**
      * @dataProvider provideIntegerData
+     * @param mixed $unfilteredData
      */
-    public function testInteger($result, $unfilteredData, $isValid)
+    public function testInteger(int $result, $unfilteredData, bool $isValid): void
     {
-        $formData = $this->formValidData;
+        $formData         = $this->formValidData;
         $formData['cost'] = $unfilteredData;
 
         $this->ideaInputFilterInit($formData);
@@ -144,7 +145,7 @@ final class IdeaInputFilterTest extends AbstractServiceTest
         $this->assertEquals($this->ideaInputFilter->isValid(), $isValid);
     }
 
-    public function provideIntegerData()
+    public function provideIntegerData(): array
     {
         return [
             [1, 1, true],
@@ -154,9 +155,9 @@ final class IdeaInputFilterTest extends AbstractServiceTest
         ];
     }
 
-    public function testSubmitInvalidCategoryData()
+    public function testSubmitInvalidCategoryData(): void
     {
-        $formData = $this->formValidData;
+        $formData             = $this->formValidData;
         $formData['category'] = 0;
 
         $this->ideaInputFilterInit($formData);

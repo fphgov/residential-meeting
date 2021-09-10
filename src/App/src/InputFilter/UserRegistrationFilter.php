@@ -218,7 +218,7 @@ class UserRegistrationFilter extends InputFilter
                     ]
                 ]),
                 new Validator\LessThan([
-                    'max'       => (new \DateTime())->format('Y') - 18,
+                    'max'       => (int)(new \DateTime())->format('Y') - 18,
                     'inclusive' => true,
                     'messages' => [
                         Validator\LessThan::NOT_LESS           => "The input is not less than '%max%'",

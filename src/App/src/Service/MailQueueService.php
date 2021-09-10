@@ -78,7 +78,7 @@ final class MailQueueService implements MailQueueServiceInterface
 
         $limit = $this->config['app']['notification']['frequency'] ?? 20;
 
-        $this->emails = $mailQueueRepository->findAll([], [], $limit);
+        $this->emails = $mailQueueRepository->findBy([], [], $limit);
 
         foreach ($this->emails as $email) {
             $this->sendMail($email);

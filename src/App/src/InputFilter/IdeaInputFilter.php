@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\InputFilter;
 
 use Laminas\Db\Adapter\AdapterInterface;
-use Laminas\Filter;
-use Laminas\I18n\Validator\IsInt;
-use Laminas\InputFilter\InputFilter;
-use Laminas\Validator;
 use Laminas\Diactoros\StreamFactory;
 use Laminas\Diactoros\UploadedFileFactory;
+use Laminas\Filter;
+use Laminas\I18n\Validator\IsInt;
+use Laminas\InputFilter\FileInput;
+use Laminas\InputFilter\InputFilter;
+use Laminas\Validator;
 
 use function getenv;
 
@@ -95,8 +96,8 @@ class IdeaInputFilter extends InputFilter
                         Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia az "Leírás" mezőnek mint: %max%',
                         Validator\StringLength::INVALID   => 'Leírás: Hibás mező tipus. Csak szöveg fogadható el.',
                     ],
-                    'min' => 4,
-                    'max' => 1000,
+                    'min'      => 4,
+                    'max'      => 1000,
                 ]),
             ],
             'filters'     => [
@@ -118,7 +119,7 @@ class IdeaInputFilter extends InputFilter
             ],
             'filters'     => [
                 new Filter\Boolean([
-                    'type' => Filter\Boolean::TYPE_ALL
+                    'type' => Filter\Boolean::TYPE_ALL,
                 ]),
             ],
         ]);
@@ -133,8 +134,8 @@ class IdeaInputFilter extends InputFilter
                         Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia az "Milyen módon tudna részt venni a megvalósításban?" mezőnek mint: %max%',
                         Validator\StringLength::INVALID   => 'Milyen módon tudna részt venni a megvalósításban?: Hibás mező tipus. Csak szöveg fogadható el.',
                     ],
-                    'min' => 0,
-                    'max' => 1000,
+                    'min'      => 0,
+                    'max'      => 1000,
                 ]),
             ],
             'filters'     => [
@@ -144,10 +145,10 @@ class IdeaInputFilter extends InputFilter
         ]);
 
         $this->add([
-            'name'              => 'file',
-            'type'              => \Laminas\InputFilter\FileInput::class,
-            'allow_empty'       => true,
-            'validators'        => [
+            'name'        => 'file',
+            'type'        => FileInput::class,
+            'allow_empty' => true,
+            'validators'  => [
                 new Validator\File\Extension([
                     'messages'  => [
                         Validator\File\Extension::FALSE_EXTENSION => 'A feltöltött fájl helytelen kiterjesztéssel rendelkezik',
@@ -171,7 +172,7 @@ class IdeaInputFilter extends InputFilter
                         'application/pdf',
                         'application/msword',
                         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    ]
+                    ],
                 ]),
                 new Validator\File\Size([
                     'messages' => [
@@ -179,19 +180,19 @@ class IdeaInputFilter extends InputFilter
                         Validator\File\Size::TOO_SMALL => 'Az engedélyezett minimális fájlméret \'%min%\'. A feltöltött fájl mérete \'%size%\'',
                         Validator\File\Size::NOT_FOUND => 'A feltöltött fájl nem olvasható vagy nem létezik',
                     ],
-                    'max' => 25 * 1024 * 1024,
-                    'min' => 1,
+                    'max'      => 25 * 1024 * 1024,
+                    'min'      => 1,
                 ]),
                 new Validator\File\Count([
                     'messages' => [
                         Validator\File\Count::TOO_MANY => "Túl sok a csatolt fájl, maximum '%max%' lehet, de '%count%' érkezett",
                         Validator\File\Count::TOO_FEW  => "Túl kevés a csatolt fájl, minimum '%min%' kell, de '%count%' érkezett",
                     ],
-                    'min' => 0,
-                    'max' => 5,
-                ])
+                    'min'      => 0,
+                    'max'      => 5,
+                ]),
             ],
-            'filters'           => [
+            'filters'     => [
                 new Filter\File\RenameUpload([
                     'target'               => getenv('APP_UPLOAD'),
                     'randomize'            => true,
@@ -204,12 +205,10 @@ class IdeaInputFilter extends InputFilter
         ]);
 
         $this->add([
-            'name'              => 'suggestion',
-            'allow_empty'       => true,
-            'validators'        => [
-
-            ],
-            'filters'           => [
+            'name'        => 'suggestion',
+            'allow_empty' => true,
+            'validators'  => [],
+            'filters'     => [
                 new Filter\StringTrim(),
                 new Filter\StripTags(),
             ],
@@ -232,9 +231,9 @@ class IdeaInputFilter extends InputFilter
                     'messages' => [
                         Validator\Db\RecordExists::ERROR_NO_RECORD_FOUND => 'Nem választható kategória',
                         Validator\Db\RecordExists::ERROR_RECORD_FOUND    => '',
-                    ]
-                ])
-            ]
+                    ],
+                ]),
+            ],
         ]);
 
         $this->add([
@@ -246,7 +245,7 @@ class IdeaInputFilter extends InputFilter
                         IsInt::INVALID        => 'Csak számérték adható meg',
                         IsInt::NOT_INT        => 'Csak egész számérték adható meg',
                         IsInt::NOT_INT_STRICT => 'Csak egész számérték adható meg',
-                    ]
+                    ],
                 ]),
                 new Validator\GreaterThan([
                     'messages'  => [
@@ -255,7 +254,7 @@ class IdeaInputFilter extends InputFilter
                     ],
                     'min'       => 0,
                     'inclusive' => true,
-                ])
+                ]),
             ],
             'filters'     => [
                 new Filter\ToInt(),

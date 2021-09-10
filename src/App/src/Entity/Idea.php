@@ -6,9 +6,9 @@ namespace App\Entity;
 
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
 use function array_slice;
@@ -45,15 +45,15 @@ class Idea implements JsonSerializable, IdeaInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="CampaignLocation")
-     * @ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id", nullable=true)
      *
-     * @var CampaignLocation
+     * @var CampaignLocation|null
      */
     private $campaignLocation;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="submitter_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="submitter_id", referencedColumnName="id", nullable=false)
      *
      * @var User
      */
@@ -61,7 +61,7 @@ class Idea implements JsonSerializable, IdeaInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Project", inversedBy="ideas")
-     * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=false)
      *
      * @var Project
      */
@@ -74,7 +74,7 @@ class Idea implements JsonSerializable, IdeaInterface
      *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
      * )
      *
-     * @var Collection
+     * @var Collection|Media[]
      */
     private $medias;
 
@@ -116,7 +116,7 @@ class Idea implements JsonSerializable, IdeaInterface
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
      *
-     * @var int|null
+     * @var string|null
      */
     private $cost;
 
@@ -139,52 +139,52 @@ class Idea implements JsonSerializable, IdeaInterface
         $this->medias = new ArrayCollection();
     }
 
-    public function getSubmitter(): User
+    public function getSubmitter(): UserInterface
     {
         return $this->submitter;
     }
 
-    public function setSubmitter(User $submitter): void
+    public function setSubmitter(UserInterface $submitter): void
     {
         $this->submitter = $submitter;
     }
 
-    public function getCampaign(): Campaign
+    public function getCampaign(): CampaignInterface
     {
         return $this->campaign;
     }
 
-    public function setCampaign(Campaign $campaign): void
+    public function setCampaign(CampaignInterface $campaign): void
     {
         $this->campaign = $campaign;
     }
 
-    public function getCampaignTheme(): CampaignTheme
+    public function getCampaignTheme(): CampaignThemeInterface
     {
         return $this->campaignTheme;
     }
 
-    public function setCampaignTheme(CampaignTheme $campaignTheme): void
+    public function setCampaignTheme(CampaignThemeInterface $campaignTheme): void
     {
         $this->campaignTheme = $campaignTheme;
     }
 
-    public function getCampaignLocation(): CampaignLocation
+    public function getCampaignLocation(): ?CampaignLocationInterface
     {
         return $this->campaignLocation;
     }
 
-    public function setCampaignLocation(CampaignLocation $campaignLocation)
+    public function setCampaignLocation(?CampaignLocationInterface $campaignLocation = null): void
     {
         $this->campaignLocation = $campaignLocation;
     }
 
-    public function getProject(): Project
+    public function getProject(): ProjectInterface
     {
         return $this->project;
     }
 
-    public function setProject(Project $project): void
+    public function setProject(ProjectInterface $project): void
     {
         $this->project = $project;
     }
@@ -201,19 +201,19 @@ class Idea implements JsonSerializable, IdeaInterface
 
     public function getMediaCollection(): Collection
     {
-        return $this->media;
+        return $this->medias;
     }
 
-    public function addMedia(Media $media): self
+    public function addMedia(MediaInterface $media): self
     {
-        if (!$this->medias->contains($media)) {
+        if (! $this->medias->contains($media)) {
             $this->medias[] = $media;
         }
 
         return $this;
     }
 
-    public function removeMedia(Media $media): self
+    public function removeMedia(MediaInterface $media): self
     {
         if ($this->medias->contains($media)) {
             $this->medias->removeElement($media);
@@ -282,7 +282,7 @@ class Idea implements JsonSerializable, IdeaInterface
         return $this->participateComment;
     }
 
-    public function setCost(?int $cost = null): void
+    public function setCost(?string $cost = null): void
     {
         $this->cost = $cost;
     }

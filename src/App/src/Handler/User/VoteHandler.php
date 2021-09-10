@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Handler\User;
 
 use App\Middleware\UserMiddleware;
-use App\Service\VoteServiceInterface;
 use App\Service\SettingServiceInterface;
+use App\Service\VoteServiceInterface;
 use Exception;
-use Laminas\InputFilter\InputFilterInterface;
 use Laminas\Diactoros\Response\JsonResponse;
+use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;

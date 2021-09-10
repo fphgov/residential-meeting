@@ -7,8 +7,8 @@ namespace App\Entity;
 use App\Traits\EntityActiveTrait;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
 /**
@@ -24,7 +24,7 @@ class Campaign implements JsonSerializable, CampaignInterface
     /**
      * @ORM\OneToMany(targetEntity="Idea", mappedBy="campaign")
      *
-     * @var Collection
+     * @var Collection|Idea[]
      */
     private $ideas;
 
@@ -41,6 +41,21 @@ class Campaign implements JsonSerializable, CampaignInterface
      * @var string
      */
     private $description;
+
+    public function getIdeas(): array
+    {
+        $ideas = [];
+        foreach ($this->ideas->getValues() as $idea) {
+            $ideas[] = $idea->getId();
+        }
+
+        return $ideas;
+    }
+
+    public function getIdeaCollection(): Collection
+    {
+        return $this->ideas;
+    }
 
     public function setTitle(string $title): void
     {

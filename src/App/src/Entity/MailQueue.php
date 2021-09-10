@@ -25,7 +25,7 @@ class MailQueue implements JsonSerializable, MailQueueInterface
     /**
      * @ORM\Column(name="mail_adapter", type="text")
      *
-     * @var MailAdapter|string
+     * @var string
      */
     private $mailAdapter;
 

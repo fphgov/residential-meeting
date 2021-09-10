@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Handler\Media;
 
-use App\Entity\Media;
 use App\Service\MediaServiceInterface;
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\Response\JsonResponse;
-use Laminas\Diactoros\Stream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;

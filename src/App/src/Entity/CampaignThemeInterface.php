@@ -4,8 +4,22 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-interface CampaignThemeInterface
+use App\Interfaces\EntityActiveInterface;
+use App\Interfaces\EntityInterface;
+
+interface CampaignThemeInterface extends EntityInterface, EntityActiveInterface
 {
+    public const DISABLE_SHOW_DEFAULT = [
+        'id',
+        'updatedAt',
+    ];
+
+    public const DISABLE_DEFAULT_SET = [];
+
+    public function getCampaign(): Campaign;
+
+    public function setCampaign(Campaign $campaign): void;
+
     public function getCode(): string;
 
     public function setCode(string $code): void;

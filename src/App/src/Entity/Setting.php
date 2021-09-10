@@ -18,13 +18,6 @@ class Setting implements JsonSerializable, SettingInterface
     use EntityMetaTrait;
     use EntityTrait;
 
-    public const DISABLE_SHOW_DEFAULT = [
-        'id',
-        'active',
-        'createdAt',
-        'updatedAt',
-    ];
-
     /**
      * @ORM\Column(name="close", type="boolean")
      *
