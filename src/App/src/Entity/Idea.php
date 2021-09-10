@@ -26,8 +26,16 @@ class Idea implements JsonSerializable, IdeaInterface
     use EntityTrait;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="ideas")
+     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
+     *
+     * @var Campaign
+     */
+    private $campaign;
+
+    /**
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
-     * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
      *
      * @var CampaignTheme
      */
@@ -65,6 +73,13 @@ class Idea implements JsonSerializable, IdeaInterface
     private $title;
 
     /**
+     * @ORM\Column(name="solution", type="text")
+     *
+     * @var string
+     */
+    private $solution;
+
+    /**
      * @ORM\Column(name="description", type="text")
      *
      * @var string
@@ -72,11 +87,18 @@ class Idea implements JsonSerializable, IdeaInterface
     private $description;
 
     /**
-     * @ORM\Column(name="comment", type="text")
+     * @ORM\Column(name="participate", type="boolean", nullable=false)
+     *
+     * @var bool
+     */
+    private $participate;
+
+    /**
+     * @ORM\Column(name="participate_comment", type="text", nullable=false)
      *
      * @var string
      */
-    private $comment;
+    private $participateComment = "";
 
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
@@ -93,6 +115,13 @@ class Idea implements JsonSerializable, IdeaInterface
     private $status = 0;
 
     /**
+     * @ORM\Column(name="suggestion", type="string")
+     *
+     * @var string
+     */
+    private $suggestion = '';
+
+    /**
      * @ORM\Column(name="attachment", type="string")
      *
      * @var string
@@ -107,6 +136,16 @@ class Idea implements JsonSerializable, IdeaInterface
     public function setSubmitter(User $submitter): void
     {
         $this->submitter = $submitter;
+    }
+
+    public function getCampaign(): Campaign
+    {
+        return $this->campaign;
+    }
+
+    public function setCampaign(Campaign $campaign): void
+    {
+        $this->campaign = $campaign;
     }
 
     public function getCampaignTheme(): CampaignTheme
@@ -159,14 +198,44 @@ class Idea implements JsonSerializable, IdeaInterface
         return $this->description;
     }
 
-    public function setComment(string $comment): void
+    public function setSuggestion(string $suggestion): void
     {
-        $this->comment = $comment;
+        $this->suggestion = $suggestion;
     }
 
-    public function getComment(): string
+    public function getSuggestion(): string
     {
-        return $this->comment;
+        return $this->suggestion;
+    }
+
+    public function setSolution(string $solution): void
+    {
+        $this->solution = $solution;
+    }
+
+    public function getSolution(): string
+    {
+        return $this->solution;
+    }
+
+    public function setParticipate(bool $participate): void
+    {
+        $this->participate = $participate;
+    }
+
+    public function getParticipate(): bool
+    {
+        return $this->participate;
+    }
+
+    public function setParticipateComment(string $participateComment): void
+    {
+        $this->participateComment = $participateComment;
+    }
+
+    public function getParticipateComment(): string
+    {
+        return $this->participateComment;
     }
 
     public function setCost(?int $cost = null): void

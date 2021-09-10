@@ -7,6 +7,8 @@ namespace App\Entity;
 interface UserInterface
 {
     public const DISABLE_SHOW_DEFAULT = [
+        'userPreference',
+        'vote',
         'password',
         'createdAt',
         'updatedAt',

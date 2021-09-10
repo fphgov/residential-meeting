@@ -26,7 +26,7 @@ class IdeaDataLoader extends AbstractFixture implements FixtureInterface
         );
         $idea->setTitle('Bokrok telepítése fű helyett a zöldsávokba');
         $idea->setDescription('Fű helyett bokrokat telepítsenek a járdaszigetekre, vagy a járda és az úttest között lévő zöldsávokba külső kerületekben, ahol ezek a felületek a legsérülékenyebbek.');
-        $idea->setComment('');
+        $idea->setParticipate(false);
         $idea->setCost(50000000);
         $idea->setStatus(100);
         $idea->setActive(true);

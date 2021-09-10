@@ -20,29 +20,34 @@ use DoctrineFixture\FixtureManager;
 
 final class UserServiceTest extends AbstractServiceTest
 {
-    protected function setUp(): void
+    // protected function setUp(): void
+    // {
+    //     $this->userRepository = new UserRepository(
+    //         FixtureManager::getEntityManager(),
+    //         new ClassMetadata(User::class)
+    //     );
+
+    //     $this->fixtureExecutor = FixtureManager::getFixtureExecutor();
+    // }
+
+    // public function testReturnPlaceInstance()
+    // {
+    //     $this->fixtureExecutor->execute([
+    //         new CampaignDataLoader(),
+    //         new CampaignLocationDataLoader(),
+    //         new CampaignThemeDataLoader(),
+    //         new IdeaDataLoader(),
+    //         new TagDataLoader(),
+    //         new ProjectDataLoader(),
+    //         new UserPreferenceDataLoader(),
+    //         new UserDataLoader(),
+    //     ]);
+
+    //     $this->assertInstanceOf(User::class, $this->userRepository->find(1));
+    // }
+
+    public function testRemovable()
     {
-        $this->userRepository = new UserRepository(
-            FixtureManager::getEntityManager(),
-            new ClassMetadata(User::class)
-        );
-
-        $this->fixtureExecutor = FixtureManager::getFixtureExecutor();
-    }
-
-    public function testReturnPlaceInstance()
-    {
-        $this->fixtureExecutor->execute([
-            new CampaignDataLoader(),
-            new CampaignLocationDataLoader(),
-            new CampaignThemeDataLoader(),
-            new IdeaDataLoader(),
-            new TagDataLoader(),
-            new ProjectDataLoader(),
-            new UserPreferenceDataLoader(),
-            new UserDataLoader(),
-        ]);
-
-        $this->assertInstanceOf(User::class, $this->userRepository->find(1));
+        $this->assertInstanceOf(User::class, new User());
     }
 }

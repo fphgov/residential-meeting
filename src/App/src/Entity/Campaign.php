@@ -8,6 +8,7 @@ use App\Traits\EntityActiveTrait;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use JsonSerializable;
 
 /**
@@ -19,6 +20,13 @@ class Campaign implements JsonSerializable, CampaignInterface
     use EntityActiveTrait;
     use EntityMetaTrait;
     use EntityTrait;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Idea", mappedBy="campaign")
+     *
+     * @var Collection
+     */
+    private $ideas;
 
     /**
      * @ORM\Column(name="title", type="string")

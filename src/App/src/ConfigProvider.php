@@ -51,6 +51,7 @@ class ConfigProvider
                 Handler\User\ResetPasswordHandler::class     => Handler\User\ResetPasswordHandlerFactory::class,
                 Handler\User\RegistrationHandler::class      => Handler\User\RegistrationHandlerFactory::class,
                 Handler\User\VoteHandler::class              => Handler\User\VoteHandlerFactory::class,
+                Handler\User\IdeaHandler::class              => Handler\User\IdeaHandlerFactory::class,
                 Handler\User\PrizeHandler::class             => Handler\User\PrizeHandlerFactory::class,
                 Handler\Project\ListAdminHandler::class      => Handler\Project\ListAdminHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
@@ -67,6 +68,7 @@ class ConfigProvider
                 Service\ProjectServiceInterface::class       => Service\ProjectServiceFactory::class,
                 Service\SettingServiceInterface::class       => Service\SettingServiceFactory::class,
                 Service\VoteServiceInterface::class          => Service\VoteServiceFactory::class,
+                Service\IdeaServiceInterface::class          => Service\IdeaServiceFactory::class,
             ],
         ];
     }
@@ -78,6 +80,7 @@ class ConfigProvider
                 InputFilter\ProjectInputFilter::class     => InvokableFactory::class,
                 InputFilter\UserRegistrationFilter::class => InputFilter\UserRegistrationFilterFactory::class,
                 InputFilter\VoteFilter::class             => InputFilter\VoteFilterFactory::class,
+                InputFilter\IdeaInputFilter::class        => InputFilter\IdeaInputFilterFactory::class,
                 InputFilter\OfflineVoteFilter::class      => InputFilter\OfflineVoteFilterFactory::class,
             ],
         ];
