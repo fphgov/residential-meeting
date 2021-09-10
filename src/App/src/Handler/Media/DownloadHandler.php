@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handler\Media;
 
+use App\Entity\Media;
 use App\Service\MediaServiceInterface;
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -15,7 +16,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 final class DownloadHandler implements RequestHandlerInterface
 {
     /** @var MediaServiceInterface */
-    protected $mediaService;
+    private $mediaService;
 
     public function __construct(
         MediaServiceInterface $mediaService
@@ -25,21 +26,18 @@ final class DownloadHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $mediaInfo = $this->mediaService->getMediaInfo($request->getAttribute('id'));
+        $media = $this->mediaService->getMedia($request->getAttribute('id'));
 
-        if ($mediaInfo === null) {
+        if ($media === null) {
             return new JsonResponse([
                 'errors' => 'Nem található',
             ], 404);
         }
 
-        $mime  = $mediaInfo['mime'];
-        $media = $mediaInfo['media'];
-
-        $stream = new Stream($media->getFile());
+        $stream = $this->mediaService->getMediaStream($media);
 
         return new Response($stream, 200, [
-            'Content-Type'              => $mime,
+            'Content-Type'              => $media->getType(),
             'Content-Disposition'       => 'attachment; filename="' . $media->getFilename() . '"',
             'Content-Transfer-Encoding' => 'Binary',
             'Content-Description'       => 'File Transfer',

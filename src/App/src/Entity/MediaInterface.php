@@ -22,9 +22,9 @@ interface MediaInterface
 
     public function getFilename(): string;
 
-    public function setFile(string $file): void;
+    public function setType(?string $type = null): void;
 
-    public function getFile();
+    public function getType(): ?string;
 
     public function getCreatedAt(): DateTime;
 

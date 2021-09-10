@@ -7,6 +7,8 @@ namespace App\Entity;
 use App\Traits\EntityTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use JsonSerializable;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
@@ -18,6 +20,13 @@ use Ramsey\Uuid\UuidInterface;
 class Media implements JsonSerializable, MediaInterface
 {
     use EntityTrait;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Idea", mappedBy="medias")
+     *
+     * @var Collection
+     */
+    private $ideas;
 
     /**
      * @ORM\Id
@@ -37,11 +46,11 @@ class Media implements JsonSerializable, MediaInterface
     private $filename;
 
     /**
-     * @ORM\Column(name="file", type="blob")
+     * @ORM\Column(name="type", type="string", nullable=true)
      *
-     * @var resource
+     * @var null|string
      */
-    private $file;
+    private $type;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
@@ -56,6 +65,11 @@ class Media implements JsonSerializable, MediaInterface
      * @var DateTime
      */
     protected $updatedAt;
+
+    public function __construct()
+    {
+        $this->ideas = new ArrayCollection();
+    }
 
     public function getId(): UuidInterface
     {
@@ -77,14 +91,14 @@ class Media implements JsonSerializable, MediaInterface
         return $this->filename;
     }
 
-    public function setFile(string $file): void
+    public function setType(?string $type = null): void
     {
-        $this->file = $file;
+        $this->type = $type;
     }
 
-    public function getFile(): resource
+    public function getType(): ?string
     {
-        return $this->file;
+        return $this->type;
     }
 
     public function getCreatedAt(): DateTime

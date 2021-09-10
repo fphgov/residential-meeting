@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Handler\User;
 
-use App\InputFilter\VoteFilter;
 use App\Middleware\UserMiddleware;
 use App\Service\VoteServiceInterface;
 use App\Service\SettingServiceInterface;
 use Exception;
+use Laminas\InputFilter\InputFilterInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,7 +19,7 @@ final class VoteHandler implements RequestHandlerInterface
     /** @var VoteServiceInterface **/
     private $voteService;
 
-    /** @var VoteFilter **/
+    /** @var InputFilterInterface **/
     private $voteFilter;
 
     /** @var SettingServiceInterface */
@@ -27,7 +27,7 @@ final class VoteHandler implements RequestHandlerInterface
 
     public function __construct(
         VoteServiceInterface $voteService,
-        VoteFilter $voteFilter,
+        InputFilterInterface $voteFilter,
         SettingServiceInterface $settingService
     ) {
         $this->voteService    = $voteService;

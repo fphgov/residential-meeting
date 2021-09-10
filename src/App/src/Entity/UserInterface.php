@@ -14,7 +14,7 @@ interface UserInterface
         'updatedAt',
     ];
 
-    public function setUserPreference(UserPreference $userPreference);
+    public function setUserPreference(UserPreference $userPreference): void;
 
     public function getUserPreference(): UserPreference;
 

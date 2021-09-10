@@ -8,7 +8,7 @@ use Mail\MailAdapter;
 
 interface MailQueueServiceInterface
 {
-    public function add(MailAdapter $mailAdapter);
+    public function add(MailAdapter $mailAdapter): void;
 
     public function process(): void;
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handler\Media;
 
+use App\Entity\Media;
 use App\Service\MediaServiceInterface;
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -15,7 +16,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 final class GetHandler implements RequestHandlerInterface
 {
     /** @var MediaServiceInterface */
-    protected $mediaService;
+    private $mediaService;
 
     public function __construct(
         MediaServiceInterface $mediaService
@@ -33,8 +34,8 @@ final class GetHandler implements RequestHandlerInterface
             ], 404);
         }
 
-        $stream = new Stream($media->getFile());
-
-        return new Response($stream);
+        return new Response(
+            $this->mediaService->getMediaStream($media)
+        );
     }
 }

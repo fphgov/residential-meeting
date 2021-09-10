@@ -7,6 +7,8 @@ namespace App\Entity;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use JsonSerializable;
 
 use function array_slice;
@@ -66,6 +68,17 @@ class Idea implements JsonSerializable, IdeaInterface
     private $project;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Media")
+     * @ORM\JoinTable(name="ideas_medias",
+     *      joinColumns={@ORM\JoinColumn(name="idea_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
+     * )
+     *
+     * @var Collection
+     */
+    private $medias;
+
+    /**
      * @ORM\Column(name="title", type="string")
      *
      * @var string
@@ -121,12 +134,10 @@ class Idea implements JsonSerializable, IdeaInterface
      */
     private $suggestion = '';
 
-    /**
-     * @ORM\Column(name="attachment", type="string")
-     *
-     * @var string
-     */
-    private $attachment = '';
+    public function __construct()
+    {
+        $this->medias = new ArrayCollection();
+    }
 
     public function getSubmitter(): User
     {
@@ -176,6 +187,39 @@ class Idea implements JsonSerializable, IdeaInterface
     public function setProject(Project $project): void
     {
         $this->project = $project;
+    }
+
+    public function getMedias(): array
+    {
+        $medias = [];
+        foreach ($this->medias->getValues() as $media) {
+            $medias[] = $media->getId();
+        }
+
+        return $medias;
+    }
+
+    public function getMediaCollection(): Collection
+    {
+        return $this->media;
+    }
+
+    public function addMedia(Media $media): self
+    {
+        if (!$this->medias->contains($media)) {
+            $this->medias[] = $media;
+        }
+
+        return $this;
+    }
+
+    public function removeMedia(Media $media): self
+    {
+        if ($this->medias->contains($media)) {
+            $this->medias->removeElement($media);
+        }
+
+        return $this;
     }
 
     public function setTitle(string $title): void
@@ -256,16 +300,6 @@ class Idea implements JsonSerializable, IdeaInterface
     public function getStatus(): int
     {
         return $this->status;
-    }
-
-    public function setAttachment(string $attachment): void
-    {
-        $this->attachment = $attachment;
-    }
-
-    public function getAttachment(): string
-    {
-        return $this->attachment;
     }
 
     public function getShortDescription(): string

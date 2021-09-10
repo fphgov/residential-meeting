@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Handler\User;
 
-use App\InputFilter\IdeaInputFilter;
 use App\Middleware\UserMiddleware;
 use App\Service\IdeaServiceInterface;
 use App\Service\SettingServiceInterface;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
+use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -21,7 +21,7 @@ final class IdeaHandler implements RequestHandlerInterface
     /** @var IdeaServiceInterface **/
     private $ideaService;
 
-    /** @var IdeaInputFilter **/
+    /** @var InputFilterInterface **/
     private $ideaInputFilter;
 
     /** @var SettingServiceInterface */
@@ -29,7 +29,7 @@ final class IdeaHandler implements RequestHandlerInterface
 
     public function __construct(
         IdeaServiceInterface $ideaService,
-        IdeaInputFilter $ideaInputFilter,
+        InputFilterInterface $ideaInputFilter,
         SettingServiceInterface $settingService
     ) {
         $this->ideaService     = $ideaService;

@@ -19,6 +19,9 @@ return [
         ],
         'pagination' => [
             'maxPageSize' => (int)getenv('APP_PAGINATION_MAX_PAGE_SIZE'),
+        ],
+        'paths' => [
+            'files' => getenv('APP_UPLOAD'),
         ]
     ],
 ];

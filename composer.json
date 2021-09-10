@@ -76,7 +76,7 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^0.12.85",
         "phpstan/phpstan-doctrine": "^0.12.33",
-        "phpunit/phpunit": "^9.5.4",
+        "phpunit/phpunit": "^9.5.9",
         "roave/security-advisories": "dev-latest"
     },
     "autoload": {

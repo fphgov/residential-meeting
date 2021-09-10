@@ -91,7 +91,7 @@ class User implements JsonSerializable, UserInterface
      */
     private $hash;
 
-    public function setUserPreference(UserPreference $userPreference)
+    public function setUserPreference(UserPreference $userPreference): void
     {
         $this->userPreference = $userPreference;
     }

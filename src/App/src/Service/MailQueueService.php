@@ -37,7 +37,7 @@ final class MailQueueService implements MailQueueServiceInterface
         $this->audit  = $audit;
     }
 
-    public function add(MailAdapter $mailAdapter)
+    public function add(MailAdapter $mailAdapter): void
     {
         if (
             isset($this->config['app']['notification']['force']) &&
@@ -64,7 +64,7 @@ final class MailQueueService implements MailQueueServiceInterface
         return $mailQueue;
     }
 
-    private function push(MailAdapter $mailAdapter)
+    private function push(MailAdapter $mailAdapter): void
     {
         $mailQueue = $this->createMailQueue($mailAdapter);
 

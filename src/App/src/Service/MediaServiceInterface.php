@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Media;
+use App\Entity\MediaInterface;
+use Psr\Http\Message\StreamInterface;
+
 interface MediaServiceInterface
 {
-    public function getMedia(string $id);
+    public function getMedia(string $id): ?MediaInterface;
 
-    public function getMediaInfo(string $id): array;
+    public function getMediaStream(MediaInterface $media): StreamInterface;
 }
