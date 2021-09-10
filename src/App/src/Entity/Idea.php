@@ -61,9 +61,9 @@ class Idea implements JsonSerializable, IdeaInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Project", inversedBy="ideas")
-     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=true)
      *
-     * @var Project
+     * @var Project|null
      */
     private $project;
 
@@ -179,12 +179,12 @@ class Idea implements JsonSerializable, IdeaInterface
         $this->campaignLocation = $campaignLocation;
     }
 
-    public function getProject(): ProjectInterface
+    public function getProject(): ?ProjectInterface
     {
         return $this->project;
     }
 
-    public function setProject(ProjectInterface $project): void
+    public function setProject(?ProjectInterface $project = null): void
     {
         $this->project = $project;
     }
@@ -282,7 +282,8 @@ class Idea implements JsonSerializable, IdeaInterface
         return $this->participateComment;
     }
 
-    public function setCost(?string $cost = null): void
+    /** @var int|string|null $cost **/
+    public function setCost($cost = null): void
     {
         $this->cost = $cost;
     }

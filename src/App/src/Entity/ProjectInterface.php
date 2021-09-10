@@ -55,7 +55,8 @@ interface ProjectInterface extends EntityInterface
 
     public function getVideo(): ?string;
 
-    public function setCost(?string $cost = null): void;
+    /** @var int|string|null $cost **/
+    public function setCost($cost = null): void;
 
     public function getCost(): ?int;
 

@@ -244,7 +244,8 @@ class Project implements JsonSerializable, ProjectInterface
         return $this->video;
     }
 
-    public function setCost(?string $cost = null): void
+    /** @var int|string|null $cost **/
+    public function setCost($cost = null): void
     {
         $this->cost = $cost;
     }

@@ -35,9 +35,9 @@ interface IdeaInterface extends EntityInterface
 
     public function setCampaignLocation(?CampaignLocationInterface $campaignLocation = null): void;
 
-    public function getProject(): ProjectInterface;
+    public function getProject(): ?ProjectInterface;
 
-    public function setProject(ProjectInterface $project): void;
+    public function setProject(?ProjectInterface $project = null): void;
 
     public function getMedias(): array;
 
@@ -71,7 +71,8 @@ interface IdeaInterface extends EntityInterface
 
     public function getParticipateComment(): string;
 
-    public function setCost(?string $cost = null): void;
+    /** @var int|string|null $cost **/
+    public function setCost($cost = null): void;
 
     public function getCost(): ?int;
 
