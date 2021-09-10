@@ -43,13 +43,6 @@ class User implements JsonSerializable, UserInterface
     private $username;
 
     /**
-     * @ORM\Column(name="lutece_id", type="string", nullable=true)
-     *
-     * @var string|null
-     */
-    private $luteceId;
-
-    /**
      * @ORM\Column(name="firstname", type="string")
      *
      * @var string
@@ -109,16 +102,6 @@ class User implements JsonSerializable, UserInterface
     public function getVote(): ?Vote
     {
         return $this->vote;
-    }
-
-    public function setLuteceId(?string $luteceId = null): void
-    {
-        $this->luteceId = $luteceId;
-    }
-
-    public function getLuteceId(): ?string
-    {
-        return $this->luteceId;
     }
 
     public function setUsername(string $username): void

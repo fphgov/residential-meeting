@@ -27,10 +27,6 @@ interface UserInterface extends EntityInterface, EntityActiveInterface
 
     public function getVote(): ?Vote;
 
-    public function setLuteceId(?string $luteceId = null): void;
-
-    public function getLuteceId(): ?string;
-
     public function setUsername(string $username): void;
 
     public function getUsername(): string;
