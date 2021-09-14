@@ -20,7 +20,9 @@ use function strip_tags;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IdeaRepository")
- * @ORM\Table(name="ideas")
+ * @ORM\Table(name="ideas", indexes={
+ *     @ORM\Index(name="search_idx", columns={"title"})
+ * })
  */
 class Idea implements JsonSerializable, IdeaInterface
 {
@@ -66,6 +68,14 @@ class Idea implements JsonSerializable, IdeaInterface
      * @var Project|null
      */
     private $project;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="WorkflowState")
+     * @ORM\JoinColumn(name="workflow_state_id", referencedColumnName="id", nullable=false)
+     *
+     * @var WorkflowState
+     */
+    private $workflowState;
 
     /**
      * @ORM\ManyToMany(targetEntity="Media")
@@ -119,13 +129,6 @@ class Idea implements JsonSerializable, IdeaInterface
      * @var string|null
      */
     private $cost;
-
-    /**
-     * @ORM\Column(name="status", type="integer")
-     *
-     * @var int
-     */
-    private $status = 0;
 
     /**
      * @ORM\Column(name="suggestion", type="string")
@@ -222,6 +225,16 @@ class Idea implements JsonSerializable, IdeaInterface
         return $this;
     }
 
+    public function setWorkflowState(WorkflowState $workflowState): void
+    {
+        $this->workflowState = $workflowState;
+    }
+
+    public function getWorkflowState(): WorkflowState
+    {
+        return $this->workflowState;
+    }
+
     public function setTitle(string $title): void
     {
         $this->title = $title;
@@ -291,16 +304,6 @@ class Idea implements JsonSerializable, IdeaInterface
     public function getCost(): ?int
     {
         return $this->cost !== null ? (int) $this->cost : null;
-    }
-
-    public function setStatus(int $status): void
-    {
-        $this->status = $status;
-    }
-
-    public function getStatus(): int
-    {
-        return $this->status;
     }
 
     public function getShortDescription(): string

@@ -47,6 +47,10 @@ interface IdeaInterface extends EntityInterface
 
     public function removeMedia(MediaInterface $media): self;
 
+    public function setWorkflowState(WorkflowState $workflowState): void;
+
+    public function getWorkflowState(): WorkflowState;
+
     public function setTitle(string $title): void;
 
     public function getTitle(): string;
@@ -75,10 +79,6 @@ interface IdeaInterface extends EntityInterface
     public function setCost($cost = null): void;
 
     public function getCost(): ?int;
-
-    public function setStatus(int $status): void;
-
-    public function getStatus(): int;
 
     public function getShortDescription(): string;
 }

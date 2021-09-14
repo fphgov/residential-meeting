@@ -28,7 +28,9 @@ class IdeaDataLoader extends AbstractFixture implements FixtureInterface
         $idea->setDescription('Fű helyett bokrokat telepítsenek a járdaszigetekre, vagy a járda és az úttest között lévő zöldsávokba külső kerületekben, ahol ezek a felületek a legsérülékenyebbek.');
         $idea->setParticipate(false);
         $idea->setCost(50000000);
-        $idea->setStatus(100);
+        $idea->setWorkflowState(
+            $this->getReference('workflow-state-1')
+        );
         $idea->setActive(true);
         $idea->setCreatedAt(new DateTime());
         $idea->setUpdatedAt(new DateTime());

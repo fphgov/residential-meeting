@@ -24,7 +24,9 @@ class ProjectDataLoader extends AbstractFixture implements FixtureInterface
         $project->setTitle('Bokrok telepítése fű helyett a zöldsávokba');
         $project->setDescription('Fű helyett bokrokat telepítsenek a járdaszigetekre, vagy a járda és az úttest között lévő zöldsávokba külső kerületekben, ahol ezek a felületek a legsérülékenyebbek.');
         $project->setCost(50000000);
-        $project->setStatus(101);
+        $project->setWorkflowState(
+            $this->getReference('workflow-state-1')
+        );
         $project->setLocation('Nem köthető konkrét helyszínhez');
         $project->setSolution('Esztétikusabb és a tűrőképessége is magasabb ezeknek a bokroknak a porral és az időjárással szemben, nem tapossák le a járókelők, nem parkolják le az autók, oxigént termel, port köt meg.');
         $project->setActive(true);

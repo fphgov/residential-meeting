@@ -76,6 +76,14 @@ class Project implements JsonSerializable, ProjectInterface
     private $medias;
 
     /**
+     * @ORM\ManyToOne(targetEntity="WorkflowState")
+     * @ORM\JoinColumn(name="workflow_state_id", referencedColumnName="id", nullable=false)
+     *
+     * @var WorkflowState
+     */
+    private $workflowState;
+
+    /**
      * @ORM\Column(name="title", type="string")
      *
      * @var string
@@ -109,13 +117,6 @@ class Project implements JsonSerializable, ProjectInterface
      * @var string|null
      */
     private $cost;
-
-    /**
-     * @ORM\Column(name="status", type="integer")
-     *
-     * @var int
-     */
-    private $status = 0;
 
     /**
      * @ORM\Column(name="video", type="string", nullable=true)
@@ -189,6 +190,16 @@ class Project implements JsonSerializable, ProjectInterface
         return $this;
     }
 
+    public function setWorkflowState(WorkflowState $workflowState): void
+    {
+        $this->workflowState = $workflowState;
+    }
+
+    public function getWorkflowState(): WorkflowState
+    {
+        return $this->workflowState;
+    }
+
     public function getCampaignLocations(): array
     {
         return $this->campaignLocations->getValues();
@@ -253,16 +264,6 @@ class Project implements JsonSerializable, ProjectInterface
     public function getCost(): ?int
     {
         return $this->cost !== null ? (int) $this->cost : null;
-    }
-
-    public function setStatus(int $status): void
-    {
-        $this->status = $status;
-    }
-
-    public function getStatus(): int
-    {
-        return $this->status;
     }
 
     public function setWin(bool $win): void

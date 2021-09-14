@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Service\PhaseServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Interop\Container\ContainerInterface;
 
@@ -15,7 +16,8 @@ final class IdeaServiceFactory
     public function __invoke(ContainerInterface $container)
     {
         return new IdeaService(
-            $container->get(EntityManagerInterface::class)
+            $container->get(EntityManagerInterface::class),
+            $container->get(PhaseServiceInterface::class)
         );
     }
 }

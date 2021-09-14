@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Handler\User;
 
+use App\Exception\DifferentPhaseException;
 use App\Middleware\UserMiddleware;
 use App\Service\IdeaServiceInterface;
-use App\Service\SettingServiceInterface;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterInterface;
@@ -24,17 +24,12 @@ final class IdeaHandler implements RequestHandlerInterface
     /** @var InputFilterInterface **/
     private $ideaInputFilter;
 
-    /** @var SettingServiceInterface */
-    private $settingService;
-
     public function __construct(
         IdeaServiceInterface $ideaService,
-        InputFilterInterface $ideaInputFilter,
-        SettingServiceInterface $settingService
+        InputFilterInterface $ideaInputFilter
     ) {
         $this->ideaService     = $ideaService;
         $this->ideaInputFilter = $ideaInputFilter;
-        $this->settingService  = $settingService;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -45,8 +40,6 @@ final class IdeaHandler implements RequestHandlerInterface
             $request->getParsedBody(),
             $request->getUploadedFiles(),
         );
-
-        $setting = $this->settingService->getRepository()->find(1);
 
         $this->ideaInputFilter->setData($body);
 
@@ -60,6 +53,10 @@ final class IdeaHandler implements RequestHandlerInterface
 
         try {
             $this->ideaService->addIdea($user, $filteredParams);
+        } catch (DifferentPhaseException $e) {
+            return new JsonResponse([
+                'message' => 'Jelenleg nem lehetséges az ötlet beküldése',
+            ], 422);
         } catch (Exception $e) {
             return new JsonResponse([
                 'message' => 'Sikertelen ötlet beküldés',

@@ -6,7 +6,6 @@ namespace App\Handler\User;
 
 use App\InputFilter\IdeaInputFilter;
 use App\Service\IdeaServiceInterface;
-use App\Service\SettingServiceInterface;
 use Interop\Container\ContainerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 
@@ -20,8 +19,7 @@ final class IdeaHandlerFactory
 
         return new IdeaHandler(
             $container->get(IdeaServiceInterface::class),
-            $inputFilter,
-            $container->get(SettingServiceInterface::class)
+            $inputFilter
         );
     }
 }

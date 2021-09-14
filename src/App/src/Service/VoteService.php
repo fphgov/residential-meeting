@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\OfflineVote;
+use App\Entity\PhaseInterface;
 use App\Entity\Project;
 use App\Entity\ProjectInterface;
 use App\Entity\UserInterface;
 use App\Entity\Vote;
 use App\Entity\VoteInterface;
 use App\Service\MailQueueServiceInterface;
+use App\Service\PhaseServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -40,12 +42,16 @@ final class VoteService implements VoteServiceInterface
     /** @var EntityRepository */
     private $voteRepository;
 
+    /** @var PhaseServiceInterface */
+    private $phaseService;
+
     public function __construct(
         array $config,
         EntityManagerInterface $em,
         Logger $audit,
         MailAdapter $mailAdapter,
-        MailQueueServiceInterface $mailQueueService
+        MailQueueServiceInterface $mailQueueService,
+        PhaseServiceInterface $phaseService
     ) {
         $this->config           = $config;
         $this->em               = $em;
@@ -53,6 +59,7 @@ final class VoteService implements VoteServiceInterface
         $this->mailAdapter      = $mailAdapter;
         $this->mailQueueService = $mailQueueService;
         $this->voteRepository   = $this->em->getRepository(Vote::class);
+        $this->phaseService     = $phaseService;
     }
 
     public function addOfflineVote(UserInterface $user, array $filteredParams): void
@@ -83,6 +90,8 @@ final class VoteService implements VoteServiceInterface
 
     public function voting(UserInterface $user, array $filteredParams): VoteInterface
     {
+        $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
+
         $date = new DateTime();
 
         $vote = new Vote();

@@ -9,8 +9,11 @@ use App\Entity\CampaignTheme;
 use App\Entity\Idea;
 use App\Entity\IdeaInterface;
 use App\Entity\Media;
+use App\Entity\PhaseInterface;
 use App\Entity\UserInterface;
+use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateInterface;
+use App\Service\PhaseServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -27,17 +30,24 @@ final class IdeaService implements IdeaServiceInterface
     /** @var EntityRepository */
     private $ideaRepository;
 
+    /** @var PhaseServiceInterface */
+    private $phaseService;
+
     public function __construct(
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PhaseServiceInterface $phaseService
     ) {
         $this->em             = $em;
         $this->ideaRepository = $this->em->getRepository(Idea::class);
+        $this->phaseService   = $phaseService;
     }
 
     public function addIdea(
         UserInterface $submitter,
         array $filteredParams
     ): ?IdeaInterface {
+        $this->phaseService->phaseCheck(PhaseInterface::PHASE_IDEATION);
+
         $date = new DateTime();
 
         $idea = new Idea();
@@ -55,7 +65,9 @@ final class IdeaService implements IdeaServiceInterface
         $idea->setCampaignTheme(
             $this->em->getReference(CampaignTheme::class, $filteredParams['category'])
         );
-        $idea->setStatus(WorkflowStateInterface::STATUS_RECEIVED);
+        $idea->setWorkflowState(
+            $this->em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_RECEIVED)
+        );
         $idea->setSuggestion($filteredParams['suggestion'] ?? '');
 
         if (is_array($filteredParams['file'])) {

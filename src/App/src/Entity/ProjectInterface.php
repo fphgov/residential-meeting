@@ -60,9 +60,9 @@ interface ProjectInterface extends EntityInterface
 
     public function getCost(): ?int;
 
-    public function setStatus(int $status): void;
+    public function setWorkflowState(WorkflowState $workflowState): void;
 
-    public function getStatus(): int;
+    public function getWorkflowState(): WorkflowState;
 
     public function setWin(bool $win): void;
 

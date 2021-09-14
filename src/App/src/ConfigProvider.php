@@ -69,6 +69,7 @@ class ConfigProvider
                 Service\SettingServiceInterface::class       => Service\SettingServiceFactory::class,
                 Service\VoteServiceInterface::class          => Service\VoteServiceFactory::class,
                 Service\IdeaServiceInterface::class          => Service\IdeaServiceFactory::class,
+                Service\PhaseServiceInterface::class         => Service\PhaseServiceFactory::class,
             ],
         ];
     }
