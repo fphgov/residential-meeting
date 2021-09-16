@@ -13,6 +13,7 @@ use App\Entity\PhaseInterface;
 use App\Entity\UserInterface;
 use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateInterface;
+use App\Exception\NoHasPhaseCategoryException;
 use App\Service\PhaseServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,20 +38,30 @@ final class IdeaService implements IdeaServiceInterface
         EntityManagerInterface $em,
         PhaseServiceInterface $phaseService
     ) {
-        $this->em             = $em;
-        $this->ideaRepository = $this->em->getRepository(Idea::class);
-        $this->phaseService   = $phaseService;
+        $this->em                      = $em;
+        $this->ideaRepository          = $this->em->getRepository(Idea::class);
+        $this->campaignThemeRepository = $this->em->getRepository(CampaignTheme::class);
+        $this->phaseService            = $phaseService;
     }
 
     public function addIdea(
         UserInterface $submitter,
         array $filteredParams
     ): ?IdeaInterface {
-        $this->phaseService->phaseCheck(PhaseInterface::PHASE_IDEATION);
+        $phase = $this->phaseService->phaseCheck(PhaseInterface::PHASE_IDEATION);
 
         $date = new DateTime();
 
         $idea = new Idea();
+
+        $category = $this->campaignThemeRepository->findOneBy([
+            'campaign' => $phase->getCampaign(),
+            'code'     => $filteredParams['category'],
+        ]);
+
+        if (! $category instanceof CampaignTheme) {
+            throw new NoHasPhaseCategoryException($filteredParams['category']);
+        }
 
         $idea->setSubmitter($submitter);
         $idea->setTitle($filteredParams['title']);
@@ -59,9 +70,7 @@ final class IdeaService implements IdeaServiceInterface
         $idea->setCost($filteredParams['cost']);
         $idea->setParticipate($filteredParams['participate']);
         $idea->setParticipateComment($filteredParams['participate_comment']);
-        $idea->setCampaign(
-            $this->em->getReference(Campaign::class, 2)
-        );
+        $idea->setCampaign($phase->getCampaign());
         $idea->setCampaignTheme(
             $this->em->getReference(CampaignTheme::class, $filteredParams['category'])
         );

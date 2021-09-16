@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Handler\User;
 
 use App\Exception\DifferentPhaseException;
+use App\Exception\NoHasPhaseCategoryException;
 use App\Middleware\UserMiddleware;
 use App\Service\IdeaServiceInterface;
 use Exception;
@@ -53,6 +54,14 @@ final class IdeaHandler implements RequestHandlerInterface
 
         try {
             $this->ideaService->addIdea($user, $filteredParams);
+        } catch (NoHasPhaseCategoryException $e) {
+            return new JsonResponse([
+                'errors' => [
+                    'category' => [
+                        'unknowCampaignTheme' => 'Ismeretlen kampány kategória',
+                    ]
+                ]
+            ], 422);
         } catch (DifferentPhaseException $e) {
             return new JsonResponse([
                 'message' => 'Jelenleg nem lehetséges az ötlet beküldése',
