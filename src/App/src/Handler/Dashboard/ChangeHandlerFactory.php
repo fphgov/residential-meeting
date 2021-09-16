@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Handler\Dashboard;
 
 use App\Service\SettingServiceInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 final class ChangeHandlerFactory
 {

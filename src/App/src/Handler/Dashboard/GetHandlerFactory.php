@@ -6,7 +6,7 @@ namespace App\Handler\Dashboard;
 
 use App\Service\SettingServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 final class GetHandlerFactory
 {

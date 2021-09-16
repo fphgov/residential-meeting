@@ -6,7 +6,7 @@ namespace App\Service;
 
 use App\Service\PhaseServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 final class IdeaServiceFactory
 {

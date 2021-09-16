@@ -8,7 +8,7 @@ use App\Middleware\AuditMiddleware;
 use App\Service\MailQueueServiceInterface;
 use App\Service\PhaseServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Mail\Action\MailAction;
 
 final class VoteServiceFactory

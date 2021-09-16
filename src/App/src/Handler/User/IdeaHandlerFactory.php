@@ -6,7 +6,7 @@ namespace App\Handler\User;
 
 use App\InputFilter\IdeaInputFilter;
 use App\Service\IdeaServiceInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 
 final class IdeaHandlerFactory

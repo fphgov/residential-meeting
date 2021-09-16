@@ -6,7 +6,7 @@ namespace App\Service;
 
 use App\Middleware\AuditMiddleware;
 use Doctrine\ORM\EntityManagerInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 final class MailQueueServiceFactory
 {

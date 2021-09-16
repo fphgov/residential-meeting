@@ -6,7 +6,7 @@ namespace App\Handler\User;
 
 use App\InputFilter\UserRegistrationFilter;
 use App\Service\UserServiceInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 
 final class RegistrationHandlerFactory

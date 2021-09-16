@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\InputFilter;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 
 final class OfflineVoteFilterFactory
