@@ -24,7 +24,8 @@
         },
         "patches": {
             "laminas/laminas-validator": {
-                "Supported PSR-7 in File\\Count validator": "./patches/validator.patch"
+                "Supported PSR-7 in File\\Count validator": "./patches/validator.patch",
+                "Supported URI and Hostname multiple validator": "./patches/validator_uri.patch"
             }
         },
         "composer-exit-on-patch-failure": true,
@@ -48,6 +49,7 @@
         "laminas/laminas-mail": "^2.14.0",
         "laminas/laminas-servicemanager": "^3.6.4",
         "laminas/laminas-stdlib": "^3.2.1",
+        "laminas/laminas-uri": "^2.9",
         "lcobucci/jwt": "^4.0",
         "mezzio/mezzio": "^3.2.1",
         "mezzio/mezzio-authentication": "1.3.x-dev",

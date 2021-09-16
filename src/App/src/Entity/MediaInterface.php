@@ -18,7 +18,7 @@ interface MediaInterface
 
     public function getId(): UuidInterface;
 
-    public function setId(UuidInterface $id): UuidInterface;
+    public function setId(UuidInterface $id): void;
 
     public function setFilename(string $filename): void;
 

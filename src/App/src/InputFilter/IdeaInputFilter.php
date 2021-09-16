@@ -226,7 +226,7 @@ class IdeaInputFilter extends InputFilter
                 ]),
                 new Validator\Db\RecordExists([
                     'table'    => 'campaign_themes',
-                    'field'    => 'id',
+                    'field'    => 'code',
                     'adapter'  => $this->dbAdapter,
                     'messages' => [
                         Validator\Db\RecordExists::ERROR_NO_RECORD_FOUND => 'Nem választható kategória',
@@ -258,6 +258,33 @@ class IdeaInputFilter extends InputFilter
             ],
             'filters'     => [
                 new Filter\ToInt(),
+            ],
+        ]);
+
+        $this->add([
+            'name'        => 'links',
+            'allow_empty' => true,
+            'validators'  => [
+                new Validator\IsCountable([
+                    'messages' => [
+                        Validator\IsCountable::NOT_COUNTABLE => 'A bemeneti értéknek tömbnek kell lennie',
+                        Validator\IsCountable::NOT_EQUALS    => "Kapcsolodó hivatkozások számának '%count%' kell lennie",
+                        Validator\IsCountable::GREATER_THAN  => "Kapcsolodó hivatkozások száma maximum '%max%' lehet",
+                        Validator\IsCountable::LESS_THAN     => "Kapcsolodó hivatkozások száma minimum '%min%' lehet",
+                    ],
+                    'min'      => 0,
+                    'max'      => 5,
+                ]),
+                new Validator\Uri([
+                    'messages' => [
+                        Validator\Uri::INVALID => 'Érvénytelen típus. Szöveg vagy tömb típus fogadható el',
+                        Validator\Uri::NOT_URI => 'Érvénytelen URL cím',
+                    ],
+                    'allowRelative' => false
+                ]),
+            ],
+            'filters'     => [
+                // new Filter\ToInt(),
             ],
         ]);
     }

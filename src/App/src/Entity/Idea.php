@@ -89,6 +89,13 @@ class Idea implements JsonSerializable, IdeaInterface
     private $medias;
 
     /**
+     * @ORM\OneToMany(targetEntity="Link", mappedBy="idea")
+     *
+     * @var Collection|Link[]
+     */
+    private $links;
+
+    /**
      * @ORM\Column(name="title", type="string")
      *
      * @var string
@@ -140,6 +147,7 @@ class Idea implements JsonSerializable, IdeaInterface
     public function __construct()
     {
         $this->medias = new ArrayCollection();
+        $this->links  = new ArrayCollection();
     }
 
     public function getSubmitter(): UserInterface
@@ -220,6 +228,34 @@ class Idea implements JsonSerializable, IdeaInterface
     {
         if ($this->medias->contains($media)) {
             $this->medias->removeElement($media);
+        }
+
+        return $this;
+    }
+
+    public function getLinks(): array
+    {
+        return $this->links->getValues();
+    }
+
+    public function getLinkCollection(): Collection
+    {
+        return $this->links;
+    }
+
+    public function addLink(Link $link): self
+    {
+        if (! $this->links->contains($link)) {
+            $this->links[] = $link;
+        }
+
+        return $this;
+    }
+
+    public function removeLink(Link $link): self
+    {
+        if ($this->links->contains($link)) {
+            $this->links->removeElement($link);
         }
 
         return $this;

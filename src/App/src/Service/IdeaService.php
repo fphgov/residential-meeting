@@ -9,6 +9,7 @@ use App\Entity\CampaignTheme;
 use App\Entity\Idea;
 use App\Entity\IdeaInterface;
 use App\Entity\Media;
+use App\Entity\Link;
 use App\Entity\PhaseInterface;
 use App\Entity\UserInterface;
 use App\Entity\WorkflowState;
@@ -21,6 +22,7 @@ use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\UploadedFileInterface;
 
 use function basename;
+use function is_countable;
 use function is_array;
 
 final class IdeaService implements IdeaServiceInterface
@@ -71,9 +73,7 @@ final class IdeaService implements IdeaServiceInterface
         $idea->setParticipate($filteredParams['participate']);
         $idea->setParticipateComment($filteredParams['participate_comment']);
         $idea->setCampaign($phase->getCampaign());
-        $idea->setCampaignTheme(
-            $this->em->getReference(CampaignTheme::class, $filteredParams['category'])
-        );
+        $idea->setCampaignTheme($category);
         $idea->setWorkflowState(
             $this->em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_RECEIVED)
         );
@@ -81,6 +81,18 @@ final class IdeaService implements IdeaServiceInterface
 
         if (is_array($filteredParams['file'])) {
             $this->addAttachments($idea, $filteredParams['file'], $date);
+        }
+
+        if (isset($filteredParams['links']) && is_countable($filteredParams['links'])) {
+            foreach ($filteredParams['links'] as $filteredLink) {
+                $link = new Link();
+                $link->setIdea($idea);
+                $link->setHref($filteredLink);
+
+                $idea->addLink($link);
+
+                $this->em->persist($link);
+            }
         }
 
         $idea->setCreatedAt($date);

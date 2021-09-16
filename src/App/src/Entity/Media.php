@@ -62,9 +62,9 @@ class Media implements JsonSerializable, MediaInterface
         return $this->id;
     }
 
-    public function setId(UuidInterface $id): UuidInterface
+    public function setId(UuidInterface $id): void
     {
-        return $this->id;
+        $this->id = $id;
     }
 
     public function setFilename(string $filename): void
