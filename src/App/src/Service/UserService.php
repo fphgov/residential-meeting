@@ -72,6 +72,7 @@ final class UserService implements UserServiceInterface
 
         $user->setHash(null);
         $user->setActive(true);
+        $user->setUpdatedAt(new DateTime());
 
         $this->em->flush();
     }
@@ -88,6 +89,7 @@ final class UserService implements UserServiceInterface
 
         $userPreference->setPrizeHash(null);
         $userPreference->setPrize(true);
+        $userPreference->setUpdatedAt(new DateTime());
 
         $this->em->flush();
     }
@@ -129,16 +131,32 @@ final class UserService implements UserServiceInterface
 
         if (! $user->getActive()) {
             $user->setHash($user->generateToken());
+            $user->setUpdatedAt(new DateTime());
+
             $this->sendActivationEmail($user);
 
             throw new UserNotActiveException((string) $user->getId());
         }
 
         $user->setHash($user->generateToken());
+        $user->setUpdatedAt(new DateTime());
 
         $this->forgotPasswordMail($user);
 
         $this->em->flush();
+    }
+
+    public function accountConfirmation(UserInterface $user): void
+    {
+        if ($user->getActive()) {
+            $user->setActive(false);
+            $user->setHash($user->generateToken());
+            $user->setUpdatedAt(new DateTime());
+
+            $this->sendAccountConfirmationEmail($user);
+
+            $this->em->flush();
+        }
     }
 
     public function registration(array $filteredParams): UserInterface
@@ -266,6 +284,33 @@ final class UserService implements UserServiceInterface
 
             $this->audit->err('User forgot password notification no added to MailQueueService', [
                 'extra' => $user->getId() . ' | ' . $e->getMessage(),
+            ]);
+        }
+    }
+
+    private function sendAccountConfirmationEmail(UserInterface $user): void
+    {
+        $this->mailAdapter->clear();
+
+        try {
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Őrizze meg a regisztrációját az Ötlet.budapest.hu-n');
+
+            $tplData = [
+                'name'             => $user->getFirstname(),
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
+            ];
+
+            $this->mailAdapter->setTemplate('account-confirmation', $tplData);
+
+            $this->mailQueueService->add($user, $this->mailAdapter);
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('Account confirmation notification no added to MailQueueService', [
+                'extra' => $user->getId() . " | " . $e->getMessage(),
             ]);
         }
     }

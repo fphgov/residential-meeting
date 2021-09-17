@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\UserPreference;
-use App\Entity\Vote;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 
 final class UserRepository extends EntityRepository
 {
-
+    public function getActiveUsers(): array
+    {
+        return $this->findBy([
+            'active' => true,
+            'role'   => 'user',
+        ]);
+    }
 }
