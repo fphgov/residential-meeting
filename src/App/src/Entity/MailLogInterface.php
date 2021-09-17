@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\EntityInterface;
-use Mail\MailAdapterInterface;
+use Mail\MailAdapter;
 
-interface MailQueueInterface extends EntityInterface
+interface MailLogInterface extends EntityInterface
 {
     public const DISABLE_SHOW_DEFAULT = [
         'createdAt',
@@ -20,7 +20,11 @@ interface MailQueueInterface extends EntityInterface
 
     public function setUser(UserInterface $user): void;
 
-    public function setMailAdapter(MailAdapterInterface $mailAdapter): void;
+    public function setMessageId(string $messageId): void;
 
-    public function getMailAdapter(): MailAdapterInterface;
+    public function getMessageId(): string;
+
+    public function setName(string $type): void;
+
+    public function getName(): string;
 }

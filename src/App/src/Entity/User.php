@@ -24,7 +24,7 @@ class User implements JsonSerializable, UserInterface
     /**
      * @ORM\OneToOne(targetEntity="UserPreference", mappedBy="user")
      *
-     * @var UserPreference
+     * @var UserPreference|null
      */
     private $userPreference;
 
@@ -84,12 +84,12 @@ class User implements JsonSerializable, UserInterface
      */
     private $hash;
 
-    public function setUserPreference(UserPreference $userPreference): void
+    public function setUserPreference(?UserPreference $userPreference = null): void
     {
         $this->userPreference = $userPreference;
     }
 
-    public function getUserPreference(): UserPreference
+    public function getUserPreference(): ?UserPreference
     {
         return $this->userPreference;
     }

@@ -13,12 +13,6 @@ interface UserServiceInterface
 
     public function prizeActivate(string $prizeHash): void;
 
-    public function sendPrizeNotification(UserInterface $user): void;
-
-    public function sendPrizeNotificationSec(UserInterface $user): void;
-
-    public function sendPrizeNotificationThird(UserInterface $user): void;
-
     public function resetPassword(string $hash, string $password): void;
 
     public function forgotPassword(string $email): void;

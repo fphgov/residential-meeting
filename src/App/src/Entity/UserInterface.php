@@ -19,9 +19,9 @@ interface UserInterface extends EntityInterface, EntityActiveInterface
 
     public const DISABLE_DEFAULT_SET = [];
 
-    public function setUserPreference(UserPreference $userPreference): void;
+    public function setUserPreference(?UserPreference $userPreference = null): void;
 
-    public function getUserPreference(): UserPreference;
+    public function getUserPreference(): ?UserPreference;
 
     public function setVote(?Vote $vote = null): void;
 

@@ -120,8 +120,8 @@ final class VoteService implements VoteServiceInterface
         $this->mailAdapter->clear();
 
         try {
-            $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('Köszönjük szavazatát!');
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Köszönjük szavazatát!');
 
             $tplData = [
                 'name'             => $user->getFirstname(),
@@ -142,7 +142,7 @@ final class VoteService implements VoteServiceInterface
 
             $this->mailAdapter->setTemplate('vote-success', $tplData);
 
-            $this->mailQueueService->add($this->mailAdapter);
+            $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 

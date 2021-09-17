@@ -92,51 +92,6 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
-    public function sendPrizeNotification(UserInterface $user): void
-    {
-        $userPreference = $user->getUserPreference();
-
-        if ($userPreference->getPrizeHash() === null) {
-            $userPreference->setPrizeHash($user->generateToken());
-        }
-
-        $this->sendPrizeActivationEmail($user);
-
-        $userPreference->setPrizeNotified(true);
-
-        $this->em->flush();
-    }
-
-    public function sendPrizeNotificationSec(UserInterface $user): void
-    {
-        $userPreference = $user->getUserPreference();
-
-        if ($userPreference->getPrizeHash() === null) {
-            $userPreference->setPrizeHash($user->generateToken());
-        }
-
-        $this->sendPrizeActivationEmail($user);
-
-        $userPreference->setPrizeNotifiedSec(true);
-
-        $this->em->flush();
-    }
-
-    public function sendPrizeNotificationThird(UserInterface $user): void
-    {
-        $userPreference = $user->getUserPreference();
-
-        if ($userPreference->getPrizeHash() === null) {
-            $userPreference->setPrizeHash($user->generateToken());
-        }
-
-        $this->sendPrizeActivationEmail($user);
-
-        $userPreference->setPrizeNotifiedThird(true);
-
-        $this->em->flush();
-    }
-
     public function resetPassword(string $hash, string $password): void
     {
         $filteredParams = [
@@ -235,8 +190,8 @@ final class UserService implements UserServiceInterface
         $this->mailAdapter->clear();
 
         try {
-            $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('Erősítse meg a regisztrációját az Ötlet.budapest.hu-n');
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Erősítse meg a regisztrációját az Ötlet.budapest.hu-n');
 
             $tplData = [
                 'name'             => $user->getFirstname(),
@@ -247,7 +202,7 @@ final class UserService implements UserServiceInterface
 
             $this->mailAdapter->setTemplate('user-created', $tplData);
 
-            $this->mailQueueService->add($this->mailAdapter);
+            $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
@@ -262,8 +217,8 @@ final class UserService implements UserServiceInterface
         $this->mailAdapter->clear();
 
         try {
-            $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('Nyereményjáték az Ötlet.budapest.hu-n');
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Nyereményjáték az Ötlet.budapest.hu-n');
 
             $userPreference = $user->getUserPreference();
 
@@ -278,7 +233,7 @@ final class UserService implements UserServiceInterface
 
             $this->mailAdapter->setTemplate('user-prize', $tplData);
 
-            $this->mailQueueService->add($this->mailAdapter);
+            $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
@@ -293,8 +248,8 @@ final class UserService implements UserServiceInterface
         $this->mailAdapter->clear();
 
         try {
-            $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('A fiók jelszavánának visszaállítása');
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('A fiók jelszavánának visszaállítása');
 
             $tplData = [
                 'name'             => $user->getFirstname(),
@@ -305,7 +260,7 @@ final class UserService implements UserServiceInterface
 
             $this->mailAdapter->setTemplate('user-password-recovery', $tplData);
 
-            $this->mailQueueService->add($this->mailAdapter);
+            $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 

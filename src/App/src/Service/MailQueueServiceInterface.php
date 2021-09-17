@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Mail\MailAdapter;
+use App\Entity\UserInterface;
+use Mail\MailAdapterInterface;
 
 interface MailQueueServiceInterface
 {
-    public function add(MailAdapter $mailAdapter): void;
+    public function add(UserInterface $user, MailAdapterInterface $mailAdapter): void;
 
     public function process(): void;
 }

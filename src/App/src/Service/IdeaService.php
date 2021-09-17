@@ -33,6 +33,9 @@ final class IdeaService implements IdeaServiceInterface
     /** @var EntityRepository */
     private $ideaRepository;
 
+    /** @var EntityRepository */
+    private $campaignThemeRepository;
+
     /** @var PhaseServiceInterface */
     private $phaseService;
 

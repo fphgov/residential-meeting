@@ -44,18 +44,6 @@ interface UserPreferenceInterface extends EntityInterface
 
     public function getPrize(): bool;
 
-    public function setPrizeNotified(bool $prizeNotified): void;
-
-    public function getPrizeNotified(): bool;
-
-    public function setPrizeNotifiedSec(bool $prizeNotifiedSec): void;
-
-    public function getPrizeNotifiedSec(): bool;
-
-    public function setPrizeNotifiedThird(bool $prizeNotifiedThird): void;
-
-    public function getPrizeNotifiedThird(): bool;
-
     public function setPrizeHash(?string $prizeHash = null): void;
 
     public function getPrizeHash(): ?string;
