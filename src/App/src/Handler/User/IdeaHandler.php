@@ -54,6 +54,14 @@ final class IdeaHandler implements RequestHandlerInterface
 
         try {
             $this->ideaService->addIdea($user, $filteredParams);
+        } catch (NotPossibleSubmitIdeaWithAdminAccountException $e) {
+            return new JsonResponse([
+                'errors' => [
+                    'form' => [
+                        'notPossibleSubmitIdea' => 'Admin vagy fejlesztői fiókkal nem lehetséges az ötlet beküldése',
+                    ]
+                ]
+            ], 422);
         } catch (NoHasPhaseCategoryException $e) {
             return new JsonResponse([
                 'errors' => [
