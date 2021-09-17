@@ -280,11 +280,12 @@ class IdeaInputFilter extends InputFilter
                         Validator\Uri::INVALID => 'Érvénytelen típus. Szöveg vagy tömb típus fogadható el',
                         Validator\Uri::NOT_URI => 'Érvénytelen URL cím',
                     ],
-                    'allowRelative' => false
+                    'allowRelative' => false,
+                    'allowAbsolute' => true
                 ]),
             ],
             'filters'     => [
-                // new Filter\ToInt(),
+
             ],
         ]);
     }

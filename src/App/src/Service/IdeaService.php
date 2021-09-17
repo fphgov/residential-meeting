@@ -15,6 +15,7 @@ use App\Entity\UserInterface;
 use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateInterface;
 use App\Exception\NoHasPhaseCategoryException;
+use App\Exception\NotPossibleSubmitIdeaWithAdminAccountException;
 use App\Service\PhaseServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,10 +51,14 @@ final class IdeaService implements IdeaServiceInterface
     }
 
     public function addIdea(
-        UserInterface $submitter,
+        UserInterface $user,
         array $filteredParams
     ): ?IdeaInterface {
         $phase = $this->phaseService->phaseCheck(PhaseInterface::PHASE_IDEATION);
+
+        if (in_array($user->getRole(), ['developer', 'admin'], true)) {
+            throw new NotPossibleSubmitIdeaWithAdminAccountException($user->getRole());
+        }
 
         $date = new DateTime();
 
@@ -68,7 +73,7 @@ final class IdeaService implements IdeaServiceInterface
             throw new NoHasPhaseCategoryException($filteredParams['category']);
         }
 
-        $idea->setSubmitter($submitter);
+        $idea->setSubmitter($user);
         $idea->setTitle($filteredParams['title']);
         $idea->setDescription($filteredParams['description']);
         $idea->setSolution($filteredParams['solution']);
