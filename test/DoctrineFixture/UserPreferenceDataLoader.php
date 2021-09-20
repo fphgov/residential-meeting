@@ -20,9 +20,6 @@ class UserPreferenceDataLoader extends AbstractFixture implements FixtureInterfa
         $userPreference->setHearAbout('facebook');
         $userPreference->setPrivacy(true);
         $userPreference->setPrize(false);
-        $userPreference->setPrizeNotified(false);
-        $userPreference->setPrizeNotifiedSec(false);
-        $userPreference->setPrizeNotifiedThird(false);
         $userPreference->setPrizeHash(null);
         $userPreference->setCreated(null);
         $userPreference->setCampaignEmail(false);

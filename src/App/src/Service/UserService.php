@@ -159,6 +159,20 @@ final class UserService implements UserServiceInterface
         }
     }
 
+    public function sendPrizeNotification(UserInterface $user): void
+    {
+        $userPreference = $user->getUserPreference();
+
+        if ($userPreference->getPrizeHash() === null) {
+            $userPreference->setPrizeHash($user->generateToken());
+            $userPreference->setUpdatedAt(new DateTime());
+        }
+
+        $this->sendPrizeActivationEmail($user);
+
+        $this->em->flush();
+    }
+
     public function registration(array $filteredParams): UserInterface
     {
         $date = new DateTime();
