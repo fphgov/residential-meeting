@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Interfaces\EntityActiveInterface;
 use App\Interfaces\EntityInterface;
+use Doctrine\Common\Collections\Collection;
 
 interface UserInterface extends EntityInterface, EntityActiveInterface
 {
@@ -23,9 +24,17 @@ interface UserInterface extends EntityInterface, EntityActiveInterface
 
     public function getUserPreference(): ?UserPreference;
 
-    public function setVote(?Vote $vote = null): void;
+    public function getVoteCollection(): Collection;
 
-    public function getVote(): ?Vote;
+    public function getVotes(): array;
+
+    public function addVote(VoteInterface $vote): self;
+
+    public function getIdeaCollection(): Collection;
+
+    public function getIdeas(): array;
+
+    public function addIdea(IdeaInterface $idea): self;
 
     public function setUsername(string $username): void;
 

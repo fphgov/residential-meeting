@@ -12,6 +12,7 @@ use App\Exception\UserNotActiveException;
 use App\Exception\UserNotFoundException;
 use App\Model\PBKDF2Password;
 use App\Service\MailQueueServiceInterface;
+use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -38,7 +39,7 @@ final class UserService implements UserServiceInterface
     /** @var MailQueueServiceInterface */
     private $mailQueueService;
 
-    /** @var EntityRepository */
+    /** @var UserRepository */
     private $userRepository;
 
     /** @var EntityRepository */
@@ -215,6 +216,43 @@ final class UserService implements UserServiceInterface
         $this->sendActivationEmail($user);
 
         return $user;
+    }
+
+    public function clearAccount(): void
+    {
+        $users = $this->userRepository->noActivatedUsers();
+
+        foreach ($users as $user) {
+            $userPreference = $user->getUserPreference();
+            $userVotes      = $user->getVoteCollection();
+            $ideas          = $user->getIdeaCollection();
+
+            $anonymusUser = $this->em->getReference(User::class, 1);
+
+            foreach ($ideas as $idea) {
+                $idea->setSubmitter($anonymusUser);
+            }
+
+            foreach ($userVotes as $userVote) {
+                $userVote->setUser($anonymusUser);
+            }
+
+            if ($userPreference !== null) {
+                $this->em->remove($userPreference);
+            }
+
+            $this->em->remove($user);
+        }
+
+        try {
+            $this->em->flush();
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('Failed delete user', [
+                'extra' => $e->getMessage(),
+            ]);
+        }
     }
 
     private function sendActivationEmail(UserInterface $user): void

@@ -1,3 +1,5 @@
+INSERT INTO `users` (`id`, `username`, `firstname`, `lastname`, `email`, `password`, `role`, `active`, `created_at`, `updated_at`, `hash`) VALUES (1, 'anonymus', 'N/A', 'N/A', 'anonymus@budapest.hu', '-', 'anonymus', 1, '2021-09-20 14:53:28', '2021-09-20 14:53:30', NULL);
+
 INSERT INTO `workflow_states` (`id`, `name`, `description`) VALUES (100, 'RECEIVED', 'Beküldött');
 INSERT INTO `workflow_states` (`id`, `name`, `description`) VALUES (110, 'PUBLISHED', 'Közzétéve');
 INSERT INTO `workflow_states` (`id`, `name`, `description`) VALUES (120, 'FORMALLY_APPROPRIATE', 'Formailag nem megfelelő');

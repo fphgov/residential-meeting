@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Entity\UserPreference;
 use App\Entity\Vote;
 use App\Entity\MailLog;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -21,10 +22,22 @@ final class UserRepository extends EntityRepository
         ]);
     }
 
+    public function noActivatedUsers(): array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $qb->where('u.active = :active')
+            ->andWhere('u.createdAt < DATE_SUB(NOW(), 48, \'HOUR\')')
+            ->setParameter('active', false)
+            ->orderBy('u.id', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function getPrizeNotificationList(
         ?int $limit = null,
         string $emailName,
-        $hasVote = true
+        bool $hasVote = true
     ): array {
         $qb = $this->getNotificationQuery($emailName);
 

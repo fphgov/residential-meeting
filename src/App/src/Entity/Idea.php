@@ -54,7 +54,7 @@ class Idea implements JsonSerializable, IdeaInterface
     private $campaignLocation;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="ideas")
      * @ORM\JoinColumn(name="submitter_id", referencedColumnName="id", nullable=false)
      *
      * @var User

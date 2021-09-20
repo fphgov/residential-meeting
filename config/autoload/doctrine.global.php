@@ -34,6 +34,10 @@ return [
                     'GROUP_CONCAT' => Mysql\GroupConcat::class,
                     'DATE_FORMAT'  => Mysql\DateFormat::class,
                     'CONCAT_WS'    => Mysql\ConcatWs::class,
+                    'NOW'          => Mysql\Now::class,
+                ],
+                'datetime_functions' => [
+                    'DATE_SUB' => Mysql\DateSub::class,
                 ],
                 'numeric_functions' => [
                     'RAND' => Mysql\Rand::class,
