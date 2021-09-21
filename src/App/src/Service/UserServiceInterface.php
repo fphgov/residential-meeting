@@ -17,6 +17,10 @@ interface UserServiceInterface
 
     public function forgotPassword(string $email): void;
 
+    public function accountConfirmation(UserInterface $user): void;
+
+    public function sendPrizeNotification(UserInterface $user): void;
+
     public function registration(array $filteredParams): UserInterface;
 
     public function getRepository(): EntityRepository;

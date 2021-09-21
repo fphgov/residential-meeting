@@ -152,6 +152,11 @@ class Project implements JsonSerializable, ProjectInterface
         return $medias;
     }
 
+    public function getIdeaCollection(): Collection
+    {
+        return $this->ideas;
+    }
+
     public function getIdeas(): array
     {
         $ideas = [];

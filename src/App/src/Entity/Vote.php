@@ -19,8 +19,8 @@ class Vote implements JsonSerializable, VoteInterface
     use EntityTrait;
 
     /**
-     * @ORM\OneToOne(targetEntity="User", inversedBy="vote")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", unique=true, nullable=false)
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="votes")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      *
      * @var User
      */
