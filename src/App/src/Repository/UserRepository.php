@@ -27,7 +27,7 @@ final class UserRepository extends EntityRepository
         $qb = $this->createQueryBuilder('u');
 
         $qb->where('u.active = :active')
-            ->andWhere('u.createdAt < DATE_SUB(NOW(), 48, \'HOUR\')')
+            ->andWhere('u.updatedAt < DATE_SUB(NOW(), 120, \'HOUR\')')
             ->setParameter('active', false)
             ->orderBy('u.id', 'ASC');
 
