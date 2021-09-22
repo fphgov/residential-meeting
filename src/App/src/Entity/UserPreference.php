@@ -6,7 +6,6 @@ namespace App\Entity;
 
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
@@ -54,13 +53,6 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
      * @var string
      */
     private $hearAbout;
-
-    /**
-     * @ORM\Column(name="created", type="date", nullable=true)
-     *
-     * @var DateTime|null
-     */
-    private $created;
 
     /**
      * @ORM\Column(name="privacy", type="boolean")
@@ -168,16 +160,6 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     public function getPrizeHash(): ?string
     {
         return $this->prizeHash;
-    }
-
-    public function setCreated(?DateTime $created = null): void
-    {
-        $this->created = $created;
-    }
-
-    public function getCreated(): ?DateTime
-    {
-        return $this->created;
     }
 
     public function setCampaignEmail(bool $campaignEmail): void

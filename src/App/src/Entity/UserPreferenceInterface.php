@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\EntityInterface;
-use DateTime;
 
 interface UserPreferenceInterface extends EntityInterface
 {
@@ -47,10 +46,6 @@ interface UserPreferenceInterface extends EntityInterface
     public function setPrizeHash(?string $prizeHash = null): void;
 
     public function getPrizeHash(): ?string;
-
-    public function setCreated(?DateTime $created = null): void;
-
-    public function getCreated(): ?DateTime;
 
     public function setCampaignEmail(bool $campaignEmail): void;
 

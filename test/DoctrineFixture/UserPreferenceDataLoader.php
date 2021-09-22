@@ -21,7 +21,6 @@ class UserPreferenceDataLoader extends AbstractFixture implements FixtureInterfa
         $userPreference->setPrivacy(true);
         $userPreference->setPrize(false);
         $userPreference->setPrizeHash(null);
-        $userPreference->setCreated(null);
         $userPreference->setCampaignEmail(false);
 
         $manager->persist($userPreference);
