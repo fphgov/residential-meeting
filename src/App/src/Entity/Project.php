@@ -142,6 +142,11 @@ class Project implements JsonSerializable, ProjectInterface
         $this->campaignTheme = $campaignTheme;
     }
 
+    public function getMediaCollection(): Collection
+    {
+        return $this->medias;
+    }
+
     public function getMedias(): array
     {
         $medias = [];

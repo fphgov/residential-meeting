@@ -23,7 +23,11 @@ interface ProjectInterface extends EntityInterface
 
     public function getMedias(): array;
 
+    public function getMediaCollection(): Collection;
+
     public function getIdeas(): array;
+
+    public function getIdeaCollection(): Collection;
 
     public function getTags(): array;
 
