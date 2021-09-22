@@ -19,6 +19,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function count;
 use function in_array;
 
 class TokenHandler implements RequestHandlerInterface
@@ -76,7 +77,7 @@ class TokenHandler implements RequestHandlerInterface
             'email'     => $user->getEmail(),
             'role'      => $user->getRole(),
             'votes'     => null,
-            'voted'     => $user->getVote() !== null,
+            'voted'     => count($user->getVotes()) !== 0,
         ];
 
         $votes = $voteRepository->findOneBy([
