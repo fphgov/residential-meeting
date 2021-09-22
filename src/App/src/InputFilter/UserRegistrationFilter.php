@@ -70,6 +70,7 @@ class UserRegistrationFilter extends InputFilter
             'filters'     => [
                 new Filter\StringTrim(),
                 new Filter\StripTags(),
+                new Filter\StringToLower(),
             ],
         ]);
 
@@ -127,7 +128,7 @@ class UserRegistrationFilter extends InputFilter
 
         $this->add([
             'name'        => 'hear_about',
-            'allow_empty' => false,
+            'allow_empty' => true,
             'validators'  => [
                 new Validator\NotEmpty([
                     'messages' => [
@@ -242,7 +243,7 @@ class UserRegistrationFilter extends InputFilter
 
         $this->add([
             'name'        => 'postal_code',
-            'allow_empty' => false,
+            'allow_empty' => true,
             'validators'  => [
                 new Validator\NotEmpty([
                     'messages' => [
