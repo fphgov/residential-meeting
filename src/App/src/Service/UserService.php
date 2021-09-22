@@ -220,7 +220,9 @@ final class UserService implements UserServiceInterface
 
     public function clearAccount(): void
     {
-        $users = $this->userRepository->noActivatedUsers();
+        $users = $this->userRepository->noActivatedUsers(
+            $this->config['app']['account']['clearTimeHour']
+        );
 
         foreach ($users as $user) {
             $userPreference = $user->getUserPreference();

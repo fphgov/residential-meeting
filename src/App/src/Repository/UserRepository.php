@@ -22,12 +22,12 @@ final class UserRepository extends EntityRepository
         ]);
     }
 
-    public function noActivatedUsers(): array
+    public function noActivatedUsers(int $hour): array
     {
         $qb = $this->createQueryBuilder('u');
 
         $qb->where('u.active = :active')
-            ->andWhere('u.updatedAt < DATE_SUB(NOW(), 120, \'HOUR\')')
+            ->andWhere('u.updatedAt < DATE_SUB(NOW(), '. $hour .', \'HOUR\')')
             ->setParameter('active', false)
             ->orderBy('u.id', 'ASC');
 
