@@ -47,7 +47,7 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     $app->get('/app/api/user', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
-        App\Handler\User\ListHandler::class
+        App\Handler\User\GetHandler::class
     ], 'app.api.user');
 
     $app->post('/app/api/user/idea', [
