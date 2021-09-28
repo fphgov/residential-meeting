@@ -64,13 +64,13 @@ final class IdeaService implements IdeaServiceInterface
 
         $idea = new Idea();
 
-        $category = $this->campaignThemeRepository->findOneBy([
+        $theme = $this->campaignThemeRepository->findOneBy([
             'campaign' => $phase->getCampaign(),
-            'code'     => $filteredParams['category'],
+            'code'     => $filteredParams['theme'],
         ]);
 
-        if (! $category instanceof CampaignTheme) {
-            throw new NoHasPhaseCategoryException($filteredParams['category']);
+        if (! $theme instanceof CampaignTheme) {
+            throw new NoHasPhaseCategoryException($filteredParams['theme']);
         }
 
         $idea->setSubmitter($user);
@@ -81,7 +81,7 @@ final class IdeaService implements IdeaServiceInterface
         $idea->setParticipate($filteredParams['participate']);
         $idea->setParticipateComment($filteredParams['participate_comment']);
         $idea->setCampaign($phase->getCampaign());
-        $idea->setCampaignTheme($category);
+        $idea->setCampaignTheme($theme);
         $idea->setWorkflowState(
             $this->em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_RECEIVED)
         );

@@ -38,7 +38,7 @@ final class IdeaInputFilterTest extends AbstractServiceTest
             'participate'         => true,
             'participate_comment' => 'Implementation',
             'cost'                => '1234',
-            'category'            => 1,
+            'theme'               => 1,
             'file'                => [
                 $file,
             ],
@@ -73,7 +73,7 @@ final class IdeaInputFilterTest extends AbstractServiceTest
         $this->assertEquals($values['participate'], true);
         $this->assertEquals($values['participate_comment'], 'Implementation');
         $this->assertEquals($values['cost'], 1234);
-        $this->assertEquals($values['category'], 1);
+        $this->assertEquals($values['theme'], 1);
 
         $this->assertInstanceOf(UploadedFileInterface::class, $values['file'][0]);
     }
@@ -157,8 +157,8 @@ final class IdeaInputFilterTest extends AbstractServiceTest
 
     public function testSubmitInvalidCategoryData(): void
     {
-        $formData             = $this->formValidData;
-        $formData['category'] = 0;
+        $formData          = $this->formValidData;
+        $formData['theme'] = 0;
 
         $this->ideaInputFilterInit($formData);
 
@@ -166,6 +166,6 @@ final class IdeaInputFilterTest extends AbstractServiceTest
 
         $message = $this->ideaInputFilter->getMessages();
 
-        $this->assertArrayHasKey('noRecordFound', $message['category']);
+        $this->assertArrayHasKey('noRecordFound', $message['theme']);
     }
 }

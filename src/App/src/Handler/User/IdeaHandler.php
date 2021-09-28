@@ -66,7 +66,7 @@ final class IdeaHandler implements RequestHandlerInterface
         } catch (NoHasPhaseCategoryException $e) {
             return new JsonResponse([
                 'errors' => [
-                    'category' => [
+                    'theme' => [
                         'unknowCampaignTheme' => 'Ismeretlen kampány kategória',
                     ]
                 ]

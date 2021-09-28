@@ -215,7 +215,7 @@ class IdeaInputFilter extends InputFilter
         ]);
 
         $this->add([
-            'name'        => 'category',
+            'name'        => 'theme',
             'allow_empty' => false,
             'validators'  => [
                 new Validator\NotEmpty([
