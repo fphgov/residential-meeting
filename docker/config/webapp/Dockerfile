@@ -1,8 +1,29 @@
 FROM php:7-fpm-alpine
 
-RUN apk add --no-cache --update git wget mysql-client libzip-dev supervisor
+# Locale
+ENV LANG "C.UTF-8"
+ENV LANGUAGE "C.UTF-8"
+ENV LC_ALL "C.UTF-8"
 
-RUN apk add --no-cache --update zlib-dev icu-dev g++ libxml2-dev && docker-php-ext-configure intl && docker-php-ext-install intl
+RUN apk add --no-cache --update \
+        curl-dev \
+        git \
+        wget \
+        mysql-client \
+        libzip-dev \
+        supervisor \
+        autoconf \
+        make \
+        automake \
+        libtool \
+        pkgconfig \
+        bash \
+        zlib-dev \
+        icu-dev \
+        g++ \
+        libxml2-dev
+
+RUN docker-php-ext-configure intl && docker-php-ext-install intl
 
 ENV LIBRARY_PATH=/lib:/usr/lib
 
@@ -26,6 +47,23 @@ RUN apk add --no-cache cmake freetype libpng libjpeg-turbo freetype-dev libpng-d
   docker-php-ext-configure gd && \
   NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
   docker-php-ext-install -j${NPROC} gd
+
+# Install libpostal
+RUN mkdir /datadir
+RUN git clone https://github.com/openvenues/libpostal && \
+    cd libpostal && \
+    ./bootstrap.sh && \
+    ./configure --datadir=/datadir --disable-dependency-tracking && \
+    make && \
+    make install
+
+# Install php-postal
+RUN git clone https://github.com/openvenues/php-postal && \
+    cd php-postal && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install
 
 # Install Xdebug
 RUN apk add --no-cache $PHPIZE_DEPS && pecl install xdebug; \

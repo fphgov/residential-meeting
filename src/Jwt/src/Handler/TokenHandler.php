@@ -21,6 +21,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 use function count;
 use function in_array;
+use function strtolower;
 
 class TokenHandler implements RequestHandlerInterface
 {
@@ -48,7 +49,7 @@ class TokenHandler implements RequestHandlerInterface
             return $this->badAuthentication();
         }
 
-        $user = $userRepository->findOneBy(['email' => $postBody['email']]);
+        $user = $userRepository->findOneBy(['email' => strtolower($postBody['email'])]);
 
         if (! $user) {
             return $this->badAuthentication();

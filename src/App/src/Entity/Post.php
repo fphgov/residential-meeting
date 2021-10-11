@@ -43,6 +43,13 @@ class Post implements JsonSerializable, PostInterface
     private $status;
 
     /**
+     * @ORM\Column(name="slug", type="string", nullable=true)
+     *
+     * @var string
+     */
+    private $slug;
+
+    /**
      * @ORM\Column(name="title", type="string")
      *
      * @var string
@@ -91,6 +98,16 @@ class Post implements JsonSerializable, PostInterface
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
     }
 
     public function setTitle(string $title): void

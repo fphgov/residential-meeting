@@ -66,7 +66,7 @@ final class IdeaService implements IdeaServiceInterface
 
         $theme = $this->campaignThemeRepository->findOneBy([
             'campaign' => $phase->getCampaign(),
-            'code'     => $filteredParams['theme'],
+            'id'       => $filteredParams['theme'],
         ]);
 
         if (! $theme instanceof CampaignTheme) {
@@ -79,7 +79,7 @@ final class IdeaService implements IdeaServiceInterface
         $idea->setSolution($filteredParams['solution']);
         $idea->setCost($filteredParams['cost']);
         $idea->setParticipate($filteredParams['participate']);
-        $idea->setParticipateComment($filteredParams['participate_comment']);
+        $idea->setParticipateComment($filteredParams['participate_comment'] ? $filteredParams['participate_comment'] : '');
         $idea->setCampaign($phase->getCampaign());
         $idea->setCampaignTheme($theme);
         $idea->setWorkflowState(

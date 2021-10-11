@@ -82,6 +82,18 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Media\DownloadHandler::class
     ], 'app.api.media.download');
 
+    $app->get('/app/api/page/{slug}', [
+        App\Handler\Page\GetHandler::class
+    ], 'app.api.page.show');
+
+    $app->get('/app/api/post', [
+        App\Handler\Post\GetAllHandler::class
+    ], 'app.api.post.all');
+
+    $app->get('/app/api/post/{slug}', [
+        App\Handler\Post\GetHandler::class
+    ], 'app.api.post.show');
+
     // Admin
     if (getenv('NODE_ENV') === 'development') {
         $app->post('/admin/api/login', [

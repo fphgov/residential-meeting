@@ -34,7 +34,7 @@ class IdeaInputFilter extends InputFilter
             'validators'  => [
                 new Validator\NotEmpty([
                     'messages' => [
-                        Validator\NotEmpty::IS_EMPTY => 'Az  \'%name%\' "Ötlet megnevezése" mező kitöltése kötelező',
+                        Validator\NotEmpty::IS_EMPTY => 'Az "Ötlet megnevezése" mező kitöltése kötelező',
                         Validator\NotEmpty::INVALID  => 'Ötlet megnevezése: Hibás mező tipus',
                     ],
                 ]),
@@ -226,7 +226,7 @@ class IdeaInputFilter extends InputFilter
                 ]),
                 new Validator\Db\RecordExists([
                     'table'    => 'campaign_themes',
-                    'field'    => 'code',
+                    'field'    => 'id',
                     'adapter'  => $this->dbAdapter,
                     'messages' => [
                         Validator\Db\RecordExists::ERROR_NO_RECORD_FOUND => 'Nem választható kategória',
