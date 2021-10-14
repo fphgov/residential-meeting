@@ -57,6 +57,8 @@ class ConfigProvider
                 Handler\Page\GetHandler::class               => Handler\Page\GetHandlerFactory::class,
                 Handler\Post\GetHandler::class               => Handler\Post\GetHandlerFactory::class,
                 Handler\Post\GetAllHandler::class            => Handler\Post\GetAllHandlerFactory::class,
+                Handler\Idea\GetHandler::class               => Handler\Idea\GetHandlerFactory::class,
+                Handler\Idea\ListHandler::class           => Handler\Idea\ListHandlerFactory::class,
                 Handler\Project\ListAdminHandler::class      => Handler\Project\ListAdminHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
@@ -102,8 +104,20 @@ class ConfigProvider
             ],
             [
                 '__class__'      => RouteBasedResourceMetadata::class,
+                'resource_class' => Entity\Idea::class,
+                'route'          => 'app.api.idea.show',
+                'extractor'      => Hydrator\ClassMethodsHydrator::class,
+            ],
+            [
+                '__class__'      => RouteBasedResourceMetadata::class,
                 'resource_class' => Entity\ProjectListDTO::class,
                 'route'          => 'app.api.project.show',
+                'extractor'      => Hydrator\ClassMethodsHydrator::class,
+            ],
+            [
+                '__class__'      => RouteBasedResourceMetadata::class,
+                'resource_class' => Entity\IdeaListDTO::class,
+                'route'          => 'app.api.idea.show',
                 'extractor'      => Hydrator\ClassMethodsHydrator::class,
             ],
             [
@@ -117,6 +131,12 @@ class ConfigProvider
                 'collection_class'    => Entity\ProjectCollection::class,
                 'collection_relation' => 'projects',
                 'route'               => 'app.api.project.list',
+            ],
+            [
+                '__class__'           => RouteBasedCollectionMetadata::class,
+                'collection_class'    => Entity\IdeaCollection::class,
+                'collection_relation' => 'ideas',
+                'route'               => 'app.api.idea.list',
             ],
             [
                 '__class__'           => RouteBasedCollectionMetadata::class,
