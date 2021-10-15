@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use Ramsey\Uuid\Lazy\LazyUuidFromString;
+
 use function defined;
 use function explode;
 use function get_class_vars;
@@ -74,7 +76,9 @@ trait EntityTrait
 
                 if (is_array($props[$dk])) {
                     foreach ($props[$dk] as $pk => $p) {
-                        if (is_object($p)) {
+                        if ($p instanceof LazyUuidFromString) {
+                            $props[$dk][$pk] = $p->serialize();
+                        } else if (is_object($p)) {
                             $props[$dk][$pk] = $p->getProps($depthLvl);
                         }
                     }
