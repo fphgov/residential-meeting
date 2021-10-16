@@ -26,9 +26,14 @@ final class GetAllHandler implements RequestHandlerInterface
     {
         $postRepository = $this->entityManager->getRepository(Post::class);
 
+        $queryParams = $request->getQueryParams();
+        $limit       = $queryParams['limit'] ?? null;
+
         $result = $postRepository->findBy([
             'status' => 'publish',
-        ]);
+        ], [
+            'createdAt' => 'DESC'
+        ], $limit);
 
         if ($result === null) {
             return new JsonResponse([

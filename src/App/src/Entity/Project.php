@@ -151,7 +151,10 @@ class Project implements JsonSerializable, ProjectInterface
     {
         $medias = [];
         foreach ($this->medias->getValues() as $media) {
-            $medias[] = $media->getId();
+            $medias[] = [
+                'id'   => $media->getId(),
+                'type' => $media->getType()
+            ];
         }
 
         return $medias;

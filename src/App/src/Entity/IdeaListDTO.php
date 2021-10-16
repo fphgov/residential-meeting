@@ -19,7 +19,7 @@ class IdeaListDTO
     private string $campaignThemeRgb;
     private string $title;
     private string $description;
-    private string $campaignLocation;
+    private $campaignLocation;
 
     public function __construct(
         int $id,
@@ -27,7 +27,7 @@ class IdeaListDTO
         string $campaignThemeRgb,
         string $title,
         string $description,
-        string $campaignLocation
+        $campaignLocation
     ) {
         $this->id                = $id;
         $this->campaignThemeName = $campaignThemeName;
@@ -55,7 +55,7 @@ class IdeaListDTO
         return $this->title;
     }
 
-    public function getLocation(): string
+    public function getLocation(): ?string
     {
         return $this->campaignLocation;
     }

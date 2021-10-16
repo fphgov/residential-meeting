@@ -58,7 +58,7 @@ class ConfigProvider
                 Handler\Post\GetHandler::class               => Handler\Post\GetHandlerFactory::class,
                 Handler\Post\GetAllHandler::class            => Handler\Post\GetAllHandlerFactory::class,
                 Handler\Idea\GetHandler::class               => Handler\Idea\GetHandlerFactory::class,
-                Handler\Idea\ListHandler::class           => Handler\Idea\ListHandlerFactory::class,
+                Handler\Idea\ListHandler::class              => Handler\Idea\ListHandlerFactory::class,
                 Handler\Project\ListAdminHandler::class      => Handler\Project\ListAdminHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
@@ -117,7 +117,7 @@ class ConfigProvider
             [
                 '__class__'      => RouteBasedResourceMetadata::class,
                 'resource_class' => Entity\IdeaListDTO::class,
-                'route'          => 'app.api.idea.show',
+                'route'          => 'app.api.idea.list',
                 'extractor'      => Hydrator\ClassMethodsHydrator::class,
             ],
             [

@@ -204,7 +204,10 @@ class Idea implements JsonSerializable, IdeaInterface
     {
         $medias = [];
         foreach ($this->medias->getValues() as $media) {
-            $medias[] = $media->getId();
+            $medias[] = [
+                'id'   => $media->getId(),
+                'type' => $media->getType()
+            ];
         }
 
         return $medias;
@@ -235,12 +238,12 @@ class Idea implements JsonSerializable, IdeaInterface
 
     public function getLinks(): array
     {
-        return $this->links->getValues();
-    }
+        $links = [];
+        foreach ($this->links->getValues() as $link) {
+            $links[] = $link->getHref();
+        }
 
-    public function getLinkCollection(): Collection
-    {
-        return $this->links;
+        return $links;
     }
 
     public function addLink(Link $link): self

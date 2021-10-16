@@ -20,6 +20,8 @@ use function in_array;
 use function intval;
 use function is_string;
 use function strtoupper;
+use function str_replace;
+use function explode;
 
 final class ListHandler implements RequestHandlerInterface
 {
@@ -52,9 +54,11 @@ final class ListHandler implements RequestHandlerInterface
         $repository = $this->em->getRepository(Idea::class);
 
         $queryParams = $request->getQueryParams();
+        $ids         = $queryParams['ids'] ?? '';
         $query       = $queryParams['query'] ?? '';
         $theme       = $queryParams['theme'] ?? '';
         $location    = $queryParams['location'] ?? '';
+        $campaign    = $queryParams['campaign'] ?? '';
         $page        = $queryParams['page'] ?? 1;
         $sort        = $queryParams['sort'] ?? 'ASC';
         $rand        = $queryParams['rand'] ?? '';
@@ -83,13 +87,23 @@ final class ListHandler implements RequestHandlerInterface
         }
 
         if ($theme && $theme !== 0) {
-            $qb->andWhere('ct.id = :themes');
-            $qb->setParameter('themes', $theme);
+            $qb->andWhere('ct.code = :themes');
+            $qb->setParameter('themes', strtoupper($theme));
         }
 
         if ($location && $location !== 0) {
             $qb->andWhere('cl.id = :location');
             $qb->setParameter('location', $location);
+        }
+
+        if ($campaign && $campaign !== 0) {
+            $qb->andWhere('ct.campaign = :campaign');
+            $qb->setParameter('campaign', $campaign);
+        }
+
+        if ($ids && $ids !== 0) {
+            $qb->andWhere('p.id IN (:ids)');
+            $qb->setParameter('ids', explode(';', str_replace(',', ';', $ids)));
         }
 
         $qb->setMaxResults(1);
