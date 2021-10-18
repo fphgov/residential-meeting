@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Handler\Idea;
 
 use App\Entity\CampaignTheme;
+use App\Entity\WorkflowState;
 use App\Entity\Idea;
 use App\Entity\IdeaCollection;
 use Doctrine\ORM\EntityManager;
@@ -62,10 +63,12 @@ final class ListHandler implements RequestHandlerInterface
         $page        = $queryParams['page'] ?? 1;
         $sort        = $queryParams['sort'] ?? 'ASC';
         $rand        = $queryParams['rand'] ?? '';
+        $status      = $queryParams['status'] ?? '';
 
         $qb = $repository->createQueryBuilder('p')
-            ->select('NEW IdeaListDTO(p.id, ct.name, ct.rgb, p.title, p.description, cl.name) as idea')
+            ->select('NEW IdeaListDTO(p.id, ct.name, ct.rgb, p.title, p.description, w.code, w.title, cl.name) as idea')
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
+            ->join(WorkflowState::class, 'w', Join::WITH, 'w.id = p.workflowState')
             ->leftJoin('p.campaignLocation', 'cl')
             ->groupBy('p.id');
 
@@ -104,6 +107,11 @@ final class ListHandler implements RequestHandlerInterface
         if ($ids && $ids !== 0) {
             $qb->andWhere('p.id IN (:ids)');
             $qb->setParameter('ids', explode(';', str_replace(',', ';', $ids)));
+        }
+
+        if ($status && $status !== 0) {
+            $qb->andWhere('w.code IN (:status)');
+            $qb->setParameter('status', strtoupper($status));
         }
 
         $qb->setMaxResults(1);

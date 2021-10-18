@@ -19,6 +19,8 @@ class IdeaListDTO
     private string $campaignThemeRgb;
     private string $title;
     private string $description;
+    private string $statusCode;
+    private string $statusTitle;
     private $campaignLocation;
 
     public function __construct(
@@ -27,6 +29,8 @@ class IdeaListDTO
         string $campaignThemeRgb,
         string $title,
         string $description,
+        string $statusCode,
+        string $statusTitle,
         $campaignLocation
     ) {
         $this->id                = $id;
@@ -34,12 +38,22 @@ class IdeaListDTO
         $this->campaignThemeRgb  = $campaignThemeRgb;
         $this->title             = $title;
         $this->description       = $description;
+        $this->statusCode        = $statusCode;
+        $this->statusTitle       = $statusTitle;
         $this->campaignLocation  = $campaignLocation;
     }
 
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getStatus(): array
+    {
+        return [
+            'code'  => $this->statusCode,
+            'title' => $this->statusTitle,
+        ];
     }
 
     public function getCampaignTheme(): array

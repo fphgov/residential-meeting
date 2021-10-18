@@ -20,6 +20,8 @@ class ProjectListDTO
     private string $title;
     private string $description;
     private string $location;
+    private string $statusCode;
+    private string $statusTitle;
     private ?string $tagId;
     private ?string $tagName;
 
@@ -30,6 +32,8 @@ class ProjectListDTO
         string $title,
         string $description,
         string $location,
+        string $statusCode,
+        string $statusTitle,
         ?string $tagId = null,
         ?string $tagName = null
     ) {
@@ -39,6 +43,8 @@ class ProjectListDTO
         $this->title             = $title;
         $this->description       = $description;
         $this->location          = $location;
+        $this->statusCode        = $statusCode;
+        $this->statusTitle       = $statusTitle;
         $this->tagId             = $tagId;
         $this->tagName           = $tagName;
     }
@@ -46,6 +52,14 @@ class ProjectListDTO
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getStatus(): array
+    {
+        return [
+            'code'  => $this->statusCode,
+            'title' => $this->statusTitle,
+        ];
     }
 
     public function getCampaignTheme(): array
@@ -69,7 +83,7 @@ class ProjectListDTO
 
         foreach ($tagIds as $ti => $tagId) {
             $tags[$ti] = [
-                'id'   => $tagId,
+                'id'   => (int) $tagId,
                 'name' => $tagNames[$ti],
             ];
         }
