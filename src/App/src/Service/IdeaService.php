@@ -17,10 +17,13 @@ use App\Entity\WorkflowStateInterface;
 use App\Exception\NoHasPhaseCategoryException;
 use App\Exception\NotPossibleSubmitIdeaWithAdminAccountException;
 use App\Service\PhaseServiceInterface;
+use App\Service\MailQueueServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Mail\MailAdapter;
 use Psr\Http\Message\UploadedFileInterface;
+use Laminas\Log\Logger;
 
 use function basename;
 use function is_countable;
@@ -28,6 +31,9 @@ use function is_array;
 
 final class IdeaService implements IdeaServiceInterface
 {
+    /** @var array */
+    private $config;
+
     /** @var EntityManagerInterface */
     protected $em;
 
@@ -40,14 +46,31 @@ final class IdeaService implements IdeaServiceInterface
     /** @var PhaseServiceInterface */
     private $phaseService;
 
+    /** @var Logger */
+    private $audit;
+
+    /** @var MailAdapter */
+    private $mailAdapter;
+
+    /** @var MailQueueServiceInterface */
+    private $mailQueueService;
+
     public function __construct(
+        array $config,
         EntityManagerInterface $em,
-        PhaseServiceInterface $phaseService
+        PhaseServiceInterface $phaseService,
+        Logger $audit,
+        MailAdapter $mailAdapter,
+        MailQueueServiceInterface $mailQueueService
     ) {
+        $this->config                  = $config;
         $this->em                      = $em;
         $this->ideaRepository          = $this->em->getRepository(Idea::class);
         $this->campaignThemeRepository = $this->em->getRepository(CampaignTheme::class);
         $this->phaseService            = $phaseService;
+        $this->audit                   = $audit;
+        $this->mailAdapter             = $mailAdapter;
+        $this->mailQueueService        = $mailQueueService;
     }
 
     public function addIdea(
@@ -109,6 +132,8 @@ final class IdeaService implements IdeaServiceInterface
         $this->em->persist($idea);
         $this->em->flush();
 
+        $this->sendIdeaConfirmationEmail($user);
+
         return $idea;
     }
 
@@ -135,6 +160,32 @@ final class IdeaService implements IdeaServiceInterface
             $this->em->persist($media);
 
             $idea->addMedia($media);
+        }
+    }
+
+    private function sendIdeaConfirmationEmail(UserInterface $user): void
+    {
+        $this->mailAdapter->clear();
+
+        try {
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Sikeres ötlet beküldés');
+
+            $tplData = [
+                'name'             => $user->getFirstname(),
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+            ];
+
+            $this->mailAdapter->setTemplate('idea-confirmation', $tplData);
+
+            $this->mailQueueService->add($user, $this->mailAdapter);
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('Account confirmation notification no added to MailQueueService', [
+                'extra' => $user->getId() . " | " . $e->getMessage(),
+            ]);
         }
     }
 }
