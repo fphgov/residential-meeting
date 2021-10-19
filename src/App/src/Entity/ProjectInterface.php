@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\Collection;
 interface ProjectInterface extends EntityInterface
 {
     public const DISABLE_SHOW_DEFAULT = [
-        'id',
         'campaignLocation',
         'updatedAt',
     ];

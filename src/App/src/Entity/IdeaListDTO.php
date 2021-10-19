@@ -15,6 +15,7 @@ use function trim;
 class IdeaListDTO
 {
     private int $id;
+    private string $campaignTitle;
     private string $campaignThemeName;
     private string $campaignThemeRgb;
     private string $title;
@@ -25,6 +26,7 @@ class IdeaListDTO
 
     public function __construct(
         int $id,
+        string $campaignTitle,
         string $campaignThemeName,
         string $campaignThemeRgb,
         string $title,
@@ -34,6 +36,7 @@ class IdeaListDTO
         $campaignLocation
     ) {
         $this->id                = $id;
+        $this->campaignTitle     = $campaignTitle;
         $this->campaignThemeName = $campaignThemeName;
         $this->campaignThemeRgb  = $campaignThemeRgb;
         $this->title             = $title;
@@ -59,8 +62,9 @@ class IdeaListDTO
     public function getCampaignTheme(): array
     {
         return [
-            'name' => $this->campaignThemeName,
-            'rgb'  => $this->campaignThemeRgb,
+            'title' => $this->campaignTitle,
+            'name'  => $this->campaignThemeName,
+            'rgb'   => $this->campaignThemeRgb,
         ];
     }
 

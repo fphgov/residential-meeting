@@ -25,6 +25,10 @@ interface CampaignInterface extends EntityInterface, EntityActiveInterface
 
     public function getTitle(): string;
 
+    public function setShortTitle(string $shortTitle): void;
+
+    public function getShortTitle(): string;
+
     public function setDescription(string $description): void;
 
     public function getDescription(): string;

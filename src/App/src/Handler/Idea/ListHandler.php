@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handler\Idea;
 
+use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
 use App\Entity\WorkflowState;
 use App\Entity\Idea;
@@ -66,8 +67,9 @@ final class ListHandler implements RequestHandlerInterface
         $status      = $queryParams['status'] ?? '';
 
         $qb = $repository->createQueryBuilder('p')
-            ->select('NEW IdeaListDTO(p.id, ct.name, ct.rgb, p.title, p.description, w.code, w.title, cl.name) as idea')
+            ->select('NEW IdeaListDTO(p.id, c.shortTitle, ct.name, ct.rgb, p.title, p.description, w.code, w.title, cl.name) as idea')
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
+            ->join(Campaign::class, 'c', Join::WITH, 'c.id = p.campaign')
             ->join(WorkflowState::class, 'w', Join::WITH, 'w.id = p.workflowState')
             ->leftJoin('p.campaignLocation', 'cl')
             ->groupBy('p.id');

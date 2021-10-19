@@ -36,6 +36,13 @@ class Campaign implements JsonSerializable, CampaignInterface
     private $title;
 
     /**
+     * @ORM\Column(name="short_title", type="string")
+     *
+     * @var string
+     */
+    private $shortTitle;
+
+    /**
      * @ORM\Column(name="description", type="text")
      *
      * @var string
@@ -65,6 +72,16 @@ class Campaign implements JsonSerializable, CampaignInterface
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setShortTitle(string $shortTitle): void
+    {
+        $this->shortTitle = $shortTitle;
+    }
+
+    public function getShortTitle(): string
+    {
+        return $this->shortTitle;
     }
 
     public function setDescription(string $description): void
