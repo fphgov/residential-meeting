@@ -28,6 +28,14 @@ class Post implements JsonSerializable, PostInterface
     private $author;
 
     /**
+     * @ORM\ManyToOne(targetEntity="PostCategory")
+     * @ORM\JoinColumn(name="post_category_id", referencedColumnName="id", nullable=true)
+     *
+     * @var PostCategory
+     */
+    private $category;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Media")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      *
@@ -98,6 +106,16 @@ class Post implements JsonSerializable, PostInterface
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public function setCategory(PostCategory $category): void
+    {
+        $this->category = $category;
+    }
+
+    public function getCategory(): PostCategory
+    {
+        return $this->category;
     }
 
     public function setSlug(string $slug): void

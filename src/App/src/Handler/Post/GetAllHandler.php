@@ -28,9 +28,11 @@ final class GetAllHandler implements RequestHandlerInterface
 
         $queryParams = $request->getQueryParams();
         $limit       = $queryParams['limit'] ?? null;
+        $category    = $queryParams['category'] ?? 1;
 
         $result = $postRepository->findBy([
-            'status' => 'publish',
+            'status'   => 'publish',
+            'category' => $category,
         ], [
             'createdAt' => 'DESC'
         ], $limit);

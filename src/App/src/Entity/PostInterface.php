@@ -44,6 +44,10 @@ interface PostInterface extends EntityInterface
 
     public function getStatus(): string;
 
+    public function setCategory(PostCategory $category): void;
+
+    public function getCategory(): PostCategory;
+
     public function setTitle(string $title): void;
 
     public function getTitle(): string;
