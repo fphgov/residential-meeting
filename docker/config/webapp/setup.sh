@@ -22,7 +22,7 @@ fi
 if [ $MODE = "production" ]; then
   cd /var/www/html
 
-  php -d allow_url_fopen=on /usr/local/bin/composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --no-scripts --optimize-autoloader
+  php -d allow_url_fopen=on /usr/local/bin/composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
 
   composer db-update
 

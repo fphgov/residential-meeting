@@ -71,7 +71,7 @@ class IdeaInputFilter extends InputFilter
                         Validator\StringLength::INVALID   => 'Mit oldana meg / mire megoldás?: Hibás mező tipus. Csak szöveg fogadható el.',
                     ],
                     'min'      => 4,
-                    'max'      => 100,
+                    'max'      => 500,
                 ]),
             ],
             'filters'     => [
