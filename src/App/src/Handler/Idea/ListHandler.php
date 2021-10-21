@@ -116,6 +116,8 @@ final class ListHandler implements RequestHandlerInterface
             $qb->setParameter('status', strtoupper($status));
         }
 
+        $qb->andWhere('w.id NOT IN (100, 120)');
+
         $qb->setMaxResults(1);
 
         $paginator = new IdeaCollection($qb);
