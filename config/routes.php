@@ -68,6 +68,12 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Account\PasswordChangeHandler::class,
     ], 'app.api.account.password.change');
 
+    $app->delete('/app/api/user/delete', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        App\Handler\Account\DeleteHandler::class,
+    ], 'app.api.account.delete');
+
     $app->get('/app/api/projects', [
         App\Handler\Project\ListHandler::class
     ], 'app.api.project.list');

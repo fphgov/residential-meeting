@@ -43,6 +43,7 @@ class ConfigProvider
             ],
             'factories'  => [
                 Handler\Account\PasswordChangeHandler::class => Handler\Account\PasswordChangeHandlerFactory::class,
+                Handler\Account\DeleteHandler::class         => Handler\Account\DeleteHandlerFactory::class,
                 Handler\Dashboard\GetHandler::class          => Handler\Dashboard\GetHandlerFactory::class,
                 Handler\Dashboard\ChangeHandler::class       => Handler\Dashboard\ChangeHandlerFactory::class,
                 Handler\User\ListHandler::class              => Handler\User\ListHandlerFactory::class,
