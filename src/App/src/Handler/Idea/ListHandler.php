@@ -7,6 +7,7 @@ namespace App\Handler\Idea;
 use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
 use App\Entity\WorkflowState;
+use App\Entity\User;
 use App\Entity\Idea;
 use App\Entity\IdeaCollection;
 use Doctrine\ORM\EntityManager;
@@ -56,6 +57,7 @@ final class ListHandler implements RequestHandlerInterface
         $repository = $this->em->getRepository(Idea::class);
 
         $queryParams = $request->getQueryParams();
+        $username    = $queryParams['username'] ?? '';
         $ids         = $queryParams['ids'] ?? '';
         $query       = $queryParams['query'] ?? '';
         $theme       = $queryParams['theme'] ?? '';
@@ -71,6 +73,7 @@ final class ListHandler implements RequestHandlerInterface
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
             ->join(Campaign::class, 'c', Join::WITH, 'c.id = p.campaign')
             ->join(WorkflowState::class, 'w', Join::WITH, 'w.id = p.workflowState')
+            ->innerJoin(User::class, 'u', Join::WITH, 'u.id = p.submitter')
             ->leftJoin('p.campaignLocation', 'cl')
             ->groupBy('p.id');
 
@@ -116,7 +119,12 @@ final class ListHandler implements RequestHandlerInterface
             $qb->setParameter('status', strtoupper($status));
         }
 
-        $qb->andWhere('w.id NOT IN (100, 120)');
+        if ($username && $username !== '') {
+            $qb->andWhere('u.username = :username');
+            $qb->setParameter('username', $username);
+        } else {
+            $qb->andWhere('w.id NOT IN (100, 120)');
+        }
 
         $qb->setMaxResults(1);
 
