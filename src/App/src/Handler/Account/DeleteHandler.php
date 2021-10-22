@@ -6,6 +6,7 @@ namespace App\Handler\Account;
 
 use App\Middleware\UserMiddleware;
 use App\Model\PBKDF2Password;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -42,6 +43,7 @@ final class DeleteHandler implements RequestHandlerInterface
         }
 
         $user->setActive(false);
+        $user->setUpdatedAt(new DateTime());
 
         $this->em->flush();
 
