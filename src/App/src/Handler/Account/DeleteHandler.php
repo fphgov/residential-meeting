@@ -48,7 +48,7 @@ final class DeleteHandler implements RequestHandlerInterface
         $this->em->flush();
 
         return new JsonResponse([
-            'message' => sprintf('A fiók törlésének kérését fogadtuk. A fiók %d órán belül törlödni fog.', $this->config['app']['account']['clearTimeHour']),
+            'message' => sprintf('A fiók törlésének kérését fogadtuk. A fiók %d óra múlva törlödni fog automatikusan.', $this->config['app']['account']['clearTimeHour']),
         ]);
     }
 }
