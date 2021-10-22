@@ -62,6 +62,12 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\User\VoteHandler::class
     ], 'app.api.user.vote');
 
+    $app->post('/app/api/user/password', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        App\Handler\Account\PasswordChangeHandler::class,
+    ], 'app.api.account.password.change');
+
     $app->get('/app/api/projects', [
         App\Handler\Project\ListHandler::class
     ], 'app.api.project.list');

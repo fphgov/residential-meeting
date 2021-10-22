@@ -36,11 +36,29 @@ final class PasswordChangeHandler implements RequestHandlerInterface
             ], 404);
         }
 
-        if (! empty($body['password'])) {
-            $pass = new PBKDF2Password($body['password']);
-
-            $user->setPassword($pass->getStorableRepresentation());
+        if (empty($body['password']) || empty($body['password_again'])) {
+            return new JsonResponse([
+                'errors' => [
+                    'password' => [
+                        'required' => 'Kötelező a jelszó mezők kitöltése',
+                    ]
+                ]
+            ], 422);
         }
+
+        if ($body['password'] !== $body['password_again']) {
+            return new JsonResponse([
+                'errors' => [
+                    'password_again' => [
+                        'password_not_same' =>'Nem egyezik a megadott két jelszó',
+                    ]
+                ]
+            ], 422);
+        }
+
+        $pass = new PBKDF2Password($body['password']);
+
+        $user->setPassword($pass->getStorableRepresentation());
 
         $this->em->flush();
 
