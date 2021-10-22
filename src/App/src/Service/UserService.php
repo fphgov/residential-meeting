@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Entity\UserInterface;
 use App\Entity\UserPreference;
 use App\Entity\UserPreferenceInterface;
+use App\Entity\MailLog;
 use App\Exception\UserNotActiveException;
 use App\Exception\UserNotFoundException;
 use App\Model\PBKDF2Password;
@@ -45,6 +46,9 @@ final class UserService implements UserServiceInterface
     /** @var EntityRepository */
     private $userPreferenceRepository;
 
+    /** @var EntityRepository */
+    private $mailLogRepository;
+
     public function __construct(
         array $config,
         EntityManagerInterface $em,
@@ -59,6 +63,7 @@ final class UserService implements UserServiceInterface
         $this->mailQueueService         = $mailQueueService;
         $this->userRepository           = $this->em->getRepository(User::class);
         $this->userPreferenceRepository = $this->em->getRepository(UserPreference::class);
+        $this->mailLogRepository        = $this->em->getRepository(MailLog::class);
     }
 
     public function activate(string $hash): void
@@ -241,6 +246,14 @@ final class UserService implements UserServiceInterface
 
             if ($userPreference !== null) {
                 $this->em->remove($userPreference);
+            }
+
+            $mailLogs = $this->mailLogRepository->findBy([
+                'user' => $user,
+            ]);
+
+            foreach ($mailLogs as $mailLog) {
+                $mailLog->setUser($anonymusUser);
             }
 
             $this->em->remove($user);
