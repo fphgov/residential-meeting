@@ -10,14 +10,15 @@ use App\Traits\EntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="users")
  */
-class User implements JsonSerializable, UserInterface
+class User implements UserInterface
 {
     use EntityActiveTrait;
     use EntityMetaTrait;
@@ -25,6 +26,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity="UserPreference", mappedBy="user")
+     * @Ignore
      *
      * @var UserPreference|null
      */
@@ -32,6 +34,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Vote", mappedBy="user")
+     * @Ignore
      *
      * @var Collection|Vote[]
      */
@@ -39,6 +42,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Idea", mappedBy="submitter")
+     * @Ignore
      *
      * @var Collection|Idea[]
      */
@@ -46,6 +50,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\Column(name="username", type="string")
+     * @Groups({"profile"})
      *
      * @var string
      */
@@ -53,6 +58,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\Column(name="firstname", type="string")
+     * @Groups({"list", "detail", "profile"})
      *
      * @var string
      */
@@ -60,6 +66,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\Column(name="lastname", type="string")
+     * @Groups({"list", "detail", "profile"})
      *
      * @var string
      */
@@ -67,6 +74,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\Column(name="email", type="string", length=100, unique=true)
+     * @Groups({"profile"})
      *
      * @var string
      */
@@ -74,6 +82,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\Column(name="password", type="text", length=100)
+     * @Ignore
      *
      * @var string
      */
@@ -81,6 +90,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\Column(name="role", type="string")
+     * @Ignore
      *
      * @var string
      */

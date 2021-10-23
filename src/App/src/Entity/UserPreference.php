@@ -7,13 +7,12 @@ namespace App\Entity;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserPreferenceRepository")
  * @ORM\Table(name="user_preferences")
  */
-class UserPreference implements JsonSerializable, UserPreferenceInterface
+class UserPreference implements UserPreferenceInterface
 {
     use EntityMetaTrait;
     use EntityTrait;

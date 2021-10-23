@@ -6,6 +6,7 @@ namespace App\Traits;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 trait EntityMetaTrait
 {
@@ -13,6 +14,7 @@ trait EntityMetaTrait
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"list", "detail"})
      *
      * @var int
      */
@@ -20,6 +22,7 @@ trait EntityMetaTrait
 
     /**
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     * @Groups({"list", "detail"})
      *
      * @var DateTime
      */

@@ -9,7 +9,7 @@ use App\Traits\EntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 use function array_slice;
 use function count;
@@ -24,7 +24,7 @@ use function strip_tags;
  *     @ORM\Index(name="search_idx", columns={"title"})
  * })
  */
-class Idea implements JsonSerializable, IdeaInterface
+class Idea implements IdeaInterface
 {
     use EntityMetaTrait;
     use EntityTrait;
@@ -32,6 +32,7 @@ class Idea implements JsonSerializable, IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="ideas")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
+     * @Groups({"list", "detail"})
      *
      * @var Campaign
      */
@@ -40,6 +41,7 @@ class Idea implements JsonSerializable, IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
      * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
+     * @Groups({"list", "detail"})
      *
      * @var CampaignTheme
      */
@@ -48,6 +50,7 @@ class Idea implements JsonSerializable, IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="CampaignLocation")
      * @ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id", nullable=true)
+     * @Groups({"list", "detail"})
      *
      * @var CampaignLocation|null
      */
@@ -56,6 +59,7 @@ class Idea implements JsonSerializable, IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="ideas")
      * @ORM\JoinColumn(name="submitter_id", referencedColumnName="id", nullable=false)
+     * @Groups({"detail"})
      *
      * @var User
      */
@@ -64,6 +68,7 @@ class Idea implements JsonSerializable, IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="Project", inversedBy="ideas")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=true)
+     * @Groups({"detail"})
      *
      * @var Project|null
      */
@@ -72,6 +77,7 @@ class Idea implements JsonSerializable, IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="WorkflowState")
      * @ORM\JoinColumn(name="workflow_state_id", referencedColumnName="id", nullable=false)
+     * @Groups({"list", "detail"})
      *
      * @var WorkflowState
      */
@@ -83,6 +89,7 @@ class Idea implements JsonSerializable, IdeaInterface
      *      joinColumns={@ORM\JoinColumn(name="idea_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
      * )
+     * @Groups({"detail"})
      *
      * @var Collection|Media[]
      */
@@ -90,6 +97,7 @@ class Idea implements JsonSerializable, IdeaInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Link", mappedBy="idea")
+     * @Groups({"detail"})
      *
      * @var Collection|Link[]
      */
@@ -97,6 +105,7 @@ class Idea implements JsonSerializable, IdeaInterface
 
     /**
      * @ORM\Column(name="title", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -104,6 +113,7 @@ class Idea implements JsonSerializable, IdeaInterface
 
     /**
      * @ORM\Column(name="solution", type="text")
+     * @Groups({"detail"})
      *
      * @var string
      */
@@ -111,6 +121,7 @@ class Idea implements JsonSerializable, IdeaInterface
 
     /**
      * @ORM\Column(name="description", type="text")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -132,6 +143,7 @@ class Idea implements JsonSerializable, IdeaInterface
 
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
+     * @Groups({"list", "detail"})
      *
      * @var string|null
      */

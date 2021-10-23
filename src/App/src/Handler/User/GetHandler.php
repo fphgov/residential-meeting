@@ -25,6 +25,10 @@ final class GetHandler implements RequestHandlerInterface
     {
         $user = $request->getAttribute(UserMiddleware::class);
 
-        return new JsonResponse($user);
+        $normalizedUser = $user->normalizer(null, ['groups' => 'profile']);
+
+        return new JsonResponse([
+            'data' => $normalizedUser,
+        ]);
     }
 }

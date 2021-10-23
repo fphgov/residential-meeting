@@ -7,13 +7,12 @@ namespace App\Entity;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
  * @ORM\Table(name="votes")
  */
-class Vote implements JsonSerializable, VoteInterface
+class Vote implements VoteInterface
 {
     use EntityMetaTrait;
     use EntityTrait;

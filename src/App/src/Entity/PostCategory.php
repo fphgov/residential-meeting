@@ -8,13 +8,13 @@ use App\Traits\EntityActiveTrait;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostCategoryRepository")
  * @ORM\Table(name="post_categories")
  */
-class PostCategory implements JsonSerializable, TagInterface
+class PostCategory implements TagInterface
 {
     use EntityActiveTrait;
     use EntityMetaTrait;
@@ -22,6 +22,7 @@ class PostCategory implements JsonSerializable, TagInterface
 
     /**
      * @ORM\Column(name="name", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */

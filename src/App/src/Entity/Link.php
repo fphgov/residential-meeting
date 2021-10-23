@@ -10,13 +10,13 @@ use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\LinkRepository")
  * @ORM\Table(name="links")
  */
-class Link implements JsonSerializable, LinkInterface
+class Link implements LinkInterface
 {
     use EntityTrait;
 
@@ -40,6 +40,7 @@ class Link implements JsonSerializable, LinkInterface
 
     /**
      * @ORM\Column(name="href", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */

@@ -8,13 +8,14 @@ use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
  * @ORM\Table(name="posts")
  */
-class Post implements JsonSerializable, PostInterface
+class Post implements PostInterface
 {
     use EntityMetaTrait;
     use EntityTrait;
@@ -22,6 +23,7 @@ class Post implements JsonSerializable, PostInterface
     /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @Ignore
      *
      * @var User
      */
@@ -30,6 +32,7 @@ class Post implements JsonSerializable, PostInterface
     /**
      * @ORM\ManyToOne(targetEntity="PostCategory")
      * @ORM\JoinColumn(name="post_category_id", referencedColumnName="id", nullable=true)
+     * @Groups({"list", "detail"})
      *
      * @var PostCategory
      */
@@ -38,6 +41,7 @@ class Post implements JsonSerializable, PostInterface
     /**
      * @ORM\ManyToOne(targetEntity="Media")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
+     * @Groups({"list", "detail"})
      *
      * @var Media|null
      */
@@ -52,6 +56,7 @@ class Post implements JsonSerializable, PostInterface
 
     /**
      * @ORM\Column(name="slug", type="string", nullable=true)
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -59,6 +64,7 @@ class Post implements JsonSerializable, PostInterface
 
     /**
      * @ORM\Column(name="title", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -66,6 +72,7 @@ class Post implements JsonSerializable, PostInterface
 
     /**
      * @ORM\Column(name="description", type="text")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -73,6 +80,7 @@ class Post implements JsonSerializable, PostInterface
 
     /**
      * @ORM\Column(name="content", type="text")
+     * @Groups({"detail"})
      *
      * @var string
      */

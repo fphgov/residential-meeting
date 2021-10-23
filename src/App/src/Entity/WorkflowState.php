@@ -6,7 +6,7 @@ namespace App\Entity;
 
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\WorkflowStateRepository")
@@ -14,7 +14,7 @@ use JsonSerializable;
  *     @ORM\Index(name="search_idx", columns={"code"})
  * })
  */
-class WorkflowState implements JsonSerializable, WorkflowStateInterface
+class WorkflowState implements WorkflowStateInterface
 {
     use EntityTrait;
 
@@ -28,6 +28,7 @@ class WorkflowState implements JsonSerializable, WorkflowStateInterface
 
     /**
      * @ORM\Column(name="code", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -35,6 +36,7 @@ class WorkflowState implements JsonSerializable, WorkflowStateInterface
 
     /**
      * @ORM\Column(name="title", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -42,6 +44,7 @@ class WorkflowState implements JsonSerializable, WorkflowStateInterface
 
     /**
      * @ORM\Column(name="description", type="string")
+     * @Groups({"detail"})
      *
      * @var string
      */

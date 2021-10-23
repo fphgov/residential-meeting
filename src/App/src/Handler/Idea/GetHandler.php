@@ -46,7 +46,9 @@ final class GetHandler implements RequestHandlerInterface
             ], 404);
         }
 
-        $resource = $this->resourceGenerator->fromObject($result, $request);
+        $idea = $result->normalizer(null, ['groups' => 'detail']);
+
+        $resource = $this->resourceGenerator->fromArray($idea, null);
 
         return $this->responseFactory->createResponse($request, $resource);
     }

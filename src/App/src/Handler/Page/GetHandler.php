@@ -26,18 +26,20 @@ final class GetHandler implements RequestHandlerInterface
     {
         $pageRepository = $this->entityManager->getRepository(Page::class);
 
-        $result = $pageRepository->findOneBy([
+        $page = $pageRepository->findOneBy([
             'slug' => $request->getAttribute('slug')
         ]);
 
-        if ($result === null) {
+        if ($page === null) {
             return new JsonResponse([
                 'errors' => 'Nem található',
             ], 404);
         }
 
+        $normalizedPage = $page->normalizer(null, ['groups' => 'detail']);
+
         return new JsonResponse([
-            'data' => $result,
+            'data' => $normalizedPage,
         ]);
     }
 }

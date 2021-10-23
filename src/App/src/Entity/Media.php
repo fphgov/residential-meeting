@@ -7,15 +7,15 @@ namespace App\Entity;
 use App\Traits\EntityTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
  * @ORM\Table(name="medias")
  */
-class Media implements JsonSerializable, MediaInterface
+class Media implements MediaInterface
 {
     use EntityTrait;
 
@@ -24,6 +24,7 @@ class Media implements JsonSerializable, MediaInterface
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * @Groups({"list", "detail"})
      *
      * @var UuidInterface
      */
@@ -31,6 +32,7 @@ class Media implements JsonSerializable, MediaInterface
 
     /**
      * @ORM\Column(name="filename", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -38,6 +40,7 @@ class Media implements JsonSerializable, MediaInterface
 
     /**
      * @ORM\Column(name="type", type="string", nullable=true)
+     * @Groups({"list", "detail"})
      *
      * @var string|null
      */

@@ -30,8 +30,10 @@ final class GetHandler implements RequestHandlerInterface
     {
         $setting = $this->settingRepository->find(1);
 
+        $normalizedSetting = $setting->normalizer(null, ['groups' => 'detail']);
+
         return new JsonResponse([
-            'options' => $setting,
+            'options' => $normalizedSetting,
         ]);
     }
 }

@@ -7,19 +7,20 @@ namespace App\Entity;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SettingRepository")
  * @ORM\Table(name="settings")
  */
-class Setting implements JsonSerializable, SettingInterface
+class Setting implements SettingInterface
 {
     use EntityMetaTrait;
     use EntityTrait;
 
     /**
      * @ORM\Column(name="close", type="boolean")
+     * @Groups({"list", "detail"})
      *
      * @var bool
      */

@@ -8,13 +8,13 @@ use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
  * @ORM\Table(name="pages")
  */
-class Page implements JsonSerializable, PageInterface
+class Page implements PageInterface
 {
     use EntityMetaTrait;
     use EntityTrait;
@@ -28,6 +28,7 @@ class Page implements JsonSerializable, PageInterface
 
     /**
      * @ORM\Column(name="slug", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -35,6 +36,7 @@ class Page implements JsonSerializable, PageInterface
 
     /**
      * @ORM\Column(name="title", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -42,6 +44,7 @@ class Page implements JsonSerializable, PageInterface
 
     /**
      * @ORM\Column(name="content", type="text")
+     * @Groups({"detail"})
      *
      * @var string
      */

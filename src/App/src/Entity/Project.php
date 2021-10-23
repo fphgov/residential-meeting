@@ -8,7 +8,7 @@ use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 use function array_slice;
 use function count;
@@ -22,7 +22,7 @@ use function trim;
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  * @ORM\Table(name="projects")
  */
-class Project implements JsonSerializable, ProjectInterface
+class Project implements ProjectInterface
 {
     use EntityMetaTrait;
     use EntityTrait;
@@ -30,6 +30,7 @@ class Project implements JsonSerializable, ProjectInterface
     /**
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
      * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
+     * @Groups({"list", "detail"})
      *
      * @var CampaignTheme
      */
@@ -37,6 +38,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Idea", mappedBy="project")
+     * @Groups({"detail"})
      *
      * @var Collection|Idea[]
      */
@@ -48,6 +50,7 @@ class Project implements JsonSerializable, ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
      * )
+     * @Groups({"detail"})
      *
      * @var Collection|Tag[]
      */
@@ -59,6 +62,7 @@ class Project implements JsonSerializable, ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id")}
      * )
+     * @Groups({"list", "detail"})
      *
      * @var Collection|CampaignLocation[]
      */
@@ -70,6 +74,7 @@ class Project implements JsonSerializable, ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
      * )
+     * @Groups({"detail"})
      *
      * @var Collection|Media[]
      */
@@ -78,6 +83,7 @@ class Project implements JsonSerializable, ProjectInterface
     /**
      * @ORM\ManyToOne(targetEntity="WorkflowState")
      * @ORM\JoinColumn(name="workflow_state_id", referencedColumnName="id", nullable=false)
+     * @Groups({"list", "detail"})
      *
      * @var WorkflowState
      */
@@ -85,6 +91,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\Column(name="title", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -92,6 +99,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\Column(name="description", type="text")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -99,6 +107,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\Column(name="location", type="string")
+     * @Groups({"detail"})
      *
      * @var string
      */
@@ -106,6 +115,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\Column(name="solution", type="text")
+     * @Groups({"detail"})
      *
      * @var string
      */
@@ -113,6 +123,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
+     * @Groups({"detail"})
      *
      * @var string|null
      */
@@ -120,6 +131,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\Column(name="video", type="string", nullable=true)
+     * @Groups({"detail"})
      *
      * @var string|null
      */

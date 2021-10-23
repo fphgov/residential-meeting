@@ -9,13 +9,13 @@ use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CampaignRepository")
  * @ORM\Table(name="campaigns")
  */
-class Campaign implements JsonSerializable, CampaignInterface
+class Campaign implements CampaignInterface
 {
     use EntityActiveTrait;
     use EntityMetaTrait;
@@ -30,6 +30,7 @@ class Campaign implements JsonSerializable, CampaignInterface
 
     /**
      * @ORM\Column(name="title", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -37,6 +38,7 @@ class Campaign implements JsonSerializable, CampaignInterface
 
     /**
      * @ORM\Column(name="short_title", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -44,6 +46,7 @@ class Campaign implements JsonSerializable, CampaignInterface
 
     /**
      * @ORM\Column(name="description", type="text")
+     * @Groups({"detail"})
      *
      * @var string
      */

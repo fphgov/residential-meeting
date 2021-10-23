@@ -20,11 +20,5 @@ interface EntityInterface
 
     public function setUpdatedAt(DateTime $updatedAt): void;
 
-    public function setProps(array $datas): void;
-
-    public function getProps(): array;
-
-    public function jsonSerialize(): array;
-
-    public function toArray(): array;
+    public function normalizer(string $format = null, array $context = []);
 }

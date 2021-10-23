@@ -7,7 +7,6 @@ namespace App\Entity;
 use App\Traits\EntityTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PhaseRepository")
@@ -15,7 +14,7 @@ use JsonSerializable;
  *     @ORM\Index(name="search_idx", columns={"code", "title"})
  * })
  */
-final class Phase implements JsonSerializable, PhaseInterface
+final class Phase implements PhaseInterface
 {
     use EntityTrait;
 

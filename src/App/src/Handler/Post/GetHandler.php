@@ -26,19 +26,21 @@ final class GetHandler implements RequestHandlerInterface
     {
         $postRepository = $this->entityManager->getRepository(Post::class);
 
-        $result = $postRepository->findOneBy([
+        $post = $postRepository->findOneBy([
             'status' => 'publish',
             'slug'   => $request->getAttribute('slug')
         ]);
 
-        if ($result === null) {
+        if ($post === null) {
             return new JsonResponse([
                 'errors' => 'Nem található',
             ], 404);
         }
 
+        $normalizedPost = $post->normalizer(null, ['groups' => 'detail']);
+
         return new JsonResponse([
-            'data' => $result,
+            'data' => $normalizedPost,
         ]);
     }
 }

@@ -30,21 +30,26 @@ final class GetAllHandler implements RequestHandlerInterface
         $limit       = $queryParams['limit'] ?? null;
         $category    = $queryParams['category'] ?? 1;
 
-        $result = $postRepository->findBy([
+        $posts = $postRepository->findBy([
             'status'   => 'publish',
             'category' => $category,
         ], [
             'createdAt' => 'DESC'
         ], $limit);
 
-        if ($result === null) {
+        if ($posts === null) {
             return new JsonResponse([
                 'errors' => 'Nem található',
             ], 404);
         }
 
+        $normalizedPosts = [];
+        foreach ($posts as $post) {
+            $normalizedPosts[] = $post->normalizer(null, ['groups' => 'list']);
+        }
+
         return new JsonResponse([
-            'data' => $result,
+            'data' => $normalizedPosts,
         ]);
     }
 }
