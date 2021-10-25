@@ -11,6 +11,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function explode;
+use function str_replace;
+
 final class GetAllHandler implements RequestHandlerInterface
 {
     /** @var EntityManagerInterface */
@@ -30,9 +33,11 @@ final class GetAllHandler implements RequestHandlerInterface
         $limit       = $queryParams['limit'] ?? null;
         $category    = $queryParams['category'] ?? 1;
 
+        $postCategories = explode(';', str_replace(',', ';', (string)$category));
+
         $posts = $postRepository->findBy([
             'status'   => 'publish',
-            'category' => $category,
+            'category' => $postCategories,
         ], [
             'createdAt' => 'DESC'
         ], $limit);
