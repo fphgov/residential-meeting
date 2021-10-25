@@ -59,9 +59,15 @@ interface IdeaInterface extends EntityInterface
 
     public function getDescription(): string;
 
-    public function setSuggestion(string $suggestion): void;
+    public function getShortDescription(): string;
 
-    public function getSuggestion(): string;
+    public function setLatitude(?float $latitude = null): void;
+
+    public function getLatitude(): ?float;
+
+    public function setLongitude(?float $longitude = null): void;
+
+    public function getLongitude(): ?float;
 
     public function setSolution(string $solution): void;
 
@@ -79,6 +85,4 @@ interface IdeaInterface extends EntityInterface
     public function setCost($cost = null): void;
 
     public function getCost(): ?int;
-
-    public function getShortDescription(): string;
 }

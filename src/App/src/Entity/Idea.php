@@ -150,11 +150,14 @@ class Idea implements IdeaInterface
     private $cost;
 
     /**
-     * @ORM\Column(name="suggestion", type="string")
-     *
-     * @var string
+     * @ORM\Column(name="latitude", type="float", nullable=true)
      */
-    private $suggestion = '';
+    private $latitude;
+
+    /**
+     * @ORM\Column(name="longitude", type="float", nullable=true)
+     */
+    private $longitude;
 
     public function __construct()
     {
@@ -306,16 +309,6 @@ class Idea implements IdeaInterface
         return $this->description;
     }
 
-    public function setSuggestion(string $suggestion): void
-    {
-        $this->suggestion = $suggestion;
-    }
-
-    public function getSuggestion(): string
-    {
-        return $this->suggestion;
-    }
-
     public function setSolution(string $solution): void
     {
         $this->solution = $solution;
@@ -370,5 +363,25 @@ class Idea implements IdeaInterface
         $description .= ' ...';
 
         return $description;
+    }
+
+    public function setLatitude(?float $latitude = null): void
+    {
+        $this->latitude = $latitude;
+    }
+
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function setLongitude(?float $longitude = null): void
+    {
+        $this->longitude = $longitude;
+    }
+
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
     }
 }

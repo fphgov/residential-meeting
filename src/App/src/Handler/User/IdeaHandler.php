@@ -10,6 +10,7 @@ use App\Exception\NotPossibleSubmitIdeaWithAdminAccountException;
 use App\Middleware\UserMiddleware;
 use App\Service\IdeaServiceInterface;
 use Exception;
+use Laminas\Log\Logger;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -27,12 +28,17 @@ final class IdeaHandler implements RequestHandlerInterface
     /** @var InputFilterInterface **/
     private $ideaInputFilter;
 
+    /** @var Logger */
+    private $audit;
+
     public function __construct(
         IdeaServiceInterface $ideaService,
-        InputFilterInterface $ideaInputFilter
+        InputFilterInterface $ideaInputFilter,
+        Logger $audit
     ) {
         $this->ideaService     = $ideaService;
         $this->ideaInputFilter = $ideaInputFilter;
+        $this->audit           = $audit;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -81,6 +87,10 @@ final class IdeaHandler implements RequestHandlerInterface
                 'message' => 'Jelenleg nem lehetséges az ötlet beküldése',
             ], 422);
         } catch (Exception $e) {
+            $this->audit->err('Forgot account exception', [
+                'extra' => $e->getMessage(),
+            ]);
+
             return new JsonResponse([
                 'message' => 'Sikertelen ötlet beküldés',
             ], 400);

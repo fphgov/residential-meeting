@@ -108,7 +108,14 @@ final class IdeaService implements IdeaServiceInterface
         $idea->setWorkflowState(
             $this->em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_RECEIVED)
         );
-        $idea->setSuggestion($filteredParams['suggestion'] ?? '');
+
+        if (isset($filteredParams['location'])) {
+            parse_str($filteredParams['location'], $suggestion);
+            parse_str($suggestion['geometry'], $geometry);
+
+            $idea->setLatitude((float)$geometry['y']);
+            $idea->setLongitude((float)$geometry['x']);
+        }
 
         if (is_array($filteredParams['file'])) {
             $this->addAttachments($idea, $filteredParams['file'], $date);

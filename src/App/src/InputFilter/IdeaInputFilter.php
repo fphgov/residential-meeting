@@ -205,7 +205,7 @@ class IdeaInputFilter extends InputFilter
         ]);
 
         $this->add([
-            'name'        => 'suggestion',
+            'name'        => 'location',
             'allow_empty' => true,
             'validators'  => [],
             'filters'     => [

@@ -6,6 +6,7 @@ namespace App\Handler\User;
 
 use App\InputFilter\IdeaInputFilter;
 use App\Service\IdeaServiceInterface;
+use App\Middleware\AuditMiddleware;
 use Psr\Container\ContainerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 
@@ -19,7 +20,8 @@ final class IdeaHandlerFactory
 
         return new IdeaHandler(
             $container->get(IdeaServiceInterface::class),
-            $inputFilter
+            $inputFilter,
+            $container->get(AuditMiddleware::class)->getLogger()
         );
     }
 }
