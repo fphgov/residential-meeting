@@ -101,7 +101,7 @@ final class MailQueueService implements MailQueueServiceInterface
             $this->em->remove($mailQueue);
             $this->em->flush();
 
-            usleep(250000);
+            usleep(250000); # 0.25 sec
         } catch (Throwable $th) {
             $this->audit->err('Mail no sended from mail queue', [
                 'extra' => $mailQueue->getId() . ' ' . $th->getMessage(),

@@ -25,7 +25,7 @@ $userService = $container->get(UserServiceInterface::class);
 
 try {
     $userService->clearAccount();
-    sleep(1);
+    usleep(250000); # 0.25 sec
 } catch (\Throwable $th) {
 
 }

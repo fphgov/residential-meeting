@@ -25,7 +25,7 @@ $mailQueueService = $container->get(MailQueueServiceInterface::class);
 
 try {
     $mailQueueService->process();
-    sleep(1);
+    usleep(250000); # 0.25 sec
 } catch (\Throwable $th) {
 
 }
