@@ -121,7 +121,7 @@ final class VoteService implements VoteServiceInterface
 
         try {
             $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Köszönjük szavazatát!');
+            $this->mailAdapter->getMessage()->setSubject('Köszönjük szavazatodat!');
 
             $tplData = [
                 'name'             => $user->getFirstname(),

@@ -276,7 +276,7 @@ final class UserService implements UserServiceInterface
 
         try {
             $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Erősítse meg a regisztrációját az Ötlet.budapest.hu-n');
+            $this->mailAdapter->getMessage()->setSubject('Erősítsd meg a regisztrációdat az otlet.budapest.hu-n');
 
             $tplData = [
                 'name'             => $user->getFirstname(),
@@ -303,7 +303,7 @@ final class UserService implements UserServiceInterface
 
         try {
             $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Nyereményjáték az Ötlet.budapest.hu-n');
+            $this->mailAdapter->getMessage()->setSubject('Nyereményjáték az otlet.budapest.hu-n');
 
             $userPreference = $user->getUserPreference();
 
@@ -361,10 +361,12 @@ final class UserService implements UserServiceInterface
 
         try {
             $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Őrizze meg a regisztrációját az Ötlet.budapest.hu-n');
+            $this->mailAdapter->getMessage()->setSubject('Őrizd meg a regisztrációdat az otlet.budapest.hu-n');
 
             $tplData = [
                 'name'             => $user->getFirstname(),
+                'firstname'        => $user->getFirstname(),
+                'lastname'         => $user->getLastname(),
                 'infoMunicipality' => $this->config['app']['municipality'],
                 'infoEmail'        => $this->config['app']['email'],
                 'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
