@@ -87,7 +87,7 @@ final class IdeaHandler implements RequestHandlerInterface
                 'message' => 'Jelenleg nem lehetséges az ötlet beküldése',
             ], 422);
         } catch (Exception $e) {
-            $this->audit->err('Forgot account exception', [
+            $this->audit->err('Failed insert new idea to database', [
                 'extra' => $e->getMessage(),
             ]);
 

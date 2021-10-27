@@ -13,6 +13,7 @@ use App\Entity\Link;
 use App\Entity\PhaseInterface;
 use App\Entity\UserInterface;
 use App\Entity\WorkflowState;
+use App\Entity\CampaignLocation;
 use App\Entity\WorkflowStateInterface;
 use App\Exception\NoHasPhaseCategoryException;
 use App\Exception\NotPossibleSubmitIdeaWithAdminAccountException;
@@ -28,6 +29,7 @@ use Laminas\Log\Logger;
 use function basename;
 use function is_countable;
 use function is_array;
+use function str_replace;
 
 final class IdeaService implements IdeaServiceInterface
 {
@@ -63,14 +65,15 @@ final class IdeaService implements IdeaServiceInterface
         MailAdapter $mailAdapter,
         MailQueueServiceInterface $mailQueueService
     ) {
-        $this->config                  = $config;
-        $this->em                      = $em;
-        $this->ideaRepository          = $this->em->getRepository(Idea::class);
-        $this->campaignThemeRepository = $this->em->getRepository(CampaignTheme::class);
-        $this->phaseService            = $phaseService;
-        $this->audit                   = $audit;
-        $this->mailAdapter             = $mailAdapter;
-        $this->mailQueueService        = $mailQueueService;
+        $this->config                     = $config;
+        $this->em                         = $em;
+        $this->ideaRepository             = $this->em->getRepository(Idea::class);
+        $this->campaignThemeRepository    = $this->em->getRepository(CampaignTheme::class);
+        $this->campaignLocationRepository = $this->em->getRepository(CampaignLocation::class);
+        $this->phaseService               = $phaseService;
+        $this->audit                      = $audit;
+        $this->mailAdapter                = $mailAdapter;
+        $this->mailQueueService           = $mailQueueService;
     }
 
     public function addIdea(
@@ -109,12 +112,26 @@ final class IdeaService implements IdeaServiceInterface
             $this->em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_RECEIVED)
         );
 
-        if (isset($filteredParams['location'])) {
+        if (isset($filteredParams['location']) && ! empty($filteredParams['location'])) {
             parse_str($filteredParams['location'], $suggestion);
-            parse_str($suggestion['geometry'], $geometry);
 
-            $idea->setLatitude((float)$geometry['y']);
-            $idea->setLongitude((float)$geometry['x']);
+            if (isset($suggestion['geometry']) && ! empty($suggestion['geometry'])) {
+                parse_str($suggestion['geometry'], $geometry);
+
+                $nfn = \str_replace('.', '', $suggestion['nfn']);
+
+                $idea->setLatitude((float)$geometry['y']);
+                $idea->setLongitude((float)$geometry['x']);
+
+                $location = $this->campaignLocationRepository->findOneBy([
+                    'code'     => "AREA" . $nfn,
+                    'campaign' => $phase->getCampaign(),
+                ]);
+
+                if ($location instanceof CampaignLocation) {
+                    $idea->setCampaignLocation($location);
+                }
+            }
         }
 
         if (is_array($filteredParams['file'])) {

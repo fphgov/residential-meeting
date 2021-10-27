@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "339bc55fb52de1a0c0a68822209fce16",
+    "content-hash": "ee6ae1cecb89be70676d0e2c0618365d",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -1695,16 +1695,16 @@
         },
         {
             "name": "fphgov/module-arcgis-api",
-            "version": "v1.1.0",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "git@github.com:fphgov/module-arcgis-api.git",
-                "reference": "75eed63acf4219fb95de67182ec21003775743c6"
+                "reference": "fc3fbbc68fc1cdb79f556682d04f919b40d04e0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fphgov/module-arcgis-api/zipball/75eed63acf4219fb95de67182ec21003775743c6",
-                "reference": "75eed63acf4219fb95de67182ec21003775743c6",
+                "url": "https://api.github.com/repos/fphgov/module-arcgis-api/zipball/fc3fbbc68fc1cdb79f556682d04f919b40d04e0d",
+                "reference": "fc3fbbc68fc1cdb79f556682d04f919b40d04e0d",
                 "shasum": ""
             },
             "require": {
@@ -1760,10 +1760,10 @@
             ],
             "description": "Mezzio Module ARCGIS",
             "support": {
-                "source": "https://github.com/fphgov/module-arcgis-api/tree/v1.1.0",
+                "source": "https://github.com/fphgov/module-arcgis-api/tree/v1.1.2",
                 "issues": "https://github.com/fphgov/module-arcgis-api/issues"
             },
-            "time": "2021-10-23T23:30:27+00:00"
+            "time": "2021-10-25T12:51:17+00:00"
         },
         {
             "name": "friendsofphp/proxy-manager-lts",
