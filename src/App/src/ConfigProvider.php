@@ -69,6 +69,7 @@ class ConfigProvider
                 Handler\Setting\GetHandler::class            => Handler\Setting\GetHandlerFactory::class,
                 Handler\Media\GetHandler::class              => Handler\Media\GetHandlerFactory::class,
                 Handler\Media\DownloadHandler::class         => Handler\Media\DownloadHandlerFactory::class,
+                Handler\Tools\GetAddressHandler::class       => Handler\Tools\GetAddressHandlerFactory::class,
                 Service\MailQueueServiceInterface::class     => Service\MailQueueServiceFactory::class,
                 Service\MediaServiceInterface::class         => Service\MediaServiceFactory::class,
                 Service\UserServiceInterface::class          => Service\UserServiceFactory::class,
@@ -77,6 +78,7 @@ class ConfigProvider
                 Service\VoteServiceInterface::class          => Service\VoteServiceFactory::class,
                 Service\IdeaServiceInterface::class          => Service\IdeaServiceFactory::class,
                 Service\PhaseServiceInterface::class         => Service\PhaseServiceFactory::class,
+                Service\PostalClientServiceInterface::class  => Service\PostalClientServiceFactory::class,
             ],
         ];
     }

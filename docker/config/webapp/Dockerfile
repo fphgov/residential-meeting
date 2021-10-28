@@ -65,6 +65,8 @@ RUN git clone https://github.com/openvenues/php-postal && \
     make && \
     make install
 
+RUN pecl install -D 'enable-sockets="no" enable-openssl="no" enable-http2="no" enable-mysqlnd="no" enable-swoole-json="no" enable-swoole-curl="no" enable-cares="no"' openswoole
+
 # Install Xdebug
 RUN apk add --no-cache $PHPIZE_DEPS && pecl install xdebug; \
     docker-php-ext-enable xdebug;

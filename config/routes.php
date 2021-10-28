@@ -115,7 +115,7 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     ], 'app.api.post.show');
 
     $app->post('/app/api/geocoding', [
-        \FphGov\Arcgis\Handler\FindAddressHandler::class
+        App\Handler\Tools\GetAddressHandler::class
     ], 'app.api.geocoding');
 
     // Admin
