@@ -219,11 +219,11 @@ class UserRegistrationFilter extends InputFilter
                     ]
                 ]),
                 new Validator\LessThan([
-                    'max'       => (int)(new \DateTime())->format('Y') - 18,
+                    'max'       => (int)(new \DateTime())->format('Y') - 16,
                     'inclusive' => true,
                     'messages' => [
                         Validator\LessThan::NOT_LESS           => "The input is not less than '%max%'",
-                        Validator\LessThan::NOT_LESS_INCLUSIVE => "Csak 18 év feletti személyek regisztrálhatnak",
+                        Validator\LessThan::NOT_LESS_INCLUSIVE => "Csak 16 év feletti személyek regisztrálhatnak",
                     ]
                 ]),
                 new Validator\GreaterThan([
