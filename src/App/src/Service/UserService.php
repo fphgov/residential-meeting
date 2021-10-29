@@ -165,6 +165,13 @@ final class UserService implements UserServiceInterface
         }
     }
 
+    public function accountConfirmationReminder(UserInterface $user): void
+    {
+        if (! $user->getActive()) {
+            $this->sendAccountConfirmationReminderEmail($user);
+        }
+    }
+
     public function sendPrizeNotification(UserInterface $user): void
     {
         $userPreference = $user->getUserPreference();
@@ -379,6 +386,35 @@ final class UserService implements UserServiceInterface
             error_log($e->getMessage());
 
             $this->audit->err('Account confirmation notification no added to MailQueueService', [
+                'extra' => $user->getId() . " | " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    private function sendAccountConfirmationReminderEmail(UserInterface $user): void
+    {
+        $this->mailAdapter->clear();
+
+        try {
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Emlékeztető: Őrizd meg a regisztrációdat az otlet.budapest.hu-n');
+
+            $tplData = [
+                'name'             => $user->getFirstname(),
+                'firstname'        => $user->getFirstname(),
+                'lastname'         => $user->getLastname(),
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
+            ];
+
+            $this->mailAdapter->setTemplate('account-confirmation-reminder', $tplData);
+
+            $this->mailQueueService->add($user, $this->mailAdapter);
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('Account confirmation reminder notification no added to MailQueueService', [
                 'extra' => $user->getId() . " | " . $e->getMessage(),
             ]);
         }
