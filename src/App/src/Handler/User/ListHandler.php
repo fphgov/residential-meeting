@@ -22,8 +22,15 @@ final class ListHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $users = $this->userService->getRepository()->findby([]);
+        $users = $this->userService->getRepository()->findAll();
 
-        return new JsonResponse($users);
+        $normalizedUsers = [];
+        foreach ($users as $user) {
+            $normalizedUsers[] = $user->normalizer(null, ['groups' => 'list']);
+        }
+
+        return new JsonResponse([
+            'data' => $normalizedUsers,
+        ]);
     }
 }

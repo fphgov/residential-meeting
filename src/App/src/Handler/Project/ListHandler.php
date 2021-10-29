@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Handler\Project;
 
+use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
+use App\Entity\WorkflowState;
 use App\Entity\Project;
 use App\Entity\ProjectCollection;
 use Doctrine\ORM\EntityManager;
@@ -16,7 +18,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function in_array;
 use function intval;
+use function is_string;
+use function strtoupper;
 
 final class ListHandler implements RequestHandlerInterface
 {
@@ -49,25 +54,30 @@ final class ListHandler implements RequestHandlerInterface
         $repository = $this->em->getRepository(Project::class);
 
         $queryParams = $request->getQueryParams();
+        $ids         = $queryParams['ids'] ?? '';
         $query       = $queryParams['query'] ?? '';
         $tag         = $queryParams['tag'] ?? '';
         $theme       = $queryParams['theme'] ?? '';
         $location    = $queryParams['location'] ?? '';
+        $campaign    = $queryParams['campaign'] ?? '';
         $page        = $queryParams['page'] ?? 1;
         $sort        = $queryParams['sort'] ?? 'ASC';
         $rand        = $queryParams['rand'] ?? '';
+        $status      = $queryParams['status'] ?? '';
 
         $qb = $repository->createQueryBuilder('p')
-            ->select('NEW ProjectListDTO(p.id, ct.name, ct.rgb, p.title, p.description, p.location, GROUP_CONCAT(t.id), GROUP_CONCAT(t.name)) as project')
+            ->select('NEW ProjectListDTO(p.id, c.shortTitle, ct.name, ct.rgb, p.title, p.description, p.location, w.code, w.title, GROUP_CONCAT(t.id), GROUP_CONCAT(t.name)) as project')
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
+            ->join(Campaign::class, 'c', Join::WITH, 'c.id = ct.campaign')
+            ->join(WorkflowState::class, 'w', Join::WITH, 'w.id = p.workflowState')
             ->leftJoin('p.tags', 't')
             ->leftJoin('p.campaignLocations', 'l')
             ->groupBy('p.id');
 
-        if ($rand == '' && is_string($sort) && in_array(strtoupper($sort), ['ASC', 'DESC'], true)) {
+        if ($rand === '' && is_string($sort) && in_array(strtoupper($sort), ['ASC', 'DESC'], true)) {
             $qb->orderBy('p.title', $sort);
-        } else if ($rand != '') {
-            $qb->orderBy('RAND('. $rand .')');
+        } elseif ($rand !== '') {
+            $qb->orderBy('RAND(' . $rand . ')');
         } else {
             $qb->orderBy('p.title', 'ASC');
         }
@@ -87,14 +97,31 @@ final class ListHandler implements RequestHandlerInterface
         }
 
         if ($theme && $theme !== 0) {
-            $qb->andWhere('ct.id = :themes');
-            $qb->setParameter('themes', $theme);
+            $qb->andWhere('ct.code = :themes');
+            $qb->setParameter('themes', strtoupper($theme));
         }
 
         if ($location && $location !== 0) {
             $qb->andWhere('l.id = :location');
             $qb->setParameter('location', $location);
         }
+
+        if ($campaign && $campaign !== 0) {
+            $qb->andWhere('ct.campaign = :campaign');
+            $qb->setParameter('campaign', $campaign);
+        }
+
+        if ($ids && $ids !== 0) {
+            $qb->andWhere('p.id IN (:ids)');
+            $qb->setParameter('ids', explode(';', str_replace(',', ';', $ids)));
+        }
+
+        if ($status && $status !== 0) {
+            $qb->andWhere('w.code IN (:status)');
+            $qb->setParameter('status', strtoupper($status));
+        }
+
+        $qb->andWhere('w.id NOT IN (100, 120)');
 
         $qb->setMaxResults(1);
 

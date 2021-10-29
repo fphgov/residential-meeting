@@ -6,7 +6,7 @@ namespace App\Handler\User;
 
 use App\Middleware\AuditMiddleware;
 use App\Service\UserServiceInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 final class ForgotPasswordHandlerFactory
 {

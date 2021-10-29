@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
+use App\Entity\UserInterface;
 use App\Entity\UserPreference;
+use App\Entity\UserPreferenceInterface;
+use App\Entity\MailLog;
 use App\Exception\UserNotActiveException;
 use App\Exception\UserNotFoundException;
 use App\Model\PBKDF2Password;
 use App\Service\MailQueueServiceInterface;
+use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -36,8 +40,14 @@ final class UserService implements UserServiceInterface
     /** @var MailQueueServiceInterface */
     private $mailQueueService;
 
-    /** @var EntityRepository */
+    /** @var UserRepository */
     private $userRepository;
+
+    /** @var EntityRepository */
+    private $userPreferenceRepository;
+
+    /** @var EntityRepository */
+    private $mailLogRepository;
 
     public function __construct(
         array $config,
@@ -53,6 +63,7 @@ final class UserService implements UserServiceInterface
         $this->mailQueueService         = $mailQueueService;
         $this->userRepository           = $this->em->getRepository(User::class);
         $this->userPreferenceRepository = $this->em->getRepository(UserPreference::class);
+        $this->mailLogRepository        = $this->em->getRepository(MailLog::class);
     }
 
     public function activate(string $hash): void
@@ -61,12 +72,13 @@ final class UserService implements UserServiceInterface
             'hash' => $hash,
         ]);
 
-        if (! $user instanceof User) {
+        if (! $user instanceof UserInterface) {
             throw new UserNotFoundException($hash);
         }
 
         $user->setHash(null);
         $user->setActive(true);
+        $user->setUpdatedAt(new DateTime());
 
         $this->em->flush();
     }
@@ -77,62 +89,18 @@ final class UserService implements UserServiceInterface
             'prizeHash' => $prizeHash,
         ]);
 
-        if (! $userPreference instanceof UserPreference) {
+        if (! $userPreference instanceof UserPreferenceInterface) {
             throw new UserNotFoundException($prizeHash);
         }
 
         $userPreference->setPrizeHash(null);
         $userPreference->setPrize(true);
+        $userPreference->setUpdatedAt(new DateTime());
 
         $this->em->flush();
     }
 
-    public function sendPrizeNotification(User $user)
-    {
-        $userPreference = $user->getUserPreference();
-
-        if ($userPreference->getPrizeHash() === null) {
-            $userPreference->setPrizeHash($user->generateToken());
-        }
-
-        $this->sendPrizeActivationEmail($user);
-
-        $userPreference->setPrizeNotified(true);
-
-        $this->em->flush();
-    }
-
-    public function sendPrizeNotificationSec(User $user)
-    {
-        $userPreference = $user->getUserPreference();
-
-        if ($userPreference->getPrizeHash() === null) {
-            $userPreference->setPrizeHash($user->generateToken());
-        }
-
-        $this->sendPrizeActivationEmail($user);
-
-        $userPreference->setPrizeNotifiedSec(true);
-
-        $this->em->flush();
-    }
-
-    public function sendPrizeNotificationThird(User $user)
-    {
-        $userPreference = $user->getUserPreference();
-
-        if ($userPreference->getPrizeHash() === null) {
-            $userPreference->setPrizeHash($user->generateToken());
-        }
-
-        $this->sendPrizeActivationEmail($user);
-
-        $userPreference->setPrizeNotifiedThird(true);
-
-        $this->em->flush();
-    }
-
-    public function resetPassword(string $hash, string $password)
+    public function resetPassword(string $hash, string $password): void
     {
         $filteredParams = [
             'hash'     => $hash,
@@ -144,7 +112,7 @@ final class UserService implements UserServiceInterface
             'active' => true,
         ]);
 
-        if (! $user instanceof User) {
+        if (! $user instanceof UserInterface) {
             throw new UserNotFoundException($hash);
         }
 
@@ -157,53 +125,68 @@ final class UserService implements UserServiceInterface
         $this->em->flush();
     }
 
-    public function forgotPassword(string $email)
+    public function forgotPassword(string $email): void
     {
         $user = $this->userRepository->findOneBy([
             'email' => $email,
         ]);
 
-        if (! $user instanceof User) {
+        if (! $user instanceof UserInterface) {
             throw new UserNotFoundException($email);
         }
 
         if (! $user->getActive()) {
             $user->setHash($user->generateToken());
+            $user->setUpdatedAt(new DateTime());
+
             $this->sendActivationEmail($user);
 
             throw new UserNotActiveException((string) $user->getId());
         }
 
         $user->setHash($user->generateToken());
+        $user->setUpdatedAt(new DateTime());
 
         $this->forgotPasswordMail($user);
 
         $this->em->flush();
     }
 
-    public function forgotAccount(string $email)
+    public function accountConfirmation(UserInterface $user): void
     {
-        $user = $this->userRepository->findOneBy([
-            'email' => $email,
-        ]);
-
-        if (! $user instanceof User) {
-            throw new UserNotFoundException($email);
-        }
-
-        if (! $user->getActive()) {
+        if ($user->getActive()) {
+            $user->setActive(false);
             $user->setHash($user->generateToken());
-            $this->sendActivationEmail($user);
+            $user->setUpdatedAt(new DateTime());
 
-            throw new UserNotActiveException((string) $user->getId());
+            $this->sendAccountConfirmationEmail($user);
+
+            $this->em->flush();
+        }
+    }
+
+    public function accountConfirmationReminder(UserInterface $user): void
+    {
+        if (! $user->getActive()) {
+            $this->sendAccountConfirmationReminderEmail($user);
+        }
+    }
+
+    public function sendPrizeNotification(UserInterface $user): void
+    {
+        $userPreference = $user->getUserPreference();
+
+        if ($userPreference->getPrizeHash() === null) {
+            $userPreference->setPrizeHash($user->generateToken());
+            $userPreference->setUpdatedAt(new DateTime());
         }
 
-        $this->forgotAccountMail($user);
+        $this->sendPrizeActivationEmail($user);
 
         $this->em->flush();
     }
 
-    public function registration(array $filteredParams): User
+    public function registration(array $filteredParams): UserInterface
     {
         $date = new DateTime();
 
@@ -216,7 +199,6 @@ final class UserService implements UserServiceInterface
         $userPreference->setPostalCode((string) $filteredParams['postal_code']);
         $userPreference->setLiveInCity((bool) $filteredParams['live_in_city']);
         $userPreference->setHearAbout($filteredParams['hear_about']);
-        $userPreference->setNickname($filteredParams['nickname']);
         $userPreference->setPrivacy((bool) $filteredParams['privacy']);
         $userPreference->setCreatedAt($date);
         $userPreference->setUpdatedAt($date);
@@ -231,7 +213,7 @@ final class UserService implements UserServiceInterface
 
         $user->setUserPreference($userPreference);
         $user->setHash($user->generateToken());
-        $user->setUsername($filteredParams['username']);
+        $user->setUsername($user->generateToken());
         $user->setFirstname($filteredParams['firstname']);
         $user->setLastname($filteredParams['lastname']);
         $user->setEmail($filteredParams['email']);
@@ -248,13 +230,60 @@ final class UserService implements UserServiceInterface
         return $user;
     }
 
-    private function sendActivationEmail(User $user)
+    public function clearAccount(): void
+    {
+        $users = $this->userRepository->noActivatedUsers(
+            $this->config['app']['account']['clearTimeHour']
+        );
+
+        foreach ($users as $user) {
+            $userPreference = $user->getUserPreference();
+            $userVotes      = $user->getVoteCollection();
+            $ideas          = $user->getIdeaCollection();
+
+            $anonymusUser = $this->em->getReference(User::class, 1);
+
+            foreach ($ideas as $idea) {
+                $idea->setSubmitter($anonymusUser);
+            }
+
+            foreach ($userVotes as $userVote) {
+                $userVote->setUser($anonymusUser);
+            }
+
+            if ($userPreference !== null) {
+                $this->em->remove($userPreference);
+            }
+
+            $mailLogs = $this->mailLogRepository->findBy([
+                'user' => $user,
+            ]);
+
+            foreach ($mailLogs as $mailLog) {
+                $mailLog->setUser($anonymusUser);
+            }
+
+            $this->em->remove($user);
+        }
+
+        try {
+            $this->em->flush();
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('Failed delete user', [
+                'extra' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    private function sendActivationEmail(UserInterface $user): void
     {
         $this->mailAdapter->clear();
 
         try {
-            $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('Erősítse meg a regisztrációját az Ötlet.budapest.hu-n');
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Erősítsd meg a regisztrációdat az otlet.budapest.hu-n');
 
             $tplData = [
                 'name'             => $user->getFirstname(),
@@ -265,7 +294,7 @@ final class UserService implements UserServiceInterface
 
             $this->mailAdapter->setTemplate('user-created', $tplData);
 
-            $this->mailQueueService->add($this->mailAdapter);
+            $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
@@ -275,13 +304,13 @@ final class UserService implements UserServiceInterface
         }
     }
 
-    private function sendPrizeActivationEmail(User $user)
+    private function sendPrizeActivationEmail(UserInterface $user): void
     {
         $this->mailAdapter->clear();
 
         try {
-            $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('Nyereményjáték az Ötlet.budapest.hu-n');
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Nyereményjáték az otlet.budapest.hu-n');
 
             $userPreference = $user->getUserPreference();
 
@@ -296,7 +325,7 @@ final class UserService implements UserServiceInterface
 
             $this->mailAdapter->setTemplate('user-prize', $tplData);
 
-            $this->mailQueueService->add($this->mailAdapter);
+            $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
@@ -306,13 +335,13 @@ final class UserService implements UserServiceInterface
         }
     }
 
-    private function forgotPasswordMail(User $user)
+    private function forgotPasswordMail(UserInterface $user): void
     {
         $this->mailAdapter->clear();
 
         try {
-            $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('A fiók jelszavánának visszaállítása');
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('A fiók jelszavánának visszaállítása');
 
             $tplData = [
                 'name'             => $user->getFirstname(),
@@ -323,7 +352,7 @@ final class UserService implements UserServiceInterface
 
             $this->mailAdapter->setTemplate('user-password-recovery', $tplData);
 
-            $this->mailQueueService->add($this->mailAdapter);
+            $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
@@ -333,29 +362,60 @@ final class UserService implements UserServiceInterface
         }
     }
 
-    private function forgotAccountMail(User $user)
+    private function sendAccountConfirmationEmail(UserInterface $user): void
     {
         $this->mailAdapter->clear();
 
         try {
-            $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('Felhasználónév emlékeztető az Ötlet.budapest.hu-n lévő fiókra');
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Őrizd meg a regisztrációdat az otlet.budapest.hu-n');
 
             $tplData = [
                 'name'             => $user->getFirstname(),
+                'firstname'        => $user->getFirstname(),
+                'lastname'         => $user->getLastname(),
                 'infoMunicipality' => $this->config['app']['municipality'],
                 'infoEmail'        => $this->config['app']['email'],
-                'username'         => $user->getUsername(),
+                'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
             ];
 
-            $this->mailAdapter->setTemplate('user-account-recovery', $tplData);
+            $this->mailAdapter->setTemplate('account-confirmation', $tplData);
 
-            $this->mailQueueService->add($this->mailAdapter);
+            $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
-            $this->audit->err('User forgot account notification no added to MailQueueService', [
-                'extra' => $user->getId() . ' | ' . $e->getMessage(),
+            $this->audit->err('Account confirmation notification no added to MailQueueService', [
+                'extra' => $user->getId() . " | " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    private function sendAccountConfirmationReminderEmail(UserInterface $user): void
+    {
+        $this->mailAdapter->clear();
+
+        try {
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Emlékeztető: Őrizd meg a regisztrációdat az otlet.budapest.hu-n');
+
+            $tplData = [
+                'name'             => $user->getFirstname(),
+                'firstname'        => $user->getFirstname(),
+                'lastname'         => $user->getLastname(),
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
+            ];
+
+            $this->mailAdapter->setTemplate('account-confirmation-reminder', $tplData);
+
+            $this->mailQueueService->add($user, $this->mailAdapter);
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('Account confirmation reminder notification no added to MailQueueService', [
+                'extra' => $user->getId() . " | " . $e->getMessage(),
             ]);
         }
     }

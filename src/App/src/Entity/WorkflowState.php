@@ -4,42 +4,80 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\WorkflowStateRepository")
- * @ORM\Table(name="workflow_states")
+ * @ORM\Table(name="workflow_states", indexes={
+ *     @ORM\Index(name="search_idx", columns={"code"})
+ * })
  */
-class WorkflowState implements JsonSerializable, WorkflowStateInterface
+class WorkflowState implements WorkflowStateInterface
 {
-    use EntityMetaTrait;
     use EntityTrait;
 
     /**
-     * @ORM\Column(name="name", type="string")
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
+     *
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(name="code", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
-    private $name;
+    private $code;
+
+    /**
+     * @ORM\Column(name="title", type="string")
+     * @Groups({"list", "detail"})
+     *
+     * @var string
+     */
+    private $title;
 
     /**
      * @ORM\Column(name="description", type="string")
+     * @Groups({"detail"})
      *
      * @var string
      */
     private $description;
 
-    public function setName(string $name): void
+    public function getId(): int
     {
-        $this->name = $name;
+        return $this->id;
     }
 
-    public function getName(): string
+    public function setId(int $id): void
     {
-        return $this->name;
+        $this->id = $id;
+    }
+
+    public function setCode(string $code): void
+    {
+        $this->code = $code;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 
     public function setDescription(string $description): void

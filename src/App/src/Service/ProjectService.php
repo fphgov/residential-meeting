@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Project;
-use App\Entity\User;
+use App\Entity\ProjectInterface;
+use App\Entity\UserInterface;
+use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +28,7 @@ final class ProjectService implements ProjectServiceInterface
         $this->projectRepository = $this->em->getRepository(Project::class);
     }
 
-    public function addProject(User $submitter, array $filteredParams): ?Project
+    public function addProject(UserInterface $submitter, array $filteredParams): ?ProjectInterface
     {
         $date = new DateTime();
 
@@ -35,7 +37,9 @@ final class ProjectService implements ProjectServiceInterface
         $project->setTitle($filteredParams['title']);
         $project->setDescription($filteredParams['description']);
         $project->setCost($filteredParams['cost']);
-        $project->setStatus(WorkflowStateInterface::STATUS_RECEIVED);
+        $project->setWorkflowState(
+            $this->em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_RECEIVED)
+        );
         $project->setLocation($filteredParams['location']);
         $project->setCreatedAt($date);
         $project->setUpdatedAt($date);

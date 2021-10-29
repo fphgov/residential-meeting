@@ -14,17 +14,19 @@ interface MediaInterface
         'updatedAt',
     ];
 
+    public const DISABLE_DEFAULT_SET = [];
+
     public function getId(): UuidInterface;
 
-    public function setId(UuidInterface $id): UuidInterface;
+    public function setId(UuidInterface $id): void;
 
     public function setFilename(string $filename): void;
 
     public function getFilename(): string;
 
-    public function setFile(string $file): void;
+    public function setType(?string $type = null): void;
 
-    public function getFile();
+    public function getType(): ?string;
 
     public function getCreatedAt(): DateTime;
 

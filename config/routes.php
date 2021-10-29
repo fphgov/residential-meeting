@@ -40,10 +40,6 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\User\ForgotPasswordHandler::class
     ], 'app.api.user.forgot.password');
 
-    $app->post('/app/api/user/forgot/account', [
-        App\Handler\User\ForgotAccountHandler::class
-    ], 'app.api.user.forgot.account');
-
     $app->post('/app/api/user/reset/password', [
         App\Handler\User\ResetPasswordHandler::class
     ], 'app.api.user.reset.password');
@@ -51,8 +47,14 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     $app->get('/app/api/user', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
-        App\Handler\User\ListHandler::class
+        App\Handler\User\GetHandler::class
     ], 'app.api.user');
+
+    $app->post('/app/api/user/idea', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        App\Handler\User\IdeaHandler::class
+    ], 'app.api.user.idea');
 
     $app->post('/app/api/user/vote', [
         Jwt\Handler\JwtAuthMiddleware::class,
@@ -60,17 +62,37 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\User\VoteHandler::class
     ], 'app.api.user.vote');
 
+    $app->post('/app/api/user/password', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        App\Handler\Account\PasswordChangeHandler::class,
+    ], 'app.api.account.password.change');
+
+    $app->delete('/app/api/user/delete', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        App\Handler\Account\DeleteHandler::class,
+    ], 'app.api.account.delete');
+
     $app->get('/app/api/projects', [
         App\Handler\Project\ListHandler::class
     ], 'app.api.project.list');
 
-    $app->get('/app/api/statistics', [
-        App\Handler\Project\StatisticsHandler::class
-    ], 'app.api.project.statistics');
-
     $app->get('/app/api/projects/{id}', [
         App\Handler\Project\GetHandler::class
     ], 'app.api.project.show');
+
+    $app->get('/app/api/ideas', [
+        App\Handler\Idea\ListHandler::class
+    ], 'app.api.idea.list');
+
+    $app->get('/app/api/ideas/{id}', [
+        App\Handler\Idea\GetHandler::class
+    ], 'app.api.idea.show');
+
+    $app->get('/app/api/statistics', [
+        App\Handler\Project\StatisticsHandler::class
+    ], 'app.api.project.statistics');
 
     $app->get('/app/api/media/{id}', [
         App\Handler\Media\GetHandler::class
@@ -79,6 +101,22 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     $app->get('/app/api/media/download/{id}', [
         App\Handler\Media\DownloadHandler::class
     ], 'app.api.media.download');
+
+    $app->get('/app/api/page/{slug}', [
+        App\Handler\Page\GetHandler::class
+    ], 'app.api.page.show');
+
+    $app->get('/app/api/post', [
+        App\Handler\Post\GetAllHandler::class
+    ], 'app.api.post.all');
+
+    $app->get('/app/api/post/{slug}', [
+        App\Handler\Post\GetHandler::class
+    ], 'app.api.post.show');
+
+    $app->post('/app/api/geocoding', [
+        App\Handler\Tools\GetAddressHandler::class
+    ], 'app.api.geocoding');
 
     // Admin
     if (getenv('NODE_ENV') === 'development') {

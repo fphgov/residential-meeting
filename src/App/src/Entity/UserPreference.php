@@ -6,22 +6,20 @@ namespace App\Entity;
 
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserPreferenceRepository")
  * @ORM\Table(name="user_preferences")
  */
-class UserPreference implements JsonSerializable, UserPreferenceInterface
+class UserPreference implements UserPreferenceInterface
 {
     use EntityMetaTrait;
     use EntityTrait;
 
     /**
      * @ORM\OneToOne(targetEntity="User", inversedBy="userPreference")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      *
      * @var User
      */
@@ -30,7 +28,7 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     /**
      * @ORM\Column(name="birthyear", type="smallint", nullable=true)
      *
-     * @var int
+     * @var int|null
      */
     private $birthyear;
 
@@ -44,16 +42,9 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     /**
      * @ORM\Column(name="postal_code", type="text", length=4, nullable=true)
      *
-     * @var string
+     * @var string|null
      */
     private $postalCode;
-
-    /**
-     * @ORM\Column(name="nickname", type="string")
-     *
-     * @var string
-     */
-    private $nickname;
 
     /**
      * @ORM\Column(name="hear_about", type="string")
@@ -61,13 +52,6 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
      * @var string
      */
     private $hearAbout;
-
-    /**
-     * @ORM\Column(name="created", type="date", nullable=true)
-     *
-     * @var string
-     */
-    private $created;
 
     /**
      * @ORM\Column(name="privacy", type="boolean")
@@ -89,27 +73,6 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
      * @var string|null
      */
     private $prizeHash;
-
-    /**
-     * @ORM\Column(name="prizeNotified", type="boolean")
-     *
-     * @var bool
-     */
-    private $prizeNotified = true;
-
-    /**
-     * @ORM\Column(name="prizeNotifiedSec", type="boolean")
-     *
-     * @var bool
-     */
-    private $prizeNotifiedSec = true;
-
-    /**
-     * @ORM\Column(name="prizeNotifiedThird", type="boolean")
-     *
-     * @var bool
-     */
-    private $prizeNotifiedThird = true;
 
     /**
      * @ORM\Column(name="campaignEmail", type="boolean")
@@ -158,16 +121,6 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
         return $this->postalCode;
     }
 
-    public function setNickname(string $nickname): void
-    {
-        $this->nickname = $nickname;
-    }
-
-    public function getNickname(): string
-    {
-        return $this->nickname;
-    }
-
     public function setHearAbout(string $hearAbout): void
     {
         $this->hearAbout = $hearAbout;
@@ -198,36 +151,6 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
         return $this->prize;
     }
 
-    public function setPrizeNotified(bool $prizeNotified): void
-    {
-        $this->prizeNotified = $prizeNotified;
-    }
-
-    public function getPrizeNotified(): bool
-    {
-        return $this->prizeNotified;
-    }
-
-    public function setPrizeNotifiedSec(bool $prizeNotifiedSec): void
-    {
-        $this->prizeNotifiedSec = $prizeNotifiedSec;
-    }
-
-    public function getPrizeNotifiedSec(): bool
-    {
-        return $this->prizeNotifiedSec;
-    }
-
-    public function setPrizeNotifiedThird(bool $prizeNotifiedThird): void
-    {
-        $this->prizeNotifiedThird = $prizeNotifiedThird;
-    }
-
-    public function getPrizeNotifiedThird(): bool
-    {
-        return $this->prizeNotifiedThird;
-    }
-
     public function setPrizeHash(?string $prizeHash = null): void
     {
         $this->prizeHash = $prizeHash;
@@ -236,16 +159,6 @@ class UserPreference implements JsonSerializable, UserPreferenceInterface
     public function getPrizeHash(): ?string
     {
         return $this->prizeHash;
-    }
-
-    public function setCreated(?DateTime $created = null): void
-    {
-        $this->created = $created;
-    }
-
-    public function getCreated(): ?DateTime
-    {
-        return $this->created;
     }
 
     public function setCampaignEmail(bool $campaignEmail): void

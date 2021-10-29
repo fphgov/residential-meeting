@@ -25,7 +25,7 @@ $em             = $container->get(EntityManagerInterface::class);
 $userService    = $container->get(UserServiceInterface::class);
 $userRepository = $em->getRepository(User::class);
 
-$users = $userRepository->getPrizeNotificationList(20);
+$users = $userRepository->getPrizeNotificationList(null, 'user-prize', false);
 
 foreach ($users as $user) {
     $userService->sendPrizeNotification($user);

@@ -47,6 +47,8 @@ public/**/*
 !public/index.php
 !public/static.php
 !public/.htaccess
+!public/files
+!public/files/.gitkeep
 
 supervisord.log
 supervisord.pid
@@ -57,3 +59,4 @@ supervisord.pid
 .actrc
 mysql-hide
 .htpasswd
+auth.json

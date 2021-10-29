@@ -7,15 +7,15 @@ namespace App\Entity;
 use App\Traits\EntityTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
  * @ORM\Table(name="medias")
  */
-class Media implements JsonSerializable, MediaInterface
+class Media implements MediaInterface
 {
     use EntityTrait;
 
@@ -24,6 +24,7 @@ class Media implements JsonSerializable, MediaInterface
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * @Groups({"list", "detail"})
      *
      * @var UuidInterface
      */
@@ -31,17 +32,19 @@ class Media implements JsonSerializable, MediaInterface
 
     /**
      * @ORM\Column(name="filename", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
     private $filename;
 
     /**
-     * @ORM\Column(name="file", type="blob")
+     * @ORM\Column(name="type", type="string", nullable=true)
+     * @Groups({"list", "detail"})
      *
-     * @var resource
+     * @var string|null
      */
-    private $file;
+    private $type;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
@@ -62,9 +65,9 @@ class Media implements JsonSerializable, MediaInterface
         return $this->id;
     }
 
-    public function setId(UuidInterface $id): UuidInterface
+    public function setId(UuidInterface $id): void
     {
-        return $this->id;
+        $this->id = $id;
     }
 
     public function setFilename(string $filename): void
@@ -77,14 +80,14 @@ class Media implements JsonSerializable, MediaInterface
         return $this->filename;
     }
 
-    public function setFile(string $file): void
+    public function setType(?string $type = null): void
     {
-        $this->file = $file;
+        $this->type = $type;
     }
 
-    public function getFile(): resource
+    public function getType(): ?string
     {
-        return $this->file;
+        return $this->type;
     }
 
     public function getCreatedAt(): DateTime

@@ -26,76 +26,6 @@ class UserRegistrationFilter extends InputFilter
     public function init()
     {
         $this->add([
-            'name'        => 'username',
-            'allow_empty' => false,
-            'validators'  => [
-                new Validator\NotEmpty([
-                    'messages' => [
-                        Validator\NotEmpty::IS_EMPTY => 'Kötelező a mező kitöltése',
-                        Validator\NotEmpty::INVALID  => 'Hibás mező tipus',
-                    ],
-                ]),
-                new Validator\StringLength([
-                    'min' => 2,
-                    'max' => 255,
-                    'messages' => [
-                        Validator\StringLength::TOO_SHORT => 'Legalább %min% karaktert kell tartalmaznia a mezőnek',
-                        Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia a mezőnek mint: %max%',
-                        Validator\StringLength::INVALID   => 'Hibás mező tipus. Csak szöveg fogadható el',
-                    ],
-                ]),
-                new Validator\Db\NoRecordExists([
-                    'table'    => 'users',
-                    'field'    => 'username',
-                    'adapter'  => $this->dbAdapter,
-                    'messages' => [
-                        Validator\Db\RecordExists::ERROR_NO_RECORD_FOUND => '',
-                        Validator\Db\RecordExists::ERROR_RECORD_FOUND    => 'Ez a felhasználónév már foglalt',
-                    ]
-                ])
-            ],
-            'filters'     => [
-                new Filter\StringTrim(),
-                new Filter\StripTags(),
-            ],
-        ]);
-
-        $this->add([
-            'name'        => 'nickname',
-            'allow_empty' => false,
-            'validators'  => [
-                new Validator\NotEmpty([
-                    'messages' => [
-                        Validator\NotEmpty::IS_EMPTY => 'Kötelező a mező kitöltése',
-                        Validator\NotEmpty::INVALID  => 'Hibás mező tipus',
-                    ],
-                ]),
-                new Validator\StringLength([
-                    'min'      => 2,
-                    'max'      => 255,
-                    'messages' => [
-                        Validator\StringLength::TOO_SHORT => 'Legalább %min% karaktert kell tartalmaznia a mezőnek',
-                        Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia a mezőnek mint: %max%',
-                        Validator\StringLength::INVALID   => 'Hibás mező tipus. Csak szöveg fogadható el',
-                    ],
-                ]),
-                new Validator\Db\NoRecordExists([
-                    'table'    => 'user_preferences',
-                    'field'    => 'nickname',
-                    'adapter'  => $this->dbAdapter,
-                    'messages' => [
-                        Validator\Db\RecordExists::ERROR_NO_RECORD_FOUND => '',
-                        Validator\Db\RecordExists::ERROR_RECORD_FOUND    => 'Ez a nyílvános név már foglalt',
-                    ]
-                ])
-            ],
-            'filters'     => [
-                new Filter\StringTrim(),
-                new Filter\StripTags(),
-            ],
-        ]);
-
-        $this->add([
             'name'        => 'email',
             'allow_empty' => false,
             'validators'  => [
@@ -140,6 +70,7 @@ class UserRegistrationFilter extends InputFilter
             'filters'     => [
                 new Filter\StringTrim(),
                 new Filter\StripTags(),
+                new Filter\StringToLower(),
             ],
         ]);
 
@@ -197,7 +128,7 @@ class UserRegistrationFilter extends InputFilter
 
         $this->add([
             'name'        => 'hear_about',
-            'allow_empty' => false,
+            'allow_empty' => true,
             'validators'  => [
                 new Validator\NotEmpty([
                     'messages' => [
@@ -288,11 +219,11 @@ class UserRegistrationFilter extends InputFilter
                     ]
                 ]),
                 new Validator\LessThan([
-                    'max'       => (new \DateTime())->format('Y') - 18,
+                    'max'       => (int)(new \DateTime())->format('Y') - 16,
                     'inclusive' => true,
                     'messages' => [
                         Validator\LessThan::NOT_LESS           => "The input is not less than '%max%'",
-                        Validator\LessThan::NOT_LESS_INCLUSIVE => "Csak 18 év feletti személyek regisztrálhatnak",
+                        Validator\LessThan::NOT_LESS_INCLUSIVE => "Csak 16 év feletti személyek regisztrálhatnak",
                     ]
                 ]),
                 new Validator\GreaterThan([
@@ -312,7 +243,7 @@ class UserRegistrationFilter extends InputFilter
 
         $this->add([
             'name'        => 'postal_code',
-            'allow_empty' => false,
+            'allow_empty' => true,
             'validators'  => [
                 new Validator\NotEmpty([
                     'messages' => [

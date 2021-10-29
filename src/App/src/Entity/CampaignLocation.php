@@ -8,26 +8,23 @@ use App\Traits\EntityActiveTrait;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="campaign_locations")
  */
-class CampaignLocation implements JsonSerializable, CampaignLocationInterface
+class CampaignLocation implements CampaignLocationInterface
 {
     use EntityActiveTrait;
     use EntityMetaTrait;
     use EntityTrait;
 
-    public const DISABLE_SHOW_DEFAULT = [
-        'id',
-        'updatedAt',
-    ];
-
     /**
      * @ORM\ManyToOne(targetEntity="Campaign")
-     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
+     * @Ignore
      *
      * @var Campaign
      */
@@ -35,6 +32,7 @@ class CampaignLocation implements JsonSerializable, CampaignLocationInterface
 
     /**
      * @ORM\Column(name="code", type="string")
+     * @Groups({"detail"})
      *
      * @var string
      */
@@ -42,6 +40,7 @@ class CampaignLocation implements JsonSerializable, CampaignLocationInterface
 
     /**
      * @ORM\Column(name="name", type="string")
+     * @Groups({"detail"})
      *
      * @var string
      */
@@ -49,6 +48,7 @@ class CampaignLocation implements JsonSerializable, CampaignLocationInterface
 
     /**
      * @ORM\Column(name="description", type="text")
+     * @Groups({"detail"})
      *
      * @var string
      */

@@ -7,18 +7,18 @@ namespace App\Entity;
 use App\Traits\EntityActiveTrait;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\Table(
- *     name="users",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="ix_username_email", columns={"username","email"})}
- * )
+ * @ORM\Table(name="users")
  */
-class User implements JsonSerializable, UserInterface
+class User implements UserInterface
 {
     use EntityActiveTrait;
     use EntityMetaTrait;
@@ -26,34 +26,39 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity="UserPreference", mappedBy="user")
+     * @Ignore
      *
-     * @var UserPreference
+     * @var UserPreference|null
      */
     private $userPreference;
 
     /**
-     * @ORM\OneToOne(targetEntity="Vote", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Vote", mappedBy="user")
+     * @Ignore
      *
-     * @var Vote
+     * @var Collection|Vote[]
      */
-    private $vote;
+    private $votes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Idea", mappedBy="submitter")
+     * @Ignore
+     *
+     * @var Collection|Idea[]
+     */
+    private $ideas;
 
     /**
      * @ORM\Column(name="username", type="string")
+     * @Groups({"profile"})
      *
      * @var string
      */
     private $username;
 
     /**
-     * @ORM\Column(name="lutece_id", type="string", nullable=true)
-     *
-     * @var string
-     */
-    private $luteceId;
-
-    /**
      * @ORM\Column(name="firstname", type="string")
+     * @Groups({"list", "detail", "profile"})
      *
      * @var string
      */
@@ -61,6 +66,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\Column(name="lastname", type="string")
+     * @Groups({"list", "detail", "profile"})
      *
      * @var string
      */
@@ -68,6 +74,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\Column(name="email", type="string", length=100, unique=true)
+     * @Groups({"profile"})
      *
      * @var string
      */
@@ -75,6 +82,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\Column(name="password", type="text", length=100)
+     * @Ignore
      *
      * @var string
      */
@@ -82,6 +90,7 @@ class User implements JsonSerializable, UserInterface
 
     /**
      * @ORM\Column(name="role", type="string")
+     * @Ignore
      *
      * @var string
      */
@@ -94,34 +103,68 @@ class User implements JsonSerializable, UserInterface
      */
     private $hash;
 
-    public function setUserPreference(UserPreference $userPreference)
+    public function __construct()
+    {
+        $this->votes = new ArrayCollection();
+        $this->ideas = new ArrayCollection();
+    }
+
+    public function setUserPreference(?UserPreference $userPreference = null): void
     {
         $this->userPreference = $userPreference;
     }
 
-    public function getUserPreference(): UserPreference
+    public function getUserPreference(): ?UserPreference
     {
         return $this->userPreference;
     }
 
-    public function setVote(?Vote $vote = null)
+    public function getVoteCollection(): Collection
     {
-        $this->vote = $vote;
+        return $this->votes;
     }
 
-    public function getVote(): ?Vote
+    public function getVotes(): array
     {
-        return $this->vote;
+        $votes = [];
+        foreach ($this->votes->getValues() as $vote) {
+            $votes[] = $vote->getId();
+        }
+
+        return $votes;
     }
 
-    public function setLuteceId(string $luteceId): void
+    public function addVote(VoteInterface $vote): self
     {
-        $this->luteceId = $luteceId;
+        if (! $this->votes->contains($vote)) {
+            $this->votes[] = $vote;
+        }
+
+        return $this;
     }
 
-    public function getLuteceId(): string
+    public function getIdeaCollection(): Collection
     {
-        return $this->luteceId;
+        return $this->ideas;
+    }
+
+    public function getIdeas(): array
+    {
+        $ideas = [];
+        foreach ($this->ideas->getValues() as $idea) {
+            $ideas[] = $idea->getId();
+        }
+
+        return $ideas;
+    }
+
+    public function addIdea(IdeaInterface $idea): self
+    {
+        if (! $this->ideas->contains($idea)) {
+            $this->ideas[] = $idea;
+        }
+
+        return $this;
     }
 
     public function setUsername(string $username): void

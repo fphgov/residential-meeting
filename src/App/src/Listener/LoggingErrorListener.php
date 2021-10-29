@@ -14,7 +14,7 @@ class LoggingErrorListener implements LoggingErrorListenerInterface
     /**
      * Log message string with placeholders
      */
-    public const LOG_STRING = '{status} [{method}] {uri}: {error}';
+    public const LOG_STRING = '{status} [{method}] {uri}: {error} in {file} on line {line}';
 
     /** @var LoggerInterface */
     private $logger;
@@ -34,6 +34,8 @@ class LoggingErrorListener implements LoggingErrorListenerInterface
             'method' => $request->getMethod(),
             'uri'    => (string) $request->getUri(),
             'error'  => $error->getMessage(),
+            'file'   => $error->getFile(),
+            'line'   => $error->getLine(),
         ]);
     }
 }

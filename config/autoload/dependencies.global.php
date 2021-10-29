@@ -26,6 +26,9 @@ return [
             App\Middleware\UserMiddleware::class  => App\Middleware\UserMiddlewareFactory::class,
 
             \Middlewares\Recaptcha::class => App\Middleware\RecaptchaMiddlewareFactory::class,
+
+            // For tests
+            App\InputFilter\IdeaInputFilter::class => App\InputFilter\IdeaInputFilterFactory::class,
         ],
         'delegators' => [
             Laminas\Stratigility\Middleware\ErrorHandler::class => [

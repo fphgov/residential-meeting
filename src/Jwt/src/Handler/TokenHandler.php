@@ -19,7 +19,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function count;
 use function in_array;
+use function strtolower;
 
 class TokenHandler implements RequestHandlerInterface
 {
@@ -47,11 +49,7 @@ class TokenHandler implements RequestHandlerInterface
             return $this->badAuthentication();
         }
 
-        $user = $userRepository->findOneBy(['email' => $postBody['email']]);
-
-        if (! $user) {
-            $user = $userRepository->findOneBy(['username' => $postBody['email']]);
-        }
+        $user = $userRepository->findOneBy(['email' => strtolower($postBody['email'])]);
 
         if (! $user) {
             return $this->badAuthentication();
@@ -75,12 +73,13 @@ class TokenHandler implements RequestHandlerInterface
         }
 
         $userData = [
+            'username'  => $user->getUsername(),
             'firstname' => $user->getFirstname(),
             'lastname'  => $user->getLastname(),
             'email'     => $user->getEmail(),
             'role'      => $user->getRole(),
             'votes'     => null,
-            'voted'     => $user->getVote() !== null,
+            'voted'     => count($user->getVotes()) !== 0,
         ];
 
         $votes = $voteRepository->findOneBy([

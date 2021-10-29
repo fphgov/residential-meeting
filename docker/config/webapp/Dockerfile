@@ -1,14 +1,36 @@
 FROM php:7-fpm-alpine
 
-RUN apk add --no-cache --update git wget mysql-client libzip-dev supervisor
+# Locale
+ENV LANG "C.UTF-8"
+ENV LANGUAGE "C.UTF-8"
+ENV LC_ALL "C.UTF-8"
 
-RUN apk add --no-cache --update zlib-dev icu-dev g++ libxml2-dev && docker-php-ext-configure intl && docker-php-ext-install intl
+RUN apk add --no-cache --update \
+        curl-dev \
+        git \
+        wget \
+        mysql-client \
+        libzip-dev \
+        supervisor \
+        autoconf \
+        make \
+        automake \
+        libtool \
+        pkgconfig \
+        bash \
+        zlib-dev \
+        icu-dev \
+        g++ \
+        libxml2-dev
+
+RUN docker-php-ext-configure intl && docker-php-ext-install intl
 
 ENV LIBRARY_PATH=/lib:/usr/lib
 
 ENV XDEBUG_MODE=off
 ENV XDEBUG_CLIENT_HOST=host.docker.internal
 ENV XDEBUG_CLIENT_PORT=9001
+ENV XDEBUG_IDEKEY=VSCODE
 
 WORKDIR /var/www/html
 
@@ -26,16 +48,40 @@ RUN apk add --no-cache cmake freetype libpng libjpeg-turbo freetype-dev libpng-d
   NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
   docker-php-ext-install -j${NPROC} gd
 
+# Install libpostal
+RUN mkdir /datadir
+RUN git clone https://github.com/openvenues/libpostal && \
+    cd libpostal && \
+    ./bootstrap.sh && \
+    ./configure --datadir=/datadir --disable-dependency-tracking && \
+    make && \
+    make install
+
+# Install php-postal
+RUN git clone https://github.com/openvenues/php-postal && \
+    cd php-postal && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install
+
+RUN pecl install -D 'enable-sockets="no" enable-openssl="no" enable-http2="no" enable-mysqlnd="no" enable-swoole-json="no" enable-swoole-curl="no" enable-cares="no"' openswoole
+
 # Install Xdebug
 RUN apk add --no-cache $PHPIZE_DEPS && pecl install xdebug; \
-    docker-php-ext-enable xdebug; \
-    echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+    docker-php-ext-enable xdebug;
+
+# Config Xdebug
+RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
     echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
     echo "display_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
     echo "xdebug.mode=$XDEBUG_MODE" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+    echo "xdebug.idekey=$XDEBUG_IDEKEY" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+    echo "xdebug.discover_client_host=false" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
     echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
     echo "xdebug.client_host=$XDEBUG_CLIENT_HOST" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
     echo "xdebug.client_port=$XDEBUG_CLIENT_PORT" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+    echo "xdebug.log_level=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
     echo "xdebug.var_display_max_data=512" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
     echo "xdebug.var_display_max_children=128" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
     echo "xdebug.var_display_max_depth=3" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini;
@@ -48,7 +94,7 @@ RUN chmod 0600 /etc/crontabs/docker-crontab
 
 RUN /usr/bin/crontab /etc/crontabs/docker-crontab
 
-EXPOSE 9001
+EXPOSE $XDEBUG_CLIENT_PORT
 
 RUN sed -i 's/9000/9004/' /usr/local/etc/php-fpm.d/zz-docker.conf
 RUN sed -i 's/pm.max_children = 5/pm.max_children = 816/' /usr/local/etc/php-fpm.d/www.conf

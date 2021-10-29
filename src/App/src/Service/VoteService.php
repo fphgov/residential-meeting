@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\OfflineVote;
+use App\Entity\PhaseInterface;
 use App\Entity\Project;
-use App\Entity\User;
+use App\Entity\ProjectInterface;
+use App\Entity\UserInterface;
 use App\Entity\Vote;
+use App\Entity\VoteInterface;
 use App\Service\MailQueueServiceInterface;
+use App\Service\PhaseServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -38,12 +42,16 @@ final class VoteService implements VoteServiceInterface
     /** @var EntityRepository */
     private $voteRepository;
 
+    /** @var PhaseServiceInterface */
+    private $phaseService;
+
     public function __construct(
         array $config,
         EntityManagerInterface $em,
         Logger $audit,
         MailAdapter $mailAdapter,
-        MailQueueServiceInterface $mailQueueService
+        MailQueueServiceInterface $mailQueueService,
+        PhaseServiceInterface $phaseService
     ) {
         $this->config           = $config;
         $this->em               = $em;
@@ -51,9 +59,10 @@ final class VoteService implements VoteServiceInterface
         $this->mailAdapter      = $mailAdapter;
         $this->mailQueueService = $mailQueueService;
         $this->voteRepository   = $this->em->getRepository(Vote::class);
+        $this->phaseService     = $phaseService;
     }
 
-    public function addOfflineVote(User $user, array $filteredParams): void
+    public function addOfflineVote(UserInterface $user, array $filteredParams): void
     {
         $date = new DateTime();
 
@@ -67,7 +76,7 @@ final class VoteService implements VoteServiceInterface
         $this->em->flush();
     }
 
-    private function createOfflineVote(User $user, Project $project, DateTime $date): void
+    private function createOfflineVote(UserInterface $user, ProjectInterface $project, DateTime $date): void
     {
         $vote = new OfflineVote();
 
@@ -79,8 +88,10 @@ final class VoteService implements VoteServiceInterface
         $this->em->persist($vote);
     }
 
-    public function voting(User $user, array $filteredParams): Vote
+    public function voting(UserInterface $user, array $filteredParams): VoteInterface
     {
+        $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
+
         $date = new DateTime();
 
         $vote = new Vote();
@@ -104,13 +115,13 @@ final class VoteService implements VoteServiceInterface
         return $vote;
     }
 
-    private function successVote(User $user, Vote $vote)
+    private function successVote(UserInterface $user, VoteInterface $vote): void
     {
         $this->mailAdapter->clear();
 
         try {
-            $this->mailAdapter->message->addTo($user->getEmail());
-            $this->mailAdapter->message->setSubject('Köszönjük szavazatát!');
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Köszönjük szavazatodat!');
 
             $tplData = [
                 'name'             => $user->getFirstname(),
@@ -131,12 +142,12 @@ final class VoteService implements VoteServiceInterface
 
             $this->mailAdapter->setTemplate('vote-success', $tplData);
 
-            $this->mailQueueService->add($this->mailAdapter);
+            $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
             $this->audit->err('Vote success notification no added to MailQueueService', [
-                'extra' => $user->getId()  . " | " . $e->getMessage(),
+                'extra' => $user->getId() . " | " . $e->getMessage(),
             ]);
         }
     }

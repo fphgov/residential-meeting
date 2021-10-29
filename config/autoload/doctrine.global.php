@@ -7,8 +7,20 @@ use Ramsey\Uuid\Doctrine\UuidType;
 
 $rtel = new \Doctrine\ORM\Tools\ResolveTargetEntityListener;
 
+$rtel->addResolveTargetEntity(App\Entity\CampaignInterface::class, App\Entity\Campaign::class, []);
+$rtel->addResolveTargetEntity(App\Entity\CampaignLocationInterface::class, App\Entity\CampaignLocation::class, []);
+$rtel->addResolveTargetEntity(App\Entity\CampaignThemeInterface::class, App\Entity\CampaignTheme::class, []);
+$rtel->addResolveTargetEntity(App\Entity\IdeaInterface::class, App\Entity\Idea::class, []);
+$rtel->addResolveTargetEntity(App\Entity\MailQueueInterface::class, App\Entity\MailQueue::class, []);
+$rtel->addResolveTargetEntity(App\Entity\MediaInterface::class, App\Entity\Media::class, []);
+$rtel->addResolveTargetEntity(App\Entity\OfflineVoteInterface::class, App\Entity\OfflineVote::class, []);
+$rtel->addResolveTargetEntity(App\Entity\ProjectInterface::class, App\Entity\Project::class, []);
 $rtel->addResolveTargetEntity(App\Entity\SettingsInterface::class, App\Entity\Settings::class, []);
 $rtel->addResolveTargetEntity(App\Entity\UserInterface::class, App\Entity\User::class, []);
+$rtel->addResolveTargetEntity(App\Entity\TagInterface::class, App\Entity\Tag::class, []);
+$rtel->addResolveTargetEntity(App\Entity\UserPreferenceInterface::class, App\Entity\UserPreference::class, []);
+$rtel->addResolveTargetEntity(App\Entity\VoteInterface::class, App\Entity\Vote::class, []);
+$rtel->addResolveTargetEntity(App\Entity\WorkflowStateInterface::class, App\Entity\WorkflowState::class, []);
 
 return [
     'doctrine' => [
@@ -22,6 +34,10 @@ return [
                     'GROUP_CONCAT' => Mysql\GroupConcat::class,
                     'DATE_FORMAT'  => Mysql\DateFormat::class,
                     'CONCAT_WS'    => Mysql\ConcatWs::class,
+                    'NOW'          => Mysql\Now::class,
+                ],
+                'datetime_functions' => [
+                    'DATE_SUB' => Mysql\DateSub::class,
                 ],
                 'numeric_functions' => [
                     'RAND' => Mysql\Rand::class,

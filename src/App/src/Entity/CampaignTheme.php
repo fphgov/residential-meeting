@@ -8,26 +8,23 @@ use App\Traits\EntityActiveTrait;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="campaign_themes")
  */
-class CampaignTheme implements JsonSerializable, CampaignThemeInterface
+class CampaignTheme implements CampaignThemeInterface
 {
     use EntityActiveTrait;
     use EntityMetaTrait;
     use EntityTrait;
 
-    public const DISABLE_SHOW_DEFAULT = [
-        'id',
-        'updatedAt',
-    ];
-
     /**
      * @ORM\ManyToOne(targetEntity="Campaign")
-     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
+     * @Ignore
      *
      * @var Campaign
      */
@@ -35,6 +32,7 @@ class CampaignTheme implements JsonSerializable, CampaignThemeInterface
 
     /**
      * @ORM\Column(name="code", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -42,6 +40,7 @@ class CampaignTheme implements JsonSerializable, CampaignThemeInterface
 
     /**
      * @ORM\Column(name="name", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -49,6 +48,7 @@ class CampaignTheme implements JsonSerializable, CampaignThemeInterface
 
     /**
      * @ORM\Column(name="description", type="text")
+     * @Groups({"detail"})
      *
      * @var string
      */
@@ -56,6 +56,7 @@ class CampaignTheme implements JsonSerializable, CampaignThemeInterface
 
     /**
      * @ORM\Column(name="rgb", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */

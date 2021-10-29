@@ -7,7 +7,7 @@ namespace App\Handler\Vote;
 use App\InputFilter\OfflineVoteFilter;
 use App\Service\VoteServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 
 final class AddHandlerFactory

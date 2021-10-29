@@ -5,17 +5,32 @@ declare(strict_types=1);
 return [
     'log'    => [
         'writers'    => [
+            'stdout' => [
+                'name'     => 'stream',
+                'priority' => Laminas\Log\Logger::ALERT,
+                'options'  => [
+                    'stream'    => 'php://stdout',
+                    'formatter' => [
+                        'name'    => Laminas\Log\Formatter\Simple::class,
+                    ],
+                    'filters'   => [
+                        'priority' => [
+                            'name'    => 'priority',
+                            'options' => [
+                                'operator' => '<=',
+                                'priority' => Laminas\Log\Logger::INFO,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'stream' => [
                 'name'     => 'stream',
                 'priority' => Laminas\Log\Logger::ALERT,
                 'options'  => [
                     'stream'    => __DIR__ . '/../../data/log/error.log',
                     'formatter' => [
-                        'name'    => Laminas\Log\Formatter\Simple::class,
-                        'options' => [
-                            'format'         => '%timestamp% %priorityName% (%priority%): %message% %extra%',
-                            'dateTimeFormat' => 'c',
-                        ],
+                        'name'    => Laminas\Log\Formatter\Simple::class
                     ],
                     'filters'   => [
                         'priority' => [
@@ -46,9 +61,6 @@ return [
                         'priority'     => 'priority',
                         'priorityName' => 'priorityName',
                         'message'      => 'message',
-                        'extra'        => [
-                            'extra' => 'extra',
-                        ],
                     ],
                     'formatter' => [
                         'name'    => Laminas\Log\Formatter\Db::class,

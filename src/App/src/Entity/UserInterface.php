@@ -4,21 +4,41 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-interface UserInterface
+use App\Interfaces\EntityActiveInterface;
+use App\Interfaces\EntityInterface;
+use Doctrine\Common\Collections\Collection;
+
+interface UserInterface extends EntityInterface, EntityActiveInterface
 {
     public const DISABLE_SHOW_DEFAULT = [
+        'userPreference',
+        'vote',
         'password',
         'createdAt',
         'updatedAt',
     ];
 
-    public function setUserPreference(UserPreference $userPreference);
+    public const DISABLE_DEFAULT_SET = [];
 
-    public function getUserPreference(): UserPreference;
+    public function setUserPreference(?UserPreference $userPreference = null): void;
 
-    public function setLuteceId(string $luteceId): void;
+    public function getUserPreference(): ?UserPreference;
 
-    public function getLuteceId(): string;
+    public function getVoteCollection(): Collection;
+
+    public function getVotes(): array;
+
+    public function addVote(VoteInterface $vote): self;
+
+    public function getIdeaCollection(): Collection;
+
+    public function getIdeas(): array;
+
+    public function addIdea(IdeaInterface $idea): self;
+
+    public function setUsername(string $username): void;
+
+    public function getUsername(): string;
 
     public function setFirstname(string $firstname): void;
 
@@ -39,4 +59,10 @@ interface UserInterface
     public function setRole(string $role): void;
 
     public function getRole(): ?string;
+
+    public function setHash(?string $hash = null): void;
+
+    public function getHash(): ?string;
+
+    public function generateToken(): string;
 }

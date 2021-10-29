@@ -6,68 +6,78 @@ namespace App\Repository;
 
 use App\Entity\UserPreference;
 use App\Entity\Vote;
+use App\Entity\MailLog;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 
 final class UserRepository extends EntityRepository
 {
-    public function getPrizeNotificationList(int $limit): array
+    public function getActiveUsers(): array
     {
-        $qb = $this->createQueryBuilder('u')
-                   ->innerJoin(UserPreference::class, 'up', Join::WITH, 'up.user = u.id')
-                   ->innerJoin(Vote::class, 'v', Join::WITH, 'v.user = u.id')
-                   ->where('u.active = :active')
-                   ->andWhere('up.prize = :prize')
-                   ->andWhere('up.prizeHash IS NULL')
-                   ->andWhere('up.prizeNotified = :prizeNotified')
-                   ->andWhere('up.campaignEmail = :campaignEmail')
-                   ->setParameter('active', true)
-                   ->setParameter('prize', false)
-                   ->setParameter('prizeNotified', false)
-                   ->setParameter('campaignEmail', true)
-                   ->setMaxResults($limit)
-                   ->orderBy('u.id', 'ASC');
+        return $this->findBy([
+            'active' => true,
+            'role'   => 'user',
+        ]);
+    }
+
+    public function noActivatedUsers(int $hour): array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $qb->where('u.active = :active')
+            ->andWhere('u.updatedAt < DATE_SUB(NOW(), '. $hour .', \'HOUR\')')
+            ->setParameter('active', false)
+            ->orderBy('u.id', 'ASC');
 
         return $qb->getQuery()->getResult();
     }
 
-    public function getPrizeNotificationListSec(int $limit): array
-    {
-        $qb = $this->createQueryBuilder('u')
-                   ->innerJoin(UserPreference::class, 'up', Join::WITH, 'up.user = u.id')
-                   ->innerJoin(Vote::class, 'v', Join::WITH, 'v.user = u.id')
-                   ->where('u.active = :active')
-                   ->andWhere('up.prizeNotified = :prizeNotified')
-                   ->andWhere('up.prizeNotifiedSec = :prizeNotifiedSec')
-                   ->andWhere('up.campaignEmail = :campaignEmail')
-                   ->setParameter('active', true)
-                   ->setParameter('prizeNotified', true)
-                   ->setParameter('prizeNotifiedSec', false)
-                   ->setParameter('campaignEmail', true)
-                   ->setMaxResults($limit)
-                   ->orderBy('u.id', 'ASC');
+    public function getPrizeNotificationList(
+        ?int $limit = null,
+        string $emailName,
+        bool $hasVote = true
+    ): array {
+        $qb = $this->getNotificationQuery($emailName);
+
+        if ($hasVote) {
+            $qb->innerJoin(Vote::class, 'v', Join::WITH, 'v.user = u.id');
+        }
+
+        $qb->andWhere('up.prize = :prize')->setParameter('prize', false);
+        $qb->andWhere('up.prizeHash IS NULL');
+
+        if ($limit !== null) {
+            $qb->setMaxResults($limit);
+        }
 
         return $qb->getQuery()->getResult();
     }
 
-    public function getPrizeNotificationListThird(int $limit): array
+    private function getNotificationQuery(string $emailName): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('u')
-                   ->innerJoin(UserPreference::class, 'up', Join::WITH, 'up.user = u.id')
-                   ->innerJoin(Vote::class, 'v', Join::WITH, 'v.user = u.id')
-                   ->where('u.active = :active')
-                   ->andWhere('up.prizeNotified = :prizeNotified')
-                   ->andWhere('up.prizeNotifiedSec = :prizeNotifiedSec')
-                   ->andWhere('up.prizeNotifiedThird = :prizeNotifiedThird')
-                   ->andWhere('up.campaignEmail = :campaignEmail')
-                   ->setParameter('active', true)
-                   ->setParameter('prizeNotified', false)
-                   ->setParameter('prizeNotifiedSec', false)
-                   ->setParameter('prizeNotifiedThird', false)
-                   ->setParameter('campaignEmail', true)
-                   ->setMaxResults($limit)
-                   ->orderBy('u.id', 'ASC');
+        $qbMail = $this->createQueryBuilder('u');
+        $qbMail->select('u.id')
+            ->leftJoin(MailLog::class, 'ml', Join::WITH, 'ml.user = u.id')
+            ->where('ml.name = :emailName')
+            ->setParameter('emailName', $emailName);
 
-        return $qb->getQuery()->getResult();
+        $qb = $this->createQueryBuilder('u');
+
+        $qb->innerJoin(UserPreference::class, 'up', Join::WITH, 'up.user = u.id');
+        $qb->leftJoin(MailLog::class, 'ml', Join::WITH, 'ml.user = u.id');
+
+        $qb->where('u.active = :active')
+            ->andWhere('u.role = :role')
+            ->andWhere('up.campaignEmail = :campaignEmail')
+            ->andWhere('u.id NOT IN (:disableIds)')
+            ->setParameter('active', true)
+            ->setParameter('role', 'user')
+            ->setParameter('campaignEmail', true)
+            ->setParameter('disableIds', $qbMail->getDQL())
+            ->orderBy('u.id', 'ASC');
+
+        return $qb;
     }
 }

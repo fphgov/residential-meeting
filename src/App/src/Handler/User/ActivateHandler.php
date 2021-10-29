@@ -27,7 +27,7 @@ final class ActivateHandler implements RequestHandlerInterface
             $this->userService->activate($request->getAttribute('hash'));
         } catch (Exception $e) {
             return new JsonResponse([
-                'message' => 'Fiókja már aktíválva van vagy ismeretlen aktiváló kulcs.',
+                'message' => 'Fiókja már aktiválva van vagy ismeretlen aktiváló kulcs.',
             ], 404);
         }
 

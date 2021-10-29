@@ -6,7 +6,7 @@ namespace App\Handler\Project;
 
 use App\InputFilter\ProjectInputFilter;
 use App\Service\ProjectServiceInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 
 final class AddHandlerFactory

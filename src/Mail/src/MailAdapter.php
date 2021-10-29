@@ -13,12 +13,11 @@ use Laminas\Mime\Part as MimePart;
 use Mezzio\Template\TemplateRendererInterface;
 use Throwable;
 
-use function strip_tags;
 use function error_log;
 use function is_array;
 use function uniqid;
 
-class MailAdapter
+class MailAdapter implements MailAdapterInterface
 {
     /** @var array */
     private $config;
@@ -30,10 +29,16 @@ class MailAdapter
     private $template;
 
     /** @var Message */
-    public $message;
+    private $message;
 
     /** @var MimeMessage */
-    public $content;
+    private $content;
+
+    /** @var string */
+    private $messageId = '';
+
+    /** @var string */
+    private $name = '';
 
     public function __construct(
         Smtp $transport,
@@ -53,9 +58,11 @@ class MailAdapter
             return $this;
         }
 
+        $this->name = $name;
+
         $this->content = new MimeMessage();
 
-        $text = $this->template->render("email/text/$name", $data);
+        $text = $this->template->render("email/text/$this->name", $data);
 
         $bodyText           = new MimePart($text);
         $bodyText->type     = Mime::TYPE_TEXT;
@@ -64,7 +71,7 @@ class MailAdapter
 
         $this->content->addPart($bodyText);
 
-        $html = $this->template->render("email/html/$name", $data);
+        $html = $this->template->render("email/html/$this->name", $data);
 
         $bodyHtml           = new MimePart($html);
         $bodyHtml->type     = Mime::TYPE_HTML;
@@ -112,14 +119,39 @@ class MailAdapter
         $this->message->setEncoding('UTF-8');
 
         $contentTypeHeader = $this->message->getHeaders()->get('Content-Type');
-        $contentTypeHeader->setType('multipart/alternative');
+
+        if ($contentTypeHeader instanceof Header\ContentType) {
+            $contentTypeHeader->setType('multipart/alternative');
+        }
 
         $this->transport->send($this->message);
     }
 
+    public function getMessage(): Message
+    {
+        return $this->message;
+    }
+
+    public function getContent(): MimeMessage
+    {
+        return $this->content;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getMessageId(): string
+    {
+        return $this->messageId;
+    }
+
     public function clear(): void
     {
-        $this->message = new Message();
+        $this->name      = '';
+        $this->messageId = '';
+        $this->message   = new Message();
 
         if (is_array($this->config['defaults'])) {
             foreach ($this->config['defaults'] as $ck => $cv) {
@@ -139,6 +171,8 @@ class MailAdapter
         $key = uniqid() . '@' . $this->config['headers']['message_id_domain'];
 
         $messageId = Header\MessageId::fromString('message-id: ' . $key);
+
+        $this->messageId = $messageId->getFieldValue();
 
         $this->message->getHeaders()->removeHeader($messageId);
         $this->message->getHeaders()->addHeader($messageId);

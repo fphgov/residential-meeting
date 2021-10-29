@@ -6,8 +6,7 @@ namespace App\Handler\User;
 
 use App\InputFilter\VoteFilter;
 use App\Service\VoteServiceInterface;
-use App\Service\SettingServiceInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 
 final class VoteHandlerFactory
@@ -20,8 +19,7 @@ final class VoteHandlerFactory
 
         return new VoteHandler(
             $container->get(VoteServiceInterface::class),
-            $inputFilter,
-            $container->get(SettingServiceInterface::class)
+            $inputFilter
         );
     }
 }

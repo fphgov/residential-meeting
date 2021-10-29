@@ -15,30 +15,39 @@ use function trim;
 class ProjectListDTO
 {
     private int $id;
+    private string $campaignTitle;
     private string $campaignThemeName;
     private string $campaignThemeRgb;
     private string $title;
     private string $description;
     private string $location;
-    private string $tagId;
-    private string $tagName;
+    private string $statusCode;
+    private string $statusTitle;
+    private ?string $tagId;
+    private ?string $tagName;
 
     public function __construct(
         int $id,
+        string $campaignTitle,
         string $campaignThemeName,
         string $campaignThemeRgb,
         string $title,
         string $description,
         string $location,
-        string $tagId,
-        string $tagName
+        string $statusCode,
+        string $statusTitle,
+        ?string $tagId = null,
+        ?string $tagName = null
     ) {
         $this->id                = $id;
+        $this->campaignTitle     = $campaignTitle;
         $this->campaignThemeName = $campaignThemeName;
         $this->campaignThemeRgb  = $campaignThemeRgb;
         $this->title             = $title;
         $this->description       = $description;
         $this->location          = $location;
+        $this->statusCode        = $statusCode;
+        $this->statusTitle       = $statusTitle;
         $this->tagId             = $tagId;
         $this->tagName           = $tagName;
     }
@@ -48,11 +57,20 @@ class ProjectListDTO
         return $this->id;
     }
 
+    public function getStatus(): array
+    {
+        return [
+            'code'  => $this->statusCode,
+            'title' => $this->statusTitle,
+        ];
+    }
+
     public function getCampaignTheme(): array
     {
         return [
-            'name' => $this->campaignThemeName,
-            'rgb'  => $this->campaignThemeRgb,
+            'title' => $this->campaignTitle,
+            'name'  => $this->campaignThemeName,
+            'rgb'   => $this->campaignThemeRgb,
         ];
     }
 
@@ -69,7 +87,7 @@ class ProjectListDTO
 
         foreach ($tagIds as $ti => $tagId) {
             $tags[$ti] = [
-                'id'   => $tagId,
+                'id'   => (int) $tagId,
                 'name' => $tagNames[$ti],
             ];
         }

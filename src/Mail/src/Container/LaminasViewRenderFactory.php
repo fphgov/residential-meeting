@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Mail\Container;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\View\Renderer\PhpRenderer;
 use Laminas\View\Resolver;
 use Mezzio\LaminasView\LaminasViewRenderer;

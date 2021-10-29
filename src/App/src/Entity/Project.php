@@ -8,7 +8,7 @@ use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 use function array_slice;
 use function count;
@@ -22,14 +22,15 @@ use function trim;
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  * @ORM\Table(name="projects")
  */
-class Project implements JsonSerializable, ProjectInterface
+class Project implements ProjectInterface
 {
     use EntityMetaTrait;
     use EntityTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
-     * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
+     * @Groups({"list", "detail"})
      *
      * @var CampaignTheme
      */
@@ -37,8 +38,9 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Idea", mappedBy="project")
+     * @Groups({"detail"})
      *
-     * @var Collection
+     * @var Collection|Idea[]
      */
     private $ideas;
 
@@ -48,8 +50,9 @@ class Project implements JsonSerializable, ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
      * )
+     * @Groups({"detail"})
      *
-     * @var Collection
+     * @var Collection|Tag[]
      */
     private $tags;
 
@@ -59,8 +62,9 @@ class Project implements JsonSerializable, ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id")}
      * )
+     * @Groups({"list", "detail"})
      *
-     * @var Collection
+     * @var Collection|CampaignLocation[]
      */
     private $campaignLocations;
 
@@ -70,13 +74,24 @@ class Project implements JsonSerializable, ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
      * )
+     * @Groups({"detail"})
      *
-     * @var Collection
+     * @var Collection|Media[]
      */
     private $medias;
 
     /**
+     * @ORM\ManyToOne(targetEntity="WorkflowState")
+     * @ORM\JoinColumn(name="workflow_state_id", referencedColumnName="id", nullable=false)
+     * @Groups({"list", "detail"})
+     *
+     * @var WorkflowState
+     */
+    private $workflowState;
+
+    /**
      * @ORM\Column(name="title", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -84,6 +99,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\Column(name="description", type="text")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */
@@ -91,6 +107,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\Column(name="location", type="string")
+     * @Groups({"detail"})
      *
      * @var string
      */
@@ -98,6 +115,7 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\Column(name="solution", type="text")
+     * @Groups({"detail"})
      *
      * @var string
      */
@@ -105,22 +123,17 @@ class Project implements JsonSerializable, ProjectInterface
 
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
+     * @Groups({"detail"})
      *
-     * @var int|null
+     * @var string|null
      */
     private $cost;
 
     /**
-     * @ORM\Column(name="status", type="integer")
-     *
-     * @var int
-     */
-    private $status = 0;
-
-    /**
      * @ORM\Column(name="video", type="string", nullable=true)
+     * @Groups({"detail"})
      *
-     * @var string
+     * @var string|null
      */
     private $video;
 
@@ -141,14 +154,27 @@ class Project implements JsonSerializable, ProjectInterface
         $this->campaignTheme = $campaignTheme;
     }
 
+    public function getMediaCollection(): Collection
+    {
+        return $this->medias;
+    }
+
     public function getMedias(): array
     {
         $medias = [];
         foreach ($this->medias->getValues() as $media) {
-            $medias[] = $media->getId();
+            $medias[] = [
+                'id'   => $media->getId(),
+                'type' => $media->getType()
+            ];
         }
 
         return $medias;
+    }
+
+    public function getIdeaCollection(): Collection
+    {
+        return $this->ideas;
     }
 
     public function getIdeas(): array
@@ -164,6 +190,39 @@ class Project implements JsonSerializable, ProjectInterface
     public function getTags(): array
     {
         return $this->tags->getValues();
+    }
+
+    public function getTagCollection(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (! $this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+        }
+
+        return $this;
+    }
+
+    public function setWorkflowState(WorkflowState $workflowState): void
+    {
+        $this->workflowState = $workflowState;
+    }
+
+    public function getWorkflowState(): WorkflowState
+    {
+        return $this->workflowState;
     }
 
     public function getCampaignLocations(): array
@@ -221,7 +280,8 @@ class Project implements JsonSerializable, ProjectInterface
         return $this->video;
     }
 
-    public function setCost(?int $cost = null): void
+    /** @var int|string|null $cost **/
+    public function setCost($cost = null): void
     {
         $this->cost = $cost;
     }
@@ -229,16 +289,6 @@ class Project implements JsonSerializable, ProjectInterface
     public function getCost(): ?int
     {
         return $this->cost !== null ? (int) $this->cost : null;
-    }
-
-    public function setStatus(int $status): void
-    {
-        $this->status = $status;
-    }
-
-    public function getStatus(): int
-    {
-        return $this->status;
     }
 
     public function setWin(bool $win): void

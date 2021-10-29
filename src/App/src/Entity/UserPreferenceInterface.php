@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use DateTime;
+use App\Interfaces\EntityInterface;
 
-interface UserPreferenceInterface
+interface UserPreferenceInterface extends EntityInterface
 {
     public const DISABLE_SHOW_DEFAULT = [
         'createdAt',
         'updatedAt',
     ];
+
+    public const DISABLE_DEFAULT_SET = [];
 
     public function setUser(User $user): void;
 
@@ -29,10 +31,6 @@ interface UserPreferenceInterface
 
     public function getPostalCode(): ?string;
 
-    public function setNickname(string $nickname): void;
-
-    public function getNickname(): string;
-
     public function setPrivacy(bool $privacy): void;
 
     public function getPrivacy(): bool;
@@ -45,23 +43,11 @@ interface UserPreferenceInterface
 
     public function getPrize(): bool;
 
-    public function setPrizeNotified(bool $prizeNotified): void;
-
-    public function getPrizeNotified(): bool;
-
-    public function setPrizeNotifiedSec(bool $prizeNotifiedSec): void;
-
-    public function getPrizeNotifiedSec(): bool;
-
-    public function setPrizeNotifiedThird(bool $prizeNotifiedThird): void;
-
-    public function getPrizeNotifiedThird(): bool;
-
     public function setPrizeHash(?string $prizeHash = null): void;
 
     public function getPrizeHash(): ?string;
 
-    public function setCreated(?DateTime $created = null): void;
+    public function setCampaignEmail(bool $campaignEmail): void;
 
-    public function getCreated(): ?DateTime;
+    public function getCampaignEmail(): bool;
 }

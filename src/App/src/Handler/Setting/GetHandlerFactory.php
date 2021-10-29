@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Handler\Setting;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 final class GetHandlerFactory
 {

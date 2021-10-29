@@ -27,6 +27,7 @@ services:
       - ./docker/config/webapp/php/ini/security.ini:/usr/local/etc/php/conf.d/security.ini
       - ./docker/config/webapp/php/ini/upload.ini:/usr/local/etc/php/conf.d/upload.ini
       - ./docker/config/webapp/php/ini/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+      - ./docker/config/webapp/php/ini/postal.ini:/usr/local/etc/php/conf.d/postal.ini
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 1m30s

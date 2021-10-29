@@ -8,13 +8,13 @@ use App\Traits\EntityActiveTrait;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
  * @ORM\Table(name="tags")
  */
-class Tag implements JsonSerializable, TagInterface
+class Tag implements TagInterface
 {
     use EntityActiveTrait;
     use EntityMetaTrait;
@@ -22,6 +22,7 @@ class Tag implements JsonSerializable, TagInterface
 
     /**
      * @ORM\Column(name="name", type="string")
+     * @Groups({"list", "detail"})
      *
      * @var string
      */

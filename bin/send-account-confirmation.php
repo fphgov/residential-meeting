@@ -25,8 +25,8 @@ $em             = $container->get(EntityManagerInterface::class);
 $userService    = $container->get(UserServiceInterface::class);
 $userRepository = $em->getRepository(User::class);
 
-$users = $userRepository->getPrizeNotificationListSec(20);
+$users = $userRepository->getActiveUsers();
 
 foreach ($users as $user) {
-    $userService->sendPrizeNotificationSec($user);
+    $userService->accountConfirmation($user);
 }

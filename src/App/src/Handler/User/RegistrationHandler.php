@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Handler\User;
 
-use App\InputFilter\UserRegistrationFilter;
 use App\Service\UserServiceInterface;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
+use Laminas\InputFilter\InputFilterInterface;
 use Laminas\Mail\Header\HeaderName;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,12 +20,12 @@ final class RegistrationHandler implements RequestHandlerInterface
     /** @var UserServiceInterface **/
     private $userService;
 
-    /** @var UserRegistrationFilter **/
+    /** @var InputFilterInterface **/
     private $userRegistrationFilter;
 
     public function __construct(
         UserServiceInterface $userService,
-        UserRegistrationFilter $userRegistrationFilter
+        InputFilterInterface $userRegistrationFilter
     ) {
         $this->userService            = $userService;
         $this->userRegistrationFilter = $userRegistrationFilter;
