@@ -123,7 +123,7 @@ final class ListHandler implements RequestHandlerInterface
             $qb->andWhere('u.username = :username');
             $qb->setParameter('username', $username);
         } else {
-            $qb->andWhere('w.id NOT IN (100, 120)');
+            $qb->andWhere('w.id NOT IN (100, 600)');
         }
 
         $qb->setMaxResults(1);

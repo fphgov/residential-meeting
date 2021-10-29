@@ -13,6 +13,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function in_array;
+
 final class GetHandler implements RequestHandlerInterface
 {
     /** @var EntityManagerInterface */
@@ -41,6 +43,12 @@ final class GetHandler implements RequestHandlerInterface
         $result = $entityRepository->find($request->getAttribute('id'));
 
         if ($result === null) {
+            return new JsonResponse([
+                'errors' => 'Nem található',
+            ], 404);
+        }
+
+        if (in_array($result->getWorkflowState()->getId(), [100, 600], true)) {
             return new JsonResponse([
                 'errors' => 'Nem található',
             ], 404);
