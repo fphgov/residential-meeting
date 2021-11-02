@@ -70,7 +70,7 @@ class IdeaInputFilter extends InputFilter
                         Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia az "Mit oldana meg / mire megoldás?" mezőnek mint: %max%',
                         Validator\StringLength::INVALID   => 'Mit oldana meg / mire megoldás?: Hibás mező tipus. Csak szöveg fogadható el.',
                     ],
-                    'min'      => 4,
+                    'min'      => 20,
                     'max'      => 500,
                 ]),
             ],
@@ -201,6 +201,32 @@ class IdeaInputFilter extends InputFilter
                     'stream_factory'       => new StreamFactory(),
                     'upload_file_factory'  => new UploadedFileFactory(),
                 ]),
+            ],
+        ]);
+
+        $this->add([
+            'name'        => 'location_description',
+            'allow_empty' => true,
+            'validators'  => [
+                new Validator\NotEmpty([
+                    'messages' => [
+                        Validator\NotEmpty::IS_EMPTY => 'A "Helyszín megnevezése" kitöltése kötelező',
+                        Validator\NotEmpty::INVALID  => 'Helyszín megnevezése: Hibás mező tipus',
+                    ],
+                ]),
+                new Validator\StringLength([
+                    'messages' => [
+                        Validator\StringLength::TOO_SHORT => 'Legalább %min% karaktert kell tartalmaznia az "Helyszín megnevezése" mezőnek',
+                        Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia az "Helyszín megnevezése" mezőnek mint: %max%',
+                        Validator\StringLength::INVALID   => 'Helyszín megnevezése: Hibás mező tipus. Csak szöveg fogadható el.',
+                    ],
+                    'min'      => 0,
+                    'max'      => 200,
+                ]),
+            ],
+            'filters'     => [
+                new Filter\StringTrim(),
+                new Filter\StripTags(),
             ],
         ]);
 
