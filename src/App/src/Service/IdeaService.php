@@ -118,19 +118,21 @@ final class IdeaService implements IdeaServiceInterface
             if (isset($suggestion['geometry']) && ! empty($suggestion['geometry'])) {
                 parse_str($suggestion['geometry'], $geometry);
 
-                $nfn = \str_replace('.', '', $suggestion['nfn']);
+                if (isset($suggestion['nfn'])) {
+                    $nfn = \str_replace('.', '', $suggestion['nfn']);
+
+                    $location = $this->campaignLocationRepository->findOneBy([
+                        'code'     => "AREA" . $nfn,
+                        'campaign' => $phase->getCampaign(),
+                    ]);
+
+                    if ($location instanceof CampaignLocation) {
+                        $idea->setCampaignLocation($location);
+                    }
+                }
 
                 $idea->setLatitude((float)$geometry['y']);
                 $idea->setLongitude((float)$geometry['x']);
-
-                $location = $this->campaignLocationRepository->findOneBy([
-                    'code'     => "AREA" . $nfn,
-                    'campaign' => $phase->getCampaign(),
-                ]);
-
-                if ($location instanceof CampaignLocation) {
-                    $idea->setCampaignLocation($location);
-                }
             }
         }
 
@@ -156,7 +158,7 @@ final class IdeaService implements IdeaServiceInterface
         $this->em->persist($idea);
         $this->em->flush();
 
-        $this->sendIdeaConfirmationEmail($user);
+        $this->sendIdeaConfirmationEmail($user, $idea);
 
         return $idea;
     }
@@ -187,7 +189,7 @@ final class IdeaService implements IdeaServiceInterface
         }
     }
 
-    private function sendIdeaConfirmationEmail(UserInterface $user): void
+    private function sendIdeaConfirmationEmail(UserInterface $user, IdeaInterface $idea): void
     {
         $this->mailAdapter->clear();
 
@@ -199,6 +201,11 @@ final class IdeaService implements IdeaServiceInterface
                 'name'             => $user->getFirstname(),
                 'infoMunicipality' => $this->config['app']['municipality'],
                 'infoEmail'        => $this->config['app']['email'],
+                'idea'             => [
+                    'title'       => $idea->getTitle(),
+                    'solution'    => $idea->getSolution(),
+                    'description' => $idea->getDescription(),
+                ]
             ];
 
             $this->mailAdapter->setTemplate('idea-confirmation', $tplData);

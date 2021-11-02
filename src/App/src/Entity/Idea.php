@@ -128,6 +128,14 @@ class Idea implements IdeaInterface
     private $description;
 
     /**
+     * @ORM\Column(name="location_description", type="text", nullable=false)
+     * @Groups({"list", "detail"})
+     *
+     * @var string
+     */
+    private $locationDescription = "";
+
+    /**
      * @ORM\Column(name="participate", type="boolean", nullable=false)
      *
      * @var bool
@@ -307,6 +315,16 @@ class Idea implements IdeaInterface
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function setLocationDescription(string $locationDescription): void
+    {
+        $this->locationDescription = $locationDescription;
+    }
+
+    public function getLocationDescription(): string
+    {
+        return $this->locationDescription;
     }
 
     public function setSolution(string $solution): void

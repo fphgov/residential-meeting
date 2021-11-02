@@ -59,6 +59,10 @@ interface IdeaInterface extends EntityInterface
 
     public function getDescription(): string;
 
+    public function setLocationDescription(string $locationDescription): void;
+
+    public function getLocationDescription(): string;
+
     public function getShortDescription(): string;
 
     public function setLatitude(?float $latitude = null): void;

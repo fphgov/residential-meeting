@@ -34,6 +34,14 @@ $mailLogs = $mailLogRepository->findBy([
 foreach ($mailLogs as $mailLog) {
     $user = $userRepository->find($mailLog->getUser());
 
+    if (! $user instanceof User) {
+        continue;
+    }
+
+    if ($user->getActive()) {
+        continue;
+    }
+
     $hasMailLogReminder = $mailLogRepository->findOneBy([
         'user' => $user,
         'name' => 'account-confirmation-reminder',
