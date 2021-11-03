@@ -106,15 +106,12 @@ final class IdeaService implements IdeaServiceInterface
         $idea->setCost($filteredParams['cost']);
         $idea->setParticipate($filteredParams['participate']);
         $idea->setParticipateComment($filteredParams['participate_comment'] ? $filteredParams['participate_comment'] : '');
+        $idea->setLocationDescription($filteredParams['location_description'] ? $filteredParams['location_description'] : '');
         $idea->setCampaign($phase->getCampaign());
         $idea->setCampaignTheme($theme);
         $idea->setWorkflowState(
             $this->em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_RECEIVED)
         );
-
-        if (isset($filteredParams['locationDescription']) && ! empty($filteredParams['locationDescription'])) {
-            $idea->setLocationDescription($filteredParams['locationDescription']);
-        }
 
         if (isset($filteredParams['location']) && ! empty($filteredParams['location'])) {
             parse_str($filteredParams['location'], $suggestion);
