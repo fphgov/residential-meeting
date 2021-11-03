@@ -112,6 +112,10 @@ final class IdeaService implements IdeaServiceInterface
             $this->em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_RECEIVED)
         );
 
+        if (isset($filteredParams['locationDescription']) && ! empty($filteredParams['locationDescription'])) {
+            $idea->setLocationDescription($filteredParams['locationDescription']);
+        }
+
         if (isset($filteredParams['location']) && ! empty($filteredParams['location'])) {
             parse_str($filteredParams['location'], $suggestion);
 
