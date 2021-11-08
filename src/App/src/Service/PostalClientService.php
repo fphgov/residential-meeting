@@ -48,7 +48,10 @@ class PostalClientService implements PostalClientServiceInterface
 
     public function getAddress(string $address): array
     {
-        $url = "http://0.0.0.0:9501";
+        $host = getenv('ARCGIS_GATEWAY_HOST');
+        $port = (int) getenv('ARCGIS_GATEWAY_PORT');
+
+        $url = "http://$host:$port";
 
         $fields["address"] = $address;
 
