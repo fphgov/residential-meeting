@@ -41,6 +41,12 @@ class ConfigProvider
             'invokables' => [
                 Handler\PingHandler::class                   => Handler\PingHandler::class,
                 Service\PostalClientServiceInterface::class  => Service\PostalClientService::class,
+                EventListener\ChangeIdeaStatus::class        => EventListener\ChangeIdeaStatus::class,
+            ],
+            'delegators' => [
+                EventListener\ChangeIdeaStatus::class => [
+                    EventListener\ChangeIdeaStatusDelegatorFactory::class,
+                ],
             ],
             'factories'  => [
                 Handler\Account\PasswordChangeHandler::class => Handler\Account\PasswordChangeHandlerFactory::class,

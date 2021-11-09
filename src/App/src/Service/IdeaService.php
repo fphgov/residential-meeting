@@ -220,4 +220,62 @@ final class IdeaService implements IdeaServiceInterface
             ]);
         }
     }
+
+    public function sendIdeaWorkflowPublished(IdeaInterface $idea): void
+    {
+        $this->mailAdapter->clear();
+
+        $user = $idea->getSubmitter();
+
+        try {
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Ötletedet közzétettük az otlet.budapest.hu-n');
+
+            $tplData = [
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'ideaId'           => $idea->getId(),
+                'ideaTitle'        => $idea->getTitle(),
+                'ideaLink'         => $this->config['app']['url'] . '/otlet/' . $idea->getId(),
+            ];
+
+            $this->mailAdapter->setTemplate('workflow-idea-published', $tplData);
+
+            $this->mailQueueService->add($user, $this->mailAdapter);
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('Idea published notification no added to MailQueueService', [
+                'extra' => $user->getId() . " | " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function sendIdeaWorkflowRejected(IdeaInterface $idea): void
+    {
+        $this->mailAdapter->clear();
+
+        $user = $idea->getSubmitter();
+
+        try {
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Ötletedet nem tudtuk közzétenni az otlet.budapest.hu-n');
+
+            $tplData = [
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'ideaTitle'        => $idea->getTitle(),
+            ];
+
+            $this->mailAdapter->setTemplate('workflow-idea-published', $tplData);
+
+            $this->mailQueueService->add($user, $this->mailAdapter);
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('Idea published notification no added to MailQueueService', [
+                'extra' => $user->getId() . " | " . $e->getMessage(),
+            ]);
+        }
+    }
 }

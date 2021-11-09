@@ -56,7 +56,8 @@ return [
         'event_manager' => [
             'orm_default' => [
                 'subscribers' => [
-                    $rtel
+                    $rtel,
+                    \App\EventListener\ChangeIdeaStatus::class,
                 ],
             ],
         ],
