@@ -39,7 +39,8 @@ class ConfigProvider
     {
         return [
             'invokables' => [
-                Handler\PingHandler::class => Handler\PingHandler::class,
+                Handler\PingHandler::class                   => Handler\PingHandler::class,
+                Service\PostalClientServiceInterface::class  => Service\PostalClientService::class,
             ],
             'factories'  => [
                 Handler\Account\PasswordChangeHandler::class => Handler\Account\PasswordChangeHandlerFactory::class,
@@ -78,7 +79,6 @@ class ConfigProvider
                 Service\VoteServiceInterface::class          => Service\VoteServiceFactory::class,
                 Service\IdeaServiceInterface::class          => Service\IdeaServiceFactory::class,
                 Service\PhaseServiceInterface::class         => Service\PhaseServiceFactory::class,
-                Service\PostalClientServiceInterface::class  => Service\PostalClientServiceFactory::class,
             ],
         ];
     }
