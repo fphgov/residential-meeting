@@ -44,13 +44,13 @@ final class GetHandler implements RequestHandlerInterface
 
         if ($result === null) {
             return new JsonResponse([
-                'errors' => 'Nem található',
+                'errors' => 'Nincs ilyen azonosítójú ötlet, vagy még feldolgozás alatt áll',
             ], 404);
         }
 
         if (in_array($result->getWorkflowState()->getId(), [100, 600], true)) {
             return new JsonResponse([
-                'errors' => 'Nem található',
+                'errors' => 'Nincs ilyen azonosítójú ötlet, vagy még feldolgozás alatt áll',
             ], 404);
         }
 

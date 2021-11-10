@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
-
 use function count;
 use function curl_close;
 use function curl_exec;
@@ -37,18 +35,12 @@ use const CURLOPT_URL;
 
 class PostalClientService implements PostalClientServiceInterface
 {
-    /** @var EntityManagerInterface */
-    private $em;
-
-    public function __construct(
-        EntityManagerInterface $em
-    ) {
-        $this->em = $em;
-    }
-
     public function getAddress(string $address): array
     {
-        $url = "http://0.0.0.0:9501";
+        $host = getenv('ARCGIS_GATEWAY_HOST');
+        $port = (int) getenv('ARCGIS_GATEWAY_PORT');
+
+        $url = "http://$host:$port";
 
         $fields["address"] = $address;
 
