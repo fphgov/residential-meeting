@@ -33,6 +33,8 @@ foreach ($publishIdeas as $publishIdea) {
     $publishIdea->setWorkflowState(
         $em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_PUBLISHED)
     );
+
+    $em->flush();
 }
 
 $rejectedIdeas = $ideaRepository->findBy([
@@ -43,6 +45,6 @@ foreach ($rejectedIdeas as $rejectedIdea) {
     $rejectedIdea->setWorkflowState(
         $em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_REJECTED)
     );
-}
 
-$em->flush();
+    $em->flush();
+}
