@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\EventListener;
 
 use App\Entity\Idea;
+use App\Entity\WorkflowStateInterface;
 use App\Service\IdeaServiceInterface;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 
 class ChangeIdeaStatus implements EventSubscriber
@@ -33,9 +34,15 @@ class ChangeIdeaStatus implements EventSubscriber
         $idea = $args->getObject();
 
         if ($idea instanceof Idea) {
-            // $entityManager = $args->getObjectManager();
+            $workflowState = $idea->getWorkflowState();
 
-            $ideaService->sendIdeaWorkflowPublished($idea);
+            if ($workflowState->getId() === WorkflowStateInterface::STATUS_PUBLISHED) {
+                $ideaService->sendIdeaWorkflowPublished($idea);
+            }
+
+            if ($workflowState->getId() === WorkflowStateInterface::STATUS_REJECTED) {
+                $ideaService->sendIdeaWorkflowRejected($idea);
+            }
         }
     }
 }

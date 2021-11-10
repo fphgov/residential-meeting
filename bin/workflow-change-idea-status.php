@@ -25,9 +25,24 @@ $container = require 'config/container.php';
 $em             = $container->get(EntityManagerInterface::class);
 $ideaRepository = $em->getRepository(Idea::class);
 
-$idea = $ideaRepository->find(750);
-$idea->setWorkflowState(
-    $em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_PUBLISHED)
-);
+$publishIdeas = $ideaRepository->findBy([
+    'id' => [],
+]);
+
+foreach ($publishIdeas as $publishIdea) {
+    $publishIdea->setWorkflowState(
+        $em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_PUBLISHED)
+    );
+}
+
+$rejectedIdeas = $ideaRepository->findBy([
+    'id' => [],
+]);
+
+foreach ($rejectedIdeas as $rejectedIdea) {
+    $rejectedIdea->setWorkflowState(
+        $em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_REJECTED)
+    );
+}
 
 $em->flush();

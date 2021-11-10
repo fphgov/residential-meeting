@@ -236,7 +236,7 @@ final class IdeaService implements IdeaServiceInterface
                 'infoEmail'        => $this->config['app']['email'],
                 'ideaId'           => $idea->getId(),
                 'ideaTitle'        => $idea->getTitle(),
-                'ideaLink'         => $this->config['app']['url'] . '/otlet/' . $idea->getId(),
+                'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
             ];
 
             $this->mailAdapter->setTemplate('workflow-idea-published', $tplData);
@@ -267,13 +267,13 @@ final class IdeaService implements IdeaServiceInterface
                 'ideaTitle'        => $idea->getTitle(),
             ];
 
-            $this->mailAdapter->setTemplate('workflow-idea-published', $tplData);
+            $this->mailAdapter->setTemplate('workflow-idea-rejected', $tplData);
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
-            $this->audit->err('Idea published notification no added to MailQueueService', [
+            $this->audit->err('Idea rejected notification no added to MailQueueService', [
                 'extra' => $user->getId() . " | " . $e->getMessage(),
             ]);
         }
