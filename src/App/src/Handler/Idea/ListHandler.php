@@ -99,8 +99,13 @@ final class ListHandler implements RequestHandlerInterface
             $qb->setParameter('themes', strtoupper($theme));
         }
 
-        if ($location && $location !== 0) {
+        if ($location && intval($location) && $location !== 0) {
             $qb->andWhere('cl.id = :location');
+            $qb->setParameter('location', $location);
+        }
+
+        if ($location && \is_string($location) && $location !== 0) {
+            $qb->andWhere('cl.code = :location');
             $qb->setParameter('location', $location);
         }
 
