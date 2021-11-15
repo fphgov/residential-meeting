@@ -37,8 +37,6 @@ $server->on("request", function (Swoole\Http\Request $request, Swoole\Http\Respo
 
     $container = require 'config/container.php';
 
-    $em            = $container->get(EntityManagerInterface::class);
-    $userService   = $container->get(UserServiceInterface::class);
     $acrgisService = $container->get(ArcgisServiceInterface::class);
 
     $body = $request->getContent();
