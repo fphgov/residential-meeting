@@ -46,13 +46,13 @@ final class GetHandler implements RequestHandlerInterface
         $count  = $voteRepository->numberOfVotes((int) $request->getAttribute('id'));
         $count += $offlineVoteRepository->numberOfVotes((int) $request->getAttribute('id'));
 
-        $project = $result->normalizer(null, ['groups' => 'detail']);
-
         if ($result === null) {
             return new JsonResponse([
                 'errors' => 'Nem található',
             ], 404);
         }
+
+        $project = $result->normalizer(null, ['groups' => 'detail']);
 
         $resource = $this->resourceGenerator->fromArray($project, null);
         $resource = $resource->withElement('voted', $count);
