@@ -46,7 +46,7 @@ final class FilterHandler implements RequestHandlerInterface
         $campaign    = $queryParams['campaign'] ?? '';
         $status      = $queryParams['status'] ?? '';
 
-        $entityRepository = $this->em->getRepository(Project::class);
+        $entityRepository           = $this->em->getRepository(Project::class);
         $campaignRepository         = $this->em->getRepository(Campaign::class);
         $campaignThemeRepository    = $this->em->getRepository(CampaignTheme::class);
         $campaignLocationRepository = $this->em->getRepository(CampaignLocation::class);
@@ -58,7 +58,7 @@ final class FilterHandler implements RequestHandlerInterface
             ->orderBy('cl.id', 'ASC')
             ->getQuery()->getResult();
 
-        $campaigns      = $campaignRepository->findAll();
+        $campaigns      = $campaignRepository->findBy([], ['id' => 'DESC']);
         $campaignThemes = $campaignThemeRepository->findAll();
         $workflowStates = $workflowStateRepository->findAll();
 

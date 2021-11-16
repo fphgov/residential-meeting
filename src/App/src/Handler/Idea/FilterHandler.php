@@ -138,7 +138,7 @@ final class FilterHandler implements RequestHandlerInterface
             ->orderBy('cl.id', 'ASC')
             ->getQuery()->getResult();
 
-        $campaigns      = $campaignRepository->findAll();
+        $campaigns      = $campaignRepository->findBy([], ['id' => 'DESC']);
         $campaignThemes = $campaignThemeRepository->findAll();
         $workflowStates = $workflowStateRepository->findAll();
 
