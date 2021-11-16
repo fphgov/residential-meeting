@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Handler\Idea;
 
+use App\Entity\Campaign;
+use App\Entity\CampaignTheme;
+use App\Entity\CampaignLocation;
+use App\Entity\WorkflowState;
 use App\Entity\Idea;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -11,67 +15,177 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function array_values;
+use function array_map;
+use function array_unique;
+use function in_array;
+use function strtolower;
+
 final class FilterHandler implements RequestHandlerInterface
 {
+    public const ENABLED_STATUSES = [
+        'published',
+        'pre_council',
+        'voting_list',
+        'under_construction',
+        'ready',
+        'not_voted',
+        'council_rejected',
+        'status_rejected'
+    ];
+
     /** @var EntityManagerInterface */
-    protected $entityManager;
+    protected $em;
 
     public function __construct(
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $em
     ) {
-        $this->entityManager = $entityManager;
+        $this->em = $em;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        // $entityRepository = $this->entityManager->getRepository(Idea::class);
+        $queryParams = $request->getQueryParams();
+        $theme       = $queryParams['theme'] ?? '';
+        $location    = $queryParams['location'] ?? '';
+        $campaign    = $queryParams['campaign'] ?? '';
+        $status      = $queryParams['status'] ?? '';
 
-        return new JsonResponse([
-            'theme'    => [
-                ['code' => 'GREEN', 'name' => 'Zöld Budapest'],
-                ['code' => 'CARE', 'name' => 'Esélyteremtő Budapest'],
-                ['code' => 'WHOLE', 'name' => 'Nyitott Budapest'],
-            ],
-            'location' => [
-                ['code' => 'AREA0', 'name' => 'Nem köthető konkrét helyszínhez'],
-                ['code' => 'AREA1', 'name' => 'I. kerület'],
-                ['code' => 'AREA2', 'name' => 'II. kerület'],
-                ['code' => 'AREA3', 'name' => 'III. kerület'],
-                ['code' => 'AREA4', 'name' => 'IV. kerület'],
-                ['code' => 'AREA5', 'name' => 'V. kerület'],
-                ['code' => 'AREA6', 'name' => 'VI. kerület'],
-                ['code' => 'AREA7', 'name' => 'VII. kerület'],
-                ['code' => 'AREA8', 'name' => 'VIII. kerület'],
-                ['code' => 'AREA9', 'name' => 'IX. kerület'],
-                ['code' => 'AREA10', 'name' => 'X. kerület'],
-                ['code' => 'AREA11', 'name' => 'XI. kerület'],
-                ['code' => 'AREA12', 'name' => 'XII. kerület'],
-                ['code' => 'AREA13', 'name' => 'XIII. kerület'],
-                ['code' => 'AREA14', 'name' => 'XIV. kerület'],
-                ['code' => 'AREA15', 'name' => 'XV. kerület'],
-                ['code' => 'AREA16', 'name' => 'XVI. kerület'],
-                ['code' => 'AREA17', 'name' => 'XVII. kerület'],
-                ['code' => 'AREA18', 'name' => 'XVIII. kerület'],
-                ['code' => 'AREA19', 'name' => 'XIX. kerület'],
-                ['code' => 'AREA20', 'name' => 'XX. kerület'],
-                ['code' => 'AREA21', 'name' => 'XXI. kerület'],
-                ['code' => 'AREA22', 'name' => 'XXII. kerület'],
-                ['code' => 'AREA23', 'name' => 'Margitsziget'],
-            ],
-            'campaign' => [
-                ['id' => 2, 'name' => '2021/2022'],
-                ['id' => 1, 'name' => '2020/2021'],
-            ],
-            'status'   => [
-                ['code' => 'published', 'name' => 'Beérkezett, feldolgozásra vár'],
-                ['code' => 'pre_council', 'name' => 'Szakmailag jóváhagyva, tanács elé kerül'],
-                ['code' => 'voting_list', 'name' => 'Szavazólapra került'],
-                ['code' => 'under_construction', 'name' => 'Szavazáson nyert, megvalósítás alatt áll'],
-                ['code' => 'ready', 'name' => 'Megvalósult'],
-                ['code' => 'not_voted', 'name' => 'Szavazólapra került, de szavazáson nem nyert'],
-                ['code' => 'council_rejected', 'name' => 'Szakmai jóváhagyást nyert, tanács nem fogadta be'],
-                ['code' => 'status_rejected', 'name' => 'Nem kapott szakmai jóváhagyást'],
-            ],
-        ]);
+        $ideaRepository             = $this->em->getRepository(Idea::class);
+        $campaignRepository         = $this->em->getRepository(Campaign::class);
+        $campaignThemeRepository    = $this->em->getRepository(CampaignTheme::class);
+        $campaignLocationRepository = $this->em->getRepository(CampaignLocation::class);
+        $workflowStateRepository    = $this->em->getRepository(WorkflowState::class);
+
+        // $ideaParams = [];
+
+        // if ($theme !== '') {
+        //     $campaignThemeCode = $campaignThemeRepository->findBy([
+        //         'code' => $theme
+        //     ]);
+
+        //     $ideaParams['campaignTheme'] = $campaignThemeCode;
+        // }
+
+        // if ($location !== '') {
+        //     $campaignLocationCode = $campaignLocationRepository->findBy([
+        //         'code' => $location
+        //     ]);
+
+        //     $ideaParams['campaignLocation'] = $campaignLocationCode;
+        // }
+
+        // if ($campaign !== '') {
+        //     $campaignId = $campaignLocationRepository->findBy([
+        //         'id' => $campaign
+        //     ]);
+
+        //     $ideaParams['campaign'] = $campaignId;
+        // }
+
+        // if ($status !== '') {
+        //     $statusCode = $campaignLocationRepository->findBy([
+        //         'code' => $status
+        //     ]);
+
+        //     $ideaParams['workflowState'] = $statusCode;
+        // }
+
+        // $ideas = $ideaRepository->findBy($ideaParams);
+
+        // // Campaign
+        // $campaignIds = array_filter(array_unique(array_map(function($idea) {
+        //     return $idea->getCampaign()->getId();
+        // }, $ideas)));
+
+        // if (isset($ideaParams['campaign'])) {
+        //     $campaignIds = array_merge($campaignIds, (array)$ideaParams['campaign']);
+        // }
+
+        // $campaigns = $campaignRepository->findBy([
+        //     'id' => $campaignIds,
+        // ]);
+
+        // // Theme
+        // $campaignThemeCodes = array_filter(array_unique(array_map(function($idea) {
+        //     return $idea->getCampaignTheme()->getCode();
+        // }, $ideas)));
+
+        // if (isset($ideaParams['campaignTheme'])) {
+        //     $campaignThemeCodes = array_merge($campaignThemeCodes, (array)$ideaParams['campaignTheme']);
+        // }
+
+        // $campaignThemes = $campaignThemeRepository->findBy([
+        //     'code' => $campaignThemeCodes,
+        // ]);
+
+        // Location
+        // $campaignLocationCodes = array_filter(array_unique(array_map(function($idea) {
+        //     if ($idea->getCampaignLocation() !== null) {
+        //         return $idea->getCampaignLocation()->getCode();
+        //     }
+
+        //     return null;
+        // }, $ideas)));
+
+        // if (isset($ideaParams['campaignLocation'])) {
+        //     $campaignLocationCodes = array_merge($campaignLocationCodes, (array)$ideaParams['campaignLocation']);
+        // }
+
+        $campaignLocations = $campaignLocationRepository
+            ->createQueryBuilder('cl')
+            ->groupBy('cl.code')
+            ->orderBy('cl.id', 'ASC')
+            ->getQuery()->getResult();
+
+        $campaigns      = $campaignRepository->findAll();
+        $campaignThemes = $campaignThemeRepository->findAll();
+        $workflowStates = $workflowStateRepository->findAll();
+
+        $filterParams = [
+            'theme'    => [],
+            'location' => [],
+            'campaign' => [],
+            'status'   => [],
+        ];
+
+        $tmpFilterParam = [];
+        foreach ($campaignThemes as $campaignTheme) {
+            $tmpFilterParam[$campaignTheme->getCode()] = [
+                'code' => $campaignTheme->getCode(),
+                'name' => $campaignTheme->getName(),
+            ];
+        }
+
+        $filterParams['theme'] = array_values($tmpFilterParam);
+
+        foreach ($campaignLocations as $campaignLocation) {
+            if ($campaignLocation !== null) {
+                $filterParams['location'][] = [
+                    'code' => $campaignLocation->getCode(),
+                    'name' => $campaignLocation->getName(),
+                ];
+            }
+        }
+
+        foreach ($campaigns as $campaign) {
+            $filterParams['campaign'][] = [
+                'id'   => $campaign->getId(),
+                'name' => $campaign->getShortTitle(),
+            ];
+        }
+
+        foreach ($workflowStates as $workflowState) {
+            $code = strtolower($workflowState->getCode());
+
+            if (in_array($code, self::ENABLED_STATUSES, true)) {
+                $filterParams['status'][] = [
+                    'code' => $code,
+                    'name' => $workflowState->getTitle(),
+                ];
+            }
+        }
+
+        return new JsonResponse($filterParams);
     }
 }
