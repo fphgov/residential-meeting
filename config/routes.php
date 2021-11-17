@@ -78,17 +78,25 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Project\ListHandler::class
     ], 'app.api.project.list');
 
-    $app->get('/app/api/projects/{id}', [
+    $app->get('/app/api/projects/{id:\d+}', [
         App\Handler\Project\GetHandler::class
     ], 'app.api.project.show');
+
+    $app->get('/app/api/projects/filter', [
+        App\Handler\Project\FilterHandler::class
+    ], 'app.api.project.filter');
 
     $app->get('/app/api/ideas', [
         App\Handler\Idea\ListHandler::class
     ], 'app.api.idea.list');
 
-    $app->get('/app/api/ideas/{id}', [
+    $app->get('/app/api/ideas/{id:\d+}', [
         App\Handler\Idea\GetHandler::class
     ], 'app.api.idea.show');
+
+    $app->get('/app/api/idea/filter', [
+        App\Handler\Idea\FilterHandler::class
+    ], 'app.api.idea.filter');
 
     $app->get('/app/api/statistics', [
         App\Handler\Project\StatisticsHandler::class
