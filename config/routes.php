@@ -90,7 +90,7 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Idea\ListHandler::class
     ], 'app.api.idea.list');
 
-    $app->get('/app/api/ideas/{id\d+}', [
+    $app->get('/app/api/ideas/{id:\d+}', [
         App\Handler\Idea\GetHandler::class
     ], 'app.api.idea.show');
 
