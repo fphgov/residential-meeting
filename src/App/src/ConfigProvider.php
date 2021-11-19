@@ -68,6 +68,7 @@ class ConfigProvider
                 Handler\Idea\GetHandler::class               => Handler\Idea\GetHandlerFactory::class,
                 Handler\Idea\ListHandler::class              => Handler\Idea\ListHandlerFactory::class,
                 Handler\Idea\FilterHandler::class            => Handler\Idea\FilterHandlerFactory::class,
+                Handler\Idea\AdminListHandler::class         => Handler\Idea\AdminListHandlerFactory::class,
                 Handler\Project\ListAdminHandler::class      => Handler\Project\ListAdminHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,

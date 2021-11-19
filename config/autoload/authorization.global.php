@@ -26,6 +26,8 @@ return [
             'admin.api.account.password.change',
             'admin.api.vote.list',
             'admin.api.vote.add',
+            'admin.api.idea.get',
+            'admin.api.idea.list',
         ],
         'allow'     => [
             'guest'     => [
@@ -44,6 +46,8 @@ return [
                 'admin.api.account.password.change',
                 'admin.api.vote.list',
                 'admin.api.vote.add',
+                'admin.api.idea.get',
+                'admin.api.idea.list',
             ],
             'admin' => [
                 'admin.api.cache.clear',

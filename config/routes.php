@@ -199,4 +199,17 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         \Mezzio\Authorization\AuthorizationMiddleware::class,
         App\Handler\Vote\AddHandler::class
     ], 'admin.api.vote.add');
+
+    $app->post('/admin/api/ideas', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        App\Handler\Idea\AdminListHandler::class
+    ], 'admin.api.idea.list');
+
+    $app->get('/admin/api/ideas/{id:\d+}', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Idea\GetHandler::class
+    ], 'admin.api.idea.get');
 };
