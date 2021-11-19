@@ -28,6 +28,7 @@ return [
             'admin.api.vote.add',
             'admin.api.idea.get',
             'admin.api.idea.list',
+            'admin.api.idea.export',
         ],
         'allow'     => [
             'guest'     => [
@@ -48,6 +49,7 @@ return [
                 'admin.api.vote.add',
                 'admin.api.idea.get',
                 'admin.api.idea.list',
+                'admin.api.idea.export',
             ],
             'admin' => [
                 'admin.api.cache.clear',

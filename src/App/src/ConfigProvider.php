@@ -69,6 +69,7 @@ class ConfigProvider
                 Handler\Idea\ListHandler::class              => Handler\Idea\ListHandlerFactory::class,
                 Handler\Idea\FilterHandler::class            => Handler\Idea\FilterHandlerFactory::class,
                 Handler\Idea\AdminListHandler::class         => Handler\Idea\AdminListHandlerFactory::class,
+                Handler\Idea\ExportHandler::class            => Handler\Idea\ExportHandlerFactory::class,
                 Handler\Project\ListAdminHandler::class      => Handler\Project\ListAdminHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
@@ -88,6 +89,7 @@ class ConfigProvider
                 Service\VoteServiceInterface::class          => Service\VoteServiceFactory::class,
                 Service\IdeaServiceInterface::class          => Service\IdeaServiceFactory::class,
                 Service\PhaseServiceInterface::class         => Service\PhaseServiceFactory::class,
+                Model\IdeaExportModel::class                 => Model\IdeaExportModelFactory::class,
             ],
         ];
     }

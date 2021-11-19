@@ -203,6 +203,7 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     $app->post('/admin/api/ideas', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
         App\Handler\Idea\AdminListHandler::class
     ], 'admin.api.idea.list');
 
@@ -212,4 +213,11 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         \Mezzio\Authorization\AuthorizationMiddleware::class,
         App\Handler\Idea\GetHandler::class
     ], 'admin.api.idea.get');
+
+    $app->get('/admin/api/ideas/export', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Idea\ExportHandler::class
+    ], 'admin.api.idea.export');
 };
