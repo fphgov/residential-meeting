@@ -190,7 +190,7 @@ final class IdeaService implements IdeaServiceInterface
         }
 
         if (isset($filteredParams['cost'])) {
-            $idea->setCost($filteredParams['cost']);
+            $idea->setCost(is_numeric($filteredParams['cost']) ? $filteredParams['cost'] : null);
         }
 
         if (isset($filteredParams['location_description'])) {
