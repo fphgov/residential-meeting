@@ -40,7 +40,7 @@ class Link implements LinkInterface
 
     /**
      * @ORM\Column(name="href", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */

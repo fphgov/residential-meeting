@@ -32,7 +32,7 @@ class Idea implements IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="ideas")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var Campaign
      */
@@ -41,7 +41,7 @@ class Idea implements IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
      * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var CampaignTheme
      */
@@ -50,7 +50,7 @@ class Idea implements IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="CampaignLocation")
      * @ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id", nullable=true)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var CampaignLocation|null
      */
@@ -59,7 +59,7 @@ class Idea implements IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="ideas")
      * @ORM\JoinColumn(name="submitter_id", referencedColumnName="id", nullable=false)
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var User
      */
@@ -68,7 +68,7 @@ class Idea implements IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="Project", inversedBy="ideas")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=true)
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var Project|null
      */
@@ -77,7 +77,7 @@ class Idea implements IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="WorkflowState")
      * @ORM\JoinColumn(name="workflow_state_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var WorkflowState
      */
@@ -89,7 +89,7 @@ class Idea implements IdeaInterface
      *      joinColumns={@ORM\JoinColumn(name="idea_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
      * )
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var Collection|Media[]
      */
@@ -97,7 +97,7 @@ class Idea implements IdeaInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Link", mappedBy="idea")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var Collection|Link[]
      */
@@ -105,7 +105,7 @@ class Idea implements IdeaInterface
 
     /**
      * @ORM\Column(name="title", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -113,7 +113,7 @@ class Idea implements IdeaInterface
 
     /**
      * @ORM\Column(name="solution", type="text")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string
      */
@@ -121,7 +121,7 @@ class Idea implements IdeaInterface
 
     /**
      * @ORM\Column(name="description", type="text")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -129,7 +129,7 @@ class Idea implements IdeaInterface
 
     /**
      * @ORM\Column(name="location_description", type="text", nullable=false)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -137,6 +137,7 @@ class Idea implements IdeaInterface
 
     /**
      * @ORM\Column(name="participate", type="boolean", nullable=false)
+     * @Groups({"full_detail"})
      *
      * @var bool
      */
@@ -144,6 +145,7 @@ class Idea implements IdeaInterface
 
     /**
      * @ORM\Column(name="participate_comment", type="text", nullable=false)
+     * @Groups({"full_detail"})
      *
      * @var string
      */
@@ -151,7 +153,7 @@ class Idea implements IdeaInterface
 
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string|null
      */
@@ -159,11 +161,13 @@ class Idea implements IdeaInterface
 
     /**
      * @ORM\Column(name="latitude", type="float", nullable=true)
+     * @Groups({"full_detail"})
      */
     private $latitude;
 
     /**
      * @ORM\Column(name="longitude", type="float", nullable=true)
+     * @Groups({"full_detail"})
      */
     private $longitude;
 

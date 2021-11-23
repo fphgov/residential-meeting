@@ -32,7 +32,7 @@ class CampaignLocation implements CampaignLocationInterface
 
     /**
      * @ORM\Column(name="code", type="string")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string
      */
@@ -40,7 +40,7 @@ class CampaignLocation implements CampaignLocationInterface
 
     /**
      * @ORM\Column(name="name", type="string")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string
      */
@@ -48,7 +48,7 @@ class CampaignLocation implements CampaignLocationInterface
 
     /**
      * @ORM\Column(name="description", type="text")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string
      */

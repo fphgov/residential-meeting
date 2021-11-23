@@ -211,8 +211,15 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
         \Mezzio\Authorization\AuthorizationMiddleware::class,
-        App\Handler\Idea\GetHandler::class
+        App\Handler\Idea\AdminGetHandler::class
     ], 'admin.api.idea.get');
+
+    $app->post('/admin/api/ideas/{id:\d+}', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Idea\AdminModifyHandler::class
+    ], 'admin.api.idea.modify');
 
     $app->get('/admin/api/ideas/export', [
         Jwt\Handler\JwtAuthMiddleware::class,
@@ -220,4 +227,11 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         \Mezzio\Authorization\AuthorizationMiddleware::class,
         App\Handler\Idea\ExportHandler::class
     ], 'admin.api.idea.export');
+
+    $app->get('/admin/api/workflow/states', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Workflow\GetStatesHandler::class
+    ], 'admin.api.workflow.states.list');
 };
