@@ -7,6 +7,7 @@ namespace App\Handler\Idea;
 use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
 use App\Entity\WorkflowState;
+use App\Entity\WorkflowStateInterface;
 use App\Entity\User;
 use App\Entity\Idea;
 use App\Entity\IdeaCollection;
@@ -124,11 +125,17 @@ final class ListHandler implements RequestHandlerInterface
             $qb->setParameter('status', strtoupper($status));
         }
 
+        $disableStatuses = implode(', ', [
+            WorkflowStateInterface::STATUS_RECEIVED,
+            WorkflowStateInterface::STATUS_USER_DELETED,
+            WorkflowStateInterface::STATUS_TRASH
+        ]);
+
         if ($username && $username !== '') {
             $qb->andWhere('u.username = :username');
             $qb->setParameter('username', $username);
         } else {
-            $qb->andWhere('w.id NOT IN (100, 600)');
+            $qb->andWhere('w.id NOT IN ('. $disableStatuses .')');
         }
 
         $qb->setMaxResults(1);
