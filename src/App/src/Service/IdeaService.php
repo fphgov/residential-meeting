@@ -299,7 +299,7 @@ final class IdeaService implements IdeaServiceInterface
         }
     }
 
-    public function sendIdeaWorkflowRejected(IdeaInterface $idea): void
+    public function sendIdeaWorkflowTrashed(IdeaInterface $idea): void
     {
         $this->mailAdapter->clear();
 

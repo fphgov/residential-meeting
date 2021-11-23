@@ -45,8 +45,8 @@ class ChangeIdeaStatus implements EventSubscriber
                     $ideaService->sendIdeaWorkflowPublished($idea);
                 }
 
-                if ($workflowState->getId() === WorkflowStateInterface::STATUS_REJECTED) {
-                    $ideaService->sendIdeaWorkflowRejected($idea);
+                if ($workflowState->getId() === WorkflowStateInterface::STATUS_TRASH) {
+                    $ideaService->sendIdeaWorkflowTrashed($idea);
                 }
             }
         }
