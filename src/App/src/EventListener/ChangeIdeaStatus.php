@@ -31,17 +31,23 @@ class ChangeIdeaStatus implements EventSubscriber
 
     public function index(LifecycleEventArgs $args, $ideaService = null)
     {
+        $em   = $args->getEntityManager();
+        $uow  = $em->getUnitOfWork();
         $idea = $args->getObject();
 
-        if ($idea instanceof Idea) {
-            $workflowState = $idea->getWorkflowState();
+        $changedValues = $uow->getEntityChangeSet($idea);
 
-            if ($workflowState->getId() === WorkflowStateInterface::STATUS_PUBLISHED) {
-                $ideaService->sendIdeaWorkflowPublished($idea);
-            }
+        if ($idea instanceof Idea && isset($changedValues['workflowState'])) {
+            if ($changedValues['workflowState'][0]->getId() !== $changedValues['workflowState'][1]->getId()) {
+                $workflowState = $idea->getWorkflowState();
 
-            if ($workflowState->getId() === WorkflowStateInterface::STATUS_REJECTED) {
-                $ideaService->sendIdeaWorkflowRejected($idea);
+                if ($workflowState->getId() === WorkflowStateInterface::STATUS_PUBLISHED) {
+                    $ideaService->sendIdeaWorkflowPublished($idea);
+                }
+
+                if ($workflowState->getId() === WorkflowStateInterface::STATUS_TRASH) {
+                    $ideaService->sendIdeaWorkflowTrashed($idea);
+                }
             }
         }
     }

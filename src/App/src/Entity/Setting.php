@@ -20,7 +20,7 @@ class Setting implements SettingInterface
 
     /**
      * @ORM\Column(name="close", type="boolean")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var bool
      */

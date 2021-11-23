@@ -43,7 +43,7 @@ $rejectedIdeas = $ideaRepository->findBy([
 
 foreach ($rejectedIdeas as $rejectedIdea) {
     $rejectedIdea->setWorkflowState(
-        $em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_REJECTED)
+        $em->getReference(WorkflowState::class, WorkflowStateInterface::STATUS_TRASH)
     );
 
     $em->flush();

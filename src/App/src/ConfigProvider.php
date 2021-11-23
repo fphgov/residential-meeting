@@ -68,6 +68,10 @@ class ConfigProvider
                 Handler\Idea\GetHandler::class               => Handler\Idea\GetHandlerFactory::class,
                 Handler\Idea\ListHandler::class              => Handler\Idea\ListHandlerFactory::class,
                 Handler\Idea\FilterHandler::class            => Handler\Idea\FilterHandlerFactory::class,
+                Handler\Idea\AdminListHandler::class         => Handler\Idea\AdminListHandlerFactory::class,
+                Handler\Idea\AdminGetHandler::class          => Handler\Idea\AdminGetHandlerFactory::class,
+                Handler\Idea\AdminModifyHandler::class       => Handler\Idea\AdminModifyHandlerFactory::class,
+                Handler\Idea\ExportHandler::class            => Handler\Idea\ExportHandlerFactory::class,
                 Handler\Project\ListAdminHandler::class      => Handler\Project\ListAdminHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
@@ -79,6 +83,7 @@ class ConfigProvider
                 Handler\Media\GetHandler::class              => Handler\Media\GetHandlerFactory::class,
                 Handler\Media\DownloadHandler::class         => Handler\Media\DownloadHandlerFactory::class,
                 Handler\Tools\GetAddressHandler::class       => Handler\Tools\GetAddressHandlerFactory::class,
+                Handler\Workflow\GetStatesHandler::class     => Handler\Workflow\GetStatesHandlerFactory::class,
                 Service\MailQueueServiceInterface::class     => Service\MailQueueServiceFactory::class,
                 Service\MediaServiceInterface::class         => Service\MediaServiceFactory::class,
                 Service\UserServiceInterface::class          => Service\UserServiceFactory::class,
@@ -87,6 +92,7 @@ class ConfigProvider
                 Service\VoteServiceInterface::class          => Service\VoteServiceFactory::class,
                 Service\IdeaServiceInterface::class          => Service\IdeaServiceFactory::class,
                 Service\PhaseServiceInterface::class         => Service\PhaseServiceFactory::class,
+                Model\IdeaExportModel::class                 => Model\IdeaExportModelFactory::class,
             ],
         ];
     }

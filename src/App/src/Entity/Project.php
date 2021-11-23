@@ -30,7 +30,7 @@ class Project implements ProjectInterface
     /**
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
      * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var CampaignTheme
      */
@@ -38,7 +38,7 @@ class Project implements ProjectInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Idea", mappedBy="project")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var Collection|Idea[]
      */
@@ -50,7 +50,7 @@ class Project implements ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
      * )
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var Collection|Tag[]
      */
@@ -62,7 +62,7 @@ class Project implements ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id")}
      * )
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var Collection|CampaignLocation[]
      */
@@ -74,7 +74,7 @@ class Project implements ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
      * )
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var Collection|Media[]
      */
@@ -83,7 +83,7 @@ class Project implements ProjectInterface
     /**
      * @ORM\ManyToOne(targetEntity="WorkflowState")
      * @ORM\JoinColumn(name="workflow_state_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var WorkflowState
      */
@@ -91,7 +91,7 @@ class Project implements ProjectInterface
 
     /**
      * @ORM\Column(name="title", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -99,7 +99,7 @@ class Project implements ProjectInterface
 
     /**
      * @ORM\Column(name="description", type="text")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -107,7 +107,7 @@ class Project implements ProjectInterface
 
     /**
      * @ORM\Column(name="location", type="string")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string
      */
@@ -115,7 +115,7 @@ class Project implements ProjectInterface
 
     /**
      * @ORM\Column(name="solution", type="text")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string
      */
@@ -123,7 +123,7 @@ class Project implements ProjectInterface
 
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string|null
      */
@@ -131,7 +131,7 @@ class Project implements ProjectInterface
 
     /**
      * @ORM\Column(name="video", type="string", nullable=true)
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string|null
      */

@@ -14,7 +14,7 @@ trait EntityMetaTrait
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var int
      */
@@ -22,7 +22,7 @@ trait EntityMetaTrait
 
     /**
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var DateTime
      */

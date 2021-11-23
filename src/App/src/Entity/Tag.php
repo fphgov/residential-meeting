@@ -22,7 +22,7 @@ class Tag implements TagInterface
 
     /**
      * @ORM\Column(name="name", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */

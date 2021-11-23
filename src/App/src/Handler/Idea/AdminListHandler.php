@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Handler\Idea;
 
+use App\Entity\IdeaCollection;
 use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
 use App\Entity\WorkflowState;
-use App\Entity\WorkflowStateInterface;
 use App\Entity\User;
-use App\Entity\Idea;
-use App\Entity\IdeaCollection;
-use Doctrine\ORM\EntityManager;
+use App\Service\IdeaServiceInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Laminas\Diactoros\Response\JsonResponse;
 use Mezzio\Hal\HalResponseFactory;
@@ -20,17 +18,14 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-use function in_array;
-use function intval;
 use function is_string;
 use function strtoupper;
-use function str_replace;
 use function explode;
 
-final class ListHandler implements RequestHandlerInterface
+final class AdminListHandler implements RequestHandlerInterface
 {
-    /** @var EntityManager */
-    protected $em;
+    /** @var IdeaServiceInterface */
+    private $ideaService;
 
     /** @var int */
     protected $pageCount;
@@ -42,12 +37,12 @@ final class ListHandler implements RequestHandlerInterface
     protected $resourceGenerator;
 
     public function __construct(
-        EntityManager $em,
+        IdeaServiceInterface $ideaService,
         int $pageCount,
         HalResponseFactory $responseFactory,
         ResourceGenerator $resourceGenerator
     ) {
-        $this->em                = $em;
+        $this->ideaService       = $ideaService;
         $this->pageCount         = $pageCount;
         $this->responseFactory   = $responseFactory;
         $this->resourceGenerator = $resourceGenerator;
@@ -55,21 +50,24 @@ final class ListHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $repository = $this->em->getRepository(Idea::class);
-
+        $body        = $request->getParsedBody();
         $queryParams = $request->getQueryParams();
-        $username    = $queryParams['username'] ?? '';
-        $ids         = $queryParams['ids'] ?? '';
-        $query       = $queryParams['query'] ?? '';
-        $theme       = $queryParams['theme'] ?? '';
-        $location    = $queryParams['location'] ?? '';
-        $campaign    = $queryParams['campaign'] ?? '';
-        $page        = $queryParams['page'] ?? 1;
-        $sort        = $queryParams['sort'] ?? 'ASC';
-        $rand        = $queryParams['rand'] ?? '';
-        $status      = $queryParams['status'] ?? '';
 
-        $qb = $repository->createQueryBuilder('p')
+        $page     = $queryParams['page'] ?? 1;
+
+        $sort     = $body['sort'] ?? 'DESC';
+        $theme    = $body['theme'] ?? '';
+        $location = $body['location'] ?? '';
+        $campaign = $body['campaign'] ?? '';
+        $status   = $body['status'] ?? '';
+
+        $searchWord = $body['search'];
+
+        if (! isset($body['search'])) {
+            return new JsonResponse([], 204);
+        }
+
+        $qb = $this->ideaService->getRepository()->createQueryBuilder('p')
             ->select('NEW IdeaListDTO(p.id, c.shortTitle, ct.name, ct.rgb, p.title, p.description, w.code, w.title, cl.name) as idea')
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
             ->join(Campaign::class, 'c', Join::WITH, 'c.id = p.campaign')
@@ -78,21 +76,21 @@ final class ListHandler implements RequestHandlerInterface
             ->leftJoin('p.campaignLocation', 'cl')
             ->groupBy('p.id');
 
-        if ($rand === '' && is_string($sort) && in_array(strtoupper($sort), ['ASC', 'DESC'], true)) {
-            $qb->orderBy('p.title', $sort);
-        } elseif ($rand !== '') {
-            $qb->orderBy('RAND(' . $rand . ')');
-        } else {
-            $qb->orderBy('p.title', 'ASC');
-        }
+        $qb->orderBy('p.id', $sort);
 
-        if (intval($query) !== 0) {
-            $qb->where('p.id = :id')->setParameter('id', $query);
-        } elseif ($query) {
-            $qb
-                ->where('p.title LIKE :title')->setParameter('title', "%" . $query . "%")
-                ->orWhere('p.description LIKE :description')->setParameter('description', "%" . $query . "%")
-                ->orWhere('p.solution LIKE :solution')->setParameter('solution', "%" . $query . "%");
+        if (intval($searchWord) !== 0) {
+            $qb->where('p.id = :id')->setParameter('id', $searchWord);
+        } elseif ($searchWord) {
+            $words = explode(' ', $searchWord);
+
+            foreach ($words as $word) {
+                $qb->where('p.title LIKE :title')
+                    ->orWhere('p.description LIKE :description')
+                    ->orWhere('p.solution LIKE :solution')
+                    ->setParameter('title', '%' . $word . '%')
+                    ->setParameter('description', '%' . $word . '%')
+                    ->setParameter('solution', '%' . $word . '%');
+            }
         }
 
         if ($theme && $theme !== 0) {
@@ -100,12 +98,7 @@ final class ListHandler implements RequestHandlerInterface
             $qb->setParameter('themes', strtoupper($theme));
         }
 
-        if ($location && intval($location) && $location !== 0) {
-            $qb->andWhere('cl.id = :location');
-            $qb->setParameter('location', $location);
-        }
-
-        if ($location && \is_string($location) && $location !== 0) {
+        if ($location && is_string($location) && $location !== 0) {
             $qb->andWhere('cl.code = :location');
             $qb->setParameter('location', $location);
         }
@@ -115,27 +108,9 @@ final class ListHandler implements RequestHandlerInterface
             $qb->setParameter('campaign', $campaign);
         }
 
-        if ($ids && $ids !== 0) {
-            $qb->andWhere('p.id IN (:ids)');
-            $qb->setParameter('ids', explode(';', str_replace(',', ';', $ids)));
-        }
-
         if ($status && $status !== 0) {
             $qb->andWhere('w.code IN (:status)');
             $qb->setParameter('status', strtoupper($status));
-        }
-
-        $disableStatuses = implode(', ', [
-            WorkflowStateInterface::STATUS_RECEIVED,
-            WorkflowStateInterface::STATUS_USER_DELETED,
-            WorkflowStateInterface::STATUS_TRASH
-        ]);
-
-        if ($username && $username !== '') {
-            $qb->andWhere('u.username = :username');
-            $qb->setParameter('username', $username);
-        } else {
-            $qb->andWhere('w.id NOT IN ('. $disableStatuses .')');
         }
 
         $qb->setMaxResults(1);

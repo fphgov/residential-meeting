@@ -60,18 +60,18 @@ class IdeaInputFilter extends InputFilter
             'validators'  => [
                 new Validator\NotEmpty([
                     'messages' => [
-                        Validator\NotEmpty::IS_EMPTY => 'A "Mit oldana meg / mire megoldás?" kitöltése kötelező',
-                        Validator\NotEmpty::INVALID  => 'Mit oldana meg / mire megoldás?: Hibás mező tipus',
+                        Validator\NotEmpty::IS_EMPTY => 'A "Min szeretnél változtatni?" kitöltése kötelező',
+                        Validator\NotEmpty::INVALID  => 'Min szeretnél változtatni?: Hibás mező tipus',
                     ],
                 ]),
                 new Validator\StringLength([
                     'messages' => [
-                        Validator\StringLength::TOO_SHORT => 'Legalább %min% karaktert kell tartalmaznia a "Mit oldana meg / mire megoldás?" mezőnek',
-                        Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia a "Mit oldana meg / mire megoldás?" mezőnek mint: %max%',
-                        Validator\StringLength::INVALID   => 'Mit oldana meg / mire megoldás?: Hibás mező tipus. Csak szöveg fogadható el.',
+                        Validator\StringLength::TOO_SHORT => 'Legalább %min% karaktert kell tartalmaznia a "Min szeretnél változtatni?" mezőnek',
+                        Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia a "Min szeretnél változtatni?" mezőnek mint: %max%',
+                        Validator\StringLength::INVALID   => 'Min szeretnél változtatni?: Hibás mező tipus. Csak szöveg fogadható el.',
                     ],
                     'min'      => 20,
-                    'max'      => 500,
+                    'max'      => 250,
                 ]),
             ],
             'filters'     => [

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Handler\Idea;
 
 use App\Entity\Idea;
-use App\Entity\WorkflowStateInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Mezzio\Hal\HalResponseFactory;
@@ -16,7 +15,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 use function in_array;
 
-final class GetHandler implements RequestHandlerInterface
+final class AdminGetHandler implements RequestHandlerInterface
 {
     /** @var EntityManagerInterface */
     protected $entityManager;
@@ -49,17 +48,7 @@ final class GetHandler implements RequestHandlerInterface
             ], 404);
         }
 
-        if (in_array($result->getWorkflowState()->getId(), [
-            WorkflowStateInterface::STATUS_RECEIVED,
-            WorkflowStateInterface::STATUS_USER_DELETED,
-            WorkflowStateInterface::STATUS_TRASH
-        ], true)) {
-            return new JsonResponse([
-                'errors' => 'Nincs ilyen azonosítójú ötlet, vagy még feldolgozás alatt áll',
-            ], 404);
-        }
-
-        $idea = $result->normalizer(null, ['groups' => 'detail']);
+        $idea = $result->normalizer(null, ['groups' => 'full_detail']);
 
         $resource = $this->resourceGenerator->fromArray($idea, null);
 

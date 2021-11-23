@@ -21,6 +21,7 @@ class WorkflowState implements WorkflowStateInterface
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
+     * @Groups({"option"})
      *
      * @var int
      */
@@ -28,7 +29,7 @@ class WorkflowState implements WorkflowStateInterface
 
     /**
      * @ORM\Column(name="code", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail", "option"})
      *
      * @var string
      */
@@ -36,7 +37,7 @@ class WorkflowState implements WorkflowStateInterface
 
     /**
      * @ORM\Column(name="title", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail", "option"})
      *
      * @var string
      */
@@ -44,7 +45,7 @@ class WorkflowState implements WorkflowStateInterface
 
     /**
      * @ORM\Column(name="description", type="string")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string
      */

@@ -45,6 +45,12 @@ final class IdeaService implements IdeaServiceInterface
     /** @var EntityRepository */
     private $campaignThemeRepository;
 
+    /** @var EntityRepository */
+    private $campaignLocationRepository;
+
+    /** @var EntityRepository */
+    private $workflowStateRepository;
+
     /** @var PhaseServiceInterface */
     private $phaseService;
 
@@ -70,6 +76,7 @@ final class IdeaService implements IdeaServiceInterface
         $this->ideaRepository             = $this->em->getRepository(Idea::class);
         $this->campaignThemeRepository    = $this->em->getRepository(CampaignTheme::class);
         $this->campaignLocationRepository = $this->em->getRepository(CampaignLocation::class);
+        $this->workflowStateRepository    = $this->em->getRepository(WorkflowState::class);
         $this->phaseService               = $phaseService;
         $this->audit                      = $audit;
         $this->mailAdapter                = $mailAdapter;
@@ -164,6 +171,47 @@ final class IdeaService implements IdeaServiceInterface
         return $idea;
     }
 
+    public function modifyIdea(
+        IdeaInterface $idea,
+        array $filteredParams
+    ): void {
+        $date = new DateTime();
+
+        if (isset($filteredParams['title'])) {
+            $idea->setTitle($filteredParams['title']);
+        }
+
+        if (isset($filteredParams['solution'])) {
+            $idea->setSolution($filteredParams['solution']);
+        }
+
+        if (isset($filteredParams['description'])) {
+            $idea->setDescription($filteredParams['description']);
+        }
+
+        if (isset($filteredParams['cost'])) {
+            $idea->setCost(is_numeric($filteredParams['cost']) ? $filteredParams['cost'] : null);
+        }
+
+        if (isset($filteredParams['location_description'])) {
+            $idea->setLocationDescription($filteredParams['location_description'] ? $filteredParams['location_description'] : '');
+        }
+
+        if (isset($filteredParams['workflowState'])) {
+            $workflowState = $this->workflowStateRepository->findOneBy([
+                'code' => $filteredParams['workflowState'],
+            ]);
+
+            if ($workflowState) {
+                $idea->setWorkflowState($workflowState);
+            }
+        }
+
+        $idea->setUpdatedAt($date);
+
+        $this->em->flush();
+    }
+
     public function getRepository(): EntityRepository
     {
         return $this->ideaRepository;
@@ -251,7 +299,7 @@ final class IdeaService implements IdeaServiceInterface
         }
     }
 
-    public function sendIdeaWorkflowRejected(IdeaInterface $idea): void
+    public function sendIdeaWorkflowTrashed(IdeaInterface $idea): void
     {
         $this->mailAdapter->clear();
 

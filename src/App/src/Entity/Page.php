@@ -28,7 +28,7 @@ class Page implements PageInterface
 
     /**
      * @ORM\Column(name="slug", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -36,7 +36,7 @@ class Page implements PageInterface
 
     /**
      * @ORM\Column(name="title", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -44,7 +44,7 @@ class Page implements PageInterface
 
     /**
      * @ORM\Column(name="content", type="text")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string
      */

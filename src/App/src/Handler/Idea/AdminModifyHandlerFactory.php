@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Handler\Idea;
+
+use App\InputFilter\IdeaInputFilter;
+use App\Service\IdeaServiceInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Container\ContainerInterface;
+use Laminas\InputFilter\InputFilterPluginManager;
+
+final class AdminModifyHandlerFactory
+{
+    public function __invoke(ContainerInterface $container): AdminModifyHandler
+    {
+        /** @var InputFilterPluginManager $pluginManager */
+        $pluginManager = $container->get(InputFilterPluginManager::class);
+        $inputFilter   = $pluginManager->get(IdeaInputFilter::class);
+
+        return new AdminModifyHandler(
+            $inputFilter,
+            $container->get(EntityManagerInterface::class),
+            $container->get(IdeaServiceInterface::class),
+        );
+    }
+}

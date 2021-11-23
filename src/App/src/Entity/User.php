@@ -58,7 +58,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(name="firstname", type="string")
-     * @Groups({"list", "detail", "profile"})
+     * @Groups({"list", "detail", "full_detail", "profile"})
      *
      * @var string
      */
@@ -66,7 +66,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(name="lastname", type="string")
-     * @Groups({"list", "detail", "profile"})
+     * @Groups({"list", "detail", "full_detail", "profile"})
      *
      * @var string
      */
