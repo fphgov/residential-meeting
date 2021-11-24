@@ -39,7 +39,7 @@ class Link implements LinkInterface
     private $idea;
 
     /**
-     * @ORM\Column(name="href", type="string")
+     * @ORM\Column(name="href", type="text")
      * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
