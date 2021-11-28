@@ -171,6 +171,14 @@ class Idea implements IdeaInterface
      */
     private $longitude;
 
+    /**
+     * @ORM\Column(name="answer", type="text", nullable=false)
+     * @Groups({"detail", "full_detail"})
+     *
+     * @var string
+     */
+    private $answer = "";
+
     public function __construct()
     {
         $this->medias = new ArrayCollection();
@@ -405,5 +413,15 @@ class Idea implements IdeaInterface
     public function getLongitude(): ?float
     {
         return $this->longitude;
+    }
+
+    public function setAnswer(string $answer): void
+    {
+        $this->answer = $answer;
+    }
+
+    public function getAnswer(): string
+    {
+        return $this->answer;
     }
 }
