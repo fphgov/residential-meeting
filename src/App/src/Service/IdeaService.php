@@ -197,6 +197,10 @@ final class IdeaService implements IdeaServiceInterface
             $idea->setLocationDescription($filteredParams['location_description'] ? $filteredParams['location_description'] : '');
         }
 
+        if (isset($filteredParams['answer'])) {
+            $idea->setAnswer($filteredParams['answer']);
+        }
+
         if (isset($filteredParams['workflowState'])) {
             $workflowState = $this->workflowStateRepository->findOneBy([
                 'code' => $filteredParams['workflowState'],
