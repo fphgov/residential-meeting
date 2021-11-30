@@ -44,6 +44,14 @@ class WorkflowState implements WorkflowStateInterface
     private $title;
 
     /**
+     * @ORM\Column(name="private_title", type="string")
+     * @Groups({"full_detail", "option"})
+     *
+     * @var string
+     */
+    private $privateTitle;
+
+    /**
      * @ORM\Column(name="description", type="string")
      * @Groups({"detail", "full_detail"})
      *
@@ -79,6 +87,16 @@ class WorkflowState implements WorkflowStateInterface
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setPrivateTitle(string $privateTitle): void
+    {
+        $this->privateTitle = $privateTitle;
+    }
+
+    public function getPrivateTitle(): string
+    {
+        return $this->privateTitle;
     }
 
     public function setDescription(string $description): void
