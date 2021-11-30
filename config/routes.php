@@ -234,4 +234,11 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         \Mezzio\Authorization\AuthorizationMiddleware::class,
         App\Handler\Workflow\GetStatesHandler::class
     ], 'admin.api.workflow.states.list');
+
+    $app->get('/admin/api/workflow/extras', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Workflow\GetExtrasHandler::class
+    ], 'admin.api.workflow.extras.list');
 };

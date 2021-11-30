@@ -84,6 +84,15 @@ class Idea implements IdeaInterface
     private $workflowState;
 
     /**
+     * @ORM\ManyToOne(targetEntity="WorkflowStateExtra")
+     * @ORM\JoinColumn(name="workflow_state_extra_id", referencedColumnName="id", nullable=true)
+     * @Groups({"list", "detail", "full_detail"})
+     *
+     * @var WorkflowStateExtra
+     */
+    private $workflowStateExtra;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Media")
      * @ORM\JoinTable(name="ideas_medias",
      *      joinColumns={@ORM\JoinColumn(name="idea_id", referencedColumnName="id")},
@@ -307,6 +316,16 @@ class Idea implements IdeaInterface
     public function getWorkflowState(): WorkflowState
     {
         return $this->workflowState;
+    }
+
+    public function setWorkflowStateExtra(?WorkflowStateExtra $workflowStateExtra = null): void
+    {
+        $this->workflowStateExtra = $workflowStateExtra;
+    }
+
+    public function getWorkflowStateExtra(): ?WorkflowStateExtra
+    {
+        return $this->workflowStateExtra;
     }
 
     public function setTitle(string $title): void

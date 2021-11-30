@@ -13,6 +13,7 @@ use App\Entity\Link;
 use App\Entity\PhaseInterface;
 use App\Entity\UserInterface;
 use App\Entity\WorkflowState;
+use App\Entity\WorkflowStateExtra;
 use App\Entity\CampaignLocation;
 use App\Entity\WorkflowStateInterface;
 use App\Exception\NoHasPhaseCategoryException;
@@ -30,6 +31,7 @@ use function basename;
 use function is_countable;
 use function is_array;
 use function str_replace;
+use function wordwrap;
 
 final class IdeaService implements IdeaServiceInterface
 {
@@ -51,6 +53,9 @@ final class IdeaService implements IdeaServiceInterface
     /** @var EntityRepository */
     private $workflowStateRepository;
 
+    /** @var EntityRepository */
+    private $workflowStateExtraRepository;
+
     /** @var PhaseServiceInterface */
     private $phaseService;
 
@@ -71,16 +76,17 @@ final class IdeaService implements IdeaServiceInterface
         MailAdapter $mailAdapter,
         MailQueueServiceInterface $mailQueueService
     ) {
-        $this->config                     = $config;
-        $this->em                         = $em;
-        $this->ideaRepository             = $this->em->getRepository(Idea::class);
-        $this->campaignThemeRepository    = $this->em->getRepository(CampaignTheme::class);
-        $this->campaignLocationRepository = $this->em->getRepository(CampaignLocation::class);
-        $this->workflowStateRepository    = $this->em->getRepository(WorkflowState::class);
-        $this->phaseService               = $phaseService;
-        $this->audit                      = $audit;
-        $this->mailAdapter                = $mailAdapter;
-        $this->mailQueueService           = $mailQueueService;
+        $this->config                       = $config;
+        $this->em                           = $em;
+        $this->ideaRepository               = $this->em->getRepository(Idea::class);
+        $this->campaignThemeRepository      = $this->em->getRepository(CampaignTheme::class);
+        $this->campaignLocationRepository   = $this->em->getRepository(CampaignLocation::class);
+        $this->workflowStateRepository      = $this->em->getRepository(WorkflowState::class);
+        $this->workflowStateExtraRepository = $this->em->getRepository(WorkflowStateExtra::class);
+        $this->phaseService                 = $phaseService;
+        $this->audit                        = $audit;
+        $this->mailAdapter                  = $mailAdapter;
+        $this->mailQueueService             = $mailQueueService;
     }
 
     public function addIdea(
@@ -211,6 +217,18 @@ final class IdeaService implements IdeaServiceInterface
             }
         }
 
+        if (isset($filteredParams['workflowStateExtra']) && $filteredParams['workflowState'] === "PUBLISHED_WITH_MOD") {
+            $workflowStateExtra = $this->workflowStateExtraRepository->findOneBy([
+                'code' => $filteredParams['workflowStateExtra'],
+            ]);
+
+            if ($workflowStateExtra) {
+                $idea->setWorkflowStateExtra($workflowStateExtra);
+            } else {
+                $idea->setWorkflowStateExtra(null);
+            }
+        }
+
         $idea->setUpdatedAt($date);
 
         $this->em->flush();
@@ -292,6 +310,40 @@ final class IdeaService implements IdeaServiceInterface
             ];
 
             $this->mailAdapter->setTemplate('workflow-idea-published', $tplData);
+
+            $this->mailQueueService->add($user, $this->mailAdapter);
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('Idea published notification no added to MailQueueService', [
+                'extra' => $user->getId() . " | " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function sendIdeaWorkflowPublishedWithMod(IdeaInterface $idea): void
+    {
+        $this->mailAdapter->clear();
+
+        $user = $idea->getSubmitter();
+
+        try {
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Ötletedet közzétettük az otlet.budapest.hu-n');
+
+            $extra = $idea->getWorkflowStateExtra() ? $idea->getWorkflowStateExtra()->getEmailText() : '';
+
+            $tplData = [
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'ideaId'           => $idea->getId(),
+                'ideaTitle'        => $idea->getTitle(),
+                'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
+                'ideaModText'      => $extra,
+                'ideaModFullText'  => wordwrap($extra, 78, "\n"),
+            ];
+
+            $this->mailAdapter->setTemplate('workflow-idea-published-mod', $tplData);
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {

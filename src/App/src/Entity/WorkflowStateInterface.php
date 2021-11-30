@@ -8,6 +8,7 @@ interface WorkflowStateInterface
 {
     public const STATUS_RECEIVED                  = 100;
     public const STATUS_PUBLISHED                 = 110;
+    public const STATUS_PUBLISHED_WITH_MOD        = 111;
     public const STATUS_PRE_COUNCIL               = 120;
     public const STATUS_VOTING_LIST               = 130;
     public const STATUS_UNDER_CONSTRUCTION        = 140;

@@ -31,6 +31,7 @@ return [
             'admin.api.idea.list',
             'admin.api.idea.export',
             'admin.api.workflow.states.list',
+            'admin.api.workflow.extras.list',
         ],
         'allow'     => [
             'guest'     => [
@@ -54,6 +55,7 @@ return [
                 'admin.api.idea.list',
                 'admin.api.idea.export',
                 'admin.api.workflow.states.list',
+                'admin.api.workflow.extras.list',
             ],
             'admin' => [
                 'admin.api.cache.clear',

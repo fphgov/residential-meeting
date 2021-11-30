@@ -45,6 +45,10 @@ class ChangeIdeaStatus implements EventSubscriber
                     $ideaService->sendIdeaWorkflowPublished($idea);
                 }
 
+                if ($workflowState->getId() === WorkflowStateInterface::STATUS_PUBLISHED_WITH_MOD) {
+                    $ideaService->sendIdeaWorkflowPublishedWithMod($idea);
+                }
+
                 if ($workflowState->getId() === WorkflowStateInterface::STATUS_TRASH) {
                     $ideaService->sendIdeaWorkflowTrashed($idea);
                 }

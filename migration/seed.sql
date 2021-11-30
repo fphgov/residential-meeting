@@ -2,6 +2,7 @@ INSERT INTO `users` (`id`, `username`, `firstname`, `lastname`, `email`, `passwo
 
 INSERT INTO `workflow_states` (`id`, `code`, `title`, `description`) VALUES (100, 'RECEIVED', 'Beküldött', 'Beküldött');
 INSERT INTO `workflow_states` (`id`, `code`, `title`, `description`) VALUES (110, 'PUBLISHED', 'Beérkezett, feldolgozásra vár', 'Az ötlet beérkezett, szakmai vizsgálata folyamatban van. ');
+INSERT INTO `workflow_states` (`id`, `code`, `title`, `description`) VALUES (111, 'PUBLISHED_WITH_MOD', 'Beérkezett, feldolgozásra vár (módosított)', 'Az ötlet beérkezett, szakmai vizsgálata folyamatban van. ');
 INSERT INTO `workflow_states` (`id`, `code`, `title`, `description`) VALUES (120, 'PRE_COUNCIL', 'Szakmailag jóváhagyva, tanács elé kerül', 'Az ötletet szakmailag jóváhagytuk, önállóan, vagy másokkal összevonva a közösségi költségvetési tanács elé kerül.');
 INSERT INTO `workflow_states` (`id`, `code`, `title`, `description`) VALUES (130, 'VOTING_LIST', 'Szavazólapra került', 'Az ötletet szakmailag jóváhagytuk, és a közösségi költségvetési tanács is támogatta. Önállóan, vagy másokkal összevonva szavazólistára kerül.');
 INSERT INTO `workflow_states` (`id`, `code`, `title`, `description`) VALUES (140, 'UNDER_CONSTRUCTION', 'Szavazáson nyert, megvalósítás alatt áll', 'Az ötlet a szavazáson nyert, megvalósítása folyamatban van.');
@@ -12,6 +13,8 @@ INSERT INTO `workflow_states` (`id`, `code`, `title`, `description`) VALUES (540
 INSERT INTO `workflow_states` (`id`, `code`, `title`, `description`) VALUES (600, 'USER_DELETED', 'Felhasználó törölte', 'A felhasználó törölte');
 INSERT INTO `workflow_states` (`id`, `code`, `title`, `description`) VALUES (610, 'TRASH', 'Kuka', 'Trollkodás');
 
+INSERT INTO `workflow_state_extras` (`id`, `code`, `title`, `description`) VALUES (100, 'POLITICIZATION', 'Politizálás', 'Kiszedtünk belőle szövegrészt, politizálás miatt');
+INSERT INTO `workflow_state_extras` (`id`, `code`, `title`, `description`) VALUES (110, 'DATAPOLICY', 'Adatkezelés', 'Kiszedtünk belőle szövegrészt, adatkezelés miatt');
 
 INSERT INTO `phases` (`id`, `campaign_id`, `code`, `title`, `description`, `start`, `end`) VALUES (1, 2, 'PRE_IDEATION', 'Ötlet beküldés előtt', 'Ötlet beküldés előtt', '2021-09-14 12:41:01', '2021-09-30 23:59:59');
 INSERT INTO `phases` (`id`, `campaign_id`, `code`, `title`, `description`, `start`, `end`) VALUES (2, 2, 'IDEATION', 'Ötlet beküldés', 'Ötlet beküldés', '2021-10-01 00:00:00', '2021-12-31 23:59:59');

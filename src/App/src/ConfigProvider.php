@@ -84,6 +84,7 @@ class ConfigProvider
                 Handler\Media\DownloadHandler::class         => Handler\Media\DownloadHandlerFactory::class,
                 Handler\Tools\GetAddressHandler::class       => Handler\Tools\GetAddressHandlerFactory::class,
                 Handler\Workflow\GetStatesHandler::class     => Handler\Workflow\GetStatesHandlerFactory::class,
+                Handler\Workflow\GetExtrasHandler::class     => Handler\Workflow\GetExtrasHandlerFactory::class,
                 Service\MailQueueServiceInterface::class     => Service\MailQueueServiceFactory::class,
                 Service\MediaServiceInterface::class         => Service\MediaServiceFactory::class,
                 Service\UserServiceInterface::class          => Service\UserServiceFactory::class,
