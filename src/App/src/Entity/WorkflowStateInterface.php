@@ -8,14 +8,16 @@ interface WorkflowStateInterface
 {
     public const STATUS_RECEIVED                  = 100;
     public const STATUS_PUBLISHED                 = 110;
-    public const STATUS_FORMALLY_APPROPRIATE      = 120;
+    public const STATUS_PUBLISHED_WITH_MOD        = 111;
+    public const STATUS_PRE_COUNCIL               = 120;
     public const STATUS_VOTING_LIST               = 130;
     public const STATUS_UNDER_CONSTRUCTION        = 140;
     public const STATUS_READY                     = 200;
-    public const STATUS_REJECTED                  = 510;
-    public const STATUS_FORMALLY_NOT_APPROPRIATE  = 520;
-    public const STATUS_FORMALLY_COUNCIL_REJECTED = 530;
-    public const STATUS_FORMALLY_NOT_VOTED        = 540;
+    public const STATUS_STATUS_REJECTED           = 510;
+    public const STATUS_COUNCIL_REJECTED          = 530;
+    public const STATUS_NOT_VOTED                 = 540;
+    public const STATUS_USER_DELETED              = 600;
+    public const STATUS_TRASH                     = 610;
 
     public const DISABLE_SHOW_DEFAULT = [];
 

@@ -13,6 +13,7 @@ use App\Entity\Link;
 use App\Entity\PhaseInterface;
 use App\Entity\UserInterface;
 use App\Entity\WorkflowState;
+use App\Entity\WorkflowStateExtra;
 use App\Entity\CampaignLocation;
 use App\Entity\WorkflowStateInterface;
 use App\Exception\NoHasPhaseCategoryException;
@@ -30,6 +31,7 @@ use function basename;
 use function is_countable;
 use function is_array;
 use function str_replace;
+use function wordwrap;
 
 final class IdeaService implements IdeaServiceInterface
 {
@@ -44,6 +46,15 @@ final class IdeaService implements IdeaServiceInterface
 
     /** @var EntityRepository */
     private $campaignThemeRepository;
+
+    /** @var EntityRepository */
+    private $campaignLocationRepository;
+
+    /** @var EntityRepository */
+    private $workflowStateRepository;
+
+    /** @var EntityRepository */
+    private $workflowStateExtraRepository;
 
     /** @var PhaseServiceInterface */
     private $phaseService;
@@ -65,15 +76,17 @@ final class IdeaService implements IdeaServiceInterface
         MailAdapter $mailAdapter,
         MailQueueServiceInterface $mailQueueService
     ) {
-        $this->config                     = $config;
-        $this->em                         = $em;
-        $this->ideaRepository             = $this->em->getRepository(Idea::class);
-        $this->campaignThemeRepository    = $this->em->getRepository(CampaignTheme::class);
-        $this->campaignLocationRepository = $this->em->getRepository(CampaignLocation::class);
-        $this->phaseService               = $phaseService;
-        $this->audit                      = $audit;
-        $this->mailAdapter                = $mailAdapter;
-        $this->mailQueueService           = $mailQueueService;
+        $this->config                       = $config;
+        $this->em                           = $em;
+        $this->ideaRepository               = $this->em->getRepository(Idea::class);
+        $this->campaignThemeRepository      = $this->em->getRepository(CampaignTheme::class);
+        $this->campaignLocationRepository   = $this->em->getRepository(CampaignLocation::class);
+        $this->workflowStateRepository      = $this->em->getRepository(WorkflowState::class);
+        $this->workflowStateExtraRepository = $this->em->getRepository(WorkflowStateExtra::class);
+        $this->phaseService                 = $phaseService;
+        $this->audit                        = $audit;
+        $this->mailAdapter                  = $mailAdapter;
+        $this->mailQueueService             = $mailQueueService;
     }
 
     public function addIdea(
@@ -164,6 +177,63 @@ final class IdeaService implements IdeaServiceInterface
         return $idea;
     }
 
+    public function modifyIdea(
+        IdeaInterface $idea,
+        array $filteredParams
+    ): void {
+        $date = new DateTime();
+
+        if (isset($filteredParams['title'])) {
+            $idea->setTitle($filteredParams['title']);
+        }
+
+        if (isset($filteredParams['solution'])) {
+            $idea->setSolution($filteredParams['solution']);
+        }
+
+        if (isset($filteredParams['description'])) {
+            $idea->setDescription($filteredParams['description']);
+        }
+
+        if (isset($filteredParams['cost'])) {
+            $idea->setCost(is_numeric($filteredParams['cost']) ? $filteredParams['cost'] : null);
+        }
+
+        if (isset($filteredParams['location_description'])) {
+            $idea->setLocationDescription($filteredParams['location_description'] ? $filteredParams['location_description'] : '');
+        }
+
+        if (isset($filteredParams['answer'])) {
+            $idea->setAnswer($filteredParams['answer']);
+        }
+
+        if (isset($filteredParams['workflowState'])) {
+            $workflowState = $this->workflowStateRepository->findOneBy([
+                'code' => $filteredParams['workflowState'],
+            ]);
+
+            if ($workflowState) {
+                $idea->setWorkflowState($workflowState);
+            }
+        }
+
+        if (isset($filteredParams['workflowStateExtra']) && $filteredParams['workflowState'] === "PUBLISHED_WITH_MOD") {
+            $workflowStateExtra = $this->workflowStateExtraRepository->findOneBy([
+                'code' => $filteredParams['workflowStateExtra'],
+            ]);
+
+            if ($workflowStateExtra) {
+                $idea->setWorkflowStateExtra($workflowStateExtra);
+            } else {
+                $idea->setWorkflowStateExtra(null);
+            }
+        }
+
+        $idea->setUpdatedAt($date);
+
+        $this->em->flush();
+    }
+
     public function getRepository(): EntityRepository
     {
         return $this->ideaRepository;
@@ -251,7 +321,41 @@ final class IdeaService implements IdeaServiceInterface
         }
     }
 
-    public function sendIdeaWorkflowRejected(IdeaInterface $idea): void
+    public function sendIdeaWorkflowPublishedWithMod(IdeaInterface $idea): void
+    {
+        $this->mailAdapter->clear();
+
+        $user = $idea->getSubmitter();
+
+        try {
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject('Ötletedet közzétettük az otlet.budapest.hu-n');
+
+            $extra = $idea->getWorkflowStateExtra() ? $idea->getWorkflowStateExtra()->getEmailText() : '';
+
+            $tplData = [
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'ideaId'           => $idea->getId(),
+                'ideaTitle'        => $idea->getTitle(),
+                'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
+                'ideaModText'      => $extra,
+                'ideaModFullText'  => wordwrap($extra, 78, "\n"),
+            ];
+
+            $this->mailAdapter->setTemplate('workflow-idea-published-mod', $tplData);
+
+            $this->mailQueueService->add($user, $this->mailAdapter);
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('Idea published notification no added to MailQueueService', [
+                'extra' => $user->getId() . " | " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function sendIdeaWorkflowTrashed(IdeaInterface $idea): void
     {
         $this->mailAdapter->clear();
 

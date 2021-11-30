@@ -32,7 +32,7 @@ class CampaignTheme implements CampaignThemeInterface
 
     /**
      * @ORM\Column(name="code", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -40,7 +40,7 @@ class CampaignTheme implements CampaignThemeInterface
 
     /**
      * @ORM\Column(name="name", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -48,7 +48,7 @@ class CampaignTheme implements CampaignThemeInterface
 
     /**
      * @ORM\Column(name="description", type="text")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string
      */
@@ -56,7 +56,7 @@ class CampaignTheme implements CampaignThemeInterface
 
     /**
      * @ORM\Column(name="rgb", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */

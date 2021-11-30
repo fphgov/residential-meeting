@@ -32,7 +32,7 @@ class Post implements PostInterface
     /**
      * @ORM\ManyToOne(targetEntity="PostCategory")
      * @ORM\JoinColumn(name="post_category_id", referencedColumnName="id", nullable=true)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var PostCategory
      */
@@ -41,7 +41,7 @@ class Post implements PostInterface
     /**
      * @ORM\ManyToOne(targetEntity="Media")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var Media|null
      */
@@ -49,6 +49,7 @@ class Post implements PostInterface
 
     /**
      * @ORM\Column(name="status", type="string")
+     * @Groups({"full_detail"})
      *
      * @var string
      */
@@ -56,7 +57,7 @@ class Post implements PostInterface
 
     /**
      * @ORM\Column(name="slug", type="string", nullable=true)
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -64,7 +65,7 @@ class Post implements PostInterface
 
     /**
      * @ORM\Column(name="title", type="string")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -72,7 +73,7 @@ class Post implements PostInterface
 
     /**
      * @ORM\Column(name="description", type="text")
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
      */
@@ -80,7 +81,7 @@ class Post implements PostInterface
 
     /**
      * @ORM\Column(name="content", type="text")
-     * @Groups({"detail"})
+     * @Groups({"detail", "full_detail"})
      *
      * @var string
      */
