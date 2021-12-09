@@ -200,6 +200,41 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Vote\AddHandler::class
     ], 'admin.api.vote.add');
 
+    $app->post('/admin/api/posts', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Post\AdminListHandler::class
+    ], 'admin.api.post.list');
+
+    $app->get('/admin/api/posts/{id:\d+}', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Post\AdminGetHandler::class
+    ], 'admin.api.post.get');
+
+    $app->post('/admin/api/posts/{id:\d+}', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Post\AdminModifyHandler::class
+    ], 'admin.api.post.modify');
+
+    $app->get('/admin/api/post/status', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Post\GetStatusHandler::class
+    ], 'admin.api.post.status.list');
+
+    $app->get('/admin/api/post/category', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Post\GetCategoryHandler::class
+    ], 'admin.api.post.category.list');
+
     $app->post('/admin/api/ideas', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,

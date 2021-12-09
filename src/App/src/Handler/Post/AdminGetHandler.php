@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Handler\Post;
 
 use App\Entity\Post;
-use App\Entity\PostStatusInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class GetHandler implements RequestHandlerInterface
+final class AdminGetHandler implements RequestHandlerInterface
 {
     /** @var EntityManagerInterface */
     private $entityManager;
@@ -27,10 +26,7 @@ final class GetHandler implements RequestHandlerInterface
     {
         $postRepository = $this->entityManager->getRepository(Post::class);
 
-        $post = $postRepository->findOneBy([
-            'status' => PostStatusInterface::STATUS_PUBLISH,
-            'slug'   => $request->getAttribute('slug')
-        ]);
+        $post = $postRepository->find($request->getAttribute('id'));
 
         if ($post === null) {
             return new JsonResponse([
@@ -38,7 +34,7 @@ final class GetHandler implements RequestHandlerInterface
             ], 404);
         }
 
-        $normalizedPost = $post->normalizer(null, ['groups' => 'detail']);
+        $normalizedPost = $post->normalizer(null, ['groups' => 'full_detail']);
 
         return new JsonResponse([
             'data' => $normalizedPost,

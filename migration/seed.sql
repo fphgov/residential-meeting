@@ -25,3 +25,14 @@ INSERT INTO `phases` (`id`, `campaign_id`, `code`, `title`, `description`, `star
 INSERT INTO `phases` (`id`, `campaign_id`, `code`, `title`, `description`, `start`, `end`) VALUES (7, 2, 'POST_VOTE', 'Szavazás után', 'Szavazás után', '2030-01-09 23:59:59', '2030-01-09 23:59:59');
 INSERT INTO `phases` (`id`, `campaign_id`, `code`, `title`, `description`, `start`, `end`) VALUES (8, 2, 'PRE_RESULT', 'Eredmény előtt', 'Eredmény előtt', '2030-01-09 23:59:59', '2030-01-09 23:59:59');
 INSERT INTO `phases` (`id`, `campaign_id`, `code`, `title`, `description`, `start`, `end`) VALUES (9, 2, 'RESULT', 'Eredmény', 'Eredmény', '2030-01-09 23:59:59', '2030-01-09 23:59:59');
+
+INSERT INTO `post_categories` (`id`, `code`, `name`) VALUES (1, 'news', 'Hír');
+INSERT INTO `post_categories` (`id`, `code`, `name`) VALUES (2, 'event', 'Rendezvény');
+INSERT INTO `post_categories` (`id`, `code`, `name`) VALUES (3, 'blog', 'Blog');
+
+INSERT INTO `post_statuses` (`id`, `code`, `name`) VALUES (1, 'publish', 'Publikálva');
+INSERT INTO `post_statuses` (`id`, `code`, `name`) VALUES (2, 'draft', 'Vázlat');
+INSERT INTO `post_statuses` (`id`, `code`, `name`) VALUES (3, 'future', 'Időzített');
+INSERT INTO `post_statuses` (`id`, `code`, `name`) VALUES (4, 'pending', 'Függőben lévő');
+INSERT INTO `post_statuses` (`id`, `code`, `name`) VALUES (5, 'private', 'Privát');
+INSERT INTO `post_statuses` (`id`, `code`, `name`) VALUES (6, 'trash', 'Lomtárban');

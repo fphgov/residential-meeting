@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Handler\Post;
 
 use App\Entity\Post;
+use App\Entity\PostStatus;
 use App\Entity\PostStatusInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -15,31 +16,34 @@ use Psr\Http\Server\RequestHandlerInterface;
 use function explode;
 use function str_replace;
 
-final class GetAllHandler implements RequestHandlerInterface
+final class AdminListHandler implements RequestHandlerInterface
 {
     /** @var EntityManagerInterface */
-    private $entityManager;
+    private $em;
 
     public function __construct(
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $em
     ) {
-        $this->entityManager = $entityManager;
+        $this->em = $em;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $postRepository = $this->entityManager->getRepository(Post::class);
+        $postRepository = $this->em->getRepository(Post::class);
 
         $queryParams = $request->getQueryParams();
         $limit       = $queryParams['limit'] ?? null;
-        $category    = $queryParams['category'] ?? 1;
+        $category    = $queryParams['category'] ?? null;
 
         $postCategories = explode(';', str_replace(',', ';', (string)$category));
 
-        $posts = $postRepository->findBy([
-            'status'   => PostStatusInterface::STATUS_PUBLISH,
-            'category' => $postCategories,
-        ], [
+        $queryData = [];
+
+        if ($category !== null) {
+            $queryData[] = $postCategories;
+        }
+
+        $posts = $postRepository->findBy($queryData, [
             'createdAt' => 'DESC'
         ], $limit);
 

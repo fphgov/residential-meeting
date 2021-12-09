@@ -31,7 +31,8 @@ class ChangeIdeaStatus implements EventSubscriber
 
     public function index(LifecycleEventArgs $args, $ideaService = null)
     {
-        $em   = $args->getEntityManager();
+        $em   = $args->getObjectManager();
+
         $uow  = $em->getUnitOfWork();
         $idea = $args->getObject();
 
