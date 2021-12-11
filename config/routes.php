@@ -221,6 +221,13 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Post\AdminModifyHandler::class
     ], 'admin.api.post.modify');
 
+    $app->post('/admin/api/posts/new', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Post\AdminAddHandler::class
+    ], 'admin.api.post.new');
+
     $app->get('/admin/api/post/status', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,

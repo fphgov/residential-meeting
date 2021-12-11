@@ -68,6 +68,7 @@ class ConfigProvider
                 Handler\Post\AdminListHandler::class         => Handler\Post\AdminListHandlerFactory::class,
                 Handler\Post\AdminGetHandler::class          => Handler\Post\AdminGetHandlerFactory::class,
                 Handler\Post\AdminModifyHandler::class       => Handler\Post\AdminModifyHandlerFactory::class,
+                Handler\Post\AdminAddHandler::class          => Handler\Post\AdminAddHandlerFactory::class,
                 Handler\Post\GetStatusHandler::class         => Handler\Post\GetStatusHandlerFactory::class,
                 Handler\Post\GetCategoryHandler::class       => Handler\Post\GetCategoryHandlerFactory::class,
                 Handler\Idea\GetHandler::class               => Handler\Idea\GetHandlerFactory::class,

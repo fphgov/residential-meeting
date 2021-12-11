@@ -52,7 +52,14 @@ final class AdminModifyHandler implements RequestHandlerInterface
         }
 
         // $modifiedIdeaData = array_merge($idea->normalizer(null, ['groups' => 'full_detail']), $body);
-        // $this->validation($modifiedIdeaData);
+
+        // $this->inputFilter->setData($modifiedIdeaData);
+
+        // if (! $this->inputFilter->isValid()) {
+        //     return new JsonResponse([
+        //         'errors' => $this->inputFilter->getMessages(),
+        //     ], 422);
+        // }
 
         try {
             // $this->ideaService->modifyIdea($idea, $this->inputFilter->getValues());
@@ -68,16 +75,5 @@ final class AdminModifyHandler implements RequestHandlerInterface
                 'success' => true,
             ],
         ]);
-    }
-
-    private function validation(array $data)
-    {
-        $this->inputFilter->setData($idea);
-
-        if (! $this->inputFilter->isValid()) {
-            return new JsonResponse([
-                'errors' => $this->inputFilter->getMessages(),
-            ], 422);
-        }
     }
 }

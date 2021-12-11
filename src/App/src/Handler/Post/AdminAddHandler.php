@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Handler\Post;
 
 use App\Entity\Post;
+use App\Middleware\UserMiddleware;
 use App\Service\PostServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -17,7 +18,7 @@ use Exception;
 use function array_merge_recursive;
 use function in_array;
 
-final class AdminModifyHandler implements RequestHandlerInterface
+final class AdminAddHandler implements RequestHandlerInterface
 {
     /** @var InputFilterInterface */
     private $inputFilter;
@@ -40,24 +41,14 @@ final class AdminModifyHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $user = $request->getAttribute(UserMiddleware::class);
+
         $body = array_merge_recursive(
             $request->getParsedBody(),
             $request->getUploadedFiles(),
         );
 
-        $entityRepository = $this->em->getRepository(Post::class);
-
-        $post = $entityRepository->find($request->getAttribute('id'));
-
-        if ($post === null) {
-            return new JsonResponse([
-                'errors' => 'Nincs ilyen azonosítójú ötlet, vagy még feldolgozás alatt áll',
-            ], 404);
-        }
-
-        $modifiedPostData = array_merge($post->normalizer(null, ['groups' => 'full_detail']), $body);
-
-        $this->inputFilter->setData($modifiedPostData);
+        $this->inputFilter->setData($body);
 
         if (! $this->inputFilter->isValid()) {
             return new JsonResponse([
@@ -66,7 +57,7 @@ final class AdminModifyHandler implements RequestHandlerInterface
         }
 
         try {
-            $this->postService->modifyPost($post, $this->inputFilter->getValues());
+            $this->postService->addPost($user, $this->inputFilter->getValues());
         } catch (Exception $e) {
             return new JsonResponse([
                 'errors' => $e->getMessage(),

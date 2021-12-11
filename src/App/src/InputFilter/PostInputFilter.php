@@ -60,15 +60,15 @@ class PostInputFilter extends InputFilter
             'validators'  => [
                 new Validator\NotEmpty([
                     'messages' => [
-                        Validator\NotEmpty::IS_EMPTY => 'Az "Slug" mező kitöltése kötelező',
-                        Validator\NotEmpty::INVALID  => 'Slug: Hibás mező tipus',
+                        Validator\NotEmpty::IS_EMPTY => 'Az "URL hivatkozás" mező kitöltése kötelező',
+                        Validator\NotEmpty::INVALID  => 'URL hivatkozás: Hibás mező tipus',
                     ],
                 ]),
                 new Validator\StringLength([
                     'messages' => [
-                        Validator\StringLength::TOO_SHORT => 'Legalább %min% karaktert kell tartalmaznia az "Slug" mezőnek',
-                        Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia az "Slug" mezőnek mint: %max%',
-                        Validator\StringLength::INVALID   => 'Slug: Hibás mező tipus. Csak szöveg fogadható el.',
+                        Validator\StringLength::TOO_SHORT => 'Legalább %min% karaktert kell tartalmaznia az "URL hivatkozás" mezőnek',
+                        Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia az "URL hivatkozás" mezőnek mint: %max%',
+                        Validator\StringLength::INVALID   => 'URL hivatkozás: Hibás mező tipus. Csak szöveg fogadható el.',
                     ],
                     'min'      => 1,
                     'max'      => 255,
@@ -83,6 +83,14 @@ class PostInputFilter extends InputFilter
         $this->add([
             'name'        => 'created',
             'allow_empty' => false,
+            'validators'  => [
+                new Validator\NotEmpty([
+                    'messages' => [
+                        Validator\NotEmpty::IS_EMPTY => 'A "Dátum" kitöltése kötelező',
+                        Validator\NotEmpty::INVALID  => 'Dátum: Hibás mező tipus',
+                    ],
+                ]),
+            ],
             'filters'     => [
                 new Filter\StringTrim(),
                 new Filter\StripTags(),
@@ -131,7 +139,7 @@ class PostInputFilter extends InputFilter
                         Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia a "Tartalom" mezőnek mint: %max%',
                         Validator\StringLength::INVALID   => 'Tartalom: Hibás mező tipus. Csak szöveg fogadható el.',
                     ],
-                    'min'      => 1,
+                    'min'      => 20,
                 ]),
             ],
         ]);
