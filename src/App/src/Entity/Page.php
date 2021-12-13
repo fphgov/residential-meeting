@@ -27,7 +27,7 @@ class Page implements PageInterface
     private $status;
 
     /**
-     * @ORM\Column(name="slug", type="string")
+     * @ORM\Column(name="slug", type="string", unique=true)
      * @Groups({"list", "detail", "full_detail"})
      *
      * @var string

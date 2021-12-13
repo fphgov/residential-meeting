@@ -57,7 +57,7 @@ class Post implements PostInterface
     private $status;
 
     /**
-     * @ORM\Column(name="slug", type="string", nullable=true)
+     * @ORM\Column(name="slug", type="string", unique=true, nullable=false)
      * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
