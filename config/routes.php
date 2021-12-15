@@ -228,6 +228,13 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Post\AdminAddHandler::class
     ], 'admin.api.post.new');
 
+    $app->delete('/admin/api/posts/{id:\d+}', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Post\AdminDeleteHandler::class
+    ], 'admin.api.post.delete');
+
     $app->get('/admin/api/post/status', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,

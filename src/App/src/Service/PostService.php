@@ -115,6 +115,27 @@ final class PostService implements PostServiceInterface
         $this->em->flush();
     }
 
+    public function deletePost(
+        UserInterface $submitter,
+        PostInterface $post
+    ): void {
+        $postId = $post->getId();
+
+        try {
+            $this->em->remove($post);
+
+            $this->em->flush();
+
+            $this->audit->err('Success deleted post', [
+                'extra' => 'Post ID: ' . $postId . ' deleted by ' . $submitter->getId()
+            ]);
+        } catch (Exception $e) {
+            $this->audit->err('Failed delete post from database', [
+                'extra' => $e->getMessage(),
+            ]);
+        }
+    }
+
     public function getRepository(): EntityRepository
     {
         return $this->postRepository;
