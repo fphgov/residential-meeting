@@ -31,7 +31,7 @@ class Post implements PostInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="PostCategory")
-     * @ORM\JoinColumn(name="post_category_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="post_category_id", referencedColumnName="id", nullable=false)
      * @Groups({"list", "detail", "full_detail"})
      *
      * @var PostCategory
@@ -48,15 +48,16 @@ class Post implements PostInterface
     private $featuredImage;
 
     /**
-     * @ORM\Column(name="status", type="string")
-     * @Groups({"full_detail"})
+     * @ORM\ManyToOne(targetEntity="PostStatus")
+     * @ORM\JoinColumn(name="post_status_id", referencedColumnName="id", nullable=false)
+     * @Groups({"list", "full_detail"})
      *
-     * @var string
+     * @var PostStatus
      */
     private $status;
 
     /**
-     * @ORM\Column(name="slug", type="string", nullable=true)
+     * @ORM\Column(name="slug", type="string", unique=true, nullable=false)
      * @Groups({"list", "detail", "full_detail"})
      *
      * @var string
@@ -97,7 +98,7 @@ class Post implements PostInterface
         return $this->author;
     }
 
-    public function setFeaturedImage(Media $featuredImage = null): void
+    public function setFeaturedImage(?Media $featuredImage = null): void
     {
         $this->featuredImage = $featuredImage;
     }
@@ -107,12 +108,12 @@ class Post implements PostInterface
         return $this->featuredImage;
     }
 
-    public function setStatus(string $status): void
+    public function setStatus(PostStatus $status): void
     {
         $this->status = $status;
     }
 
-    public function getStatus(): string
+    public function getStatus(): PostStatus
     {
         return $this->status;
     }

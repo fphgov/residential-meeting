@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Handler\Idea;
+namespace App\Handler\Post;
 
-use App\Entity\Idea;
-use App\Service\IdeaServiceInterface;
+use App\Entity\Post;
+use App\Service\PostServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterInterface;
@@ -14,6 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Exception;
 
+use function array_merge_recursive;
 use function in_array;
 
 final class AdminModifyHandler implements RequestHandlerInterface
@@ -24,46 +25,48 @@ final class AdminModifyHandler implements RequestHandlerInterface
     /** @var EntityManagerInterface */
     protected $em;
 
-    /** @var IdeaServiceInterface */
-    protected $ideaService;
+    /** @var PostServiceInterface */
+    protected $postService;
 
     public function __construct(
         InputFilterInterface $inputFilter,
         EntityManagerInterface $em,
-        IdeaServiceInterface $ideaService
+        PostServiceInterface $postService
     ) {
         $this->inputFilter = $inputFilter;
         $this->em          = $em;
-        $this->ideaService = $ideaService;
+        $this->postService = $postService;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $body = $request->getParsedBody();
+        $body = array_merge_recursive(
+            $request->getParsedBody(),
+            $request->getUploadedFiles(),
+        );
 
-        $entityRepository = $this->em->getRepository(Idea::class);
+        $entityRepository = $this->em->getRepository(Post::class);
 
-        $idea = $entityRepository->find($request->getAttribute('id'));
+        $post = $entityRepository->find($request->getAttribute('id'));
 
-        if ($idea === null) {
+        if ($post === null) {
             return new JsonResponse([
                 'errors' => 'Nincs ilyen azonosítójú ötlet, vagy még feldolgozás alatt áll',
             ], 404);
         }
 
-        // $modifiedIdeaData = array_merge($idea->normalizer(null, ['groups' => 'full_detail']), $body);
+        $modifiedPostData = array_merge($post->normalizer(null, ['groups' => 'full_detail']), $body);
 
-        // $this->inputFilter->setData($modifiedIdeaData);
+        $this->inputFilter->setData($modifiedPostData);
 
-        // if (! $this->inputFilter->isValid()) {
-        //     return new JsonResponse([
-        //         'errors' => $this->inputFilter->getMessages(),
-        //     ], 422);
-        // }
+        if (! $this->inputFilter->isValid()) {
+            return new JsonResponse([
+                'errors' => $this->inputFilter->getMessages(),
+            ], 422);
+        }
 
         try {
-            // $this->ideaService->modifyIdea($idea, $this->inputFilter->getValues());
-            $this->ideaService->modifyIdea($idea, $body);
+            $this->postService->modifyPost($post, $this->inputFilter->getValues());
         } catch (Exception $e) {
             return new JsonResponse([
                 'errors' => $e->getMessage(),

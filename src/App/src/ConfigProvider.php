@@ -65,6 +65,12 @@ class ConfigProvider
                 Handler\Page\GetHandler::class               => Handler\Page\GetHandlerFactory::class,
                 Handler\Post\GetHandler::class               => Handler\Post\GetHandlerFactory::class,
                 Handler\Post\GetAllHandler::class            => Handler\Post\GetAllHandlerFactory::class,
+                Handler\Post\AdminListHandler::class         => Handler\Post\AdminListHandlerFactory::class,
+                Handler\Post\AdminGetHandler::class          => Handler\Post\AdminGetHandlerFactory::class,
+                Handler\Post\AdminModifyHandler::class       => Handler\Post\AdminModifyHandlerFactory::class,
+                Handler\Post\AdminAddHandler::class          => Handler\Post\AdminAddHandlerFactory::class,
+                Handler\Post\GetStatusHandler::class         => Handler\Post\GetStatusHandlerFactory::class,
+                Handler\Post\GetCategoryHandler::class       => Handler\Post\GetCategoryHandlerFactory::class,
                 Handler\Idea\GetHandler::class               => Handler\Idea\GetHandlerFactory::class,
                 Handler\Idea\ListHandler::class              => Handler\Idea\ListHandlerFactory::class,
                 Handler\Idea\FilterHandler::class            => Handler\Idea\FilterHandlerFactory::class,
@@ -89,6 +95,7 @@ class ConfigProvider
                 Service\MediaServiceInterface::class         => Service\MediaServiceFactory::class,
                 Service\UserServiceInterface::class          => Service\UserServiceFactory::class,
                 Service\ProjectServiceInterface::class       => Service\ProjectServiceFactory::class,
+                Service\PostServiceInterface::class          => Service\PostServiceFactory::class,
                 Service\SettingServiceInterface::class       => Service\SettingServiceFactory::class,
                 Service\VoteServiceInterface::class          => Service\VoteServiceFactory::class,
                 Service\IdeaServiceInterface::class          => Service\IdeaServiceFactory::class,
@@ -107,6 +114,7 @@ class ConfigProvider
                 InputFilter\VoteFilter::class             => InputFilter\VoteFilterFactory::class,
                 InputFilter\IdeaInputFilter::class        => InputFilter\IdeaInputFilterFactory::class,
                 InputFilter\OfflineVoteFilter::class      => InputFilter\OfflineVoteFilterFactory::class,
+                InputFilter\PostInputFilter::class        => InputFilter\PostInputFilterFactory::class,
             ],
         ];
     }

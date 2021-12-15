@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\EntityActiveInterface;
-use App\Interfaces\EntityInterface;
+use App\Interfaces\EntitySimpleInterface;
 
-interface PostCategoryInterface extends EntityInterface, EntityActiveInterface
+interface PostCategoryInterface extends EntitySimpleInterface
 {
     public const DISABLE_SHOW_DEFAULT = [
         'active',
