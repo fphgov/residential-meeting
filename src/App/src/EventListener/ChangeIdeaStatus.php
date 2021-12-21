@@ -1,23 +1,22 @@
 <?php
-
+// phpcs:ignoreFile
 declare(strict_types=1);
 
 namespace App\EventListener;
 
 use App\Entity\Idea;
 use App\Entity\WorkflowStateInterface;
-use App\Service\IdeaServiceInterface;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 class ChangeIdeaStatus implements EventSubscriber
 {
-    public function __construct() {
-
+    public function __construct()
+    {
     }
 
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             Events::postUpdate,
@@ -31,7 +30,7 @@ class ChangeIdeaStatus implements EventSubscriber
 
     public function index(LifecycleEventArgs $args, $ideaService = null)
     {
-        $em   = $args->getObjectManager();
+        $em = $args->getObjectManager();
 
         $uow  = $em->getUnitOfWork();
         $idea = $args->getObject();

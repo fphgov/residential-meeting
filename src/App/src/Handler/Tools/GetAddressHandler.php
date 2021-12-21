@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Handler\Tools;
 
 use App\Service\PostalClientServiceInterface;
-use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

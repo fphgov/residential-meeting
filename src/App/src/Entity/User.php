@@ -26,72 +26,72 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity="UserPreference", mappedBy="user")
-     * @Ignore
      *
+     * @Ignore()
      * @var UserPreference|null
      */
     private $userPreference;
 
     /**
      * @ORM\OneToMany(targetEntity="Vote", mappedBy="user")
-     * @Ignore
      *
+     * @Ignore()
      * @var Collection|Vote[]
      */
     private $votes;
 
     /**
      * @ORM\OneToMany(targetEntity="Idea", mappedBy="submitter")
-     * @Ignore
      *
+     * @Ignore()
      * @var Collection|Idea[]
      */
     private $ideas;
 
     /**
      * @ORM\Column(name="username", type="string")
-     * @Groups({"profile"})
      *
+     * @Groups({"profile"})
      * @var string
      */
     private $username;
 
     /**
      * @ORM\Column(name="firstname", type="string")
-     * @Groups({"list", "detail", "full_detail", "profile"})
      *
+     * @Groups({"list", "detail", "full_detail", "profile"})
      * @var string
      */
     private $firstname;
 
     /**
      * @ORM\Column(name="lastname", type="string")
-     * @Groups({"list", "detail", "full_detail", "profile"})
      *
+     * @Groups({"list", "detail", "full_detail", "profile"})
      * @var string
      */
     private $lastname;
 
     /**
      * @ORM\Column(name="email", type="string", length=100, unique=true)
-     * @Groups({"profile"})
      *
+     * @Groups({"profile"})
      * @var string
      */
     private $email;
 
     /**
      * @ORM\Column(name="password", type="text", length=100)
-     * @Ignore
      *
+     * @Ignore()
      * @var string
      */
     private $password;
 
     /**
      * @ORM\Column(name="role", type="string")
-     * @Ignore
      *
+     * @Ignore()
      * @var string
      */
     private $role = 'user';

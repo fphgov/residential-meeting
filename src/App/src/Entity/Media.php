@@ -24,24 +24,24 @@ class Media implements MediaInterface
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var UuidInterface
      */
     private $id;
 
     /**
      * @ORM\Column(name="filename", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $filename;
 
     /**
      * @ORM\Column(name="type", type="string", nullable=true)
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string|null
      */
     private $type;

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Handler\Account;
 
 use App\Middleware\UserMiddleware;
-use App\Model\PBKDF2Password;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;

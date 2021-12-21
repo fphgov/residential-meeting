@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\MailQueue;
 use App\Entity\MailLog;
-use App\Entity\MailLogInterface;
+use App\Entity\MailQueue;
 use App\Entity\UserInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -101,7 +100,7 @@ final class MailQueueService implements MailQueueServiceInterface
             $this->em->remove($mailQueue);
             $this->em->flush();
 
-            usleep(250000); # 0.25 sec
+            usleep(250000); // 0.25 sec
         } catch (Throwable $th) {
             $this->audit->err('Mail no sended from mail queue', [
                 'extra' => $mailQueue->getId() . ' ' . $th->getMessage(),

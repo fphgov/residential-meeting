@@ -11,9 +11,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-use function array_keys;
-use function array_map;
-
 final class GetCategoryHandler implements RequestHandlerInterface
 {
     /** @var EntityManagerInterface */

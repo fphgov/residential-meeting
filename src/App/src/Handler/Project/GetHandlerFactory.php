@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Handler\Project;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Container\ContainerInterface;
 use Mezzio\Hal\HalResponseFactory;
 use Mezzio\Hal\ResourceGenerator;
+use Psr\Container\ContainerInterface;
 
 final class GetHandlerFactory
 {

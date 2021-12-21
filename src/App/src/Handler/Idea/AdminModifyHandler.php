@@ -7,14 +7,12 @@ namespace App\Handler\Idea;
 use App\Entity\Idea;
 use App\Service\IdeaServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Exception;
-
-use function in_array;
 
 final class AdminModifyHandler implements RequestHandlerInterface
 {

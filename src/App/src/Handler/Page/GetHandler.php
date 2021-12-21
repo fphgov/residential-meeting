@@ -27,7 +27,7 @@ final class GetHandler implements RequestHandlerInterface
         $pageRepository = $this->entityManager->getRepository(Page::class);
 
         $page = $pageRepository->findOneBy([
-            'slug' => $request->getAttribute('slug')
+            'slug' => $request->getAttribute('slug'),
         ]);
 
         if ($page === null) {

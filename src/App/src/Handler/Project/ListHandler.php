@@ -6,9 +6,9 @@ namespace App\Handler\Project;
 
 use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
-use App\Entity\WorkflowState;
 use App\Entity\Project;
 use App\Entity\ProjectCollection;
+use App\Entity\WorkflowState;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -18,9 +18,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function explode;
 use function in_array;
 use function intval;
 use function is_string;
+use function str_replace;
 use function strtoupper;
 
 final class ListHandler implements RequestHandlerInterface

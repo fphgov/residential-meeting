@@ -39,9 +39,9 @@ class ConfigProvider
     {
         return [
             'invokables' => [
-                Handler\PingHandler::class                   => Handler\PingHandler::class,
-                Service\PostalClientServiceInterface::class  => Service\PostalClientService::class,
-                EventListener\ChangeIdeaStatus::class        => EventListener\ChangeIdeaStatus::class,
+                Handler\PingHandler::class                  => Handler\PingHandler::class,
+                Service\PostalClientServiceInterface::class => Service\PostalClientService::class,
+                EventListener\ChangeIdeaStatus::class       => EventListener\ChangeIdeaStatus::class,
             ],
             'delegators' => [
                 EventListener\ChangeIdeaStatus::class => [

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Handler\Project;
 
-use App\Entity\Project;
 use App\Entity\Campaign;
-use App\Entity\CampaignTheme;
 use App\Entity\CampaignLocation;
+use App\Entity\CampaignTheme;
+use App\Entity\Project;
 use App\Entity\WorkflowState;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -16,8 +16,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 use function array_values;
-use function array_map;
-use function array_unique;
 use function in_array;
 use function strtolower;
 

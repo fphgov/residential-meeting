@@ -9,17 +9,9 @@ use function curl_close;
 use function curl_exec;
 use function curl_init;
 use function curl_setopt_array;
+use function getenv;
 use function http_build_query;
-use function is_string;
 use function json_decode;
-use function preg_match;
-use function preg_replace;
-use function preg_split;
-use function sprintf;
-use function str_replace;
-use function strlen;
-use function strtoupper;
-use function trim;
 
 use const CURL_HTTP_VERSION_1_1;
 use const CURLOPT_CUSTOMREQUEST;

@@ -34,13 +34,13 @@ final class GetAllHandler implements RequestHandlerInterface
         $limit       = $queryParams['limit'] ?? null;
         $category    = $queryParams['category'] ?? 1;
 
-        $postCategories = explode(';', str_replace(',', ';', (string)$category));
+        $postCategories = explode(';', str_replace(',', ';', (string) $category));
 
         $posts = $postRepository->findBy([
             'status'   => PostStatusInterface::STATUS_PUBLISH,
             'category' => $postCategories,
         ], [
-            'createdAt' => 'DESC'
+            'createdAt' => 'DESC',
         ], $limit);
 
         if ($posts === null) {

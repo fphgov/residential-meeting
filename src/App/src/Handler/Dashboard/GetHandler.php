@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Handler\Dashboard;
 
+use App\Entity\Idea;
 use App\Entity\OfflineVote;
 use App\Entity\User;
 use App\Entity\Vote;
-use App\Entity\Idea;
 use App\Entity\WorkflowStateInterface;
-use App\Repository\OfflineVoteRepository;
 use App\Repository\IdeaRepository;
+use App\Repository\OfflineVoteRepository;
 use App\Repository\UserRepository;
 use App\Repository\VoteRepository;
 use App\Service\SettingServiceInterface;
@@ -54,15 +54,15 @@ final class GetHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $setting             = $this->settingService->getRepository()->find(1);
+        $setting = $this->settingService->getRepository()->find(1);
 
         $countIdeas          = $this->ideaRepository->count([]);
         $countIdeasPublished = $this->countPublished();
         $countIdeasRejected  = $this->countRejected();
 
-        $countUsers          = $this->userRepository->count([]);
-        $countVotes          = $this->voteRepository->count([]);
-        $countOfflineVotes   = $this->offlineVoteRepository->count([]);
+        $countUsers        = $this->userRepository->count([]);
+        $countVotes        = $this->voteRepository->count([]);
+        $countOfflineVotes = $this->offlineVoteRepository->count([]);
 
         return new JsonResponse([
             'settings' => $setting,
@@ -82,8 +82,8 @@ final class GetHandler implements RequestHandlerInterface
         return $this->ideaRepository->count([
             'workflowState' => [
                 WorkflowStateInterface::STATUS_PUBLISHED,
-                WorkflowStateInterface::STATUS_PUBLISHED_WITH_MOD
-            ]
+                WorkflowStateInterface::STATUS_PUBLISHED_WITH_MOD,
+            ],
         ]);
     }
 
@@ -92,7 +92,7 @@ final class GetHandler implements RequestHandlerInterface
         return $this->ideaRepository->count([
             'workflowState' => [
                 WorkflowStateInterface::STATUS_TRASH,
-            ]
+            ],
         ]);
     }
 }

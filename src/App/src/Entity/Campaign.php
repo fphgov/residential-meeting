@@ -30,24 +30,24 @@ class Campaign implements CampaignInterface
 
     /**
      * @ORM\Column(name="title", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $title;
 
     /**
      * @ORM\Column(name="short_title", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $shortTitle;
 
     /**
      * @ORM\Column(name="description", type="text")
-     * @Groups({"detail", "full_detail"})
      *
+     * @Groups({"detail", "full_detail"})
      * @var string
      */
     private $description;

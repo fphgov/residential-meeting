@@ -32,65 +32,58 @@ class Idea implements IdeaInterface
     /**
      * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="ideas")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var Campaign
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $campaign;
+    private Campaign $campaign;
 
     /**
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
      * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var CampaignTheme
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $campaignTheme;
+    private CampaignTheme $campaignTheme;
 
     /**
      * @ORM\ManyToOne(targetEntity="CampaignLocation")
      * @ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id", nullable=true)
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var CampaignLocation|null
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $campaignLocation;
+    private ?CampaignLocation $campaignLocation;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="ideas")
      * @ORM\JoinColumn(name="submitter_id", referencedColumnName="id", nullable=false)
-     * @Groups({"detail", "full_detail"})
      *
-     * @var User
+     * @Groups({"detail", "full_detail"})
      */
-    private $submitter;
+    private User $submitter;
 
     /**
      * @ORM\ManyToOne(targetEntity="Project", inversedBy="ideas")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=true)
-     * @Groups({"detail", "full_detail"})
      *
-     * @var Project|null
+     * @Groups({"detail", "full_detail"})
      */
-    private $project;
+    private ?Project $project;
 
     /**
      * @ORM\ManyToOne(targetEntity="WorkflowState")
      * @ORM\JoinColumn(name="workflow_state_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var WorkflowState
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $workflowState;
+    private WorkflowState $workflowState;
 
     /**
      * @ORM\ManyToOne(targetEntity="WorkflowStateExtra")
      * @ORM\JoinColumn(name="workflow_state_extra_id", referencedColumnName="id", nullable=true)
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var WorkflowStateExtra
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $workflowStateExtra;
+    private ?WorkflowStateExtra $workflowStateExtra;
 
     /**
      * @ORM\ManyToMany(targetEntity="Media")
@@ -98,95 +91,90 @@ class Idea implements IdeaInterface
      *      joinColumns={@ORM\JoinColumn(name="idea_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
      * )
-     * @Groups({"detail", "full_detail"})
      *
+     * @Groups({"detail", "full_detail"})
      * @var Collection|Media[]
      */
     private $medias;
 
     /**
      * @ORM\OneToMany(targetEntity="Link", mappedBy="idea")
-     * @Groups({"detail", "full_detail"})
      *
+     * @Groups({"detail", "full_detail"})
      * @var Collection|Link[]
      */
     private $links;
 
     /**
      * @ORM\Column(name="title", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var string
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(name="solution", type="text")
-     * @Groups({"detail", "full_detail"})
      *
-     * @var string
+     * @Groups({"detail", "full_detail"})
      */
-    private $solution;
+    private string $solution;
 
     /**
      * @ORM\Column(name="description", type="text")
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var string
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $description;
+    private string $description;
 
     /**
      * @ORM\Column(name="location_description", type="text", nullable=false)
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var string
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $locationDescription = "";
+    private string $locationDescription = "";
 
     /**
      * @ORM\Column(name="participate", type="boolean", nullable=false)
-     * @Groups({"full_detail"})
      *
-     * @var bool
+     * @Groups({"full_detail"})
      */
-    private $participate;
+    private bool $participate;
 
     /**
      * @ORM\Column(name="participate_comment", type="text", nullable=false)
-     * @Groups({"full_detail"})
      *
-     * @var string
+     * @Groups({"full_detail"})
      */
-    private $participateComment = "";
+    private string $participateComment = "";
 
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var string|null
+     * @Groups({"list", "detail", "full_detail"})
+     * @var string|int|null
      */
     private $cost;
 
     /**
      * @ORM\Column(name="latitude", type="float", nullable=true)
+     *
      * @Groups({"full_detail"})
      */
-    private $latitude;
+    private ?float $latitude;
 
     /**
      * @ORM\Column(name="longitude", type="float", nullable=true)
+     *
      * @Groups({"full_detail"})
      */
-    private $longitude;
+    private ?float $longitude;
 
     /**
      * @ORM\Column(name="answer", type="text", nullable=false)
-     * @Groups({"detail", "full_detail"})
      *
-     * @var string
+     * @Groups({"detail", "full_detail"})
      */
-    private $answer = "";
+    private string $answer = "";
 
     public function __construct()
     {
@@ -250,7 +238,7 @@ class Idea implements IdeaInterface
         foreach ($this->medias->getValues() as $media) {
             $medias[] = [
                 'id'   => $media->getId(),
-                'type' => $media->getType()
+                'type' => $media->getType(),
             ];
         }
 
@@ -389,7 +377,7 @@ class Idea implements IdeaInterface
     }
 
     /** @var int|string|null $cost **/
-    public function setCost($cost = null): void
+    public function setCost(mixed $cost = null): void
     {
         $this->cost = $cost;
     }

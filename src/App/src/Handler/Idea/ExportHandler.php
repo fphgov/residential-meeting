@@ -11,16 +11,16 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-use function ob_start;
-use function ob_get_clean;
-use function fstat;
 use function fopen;
+use function fstat;
 use function fwrite;
+use function ob_get_clean;
+use function ob_start;
 use function rewind;
 
 final class ExportHandler implements RequestHandlerInterface
 {
-    private $ideaExportModel;
+    private IdeaExportModel $ideaExportModel;
 
     public function __construct(
         IdeaExportModel $ideaExportModel
@@ -38,7 +38,7 @@ final class ExportHandler implements RequestHandlerInterface
         $writer->save('php://output');
         $excelOutput = ob_get_clean();
 
-        $stream = fopen('php://memory','r+');
+        $stream = fopen('php://memory', 'r+');
         fwrite($stream, $excelOutput);
         rewind($stream);
 

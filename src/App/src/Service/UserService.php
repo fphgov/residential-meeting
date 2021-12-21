@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\MailLog;
 use App\Entity\User;
 use App\Entity\UserInterface;
 use App\Entity\UserPreference;
 use App\Entity\UserPreferenceInterface;
-use App\Entity\MailLog;
 use App\Exception\UserNotActiveException;
 use App\Exception\UserNotFoundException;
 use App\Model\PBKDF2Password;
-use App\Service\MailQueueServiceInterface;
 use App\Repository\UserRepository;
+use App\Service\MailQueueServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Exception;
 use Laminas\Log\Logger;
 use Mail\MailAdapter;
 use Throwable;
@@ -268,7 +269,7 @@ final class UserService implements UserServiceInterface
 
         try {
             $this->em->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             error_log($e->getMessage());
 
             $this->audit->err('Failed delete user', [

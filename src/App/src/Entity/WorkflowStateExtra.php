@@ -21,32 +21,32 @@ class WorkflowStateExtra implements WorkflowStateExtraInterface
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
-     * @Groups({"option"})
      *
+     * @Groups({"option"})
      * @var int
      */
     private $id;
 
     /**
      * @ORM\Column(name="code", type="string")
-     * @Groups({"list", "detail", "full_detail", "option"})
      *
+     * @Groups({"list", "detail", "full_detail", "option"})
      * @var string
      */
     private $code;
 
     /**
      * @ORM\Column(name="title", type="string")
-     * @Groups({"list", "detail", "full_detail", "option"})
      *
+     * @Groups({"list", "detail", "full_detail", "option"})
      * @var string
      */
     private $title;
 
     /**
      * @ORM\Column(name="description", type="string")
-     * @Groups({"detail", "full_detail"})
      *
+     * @Groups({"detail", "full_detail"})
      * @var string
      */
     private $description;

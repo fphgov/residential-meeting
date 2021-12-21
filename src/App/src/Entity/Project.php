@@ -30,16 +30,15 @@ class Project implements ProjectInterface
     /**
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
      * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var CampaignTheme
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $campaignTheme;
+    private CampaignTheme $campaignTheme;
 
     /**
      * @ORM\OneToMany(targetEntity="Idea", mappedBy="project")
-     * @Groups({"detail", "full_detail"})
      *
+     * @Groups({"detail", "full_detail"})
      * @var Collection|Idea[]
      */
     private $ideas;
@@ -50,8 +49,8 @@ class Project implements ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
      * )
-     * @Groups({"detail", "full_detail"})
      *
+     * @Groups({"detail", "full_detail"})
      * @var Collection|Tag[]
      */
     private $tags;
@@ -62,8 +61,8 @@ class Project implements ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id")}
      * )
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var Collection|CampaignLocation[]
      */
     private $campaignLocations;
@@ -74,8 +73,8 @@ class Project implements ProjectInterface
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
      * )
-     * @Groups({"detail", "full_detail"})
      *
+     * @Groups({"detail", "full_detail"})
      * @var Collection|Media[]
      */
     private $medias;
@@ -83,66 +82,60 @@ class Project implements ProjectInterface
     /**
      * @ORM\ManyToOne(targetEntity="WorkflowState")
      * @ORM\JoinColumn(name="workflow_state_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var WorkflowState
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $workflowState;
+    private WorkflowState $workflowState;
 
     /**
      * @ORM\Column(name="title", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var string
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(name="description", type="text")
-     * @Groups({"list", "detail", "full_detail"})
      *
-     * @var string
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private $description;
+    private string $description;
 
     /**
      * @ORM\Column(name="location", type="string")
-     * @Groups({"detail", "full_detail"})
      *
-     * @var string
+     * @Groups({"detail", "full_detail"})
      */
-    private $location;
+    private string $location;
 
     /**
      * @ORM\Column(name="solution", type="text")
-     * @Groups({"detail", "full_detail"})
      *
-     * @var string
+     * @Groups({"detail", "full_detail"})
      */
-    private $solution;
+    private string $solution;
 
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
-     * @Groups({"detail", "full_detail"})
      *
+     * @Groups({"detail", "full_detail"})
      * @var string|null
      */
     private $cost;
 
     /**
      * @ORM\Column(name="video", type="string", nullable=true)
-     * @Groups({"detail", "full_detail"})
      *
-     * @var string|null
+     * @Groups({"detail", "full_detail"})
      */
-    private $video;
+    private ?string $video;
 
     /**
      * @ORM\Column(name="win", type="boolean", nullable=false)
      *
-     * @var bool
+     * @Groups({"detail", "full_detail"})
      */
-    private $win = false;
+    private bool $win = false;
 
     public function getCampaignTheme(): CampaignTheme
     {
@@ -165,7 +158,7 @@ class Project implements ProjectInterface
         foreach ($this->medias->getValues() as $media) {
             $medias[] = [
                 'id'   => $media->getId(),
-                'type' => $media->getType()
+                'type' => $media->getType(),
             ];
         }
 
@@ -281,7 +274,7 @@ class Project implements ProjectInterface
     }
 
     /** @var int|string|null $cost **/
-    public function setCost($cost = null): void
+    public function setCost(mixed $cost = null): void
     {
         $this->cost = $cost;
     }

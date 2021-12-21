@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\MailLog;
 use App\Entity\UserPreference;
 use App\Entity\Vote;
-use App\Entity\MailLog;
-use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -27,7 +26,7 @@ final class UserRepository extends EntityRepository
         $qb = $this->createQueryBuilder('u');
 
         $qb->where('u.active = :active')
-            ->andWhere('u.updatedAt < DATE_SUB(NOW(), '. $hour .', \'HOUR\')')
+            ->andWhere('u.updatedAt < DATE_SUB(NOW(), ' . $hour . ', \'HOUR\')')
             ->setParameter('active', false)
             ->orderBy('u.id', 'ASC');
 

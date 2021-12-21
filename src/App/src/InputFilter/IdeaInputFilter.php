@@ -302,17 +302,15 @@ class IdeaInputFilter extends InputFilter
                     'max'      => 5,
                 ]),
                 new Validator\Uri([
-                    'messages' => [
+                    'messages'      => [
                         Validator\Uri::INVALID => 'Érvénytelen típus. Szöveg vagy tömb típus fogadható el',
                         Validator\Uri::NOT_URI => 'Érvénytelen URL cím',
                     ],
                     'allowRelative' => false,
-                    'allowAbsolute' => true
+                    'allowAbsolute' => true,
                 ]),
             ],
-            'filters'     => [
-
-            ],
+            'filters'     => [],
         ]);
     }
 }

@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace App\Serializer\Normalizer;
 
-use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Lazy\LazyUuidFromString;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class UuidNormalizer implements NormalizerInterface, DenormalizerInterface, CacheableSupportsMethodInterface
 {
-    public function normalize($object, string $format = null, array $context = [])
+    public function normalize($object, ?string $format = null, array $context = []): mixed
     {
         return $object->serialize();
     }
@@ -21,7 +20,7 @@ final class UuidNormalizer implements NormalizerInterface, DenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize($data, string $type, ?string $format = null, array $context = [])
     {
         return new LazyUuidFromString($data);
     }
@@ -29,7 +28,7 @@ final class UuidNormalizer implements NormalizerInterface, DenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, string $type, ?string $format = null): bool
     {
         return $data instanceof UuidInterface;
     }
@@ -37,7 +36,7 @@ final class UuidNormalizer implements NormalizerInterface, DenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, string $format = null)
+    public function supportsNormalization($data, ?string $format = null)
     {
         return $data instanceof UuidInterface;
     }
@@ -47,6 +46,6 @@ final class UuidNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     public function hasCacheableSupportsMethod(): bool
     {
-        return __CLASS__ === static::class;
+        return self::class === static::class;
     }
 }

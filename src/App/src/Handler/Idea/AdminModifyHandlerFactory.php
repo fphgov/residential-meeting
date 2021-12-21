@@ -7,8 +7,8 @@ namespace App\Handler\Idea;
 use App\InputFilter\IdeaInputFilter;
 use App\Service\IdeaServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Container\ContainerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
+use Psr\Container\ContainerInterface;
 
 final class AdminModifyHandlerFactory
 {

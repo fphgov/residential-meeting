@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Handler\Idea;
 
-use App\Entity\IdeaCollection;
 use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
-use App\Entity\WorkflowState;
+use App\Entity\IdeaCollection;
 use App\Entity\User;
+use App\Entity\WorkflowState;
 use App\Service\IdeaServiceInterface;
 use Doctrine\ORM\Query\Expr\Join;
+use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Mezzio\Hal\HalResponseFactory;
 use Mezzio\Hal\ResourceGenerator;
@@ -18,9 +19,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function explode;
+use function intval;
 use function is_string;
 use function strtoupper;
-use function explode;
 
 final class AdminListHandler implements RequestHandlerInterface
 {
@@ -53,7 +55,7 @@ final class AdminListHandler implements RequestHandlerInterface
         $body        = $request->getParsedBody();
         $queryParams = $request->getQueryParams();
 
-        $page     = $queryParams['page'] ?? 1;
+        $page = $queryParams['page'] ?? 1;
 
         $sort     = $body['sort'] ?? 'DESC';
         $theme    = $body['theme'] ?? '';
@@ -126,7 +128,7 @@ final class AdminListHandler implements RequestHandlerInterface
             return new JsonResponse([
                 'errors' => 'Bad Request',
             ], 400);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse([
                 'errors' => 'Bad Request',
             ], 400);

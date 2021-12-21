@@ -6,7 +6,6 @@ namespace App\Entity;
 
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\Ignore;
@@ -23,8 +22,8 @@ class Post implements PostInterface
     /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     * @Ignore
      *
+     * @ignore
      * @var User
      */
     private $author;
@@ -32,8 +31,8 @@ class Post implements PostInterface
     /**
      * @ORM\ManyToOne(targetEntity="PostCategory")
      * @ORM\JoinColumn(name="post_category_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var PostCategory
      */
     private $category;
@@ -41,8 +40,8 @@ class Post implements PostInterface
     /**
      * @ORM\ManyToOne(targetEntity="Media")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var Media|null
      */
     private $featuredImage;
@@ -50,40 +49,40 @@ class Post implements PostInterface
     /**
      * @ORM\ManyToOne(targetEntity="PostStatus")
      * @ORM\JoinColumn(name="post_status_id", referencedColumnName="id", nullable=false)
-     * @Groups({"list", "full_detail"})
      *
+     * @Groups({"list", "full_detail"})
      * @var PostStatus
      */
     private $status;
 
     /**
      * @ORM\Column(name="slug", type="string", unique=true, nullable=false)
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $slug;
 
     /**
      * @ORM\Column(name="title", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $title;
 
     /**
      * @ORM\Column(name="description", type="text")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $description;
 
     /**
      * @ORM\Column(name="content", type="text")
-     * @Groups({"detail", "full_detail"})
      *
+     * @Groups({"detail", "full_detail"})
      * @var string
      */
     private $content;

@@ -41,8 +41,8 @@ final class PasswordChangeHandler implements RequestHandlerInterface
                 'errors' => [
                     'password' => [
                         'required' => 'Kötelező a jelszó mezők kitöltése',
-                    ]
-                ]
+                    ],
+                ],
             ], 422);
         }
 
@@ -50,9 +50,9 @@ final class PasswordChangeHandler implements RequestHandlerInterface
             return new JsonResponse([
                 'errors' => [
                     'password_again' => [
-                        'password_not_same' =>'Nem egyezik a megadott két jelszó',
-                    ]
-                ]
+                        'password_not_same' => 'Nem egyezik a megadott két jelszó',
+                    ],
+                ],
             ], 422);
         }
 

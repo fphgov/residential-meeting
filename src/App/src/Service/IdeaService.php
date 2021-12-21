@@ -4,32 +4,35 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Campaign;
+use App\Entity\CampaignLocation;
 use App\Entity\CampaignTheme;
 use App\Entity\Idea;
 use App\Entity\IdeaInterface;
-use App\Entity\Media;
 use App\Entity\Link;
+use App\Entity\Media;
 use App\Entity\PhaseInterface;
 use App\Entity\UserInterface;
 use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateExtra;
-use App\Entity\CampaignLocation;
 use App\Entity\WorkflowStateInterface;
 use App\Exception\NoHasPhaseCategoryException;
 use App\Exception\NotPossibleSubmitIdeaWithAdminAccountException;
-use App\Service\PhaseServiceInterface;
 use App\Service\MailQueueServiceInterface;
+use App\Service\PhaseServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Laminas\Log\Logger;
 use Mail\MailAdapter;
 use Psr\Http\Message\UploadedFileInterface;
-use Laminas\Log\Logger;
 
 use function basename;
-use function is_countable;
+use function error_log;
+use function in_array;
 use function is_array;
+use function is_countable;
+use function is_numeric;
+use function parse_str;
 use function str_replace;
 use function wordwrap;
 
@@ -133,7 +136,7 @@ final class IdeaService implements IdeaServiceInterface
                 parse_str($suggestion['geometry'], $geometry);
 
                 if (isset($suggestion['nfn'])) {
-                    $nfn = \str_replace('.', '', $suggestion['nfn']);
+                    $nfn = str_replace('.', '', $suggestion['nfn']);
 
                     $location = $this->campaignLocationRepository->findOneBy([
                         'code'     => "AREA" . $nfn,
@@ -145,8 +148,8 @@ final class IdeaService implements IdeaServiceInterface
                     }
                 }
 
-                $idea->setLatitude((float)$geometry['y']);
-                $idea->setLongitude((float)$geometry['x']);
+                $idea->setLatitude((float) $geometry['y']);
+                $idea->setLongitude((float) $geometry['x']);
             }
         }
 
@@ -276,7 +279,7 @@ final class IdeaService implements IdeaServiceInterface
                     'title'       => $idea->getTitle(),
                     'solution'    => $idea->getSolution(),
                     'description' => $idea->getDescription(),
-                ]
+                ],
             ];
 
             $this->mailAdapter->setTemplate('idea-confirmation', $tplData);

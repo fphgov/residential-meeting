@@ -8,12 +8,11 @@ use App\Entity\Post;
 use App\Middleware\UserMiddleware;
 use App\Service\PostServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
-use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Exception;
 
 final class AdminDeleteHandler implements RequestHandlerInterface
 {

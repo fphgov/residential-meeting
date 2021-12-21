@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Handler\Idea;
 
 use App\Entity\Campaign;
-use App\Entity\CampaignTheme;
 use App\Entity\CampaignLocation;
-use App\Entity\WorkflowState;
+use App\Entity\CampaignTheme;
 use App\Entity\Idea;
+use App\Entity\WorkflowState;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -16,8 +16,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 use function array_values;
-use function array_map;
-use function array_unique;
 use function in_array;
 use function strtolower;
 
@@ -31,7 +29,7 @@ final class FilterHandler implements RequestHandlerInterface
         'ready',
         'not_voted',
         'council_rejected',
-        'status_rejected'
+        'status_rejected',
     ];
 
     /** @var EntityManagerInterface */
