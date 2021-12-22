@@ -8,7 +8,7 @@ use App\Serializer\Normalizer\ModelNormalizer;
 
 trait EntityTrait
 {
-    public function normalizer(?string $format = null, array $context = []): mixed
+    public function normalizer(?string $format = null, array $context = [])
     {
         $normalizer = new ModelNormalizer();
 

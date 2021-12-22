@@ -274,7 +274,7 @@ class Project implements ProjectInterface
     }
 
     /** @var int|string|null $cost **/
-    public function setCost(mixed $cost = null): void
+    public function setCost($cost = null): void
     {
         $this->cost = $cost;
     }
