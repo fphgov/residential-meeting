@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Mail\Container;
 
-use Psr\Container\ContainerInterface;
 use Laminas\View\Renderer\PhpRenderer;
 use Laminas\View\Resolver;
 use Mezzio\LaminasView\LaminasViewRenderer;
+use Psr\Container\ContainerInterface;
 
 class LaminasViewRenderFactory
 {

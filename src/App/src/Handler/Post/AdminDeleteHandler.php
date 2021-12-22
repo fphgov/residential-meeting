@@ -5,23 +5,17 @@ declare(strict_types=1);
 namespace App\Handler\Post;
 
 use App\Entity\Post;
+use App\Middleware\UserMiddleware;
 use App\Service\PostServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
-use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-use function array_merge;
-use function array_merge_recursive;
-
-final class AdminModifyHandler implements RequestHandlerInterface
+final class AdminDeleteHandler implements RequestHandlerInterface
 {
-    /** @var InputFilterInterface */
-    private $inputFilter;
-
     /** @var EntityManagerInterface */
     protected $em;
 
@@ -29,44 +23,29 @@ final class AdminModifyHandler implements RequestHandlerInterface
     protected $postService;
 
     public function __construct(
-        InputFilterInterface $inputFilter,
         EntityManagerInterface $em,
         PostServiceInterface $postService
     ) {
-        $this->inputFilter = $inputFilter;
         $this->em          = $em;
         $this->postService = $postService;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $body = array_merge_recursive(
-            $request->getParsedBody(),
-            $request->getUploadedFiles(),
-        );
+        $user = $request->getAttribute(UserMiddleware::class);
 
-        $entityRepository = $this->em->getRepository(Post::class);
+        $postRepository = $this->em->getRepository(Post::class);
 
-        $post = $entityRepository->find($request->getAttribute('id'));
+        $post = $postRepository->find($request->getAttribute('id'));
 
         if ($post === null) {
             return new JsonResponse([
-                'errors' => 'Nincs ilyen azonosítójú ötlet, vagy még feldolgozás alatt áll',
+                'errors' => 'Nem található',
             ], 404);
         }
 
-        $modifiedPostData = array_merge($post->normalizer(null, ['groups' => 'full_detail']), $body);
-
-        $this->inputFilter->setData($modifiedPostData);
-
-        if (! $this->inputFilter->isValid()) {
-            return new JsonResponse([
-                'errors' => $this->inputFilter->getMessages(),
-            ], 422);
-        }
-
         try {
-            $this->postService->modifyPost($post, $this->inputFilter->getValues());
+            $this->postService->deletePost($user, $post);
         } catch (Exception $e) {
             return new JsonResponse([
                 'errors' => $e->getMessage(),

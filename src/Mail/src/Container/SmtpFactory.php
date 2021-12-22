@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Mail\Container;
 
-use Psr\Container\ContainerInterface;
 use Laminas\Mail\Transport\Smtp;
 use Laminas\Mail\Transport\SmtpOptions;
 use Laminas\Mail\Transport\TransportInterface;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Psr\Container\ContainerInterface;
 
 class SmtpFactory
 {

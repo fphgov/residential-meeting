@@ -6,13 +6,14 @@ namespace App\Handler\Idea;
 
 use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
-use App\Entity\WorkflowState;
-use App\Entity\WorkflowStateInterface;
-use App\Entity\User;
 use App\Entity\Idea;
 use App\Entity\IdeaCollection;
+use App\Entity\User;
+use App\Entity\WorkflowState;
+use App\Entity\WorkflowStateInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
+use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Mezzio\Hal\HalResponseFactory;
 use Mezzio\Hal\ResourceGenerator;
@@ -20,12 +21,13 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function explode;
+use function implode;
 use function in_array;
 use function intval;
 use function is_string;
-use function strtoupper;
 use function str_replace;
-use function explode;
+use function strtoupper;
 
 final class ListHandler implements RequestHandlerInterface
 {
@@ -105,7 +107,7 @@ final class ListHandler implements RequestHandlerInterface
             $qb->setParameter('location', $location);
         }
 
-        if ($location && \is_string($location) && $location !== 0) {
+        if ($location && is_string($location) && $location !== 0) {
             $qb->andWhere('cl.code = :location');
             $qb->setParameter('location', $location);
         }
@@ -128,14 +130,14 @@ final class ListHandler implements RequestHandlerInterface
         $disableStatuses = implode(', ', [
             WorkflowStateInterface::STATUS_RECEIVED,
             WorkflowStateInterface::STATUS_USER_DELETED,
-            WorkflowStateInterface::STATUS_TRASH
+            WorkflowStateInterface::STATUS_TRASH,
         ]);
 
         if ($username && $username !== '') {
             $qb->andWhere('u.username = :username');
             $qb->setParameter('username', $username);
         } else {
-            $qb->andWhere('w.id NOT IN ('. $disableStatuses .')');
+            $qb->andWhere('w.id NOT IN (' . $disableStatuses . ')');
         }
 
         $qb->setMaxResults(1);
@@ -151,7 +153,7 @@ final class ListHandler implements RequestHandlerInterface
             return new JsonResponse([
                 'errors' => 'Bad Request',
             ], 400);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse([
                 'errors' => 'Bad Request',
             ], 400);

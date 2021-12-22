@@ -1,5 +1,5 @@
 diff --git a/src/Hostname.php b/src/Hostname.php
-index 7c72fe81..58915174 100644
+index 7c72fe81..d30a299e 100644
 --- a/src/Hostname.php
 +++ b/src/Hostname.php
 @@ -55,7 +55,7 @@ class Hostname extends AbstractValidator
@@ -11,7 +11,7 @@ index 7c72fe81..58915174 100644
          self::INVALID_DASH            => "The input appears to be a DNS hostname but contains a dash in an invalid position",
          self::INVALID_HOSTNAME        => "The input does not match the expected structure for a DNS hostname",
          self::INVALID_HOSTNAME_SCHEMA => "The input appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'",
-@@ -1966,10 +1966,29 @@ public function useTldCheck($useTldCheck)
+@@ -1966,11 +1966,30 @@ class Hostname extends AbstractValidator
       *
       * Returns true if and only if the $value is a valid hostname with respect to the current allow option
       *
@@ -20,7 +20,7 @@ index 7c72fe81..58915174 100644
       * @return bool
       */
      public function isValid($value)
-+    {
+     {
 +        if (is_array($value)) {
 +            $isValid = true;
 +
@@ -39,9 +39,11 @@ index 7c72fe81..58915174 100644
 +    }
 +
 +    private function checkIsValid($value)
-     {
++     {
          if (! is_string($value)) {
              $this->error(self::INVALID);
+             return false;
+
 diff --git a/src/Uri.php b/src/Uri.php
 index 29f7c346..ed97f713 100644
 --- a/src/Uri.php
@@ -55,7 +57,7 @@ index 29f7c346..ed97f713 100644
          self::NOT_URI => 'The input does not appear to be a valid Uri',
      ];
 
-@@ -152,10 +152,29 @@ public function setAllowRelative($allowRelative)
+@@ -152,10 +152,29 @@ class Uri extends AbstractValidator
      /**
       * Returns true if and only if $value validates as a Uri
       *

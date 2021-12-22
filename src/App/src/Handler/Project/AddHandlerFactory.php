@@ -6,8 +6,8 @@ namespace App\Handler\Project;
 
 use App\InputFilter\ProjectInputFilter;
 use App\Service\ProjectServiceInterface;
-use Psr\Container\ContainerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
+use Psr\Container\ContainerInterface;
 
 final class AddHandlerFactory
 {

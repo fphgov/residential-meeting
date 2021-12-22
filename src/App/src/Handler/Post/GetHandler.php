@@ -29,7 +29,7 @@ final class GetHandler implements RequestHandlerInterface
 
         $post = $postRepository->findOneBy([
             'status' => PostStatusInterface::STATUS_PUBLISH,
-            'slug'   => $request->getAttribute('slug')
+            'slug'   => $request->getAttribute('slug'),
         ]);
 
         if ($post === null) {

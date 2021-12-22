@@ -22,7 +22,7 @@ class IdeaListDTO
     private string $description;
     private string $statusCode;
     private string $statusTitle;
-    private $campaignLocation;
+    private ?string $campaignLocation;
 
     public function __construct(
         int $id,
@@ -33,7 +33,7 @@ class IdeaListDTO
         string $description,
         string $statusCode,
         string $statusTitle,
-        $campaignLocation
+        ?string $campaignLocation
     ) {
         $this->id                = $id;
         $this->campaignTitle     = $campaignTitle;

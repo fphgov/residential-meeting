@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Service\PhaseServiceInterface;
-use App\Service\MailQueueServiceInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Container\ContainerInterface;
-use Mail\Action\MailAction;
 use App\Middleware\AuditMiddleware;
+use App\Service\MailQueueServiceInterface;
+use App\Service\PhaseServiceInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Mail\Action\MailAction;
+use Psr\Container\ContainerInterface;
 
 final class IdeaServiceFactory
 {

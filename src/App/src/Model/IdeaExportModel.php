@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Entity\IdeaInterface;
 use App\Service\IdeaServiceInterface;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\IWriter;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-use function substr;
+use function implode;
 
 final class IdeaExportModel implements ExportModelInterface
 {
@@ -66,7 +65,7 @@ final class IdeaExportModel implements ExportModelInterface
                 '',
                 $idea->getCampaignTheme()->getName(),
                 $idea->getCost(),
-                (int)$idea->getParticipate(),
+                (int) $idea->getParticipate(),
                 $idea->getParticipateComment(),
             ];
         }

@@ -20,8 +20,8 @@ class Setting implements SettingInterface
 
     /**
      * @ORM\Column(name="close", type="boolean")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var bool
      */
     private $close = false;

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Handler\Post;
 
 use App\Entity\Post;
-use App\Entity\PostStatus;
-use App\Entity\PostStatusInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -35,7 +33,7 @@ final class AdminListHandler implements RequestHandlerInterface
         $limit       = $queryParams['limit'] ?? null;
         $category    = $queryParams['category'] ?? null;
 
-        $postCategories = explode(';', str_replace(',', ';', (string)$category));
+        $postCategories = explode(';', str_replace(',', ';', (string) $category));
 
         $queryData = [];
 
@@ -44,7 +42,7 @@ final class AdminListHandler implements RequestHandlerInterface
         }
 
         $posts = $postRepository->findBy($queryData, [
-            'createdAt' => 'DESC'
+            'createdAt' => 'DESC',
         ], $limit);
 
         if ($posts === null) {

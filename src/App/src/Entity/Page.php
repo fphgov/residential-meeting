@@ -6,7 +6,6 @@ namespace App\Entity;
 
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -28,24 +27,24 @@ class Page implements PageInterface
 
     /**
      * @ORM\Column(name="slug", type="string", unique=true)
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $slug;
 
     /**
      * @ORM\Column(name="title", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $title;
 
     /**
      * @ORM\Column(name="content", type="text")
-     * @Groups({"detail", "full_detail"})
      *
+     * @Groups({"detail", "full_detail"})
      * @var string
      */
     private $content;

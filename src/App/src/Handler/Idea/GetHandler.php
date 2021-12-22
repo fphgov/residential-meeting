@@ -49,11 +49,13 @@ final class GetHandler implements RequestHandlerInterface
             ], 404);
         }
 
-        if (in_array($result->getWorkflowState()->getId(), [
-            WorkflowStateInterface::STATUS_RECEIVED,
-            WorkflowStateInterface::STATUS_USER_DELETED,
-            WorkflowStateInterface::STATUS_TRASH
-        ], true)) {
+        if (
+            in_array($result->getWorkflowState()->getId(), [
+                WorkflowStateInterface::STATUS_RECEIVED,
+                WorkflowStateInterface::STATUS_USER_DELETED,
+                WorkflowStateInterface::STATUS_TRASH,
+            ], true)
+        ) {
             return new JsonResponse([
                 'errors' => 'Nincs ilyen azonosítójú ötlet, vagy még feldolgozás alatt áll',
             ], 404);

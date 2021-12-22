@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Traits\EntityActiveTrait;
-use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
@@ -40,8 +38,8 @@ class Link implements LinkInterface
 
     /**
      * @ORM\Column(name="href", type="text")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $href;

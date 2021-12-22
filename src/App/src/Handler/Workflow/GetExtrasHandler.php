@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Handler\Workflow;
 
 use App\Entity\WorkflowStateExtra;
-use App\Middleware\UserMiddleware;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;

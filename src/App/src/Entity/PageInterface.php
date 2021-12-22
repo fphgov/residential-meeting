@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Interfaces\EntityInterface;
-use Doctrine\Common\Collections\Collection;
 
 interface PageInterface extends EntityInterface
 {

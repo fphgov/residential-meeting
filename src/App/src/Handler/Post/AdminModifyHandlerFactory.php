@@ -7,8 +7,8 @@ namespace App\Handler\Post;
 use App\InputFilter\PostInputFilter;
 use App\Service\PostServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Container\ContainerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
+use Psr\Container\ContainerInterface;
 
 final class AdminModifyHandlerFactory
 {

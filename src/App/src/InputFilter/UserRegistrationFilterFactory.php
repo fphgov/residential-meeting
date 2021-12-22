@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\InputFilter;
 
-use Psr\Container\ContainerInterface;
 use Laminas\Db\Adapter\AdapterInterface;
+use Psr\Container\ContainerInterface;
 
 final class UserRegistrationFilterFactory
 {

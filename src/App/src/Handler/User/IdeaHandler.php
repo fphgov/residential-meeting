@@ -10,15 +10,15 @@ use App\Exception\NotPossibleSubmitIdeaWithAdminAccountException;
 use App\Middleware\UserMiddleware;
 use App\Service\IdeaServiceInterface;
 use Exception;
-use Laminas\Log\Logger;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterInterface;
+use Laminas\Log\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 use function array_merge_recursive;
-use function str_len;
+use function strlen;
 
 final class IdeaHandler implements RequestHandlerInterface
 {
@@ -50,7 +50,7 @@ final class IdeaHandler implements RequestHandlerInterface
             $request->getUploadedFiles(),
         );
 
-        if (strlen((string)$body['participate']) === 0) {
+        if (strlen((string) $body['participate']) === 0) {
             $body['participate'] = " ";
         }
 
@@ -71,16 +71,16 @@ final class IdeaHandler implements RequestHandlerInterface
                 'errors' => [
                     'form' => [
                         'notPossibleSubmitIdea' => 'Admin vagy fejlesztői fiókkal nem lehetséges az ötlet beküldése',
-                    ]
-                ]
+                    ],
+                ],
             ], 422);
         } catch (NoHasPhaseCategoryException $e) {
             return new JsonResponse([
                 'errors' => [
                     'theme' => [
                         'unknowCampaignTheme' => 'Ismeretlen kampány kategória',
-                    ]
-                ]
+                    ],
+                ],
             ], 422);
         } catch (DifferentPhaseException $e) {
             return new JsonResponse([

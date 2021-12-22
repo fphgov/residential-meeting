@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Post;
-use App\Entity\PostStatus;
-use App\Entity\PostInterface;
-use App\Entity\PostCategory;
-use App\Entity\UserInterface;
 use App\Entity\Media;
+use App\Entity\Post;
+use App\Entity\PostCategory;
+use App\Entity\PostInterface;
+use App\Entity\PostStatus;
+use App\Entity\UserInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Laminas\Log\Logger;
 use Laminas\Diactoros\UploadedFile;
+use Laminas\Log\Logger;
 
 use function basename;
 
@@ -49,8 +49,7 @@ final class PostService implements PostServiceInterface
     public function addPost(
         UserInterface $submitter,
         array $filteredParams
-    ): void
-    {
+    ): void {
         $date = new DateTime();
 
         $post = new Post();
@@ -62,10 +61,10 @@ final class PostService implements PostServiceInterface
         $post->setAuthor($submitter);
 
         $category = $this->postCategoryRepository->findOneBy([
-            'code' => $filteredParams['category']
+            'code' => $filteredParams['category'],
         ]);
-        $status = $this->postStatusRepository->findOneBy([
-            'code' => $filteredParams['status']
+        $status   = $this->postStatusRepository->findOneBy([
+            'code' => $filteredParams['status'],
         ]);
 
         $post->setCategory($category);
@@ -94,13 +93,13 @@ final class PostService implements PostServiceInterface
         $post->setContent($filteredParams['content']);
 
         $category = $this->postCategoryRepository->findOneBy([
-            'code' => $filteredParams['category']
+            'code' => $filteredParams['category'],
         ]);
 
         $post->setCategory($category);
 
         $status = $this->postStatusRepository->findOneBy([
-            'code' => $filteredParams['status']
+            'code' => $filteredParams['status'],
         ]);
 
         $post->setStatus($status);
@@ -113,6 +112,27 @@ final class PostService implements PostServiceInterface
         $post->setUpdatedAt($date);
 
         $this->em->flush();
+    }
+
+    public function deletePost(
+        UserInterface $submitter,
+        PostInterface $post
+    ): void {
+        $postId = $post->getId();
+
+        try {
+            $this->em->remove($post);
+
+            $this->em->flush();
+
+            $this->audit->err('Success deleted post', [
+                'extra' => 'Post ID: ' . $postId . ' deleted by ' . $submitter->getId(),
+            ]);
+        } catch (Exception $e) {
+            $this->audit->err('Failed delete post from database', [
+                'extra' => $e->getMessage(),
+            ]);
+        }
     }
 
     public function getRepository(): EntityRepository

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Traits\EntityActiveTrait;
-use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,24 +20,24 @@ class PostCategory implements PostCategoryInterface
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var int
      */
     protected $id;
 
     /**
      * @ORM\Column(name="code", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $code;
 
     /**
      * @ORM\Column(name="name", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $name;

@@ -8,8 +8,8 @@ use App\Traits\EntityActiveTrait;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity
@@ -24,40 +24,40 @@ class CampaignTheme implements CampaignThemeInterface
     /**
      * @ORM\ManyToOne(targetEntity="Campaign")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
-     * @Ignore
      *
+     * @ignore
      * @var Campaign
      */
     private $campaign;
 
     /**
      * @ORM\Column(name="code", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $code;
 
     /**
      * @ORM\Column(name="name", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $name;
 
     /**
      * @ORM\Column(name="description", type="text")
-     * @Groups({"detail", "full_detail"})
      *
+     * @Groups({"detail", "full_detail"})
      * @var string
      */
     private $description;
 
     /**
      * @ORM\Column(name="rgb", type="string")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var string
      */
     private $rgb;

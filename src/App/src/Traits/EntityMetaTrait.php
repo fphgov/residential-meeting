@@ -14,16 +14,16 @@ trait EntityMetaTrait
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var int
      */
     protected $id;
 
     /**
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     * @Groups({"list", "detail", "full_detail"})
      *
+     * @Groups({"list", "detail", "full_detail"})
      * @var DateTime
      */
     protected $createdAt;
