@@ -237,37 +237,37 @@ final class UserService implements UserServiceInterface
             $this->config['app']['account']['clearTimeHour']
         );
 
-        foreach ($users as $user) {
-            $userPreference = $user->getUserPreference();
-            $userVotes      = $user->getVoteCollection();
-            $ideas          = $user->getIdeaCollection();
-
-            $anonymusUser = $this->em->getReference(User::class, 1);
-
-            foreach ($ideas as $idea) {
-                $idea->setSubmitter($anonymusUser);
-            }
-
-            foreach ($userVotes as $userVote) {
-                $userVote->setUser($anonymusUser);
-            }
-
-            if ($userPreference !== null) {
-                $this->em->remove($userPreference);
-            }
-
-            $mailLogs = $this->mailLogRepository->findBy([
-                'user' => $user,
-            ]);
-
-            foreach ($mailLogs as $mailLog) {
-                $mailLog->setUser($anonymusUser);
-            }
-
-            $this->em->remove($user);
-        }
-
         try {
+            foreach ($users as $user) {
+                $userPreference = $user->getUserPreference();
+                $userVotes      = $user->getVoteCollection();
+                $ideas          = $user->getIdeaCollection();
+
+                $anonymusUser = $this->em->getReference(User::class, 1);
+
+                foreach ($ideas as $idea) {
+                    $idea->setSubmitter($anonymusUser);
+                }
+
+                foreach ($userVotes as $userVote) {
+                    $userVote->setUser($anonymusUser);
+                }
+
+                if ($userPreference !== null) {
+                    $this->em->remove($userPreference);
+                }
+
+                $mailLogs = $this->mailLogRepository->findBy([
+                    'user' => $user,
+                ]);
+
+                foreach ($mailLogs as $mailLog) {
+                    $mailLog->setUser($anonymusUser);
+                }
+
+                $this->em->remove($user);
+            }
+
             $this->em->flush();
         } catch (Exception $e) {
             error_log($e->getMessage());
