@@ -19,6 +19,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 use function array_merge_recursive;
 use function strlen;
+use function trim;
 
 final class IdeaHandler implements RequestHandlerInterface
 {
@@ -49,10 +50,6 @@ final class IdeaHandler implements RequestHandlerInterface
             $request->getParsedBody(),
             $request->getUploadedFiles(),
         );
-
-        if (strlen((string) $body['participate']) === 0) {
-            $body['participate'] = " ";
-        }
 
         $this->ideaInputFilter->setData($body);
 
