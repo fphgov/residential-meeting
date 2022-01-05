@@ -48,7 +48,7 @@ foreach ($projects as $idea) {
 $posts = $postRepository->findAll();
 
 foreach ($posts as $post) {
-    $ogMetas['/hirek/' . $post->getId()] = [
+    $ogMetas['/hirek/' . $post->getSlug()] = [
         'title'       => $post->getTitle(),
         'description' => $post->getDescription(),
     ];
