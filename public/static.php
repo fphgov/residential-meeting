@@ -64,7 +64,7 @@ class OpenGraph {
 }
 
 $og = new OpenGraph(
-    "Részvételi költségvetés 2021",
+    "Közösségi költségvetés 2021",
     "Mire költsön 1 milliárd forintot Budapest?",
     "Fővárosi Önkormányzat",
     "https://otlet.budapest.hu/files/og_image.png"
