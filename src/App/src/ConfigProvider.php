@@ -102,6 +102,7 @@ class ConfigProvider
                 Service\IdeaServiceInterface::class          => Service\IdeaServiceFactory::class,
                 Service\PhaseServiceInterface::class         => Service\PhaseServiceFactory::class,
                 Model\IdeaExportModel::class                 => Model\IdeaExportModelFactory::class,
+                Helper\MailContentHelper::class              => Helper\MailContentHelperFactory::class,
             ],
         ];
     }

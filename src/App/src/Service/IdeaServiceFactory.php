@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Helper\MailContentHelper;
 use App\Middleware\AuditMiddleware;
 use App\Service\MailQueueServiceInterface;
 use App\Service\PhaseServiceInterface;
@@ -26,6 +27,7 @@ final class IdeaServiceFactory
             $container->get(PhaseServiceInterface::class),
             $container->get(AuditMiddleware::class)->getLogger(),
             $container->get(MailAction::class)->getAdapter(),
+            $container->get(MailContentHelper::class),
             $container->get(MailQueueServiceInterface::class)
         );
     }

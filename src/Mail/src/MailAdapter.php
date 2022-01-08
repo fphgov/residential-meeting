@@ -10,7 +10,8 @@ use Laminas\Mail\Transport\Smtp;
 use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part as MimePart;
-use Mezzio\Template\TemplateRendererInterface;
+use Mail\Entity\MailInterface;
+use Mail\Helper\MailContentHelperInterface;
 use Throwable;
 
 use function error_log;
@@ -24,9 +25,6 @@ class MailAdapter implements MailAdapterInterface
 
     /** @var Smtp */
     private $transport;
-
-    /** @var TemplateRendererInterface */
-    private $template;
 
     /** @var Message */
     private $message;
@@ -42,27 +40,21 @@ class MailAdapter implements MailAdapterInterface
 
     public function __construct(
         Smtp $transport,
-        array $config,
-        ?TemplateRendererInterface $template = null
+        array $config
     ) {
         $this->transport = $transport;
-        $this->template  = $template;
         $this->config    = $config;
 
         $this->clear();
     }
 
-    public function setTemplate(string $name, array $data): self
+    public function setTemplate(MailContentHelperInterface $mailContent): self
     {
-        if ($this->template === null) {
-            return $this;
-        }
-
-        $this->name = $name;
+        $this->name = $mailContent->getName();
 
         $this->content = new MimeMessage();
 
-        $text = $this->template->render("email/text/$this->name", $data);
+        $text = $mailContent->render(MailInterface::FORMAT_TEXT);
 
         $bodyText           = new MimePart($text);
         $bodyText->type     = Mime::TYPE_TEXT;
@@ -71,7 +63,7 @@ class MailAdapter implements MailAdapterInterface
 
         $this->content->addPart($bodyText);
 
-        $html = $this->template->render("email/html/$this->name", $data);
+        $html = $mailContent->render(MailInterface::FORMAT_HTML);
 
         $bodyHtml           = new MimePart($html);
         $bodyHtml->type     = Mime::TYPE_HTML;

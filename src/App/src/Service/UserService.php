@@ -11,6 +11,7 @@ use App\Entity\UserPreference;
 use App\Entity\UserPreferenceInterface;
 use App\Exception\UserNotActiveException;
 use App\Exception\UserNotFoundException;
+use App\Helper\MailContentHelper;
 use App\Model\PBKDF2Password;
 use App\Repository\UserRepository;
 use App\Service\MailQueueServiceInterface;
@@ -38,6 +39,9 @@ final class UserService implements UserServiceInterface
     /** @var MailAdapter */
     private $mailAdapter;
 
+    /** @var MailContentHelper */
+    private $mailContentHelper;
+
     /** @var MailQueueServiceInterface */
     private $mailQueueService;
 
@@ -55,12 +59,14 @@ final class UserService implements UserServiceInterface
         EntityManagerInterface $em,
         Logger $audit,
         MailAdapter $mailAdapter,
+        MailContentHelper $mailContentHelper,
         MailQueueServiceInterface $mailQueueService
     ) {
         $this->config                   = $config;
         $this->em                       = $em;
         $this->audit                    = $audit;
         $this->mailAdapter              = $mailAdapter;
+        $this->mailContentHelper        = $mailContentHelper;
         $this->mailQueueService         = $mailQueueService;
         $this->userRepository           = $this->em->getRepository(User::class);
         $this->userPreferenceRepository = $this->em->getRepository(UserPreference::class);
@@ -293,7 +299,9 @@ final class UserService implements UserServiceInterface
                 'activation'       => $this->config['app']['url'] . '/profil/aktivalas/' . $user->getHash(),
             ];
 
-            $this->mailAdapter->setTemplate('user-created', $tplData);
+            $this->mailAdapter->setTemplate(
+                $this->mailContentHelper->create('user-created', $tplData)
+            );
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
@@ -324,7 +332,9 @@ final class UserService implements UserServiceInterface
                 'prizeActivation'  => $url,
             ];
 
-            $this->mailAdapter->setTemplate('user-prize', $tplData);
+            $this->mailAdapter->setTemplate(
+                $this->mailContentHelper->create('user-prize', $tplData)
+            );
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
@@ -351,7 +361,9 @@ final class UserService implements UserServiceInterface
                 'forgotLink'       => $this->config['app']['url'] . '/profil/jelszo/' . $user->getHash(),
             ];
 
-            $this->mailAdapter->setTemplate('user-password-recovery', $tplData);
+            $this->mailAdapter->setTemplate(
+                $this->mailContentHelper->create('user-password-recovery', $tplData)
+            );
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
@@ -380,7 +392,9 @@ final class UserService implements UserServiceInterface
                 'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
             ];
 
-            $this->mailAdapter->setTemplate('account-confirmation', $tplData);
+            $this->mailAdapter->setTemplate(
+                $this->mailContentHelper->create('account-confirmation', $tplData)
+            );
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
@@ -409,7 +423,9 @@ final class UserService implements UserServiceInterface
                 'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
             ];
 
-            $this->mailAdapter->setTemplate('account-confirmation-reminder', $tplData);
+            $this->mailAdapter->setTemplate(
+                $this->mailContentHelper->create('account-confirmation-reminder', $tplData)
+            );
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
