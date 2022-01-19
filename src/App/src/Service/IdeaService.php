@@ -26,6 +26,7 @@ use Doctrine\ORM\EntityRepository;
 use Laminas\Log\Logger;
 use Mail\MailAdapter;
 use Psr\Http\Message\UploadedFileInterface;
+use Throwable;
 
 use function basename;
 use function error_log;

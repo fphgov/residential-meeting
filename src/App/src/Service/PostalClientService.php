@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Exception;
+
 use function count;
 use function curl_close;
 use function curl_exec;
