@@ -39,6 +39,9 @@ return [
             'admin.api.idea.export',
             'admin.api.workflow.states.list',
             'admin.api.workflow.extras.list',
+            'admin.api.email.list',
+            'admin.api.email.get',
+            'admin.api.email.modify',
         ],
         'allow'     => [
             'guest'     => [
@@ -74,6 +77,9 @@ return [
             'admin' => [
                 'admin.api.cache.clear',
                 'admin.api.dashboard.set',
+                'admin.api.email.list',
+                'admin.api.email.get',
+                'admin.api.email.modify',
             ],
             'developer' => [
 

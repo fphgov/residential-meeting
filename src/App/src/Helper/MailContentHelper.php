@@ -17,7 +17,7 @@ final class MailContentHelper implements MailContentHelperInterface
     private $mailRepository;
 
     /** @var string */
-    private $name;
+    private $code;
 
     /** @var array */
     private $variables;
@@ -32,14 +32,14 @@ final class MailContentHelper implements MailContentHelperInterface
         $this->mailRepository = $this->em->getRepository(Mail::class);
     }
 
-    public function create(string $name, array $variables): self
+    public function create(string $code, array $variables): self
     {
-        $this->name      = $name;
+        $this->code      = $code;
         $this->variables = $variables;
 
         $this->mail = null;
         $this->mail = $this->mailRepository->findOneBy([
-            'name' => $this->name,
+            'code' => $this->code,
         ]);
 
         return $this;
@@ -52,13 +52,13 @@ final class MailContentHelper implements MailContentHelperInterface
         return $mustache->render($this->mail->{'get' . $type}(), $this->variables);
     }
 
-    public function setName(string $name): void
+    public function setCode(string $code): void
     {
-        $this->name = $name;
+        $this->code = $code;
     }
 
-    public function getName(): string
+    public function getCode(): string
     {
-        return $this->name;
+        return $this->code;
     }
 }

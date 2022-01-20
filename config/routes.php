@@ -290,4 +290,25 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         \Mezzio\Authorization\AuthorizationMiddleware::class,
         App\Handler\Workflow\GetExtrasHandler::class
     ], 'admin.api.workflow.extras.list');
+
+    $app->get('/admin/api/emails', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Mail\AdminListHandler::class
+    ], 'admin.api.email.list');
+
+    $app->get('/admin/api/emails/{code:.*}', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Mail\AdminGetHandler::class
+    ], 'admin.api.email.get');
+
+    $app->post('/admin/api/emails/{code:.*}', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Mail\AdminModifyHandler::class
+    ], 'admin.api.email.modify');
 };

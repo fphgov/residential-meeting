@@ -9,6 +9,10 @@ interface MailInterface
     public const FORMAT_TEXT = 'PlainText';
     public const FORMAT_HTML = 'Html';
 
+    public function setCode(string $code): void;
+
+    public function getCode(): string;
+
     public function setName(string $name): void;
 
     public function getName(): string;

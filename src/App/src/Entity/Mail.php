@@ -8,6 +8,7 @@ use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Mail\Entity\MailInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MailRepository")
@@ -19,7 +20,18 @@ class Mail implements MailInterface
     use EntityTrait;
 
     /**
+     * @ORM\Column(name="code", type="string")
+     *
+     * @Groups({"list", "option", "detail", "full_detail"})
+     *
+     * @var string
+     */
+    private $code;
+
+    /**
      * @ORM\Column(name="name", type="string")
+     *
+     * @Groups({"list", "option", "detail", "full_detail"})
      *
      * @var string
      */
@@ -28,6 +40,8 @@ class Mail implements MailInterface
     /**
      * @ORM\Column(name="plain_text", type="text")
      *
+     * @Groups({"list", "detail", "full_detail"})
+     *
      * @var string
      */
     private $plainText;
@@ -35,9 +49,21 @@ class Mail implements MailInterface
     /**
      * @ORM\Column(name="html", type="text")
      *
+     * @Groups({"list", "detail", "full_detail"})
+     *
      * @var string
      */
     private $html;
+
+    public function setCode(string $code): void
+    {
+        $this->code = $code;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
 
     public function setName(string $name): void
     {
