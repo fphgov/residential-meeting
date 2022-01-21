@@ -297,7 +297,7 @@ final class IdeaService implements IdeaServiceInterface
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
-            $this->audit->err('Account confirmation notification no added to MailQueueService', [
+            $this->audit->err('Idea confirmation notification no added to MailQueueService', [
                 'extra' => $user->getId() . " | " . $e->getMessage(),
             ]);
         }
