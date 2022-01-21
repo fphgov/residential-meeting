@@ -9,6 +9,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\IWriter;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+use function in_array;
 use function implode;
 
 final class IdeaExportModel implements ExportModelInterface
@@ -26,6 +27,11 @@ final class IdeaExportModel implements ExportModelInterface
         'Becsült költség',
         'Részvétel (I/N)',
         'Részvétel milyen módon',
+    ];
+
+    public const DISABLE_AUTO_RESIZE_COLS = [
+        'D',
+        'E'
     ];
 
     private array $config;
@@ -62,10 +68,10 @@ final class IdeaExportModel implements ExportModelInterface
                 $idea->getDescription(),
                 $idea->getLocationDescription(),
                 implode(',', $idea->getLinks()),
-                '',
+                $idea->getWorkflowState()->getTitle(),
                 $idea->getCampaignTheme()->getName(),
                 $idea->getCost(),
-                (int) $idea->getParticipate(),
+                $idea->getParticipate() ? 'Igen' : 'Nem',
                 $idea->getParticipateComment(),
             ];
         }
@@ -75,7 +81,11 @@ final class IdeaExportModel implements ExportModelInterface
         $sheet->fromArray($data, null, 'A1');
 
         foreach (['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'] as $col) {
-            $sheet->getColumnDimension($col)->setAutoSize(true);
+            if (in_array($col, self::DISABLE_AUTO_RESIZE_COLS, true)) {
+                $sheet->getColumnDimension($col)->setWidth(24);
+            } else {
+                $sheet->getColumnDimension($col)->setAutoSize(true);
+            }
         }
 
         $this->spreadsheet->removeSheetByIndex(0);

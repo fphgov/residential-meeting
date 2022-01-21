@@ -92,6 +92,9 @@ class ConfigProvider
                 Handler\Tools\GetAddressHandler::class       => Handler\Tools\GetAddressHandlerFactory::class,
                 Handler\Workflow\GetStatesHandler::class     => Handler\Workflow\GetStatesHandlerFactory::class,
                 Handler\Workflow\GetExtrasHandler::class     => Handler\Workflow\GetExtrasHandlerFactory::class,
+                Handler\Mail\AdminListHandler::class         => Handler\Mail\AdminListHandlerFactory::class,
+                Handler\Mail\AdminGetHandler::class          => Handler\Mail\AdminGetHandlerFactory::class,
+                Handler\Mail\AdminModifyHandler::class       => Handler\Mail\AdminModifyHandlerFactory::class,
                 Service\MailQueueServiceInterface::class     => Service\MailQueueServiceFactory::class,
                 Service\MediaServiceInterface::class         => Service\MediaServiceFactory::class,
                 Service\UserServiceInterface::class          => Service\UserServiceFactory::class,
@@ -101,7 +104,9 @@ class ConfigProvider
                 Service\VoteServiceInterface::class          => Service\VoteServiceFactory::class,
                 Service\IdeaServiceInterface::class          => Service\IdeaServiceFactory::class,
                 Service\PhaseServiceInterface::class         => Service\PhaseServiceFactory::class,
+                Service\MailServiceInterface::class          => Service\MailServiceFactory::class,
                 Model\IdeaExportModel::class                 => Model\IdeaExportModelFactory::class,
+                Helper\MailContentHelper::class              => Helper\MailContentHelperFactory::class,
             ],
         ];
     }

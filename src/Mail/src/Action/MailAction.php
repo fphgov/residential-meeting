@@ -6,7 +6,6 @@ namespace Mail\Action;
 
 use Laminas\Mail\Transport\Smtp;
 use Mail\MailAdapter;
-use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -19,10 +18,9 @@ class MailAction implements MiddlewareInterface
 
     public function __construct(
         Smtp $transport,
-        array $config,
-        ?TemplateRendererInterface $template = null
+        array $config
     ) {
-        $this->mailAdapter = new MailAdapter($transport, $config, $template);
+        $this->mailAdapter = new MailAdapter($transport, $config);
     }
 
     public function getAdapter(): MailAdapter

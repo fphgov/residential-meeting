@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Mail;
 
 use Laminas\Mail\Transport\TransportInterface;
-use Mezzio\LaminasView\LaminasViewRenderer;
 
 /**
  * The configuration provider for the Audit module
@@ -40,7 +39,6 @@ class ConfigProvider
             'invokables' => [],
             'factories'  => [
                 TransportInterface::class  => Container\SmtpFactory::class,
-                LaminasViewRenderer::class => Container\LaminasViewRenderFactory::class,
                 Action\MailAction::class   => Action\MailActionFactory::class,
             ],
         ];

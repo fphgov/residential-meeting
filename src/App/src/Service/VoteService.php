@@ -11,6 +11,7 @@ use App\Entity\ProjectInterface;
 use App\Entity\UserInterface;
 use App\Entity\Vote;
 use App\Entity\VoteInterface;
+use App\Helper\MailContentHelper;
 use App\Service\MailQueueServiceInterface;
 use App\Service\PhaseServiceInterface;
 use DateTime;
@@ -36,6 +37,9 @@ final class VoteService implements VoteServiceInterface
     /** @var MailAdapter */
     private $mailAdapter;
 
+    /** @var MailContentHelper */
+    private $mailContentHelper;
+
     /** @var MailQueueServiceInterface */
     private $mailQueueService;
 
@@ -50,16 +54,18 @@ final class VoteService implements VoteServiceInterface
         EntityManagerInterface $em,
         Logger $audit,
         MailAdapter $mailAdapter,
+        MailContentHelper $mailContentHelper,
         MailQueueServiceInterface $mailQueueService,
         PhaseServiceInterface $phaseService
     ) {
-        $this->config           = $config;
-        $this->em               = $em;
-        $this->audit            = $audit;
-        $this->mailAdapter      = $mailAdapter;
-        $this->mailQueueService = $mailQueueService;
-        $this->voteRepository   = $this->em->getRepository(Vote::class);
-        $this->phaseService     = $phaseService;
+        $this->config            = $config;
+        $this->em                = $em;
+        $this->audit             = $audit;
+        $this->mailAdapter       = $mailAdapter;
+        $this->mailContentHelper = $mailContentHelper;
+        $this->mailQueueService  = $mailQueueService;
+        $this->voteRepository    = $this->em->getRepository(Vote::class);
+        $this->phaseService      = $phaseService;
     }
 
     public function addOfflineVote(UserInterface $user, array $filteredParams): void
@@ -140,7 +146,9 @@ final class VoteService implements VoteServiceInterface
                 ],
             ];
 
-            $this->mailAdapter->setTemplate('vote-success', $tplData);
+            $this->mailAdapter->setTemplate(
+                $this->mailContentHelper->create('vote-success', $tplData)
+            );
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {

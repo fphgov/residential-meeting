@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Laminas\Diactoros\UploadedFile;
 use Laminas\Log\Logger;
+use Exception;
 
 use function basename;
 

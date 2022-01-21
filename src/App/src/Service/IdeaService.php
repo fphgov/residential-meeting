@@ -17,6 +17,7 @@ use App\Entity\WorkflowStateExtra;
 use App\Entity\WorkflowStateInterface;
 use App\Exception\NoHasPhaseCategoryException;
 use App\Exception\NotPossibleSubmitIdeaWithAdminAccountException;
+use App\Helper\MailContentHelper;
 use App\Service\MailQueueServiceInterface;
 use App\Service\PhaseServiceInterface;
 use DateTime;
@@ -25,6 +26,7 @@ use Doctrine\ORM\EntityRepository;
 use Laminas\Log\Logger;
 use Mail\MailAdapter;
 use Psr\Http\Message\UploadedFileInterface;
+use Throwable;
 
 use function basename;
 use function error_log;
@@ -68,6 +70,9 @@ final class IdeaService implements IdeaServiceInterface
     /** @var MailAdapter */
     private $mailAdapter;
 
+    /** @var MailContentHelper */
+    private $mailContentHelper;
+
     /** @var MailQueueServiceInterface */
     private $mailQueueService;
 
@@ -77,6 +82,7 @@ final class IdeaService implements IdeaServiceInterface
         PhaseServiceInterface $phaseService,
         Logger $audit,
         MailAdapter $mailAdapter,
+        MailContentHelper $mailContentHelper,
         MailQueueServiceInterface $mailQueueService
     ) {
         $this->config                       = $config;
@@ -89,6 +95,7 @@ final class IdeaService implements IdeaServiceInterface
         $this->phaseService                 = $phaseService;
         $this->audit                        = $audit;
         $this->mailAdapter                  = $mailAdapter;
+        $this->mailContentHelper            = $mailContentHelper;
         $this->mailQueueService             = $mailQueueService;
     }
 
@@ -282,7 +289,9 @@ final class IdeaService implements IdeaServiceInterface
                 ],
             ];
 
-            $this->mailAdapter->setTemplate('idea-confirmation', $tplData);
+            $this->mailAdapter->setTemplate(
+                $this->mailContentHelper->create('idea-confirmation', $tplData)
+            );
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
@@ -312,7 +321,9 @@ final class IdeaService implements IdeaServiceInterface
                 'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
             ];
 
-            $this->mailAdapter->setTemplate('workflow-idea-published', $tplData);
+            $this->mailAdapter->setTemplate(
+                $this->mailContentHelper->create('workflow-idea-published', $tplData)
+            );
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
@@ -346,7 +357,9 @@ final class IdeaService implements IdeaServiceInterface
                 'ideaModFullText'  => wordwrap($extra, 78, "\n"),
             ];
 
-            $this->mailAdapter->setTemplate('workflow-idea-published-mod', $tplData);
+            $this->mailAdapter->setTemplate(
+                $this->mailContentHelper->create('workflow-idea-published-mod', $tplData)
+            );
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
@@ -374,7 +387,9 @@ final class IdeaService implements IdeaServiceInterface
                 'ideaTitle'        => $idea->getTitle(),
             ];
 
-            $this->mailAdapter->setTemplate('workflow-idea-rejected', $tplData);
+            $this->mailAdapter->setTemplate(
+                $this->mailContentHelper->create('workflow-idea-rejected', $tplData)
+            );
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {

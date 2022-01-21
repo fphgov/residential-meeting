@@ -108,16 +108,10 @@ class IdeaInputFilter extends InputFilter
 
         $this->add([
             'name'        => 'participate',
-            'allow_empty' => false,
-            'validators'  => [
-                new Validator\NotEmpty([
-                    'messages' => [
-                        Validator\NotEmpty::IS_EMPTY => 'Kötelező a "Részt venne a megvalósításban?" mező kitöltése',
-                        Validator\NotEmpty::INVALID  => 'Hibás a "Részt venne a megvalósításban?" mező tipusa',
-                    ],
-                ]),
-            ],
+            'allow_empty' => true,
             'filters'     => [
+                new Filter\StringTrim(),
+                new Filter\StripTags(),
                 new Filter\Boolean([
                     'type' => Filter\Boolean::TYPE_ALL,
                 ]),

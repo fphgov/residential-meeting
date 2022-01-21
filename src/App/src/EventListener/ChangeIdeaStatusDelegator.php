@@ -6,7 +6,7 @@ namespace App\EventListener;
 
 use App\Service\IdeaServiceInterface;
 use Doctrine\Common\EventSubscriber;
-use doctrine\common\persistence\event\lifecycleeventargs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Psr\Container\ContainerInterface;
 
 class ChangeIdeaStatusDelegator extends ChangeIdeaStatus
@@ -23,9 +23,13 @@ class ChangeIdeaStatusDelegator extends ChangeIdeaStatus
         parent::__construct();
     }
 
-    public function index(lifecycleeventargs $args, $ideaService = null)
+    public function index(LifecycleEventArgs $args, $ideaService = null)
     {
-        $ideaService = $this->container->get(IdeaServiceInterface::class);
+        if ($ideaService === null) {
+            $newIdeaService = $this->container->get(IdeaServiceInterface::class);
+
+            return $this->subscriber->index($args, $newIdeaService);
+        }
 
         return $this->subscriber->index($args, $ideaService);
     }
