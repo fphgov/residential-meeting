@@ -50,7 +50,7 @@ class MailAdapter implements MailAdapterInterface
 
     public function setTemplate(MailContentHelperInterface $mailContent): self
     {
-        $this->name = $mailContent->getName();
+        $this->name = $mailContent->getCode();
 
         $this->content = new MimeMessage();
 
