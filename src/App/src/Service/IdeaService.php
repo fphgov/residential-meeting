@@ -270,7 +270,7 @@ final class IdeaService implements IdeaServiceInterface
         }
     }
 
-    private function sendIdeaConfirmationEmail(UserInterface $user, IdeaInterface $idea): void
+    public function sendIdeaConfirmationEmail(UserInterface $user, IdeaInterface $idea): void
     {
         $this->mailAdapter->clear();
 
