@@ -7,6 +7,12 @@
         "preferred-install": "source",
         "platform": {
             "ext-postal": "1.0"
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true,
+            "laminas/laminas-component-installer": true,
+            "cweagans/composer-patches": true
         }
     },
     "minimum-stability": "stable",

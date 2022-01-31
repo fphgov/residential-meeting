@@ -304,7 +304,9 @@ class IdeaInputFilter extends InputFilter
                     'allowAbsolute' => true,
                 ]),
             ],
-            'filters'     => [],
+            'filters'     => [
+                new Filter\StringTrim(),
+            ],
         ]);
     }
 }
