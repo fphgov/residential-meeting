@@ -38,7 +38,6 @@ services:
       - db
     networks:
       - default
-      - arcgis
 
   nginx:
     image: nginx:stable-alpine
@@ -67,6 +66,3 @@ services:
 networks:
   default:
     driver: bridge
-  arcgis:
-    external:
-      name: arcgis
