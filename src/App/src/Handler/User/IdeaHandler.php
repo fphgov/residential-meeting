@@ -81,7 +81,11 @@ final class IdeaHandler implements RequestHandlerInterface
             ], 422);
         } catch (DifferentPhaseException $e) {
             return new JsonResponse([
-                'message' => 'Jelenleg nem lehetséges az ötlet beküldése',
+                'errors' => [
+                    'form' => [
+                        'notPossibleSubmitIdea' => 'Jelenleg nem lehetséges az ötlet beküldése',
+                    ]
+                ]
             ], 422);
         } catch (Exception $e) {
             $this->audit->err('Failed insert new idea to database', [
