@@ -7,6 +7,7 @@ namespace App\Handler\Mail;
 use App\Entity\Mail;
 use App\Service\MailServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
