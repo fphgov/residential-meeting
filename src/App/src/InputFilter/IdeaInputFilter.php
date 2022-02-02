@@ -139,7 +139,7 @@ class IdeaInputFilter extends InputFilter
         ]);
 
         $this->add([
-            'name'        => 'file',
+            'name'        => 'medias',
             'type'        => FileInput::class,
             'allow_empty' => true,
             'validators'  => [
