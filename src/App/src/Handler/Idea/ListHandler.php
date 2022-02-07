@@ -124,7 +124,15 @@ final class ListHandler implements RequestHandlerInterface
 
         if ($status && $status !== 0) {
             $qb->andWhere('w.code IN (:status)');
-            $qb->setParameter('status', strtoupper($status));
+
+            if ($status === 'published') {
+                $status .= ', published_with_mod';
+                $status = strtoupper($status);
+
+                $qb->setParameter('status', explode(', ', $status));
+            } else {
+                $qb->setParameter('status', strtoupper($status));
+            }
         }
 
         $disableStatuses = implode(', ', [
