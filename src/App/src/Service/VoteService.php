@@ -11,14 +11,12 @@ use App\Entity\ProjectInterface;
 use App\Entity\UserInterface;
 use App\Entity\Vote;
 use App\Entity\VoteInterface;
-use App\Helper\MailContentHelper;
-use App\Service\MailQueueServiceInterface;
+use App\Service\MailServiceInterface;
 use App\Service\PhaseServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Laminas\Log\Logger;
-use Mail\MailAdapter;
 use Throwable;
 
 use function error_log;
@@ -34,36 +32,25 @@ final class VoteService implements VoteServiceInterface
     /** @var Logger */
     private $audit;
 
-    /** @var MailAdapter */
-    private $mailAdapter;
-
-    /** @var MailContentHelper */
-    private $mailContentHelper;
-
-    /** @var MailQueueServiceInterface */
-    private $mailQueueService;
-
     /** @var EntityRepository */
     private $voteRepository;
 
     /** @var PhaseServiceInterface */
     private $phaseService;
 
+    /** @var MailServiceInterface */
+    private $mailService;
+
     public function __construct(
         array $config,
         EntityManagerInterface $em,
         Logger $audit,
-        MailAdapter $mailAdapter,
-        MailContentHelper $mailContentHelper,
-        MailQueueServiceInterface $mailQueueService,
-        PhaseServiceInterface $phaseService
+        PhaseServiceInterface $phaseService,
+        MailServiceInterface $mailService
     ) {
         $this->config            = $config;
         $this->em                = $em;
         $this->audit             = $audit;
-        $this->mailAdapter       = $mailAdapter;
-        $this->mailContentHelper = $mailContentHelper;
-        $this->mailQueueService  = $mailQueueService;
         $this->voteRepository    = $this->em->getRepository(Vote::class);
         $this->phaseService      = $phaseService;
     }
@@ -123,41 +110,24 @@ final class VoteService implements VoteServiceInterface
 
     private function successVote(UserInterface $user, VoteInterface $vote): void
     {
-        $this->mailAdapter->clear();
-
-        try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Köszönjük szavazatodat!');
-
-            $tplData = [
-                'name'             => $user->getFirstname(),
-                'infoMunicipality' => $this->config['app']['municipality'],
-                'infoEmail'        => $this->config['app']['email'],
-                'votes'            => [
-                    'CARE'  => [
-                        'title' => $vote->getProjectCare()->getTitle(),
-                    ],
-                    'GREEN' => [
-                        'title' => $vote->getProjectGreen()->getTitle(),
-                    ],
-                    'WHOLE' => [
-                        'title' => $vote->getProjectWhole()->getTitle(),
-                    ],
+        $tplData = [
+            'name'             => $user->getFirstname(),
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'votes'            => [
+                'CARE'  => [
+                    'title' => $vote->getProjectCare()->getTitle(),
                 ],
-            ];
+                'GREEN' => [
+                    'title' => $vote->getProjectGreen()->getTitle(),
+                ],
+                'WHOLE' => [
+                    'title' => $vote->getProjectWhole()->getTitle(),
+                ],
+            ],
+        ];
 
-            $this->mailAdapter->setTemplate(
-                $this->mailContentHelper->create('vote-success', $tplData)
-            );
-
-            $this->mailQueueService->add($user, $this->mailAdapter);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('Vote success notification no added to MailQueueService', [
-                'extra' => $user->getId() . " | " . $e->getMessage(),
-            ]);
-        }
+        $this->mailService->send('vote-success', $tplData, $user);
     }
 
     public function getRepository(): EntityRepository
