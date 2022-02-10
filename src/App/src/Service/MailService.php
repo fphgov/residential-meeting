@@ -62,6 +62,10 @@ final class MailService implements MailServiceInterface
     {
         $date = new DateTime();
 
+        if (isset($filteredParams['subject'])) {
+            $mail->setSubject($filteredParams['subject']);
+        }
+
         if (isset($filteredParams['html'])) {
             $mail->setHtml($filteredParams['html']);
         }
