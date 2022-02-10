@@ -25,7 +25,7 @@ class CampaignTheme implements CampaignThemeInterface
      * @ORM\ManyToOne(targetEntity="Campaign")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
      *
-     * @ignore
+     * @Ignore
      * @var Campaign
      */
     private $campaign;
