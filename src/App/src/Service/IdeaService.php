@@ -91,9 +91,9 @@ final class IdeaService implements IdeaServiceInterface
     ): ?IdeaInterface {
         $phase = $this->phaseService->phaseCheck(PhaseInterface::PHASE_IDEATION);
 
-        // if (in_array($user->getRole(), ['developer', 'admin'], true)) {
-        //     throw new NotPossibleSubmitIdeaWithAdminAccountException($user->getRole());
-        // }
+        if (in_array($user->getRole(), ['developer', 'admin'], true)) {
+            throw new NotPossibleSubmitIdeaWithAdminAccountException($user->getRole());
+        }
 
         $date = new DateTime();
 
