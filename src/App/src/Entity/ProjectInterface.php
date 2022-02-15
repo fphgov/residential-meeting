@@ -85,6 +85,12 @@ interface ProjectInterface extends EntityInterface
 
     public function getShortDescription(): string;
 
+    public function getImplementationCollection(): Collection;
+
+    public function getImplementations(): array;
+
+    public function addImplementation(ImplementationInterface $implementation): self;
+
     public function setLatitude(?float $latitude = null): void;
 
     public function getLatitude(): ?float;

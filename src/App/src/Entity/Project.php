@@ -96,13 +96,13 @@ class Project implements ProjectInterface
     private WorkflowState $workflowState;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="project")
+     * @ORM\OneToMany(targetEntity="Implementation", mappedBy="project")
      *
-     * @var Collection|Comment[]
+     * @var Collection|Implementation[]
      *
      * @Groups({"detail", "full_detail"})
      */
-    private $comments;
+    private $implementations;
 
     /**
      * @ORM\Column(name="title", type="string")
@@ -386,25 +386,25 @@ class Project implements ProjectInterface
         return $description;
     }
 
-    public function getCommentCollection(): Collection
+    public function getImplementationCollection(): Collection
     {
-        return $this->comments;
+        return $this->implementations;
     }
 
-    public function getComments(): array
+    public function getImplementations(): array
     {
-        $comments = [];
-        foreach ($this->comments->getValues() as $comment) {
-            $comments[] = $comment;
+        $implementations = [];
+        foreach ($this->implementations->getValues() as $implementation) {
+            $implementations[] = $implementation;
         }
 
-        return $comments;
+        return $implementations;
     }
 
-    public function addComment(CommentInterface $comment): self
+    public function addImplementation(ImplementationInterface $implementation): self
     {
-        if (! $this->comments->contains($comment)) {
-            $this->comments[] = $comment;
+        if (! $this->implementations->contains($implementation)) {
+            $this->implementations[] = $implementation;
         }
 
         return $this;
