@@ -47,6 +47,18 @@ interface IdeaInterface extends EntityInterface
 
     public function removeMedia(MediaInterface $media): self;
 
+    public function getLinks(): array;
+
+    public function addLink(Link $link): self;
+
+    public function removeLink(Link $link): self;
+
+    public function getCommentCollection(): Collection;
+
+    public function getComments(): array;
+
+    public function addComment(CommentInterface $comment): self;
+
     public function setWorkflowState(WorkflowState $workflowState): void;
 
     public function getWorkflowState(): WorkflowState;

@@ -29,12 +29,12 @@ class Comment implements CommentInterface
     private User $submitter;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Project", inversedBy="comments")
-     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Idea", inversedBy="comments")
+     * @ORM\JoinColumn(name="idea_id", referencedColumnName="id", nullable=false)
      *
      * @Groups({"list", "detail", "full_detail"})
      */
-    private Project $project;
+    private Idea $idea;
 
     /**
      * @ORM\Column(name="content", type="text")
@@ -72,14 +72,14 @@ class Comment implements CommentInterface
         $this->submitter = $submitter;
     }
 
-    public function getProject(): Project
+    public function getIdea(): Idea
     {
-        return $this->project;
+        return $this->idea;
     }
 
-    public function setProject(Project $project): void
+    public function setIdea(Idea $idea): void
     {
-        $this->project = $project;
+        $this->idea = $idea;
     }
 
     public function setParentComment(?Comment $parentComment = null): void

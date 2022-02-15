@@ -24,9 +24,9 @@ interface CommentInterface extends EntityInterface, EntityActiveInterface
 
     public function setSubmitter(UserInterface $submitter): void;
 
-    public function getProject(): Project;
+    public function getIdea(): Idea;
 
-    public function setProject(Project $project): void;
+    public function setIdea(Idea $idea): void;
 
     public function setParentComment(?Comment $parentComment = null): void;
 

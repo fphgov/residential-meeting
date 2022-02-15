@@ -106,6 +106,15 @@ class Idea implements IdeaInterface
     private $links;
 
     /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="idea")
+     *
+     * @var Collection|Comment[]
+     *
+     * @Groups({"detail", "full_detail"})
+     */
+    private $comments;
+
+    /**
      * @ORM\Column(name="title", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
@@ -294,6 +303,28 @@ class Idea implements IdeaInterface
         }
 
         return $this;
+    }
+
+    public function getCommentCollection(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function getComments(): array
+    {
+        $comments = [];
+        foreach ($this->comments->getValues() as $comment) {
+            $comments[] = $comment;
+        }
+
+        return $comments;
+    }
+
+    public function addComment(CommentInterface $comment): self
+    {
+        if (! $this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+        }
     }
 
     public function setWorkflowState(WorkflowState $workflowState): void
