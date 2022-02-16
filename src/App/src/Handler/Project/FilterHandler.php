@@ -44,11 +44,10 @@ final class FilterHandler implements RequestHandlerInterface
         $campaign    = $queryParams['campaign'] ?? '';
         $status      = $queryParams['status'] ?? '';
 
-        $entityRepository           = $this->em->getRepository(Project::class);
+        $projectRepository          = $this->em->getRepository(Project::class);
         $campaignRepository         = $this->em->getRepository(Campaign::class);
         $campaignThemeRepository    = $this->em->getRepository(CampaignTheme::class);
         $campaignLocationRepository = $this->em->getRepository(CampaignLocation::class);
-        $workflowStateRepository    = $this->em->getRepository(WorkflowState::class);
 
         $campaignLocations = $campaignLocationRepository
             ->createQueryBuilder('cl')
@@ -58,7 +57,6 @@ final class FilterHandler implements RequestHandlerInterface
 
         $campaigns      = $campaignRepository->findBy([], ['id' => 'DESC']);
         $campaignThemes = $campaignThemeRepository->findAll();
-        $workflowStates = $workflowStateRepository->findAll();
 
         $filterParams = [
             'theme'    => [],
@@ -86,14 +84,16 @@ final class FilterHandler implements RequestHandlerInterface
             ];
         }
 
-        foreach ($campaigns as $campaign) {
+        foreach ($campaigns as $_campaign) {
             $filterParams['campaign'][] = [
-                'id'   => $campaign->getId(),
-                'name' => $campaign->getShortTitle(),
+                'id'   => $_campaign->getId(),
+                'name' => $_campaign->getShortTitle(),
             ];
         }
 
-        foreach ($workflowStates as $workflowState) {
+        $projectWorkflowStates = $projectRepository->getWorkflowStates($campaign);
+
+        foreach ($projectWorkflowStates as $workflowState) {
             $code = strtolower($workflowState->getCode());
 
             if (in_array($code, self::ENABLED_STATUSES, true)) {
