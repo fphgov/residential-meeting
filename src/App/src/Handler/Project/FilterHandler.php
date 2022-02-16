@@ -8,7 +8,6 @@ use App\Entity\Campaign;
 use App\Entity\CampaignLocation;
 use App\Entity\CampaignTheme;
 use App\Entity\Project;
-use App\Entity\WorkflowState;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;

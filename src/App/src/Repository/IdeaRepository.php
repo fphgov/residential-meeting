@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\CampaignInterface;
-use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 
 use function implode;
 
