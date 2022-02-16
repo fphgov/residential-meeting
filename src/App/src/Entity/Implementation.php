@@ -37,6 +37,18 @@ class Implementation implements ImplementationInterface
     private Project $project;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Media")
+     * @ORM\JoinTable(name="implementations_medias",
+     *      joinColumns={@ORM\JoinColumn(name="implementation_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
+     * )
+     *
+     * @Groups({"detail", "full_detail"})
+     * @var Collection|Media[]
+     */
+    private $medias;
+
+    /**
      * @ORM\Column(name="content", type="text")
      *
      * @Groups({"list", "detail", "full_detail"})
@@ -72,5 +84,41 @@ class Implementation implements ImplementationInterface
     public function setProject(Project $project): void
     {
         $this->project = $project;
+    }
+
+    public function getMedias(): array
+    {
+        $medias = [];
+        foreach ($this->medias->getValues() as $media) {
+            $medias[] = [
+                'id'   => $media->getId(),
+                'type' => $media->getType(),
+            ];
+        }
+
+        return $medias;
+    }
+
+    public function getMediaCollection(): Collection
+    {
+        return $this->medias;
+    }
+
+    public function addMedia(MediaInterface $media): self
+    {
+        if (! $this->medias->contains($media)) {
+            $this->medias[] = $media;
+        }
+
+        return $this;
+    }
+
+    public function removeMedia(MediaInterface $media): self
+    {
+        if ($this->medias->contains($media)) {
+            $this->medias->removeElement($media);
+        }
+
+        return $this;
     }
 }

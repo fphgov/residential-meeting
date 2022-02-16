@@ -27,4 +27,12 @@ interface ImplementationInterface extends EntityInterface, EntityActiveInterface
     public function getProject(): Project;
 
     public function setProject(Project $project): void;
+
+    public function getMedias(): array;
+
+    public function getMediaCollection(): Collection;
+
+    public function addMedia(MediaInterface $media): self;
+
+    public function removeMedia(MediaInterface $media): self;
 }
