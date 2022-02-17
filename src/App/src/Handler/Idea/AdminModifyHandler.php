@@ -14,6 +14,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function array_merge_recursive;
+
 final class AdminModifyHandler implements RequestHandlerInterface
 {
     /** @var InputFilterInterface */
@@ -37,7 +39,10 @@ final class AdminModifyHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $body = $request->getParsedBody();
+        $body = array_merge_recursive(
+            $request->getParsedBody(),
+            $request->getUploadedFiles(),
+        );
 
         $entityRepository = $this->em->getRepository(Idea::class);
 
@@ -49,19 +54,18 @@ final class AdminModifyHandler implements RequestHandlerInterface
             ], 404);
         }
 
-        // $modifiedIdeaData = array_merge($idea->normalizer(null, ['groups' => 'full_detail']), $body);
+        $this->inputFilter->setData($body);
 
-        // $this->inputFilter->setData($modifiedIdeaData);
+        if (! $this->inputFilter->isValid()) {
+            $message = $this->inputFilter->getMessages();
 
-        // if (! $this->inputFilter->isValid()) {
-        //     return new JsonResponse([
-        //         'errors' => $this->inputFilter->getMessages(),
-        //     ], 422);
-        // }
+            return new JsonResponse([
+                'errors' => $this->inputFilter->getMessages(),
+            ], 422);
+        }
 
         try {
-            // $this->ideaService->modifyIdea($idea, $this->inputFilter->getValues());
-            $this->ideaService->modifyIdea($idea, $body);
+            $this->ideaService->modifyIdea($idea, $this->inputFilter->getValues());
         } catch (Exception $e) {
             return new JsonResponse([
                 'errors' => $e->getMessage(),

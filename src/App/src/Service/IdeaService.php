@@ -225,6 +225,10 @@ final class IdeaService implements IdeaServiceInterface
             }
         }
 
+        if (isset($filteredParams['medias']) && is_array($filteredParams['medias'])) {
+            $this->addAttachments($idea, $filteredParams['medias'], $date);
+        }
+
         $idea->setUpdatedAt($date);
 
         $this->em->flush();

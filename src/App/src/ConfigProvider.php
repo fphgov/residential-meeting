@@ -119,6 +119,7 @@ class ConfigProvider
         return [
             'factories' => [
                 InputFilter\ProjectInputFilter::class     => InvokableFactory::class,
+                InputFilter\AdminIdeaInputFilter::class   => InputFilter\AdminIdeaInputFilterFactory::class,
                 InputFilter\UserRegistrationFilter::class => InputFilter\UserRegistrationFilterFactory::class,
                 InputFilter\VoteFilter::class             => InputFilter\VoteFilterFactory::class,
                 InputFilter\IdeaInputFilter::class        => InputFilter\IdeaInputFilterFactory::class,

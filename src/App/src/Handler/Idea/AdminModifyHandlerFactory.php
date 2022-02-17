@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handler\Idea;
 
-use App\InputFilter\IdeaInputFilter;
+use App\InputFilter\AdminIdeaInputFilter;
 use App\Service\IdeaServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
@@ -16,7 +16,7 @@ final class AdminModifyHandlerFactory
     {
         /** @var InputFilterPluginManager $pluginManager */
         $pluginManager = $container->get(InputFilterPluginManager::class);
-        $inputFilter   = $pluginManager->get(IdeaInputFilter::class);
+        $inputFilter   = $pluginManager->get(AdminIdeaInputFilter::class);
 
         return new AdminModifyHandler(
             $inputFilter,
