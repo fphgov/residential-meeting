@@ -72,7 +72,7 @@ final class ListHandler implements RequestHandlerInterface
         $status      = $queryParams['status'] ?? '';
 
         $qb = $repository->createQueryBuilder('p')
-            ->select('NEW IdeaListDTO(p.id, c.shortTitle, ct.name, ct.rgb, p.title, p.description, w.code, w.title, cl.name) as idea')
+            ->select('NEW IdeaListDTO(p.id, c.shortTitle, ct.code, ct.name, ct.rgb, p.title, p.description, w.id, w.code, w.title, CONCAT_WS(\' \', u.lastname, u.firstname), cl.name) as idea')
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
             ->join(Campaign::class, 'c', Join::WITH, 'c.id = p.campaign')
             ->join(WorkflowState::class, 'w', Join::WITH, 'w.id = p.workflowState')
