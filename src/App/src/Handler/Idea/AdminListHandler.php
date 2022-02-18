@@ -89,9 +89,11 @@ final class AdminListHandler implements RequestHandlerInterface
                 $qb->where('p.title LIKE :title')
                     ->orWhere('p.description LIKE :description')
                     ->orWhere('p.solution LIKE :solution')
+                    ->orWhere('u.email LIKE :email')
                     ->setParameter('title', '%' . $word . '%')
                     ->setParameter('description', '%' . $word . '%')
-                    ->setParameter('solution', '%' . $word . '%');
+                    ->setParameter('solution', '%' . $word . '%')
+                    ->setParameter('email', '%' . $word . '%');
             }
         }
 
