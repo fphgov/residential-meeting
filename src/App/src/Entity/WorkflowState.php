@@ -22,7 +22,7 @@ class WorkflowState implements WorkflowStateInterface
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      *
-     * @Groups({"option"})
+     * @Groups({"detail", "option"})
      * @var int
      */
     private $id;
