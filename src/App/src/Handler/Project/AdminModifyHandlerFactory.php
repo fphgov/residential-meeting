@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handler\Project;
 
-use App\InputFilter\ProjectInputFilter;
+use App\InputFilter\AdminProjectInputFilter;
 use App\Service\ProjectServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
@@ -16,7 +16,7 @@ final class AdminModifyHandlerFactory
     {
         /** @var InputFilterPluginManager $pluginManager */
         $pluginManager = $container->get(InputFilterPluginManager::class);
-        $inputFilter   = $pluginManager->get(ProjectInputFilter::class);
+        $inputFilter   = $pluginManager->get(AdminProjectInputFilter::class);
 
         return new AdminModifyHandler(
             $inputFilter,

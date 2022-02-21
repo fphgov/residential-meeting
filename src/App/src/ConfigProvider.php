@@ -118,13 +118,14 @@ class ConfigProvider
     {
         return [
             'factories' => [
-                InputFilter\ProjectInputFilter::class     => InvokableFactory::class,
-                InputFilter\AdminIdeaInputFilter::class   => InputFilter\AdminIdeaInputFilterFactory::class,
-                InputFilter\UserRegistrationFilter::class => InputFilter\UserRegistrationFilterFactory::class,
-                InputFilter\VoteFilter::class             => InputFilter\VoteFilterFactory::class,
-                InputFilter\IdeaInputFilter::class        => InputFilter\IdeaInputFilterFactory::class,
-                InputFilter\OfflineVoteFilter::class      => InputFilter\OfflineVoteFilterFactory::class,
-                InputFilter\PostInputFilter::class        => InputFilter\PostInputFilterFactory::class,
+                InputFilter\AdminIdeaInputFilter::class    => InputFilter\AdminIdeaInputFilterFactory::class,
+                InputFilter\AdminProjectInputFilter::class => InputFilter\AdminProjectInputFilterFactory::class,
+                InputFilter\UserRegistrationFilter::class  => InputFilter\UserRegistrationFilterFactory::class,
+                InputFilter\IdeaInputFilter::class         => InputFilter\IdeaInputFilterFactory::class,
+                InputFilter\OfflineVoteFilter::class       => InputFilter\OfflineVoteFilterFactory::class,
+                InputFilter\ProjectInputFilter::class      => InputFilter\ProjectInputFilter::class,
+                InputFilter\PostInputFilter::class         => InputFilter\PostInputFilterFactory::class,
+                InputFilter\VoteFilter::class              => InputFilter\VoteFilterFactory::class,
             ],
         ];
     }

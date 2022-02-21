@@ -9,6 +9,7 @@ use App\Entity\CampaignLocation;
 use App\Entity\Project;
 use App\Entity\Media;
 use App\Entity\ProjectInterface;
+use App\Entity\PhaseInterface;
 use App\Entity\UserInterface;
 use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateInterface;
@@ -32,11 +33,19 @@ final class ProjectService implements ProjectServiceInterface
     /** @var EntityRepository */
     private $projectRepository;
 
+    /** @var EntityRepository */
+    private $campaignThemeRepository;
+
+    /** @var EntityRepository */
+    private $workflowStateRepository;
+
     public function __construct(
         EntityManagerInterface $em
     ) {
-        $this->em                = $em;
-        $this->projectRepository = $this->em->getRepository(Project::class);
+        $this->em                      = $em;
+        $this->campaignThemeRepository = $this->em->getRepository(CampaignTheme::class);
+        $this->projectRepository       = $this->em->getRepository(Project::class);
+        $this->workflowStateRepository = $this->em->getRepository(WorkflowState::class);
     }
 
     public function addProject(
@@ -48,8 +57,7 @@ final class ProjectService implements ProjectServiceInterface
         $project = new Project();
 
         $theme = $this->campaignThemeRepository->findOneBy([
-            'campaign' => $phase->getCampaign(),
-            'id'       => $filteredParams['theme'],
+            'id' => $filteredParams['theme'],
         ]);
 
         if (! $theme instanceof CampaignTheme) {
@@ -79,7 +87,7 @@ final class ProjectService implements ProjectServiceInterface
 
                     $location = $this->campaignLocationRepository->findOneBy([
                         'code'     => "AREA" . $nfn,
-                        'campaign' => $phase->getCampaign(),
+                        'campaign' => $theme->getCampaign(),
                     ]);
 
                     if ($location instanceof CampaignLocation) {
@@ -102,35 +110,55 @@ final class ProjectService implements ProjectServiceInterface
         return $project;
     }
 
-    public function modifyIdea(
+    public function modifyProject(
         ProjectInterface $project,
         array $filteredParams
     ): void {
         $date = new DateTime();
 
-        if (isset($filteredParams['title'])) {
-            $project->setTitle($filteredParams['title']);
+        $theme = $this->campaignThemeRepository->findOneBy([
+            'id' => $filteredParams['theme'],
+        ]);
+
+        $project->setCampaignTheme($theme);
+        $project->setTitle($filteredParams['title']);
+        $project->setSolution($filteredParams['solution']);
+        $project->setDescription($filteredParams['description']);
+        $project->setCost(is_numeric($filteredParams['cost']) ? $filteredParams['cost'] : null);
+
+        $workflowState = $this->workflowStateRepository->findOneBy([
+            'code' => $filteredParams['workflowState'],
+        ]);
+
+        if ($workflowState) {
+            $project->setWorkflowState($workflowState);
         }
 
-        if (isset($filteredParams['solution'])) {
-            $project->setSolution($filteredParams['solution']);
+        if (isset($filteredParams['medias']) && is_countable($filteredParams['medias'])) {
+            $this->addAttachments($project, $filteredParams['medias'], $date);
         }
 
-        if (isset($filteredParams['description'])) {
-            $project->setDescription($filteredParams['description']);
-        }
+        if (isset($filteredParams['location']) && ! empty($filteredParams['location'])) {
+            parse_str($filteredParams['location'], $suggestion);
 
-        if (isset($filteredParams['cost'])) {
-            $project->setCost(is_numeric($filteredParams['cost']) ? $filteredParams['cost'] : null);
-        }
+            if (isset($suggestion['geometry']) && ! empty($suggestion['geometry'])) {
+                parse_str($suggestion['geometry'], $geometry);
 
-        if (isset($filteredParams['workflowState'])) {
-            $workflowState = $this->workflowStateRepository->findOneBy([
-                'code' => $filteredParams['workflowState'],
-            ]);
+                if (isset($suggestion['nfn'])) {
+                    $nfn = str_replace('.', '', $suggestion['nfn']);
 
-            if ($workflowState) {
-                $project->setWorkflowState($workflowState);
+                    $location = $this->campaignLocationRepository->findOneBy([
+                        'code'     => "AREA" . $nfn,
+                        'campaign' => $theme->getCampaign(),
+                    ]);
+
+                    if ($location instanceof CampaignLocation) {
+                        $project->addCampaignLocation($location);
+                    }
+                }
+
+                $project->setLatitude((float) $geometry['y']);
+                $project->setLongitude((float) $geometry['x']);
             }
         }
 
