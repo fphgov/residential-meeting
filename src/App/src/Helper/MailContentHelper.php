@@ -6,6 +6,7 @@ namespace App\Helper;
 
 use App\Entity\Mail;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Mail\Helper\MailContentHelperInterface;
 use Mustache_Engine;
 
@@ -14,6 +15,7 @@ final class MailContentHelper implements MailContentHelperInterface
     /** @var EntityManagerInterface */
     private $em;
 
+    /** @var EntityRepository */
     private $mailRepository;
 
     /** @var string */

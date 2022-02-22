@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityRepository;
 
 final class IdeaRepository extends EntityRepository
 {
-    public function getWorkflowStates(string $campaign = '')
+    public function getWorkflowStates(string $campaign = ''): array
     {
         $qb = $this->createQueryBuilder('i');
 
@@ -17,7 +17,7 @@ final class IdeaRepository extends EntityRepository
             ->where('i.workflowState NOT IN (:disableWorkflowStates)')
             ->groupBy('i.workflowState');
 
-        if ($campaign != '') {
+        if ($campaign !== '') {
             $qb->andWhere('i.campaign IN (:campaign)');
             $qb->setParameter('campaign', $campaign);
         }

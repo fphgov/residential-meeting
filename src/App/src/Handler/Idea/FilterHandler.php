@@ -91,10 +91,10 @@ final class FilterHandler implements RequestHandlerInterface
             }
         }
 
-        foreach ($campaigns as $_campaign) {
+        foreach ($campaigns as $camp) {
             $filterParams['campaign'][] = [
-                'id'   => $_campaign->getId(),
-                'name' => $_campaign->getShortTitle(),
+                'id'   => $camp->getId(),
+                'name' => $camp->getShortTitle(),
             ];
         }
 
@@ -105,8 +105,8 @@ final class FilterHandler implements RequestHandlerInterface
 
             if (in_array($code, self::ENABLED_STATUSES, true)) {
                 if (
-                    $code == 'published' && isset($filterParams['status']['published_whith_mod']) ||
-                    $code == 'published_whith_mod' && isset($filterParams['status']['published'])
+                    $code === 'published' && isset($filterParams['status']['published_whith_mod']) ||
+                    $code === 'published_whith_mod' && isset($filterParams['status']['published'])
                 ) {
                     continue;
                 }

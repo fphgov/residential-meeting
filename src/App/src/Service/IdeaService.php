@@ -9,7 +9,6 @@ use App\Entity\CampaignTheme;
 use App\Entity\Idea;
 use App\Entity\IdeaInterface;
 use App\Entity\Link;
-use App\Entity\Mail;
 use App\Entity\Media;
 use App\Entity\PhaseInterface;
 use App\Entity\UserInterface;
@@ -57,9 +56,6 @@ final class IdeaService implements IdeaServiceInterface
     /** @var EntityRepository */
     private $workflowStateExtraRepository;
 
-    /** @var EntityRepository */
-    private $mailRepository;
-
     /** @var PhaseServiceInterface */
     private $phaseService;
 
@@ -81,7 +77,6 @@ final class IdeaService implements IdeaServiceInterface
         $this->campaignLocationRepository   = $this->em->getRepository(CampaignLocation::class);
         $this->workflowStateRepository      = $this->em->getRepository(WorkflowState::class);
         $this->workflowStateExtraRepository = $this->em->getRepository(WorkflowStateExtra::class);
-        $this->mailRepository               = $this->em->getRepository(Mail::class);
     }
 
     public function addIdea(

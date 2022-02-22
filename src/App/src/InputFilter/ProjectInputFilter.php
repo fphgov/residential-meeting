@@ -18,7 +18,7 @@ use function getenv;
 class ProjectInputFilter extends InputFilter
 {
     /** @var AdapterInterface */
-    private $dbAdapter;
+    protected $dbAdapter;
 
     public function __construct(
         AdapterInterface $dbAdapter

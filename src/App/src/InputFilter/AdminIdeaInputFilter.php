@@ -9,7 +9,7 @@ use Laminas\Db\Adapter\AdapterInterface;
 class AdminIdeaInputFilter extends IdeaInputFilter
 {
     /** @var AdapterInterface */
-    private $dbAdapter;
+    protected $dbAdapter;
 
     public function __construct(
         AdapterInterface $dbAdapter

@@ -8,7 +8,7 @@ use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Ignore as ignore;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")

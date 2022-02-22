@@ -18,7 +18,7 @@ use function getenv;
 class IdeaInputFilter extends InputFilter
 {
     /** @var AdapterInterface */
-    private $dbAdapter;
+    protected $dbAdapter;
 
     public function __construct(
         AdapterInterface $dbAdapter

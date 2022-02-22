@@ -407,7 +407,7 @@ class Idea implements IdeaInterface
         return $this->participateComment;
     }
 
-    /** @var int|string|null $cost **/
+    /** @param int|string|null $cost **/
     public function setCost($cost = null): void
     {
         $this->cost = $cost;

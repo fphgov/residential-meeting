@@ -16,7 +16,7 @@ use function getenv;
 class AdminProjectInputFilter extends ProjectInputFilter
 {
     /** @var AdapterInterface */
-    private $dbAdapter;
+    protected $dbAdapter;
 
     public function __construct(
         AdapterInterface $dbAdapter

@@ -97,7 +97,7 @@ interface IdeaInterface extends EntityInterface
 
     public function getParticipateComment(): string;
 
-    /** @var int|string|null $cost **/
+    /** @param int|string|null $cost **/
     public function setCost($cost = null): void;
 
     public function getCost(): ?int;

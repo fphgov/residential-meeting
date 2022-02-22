@@ -350,7 +350,7 @@ class Project implements ProjectInterface
         return $this->video;
     }
 
-    /** @var int|string|null $cost **/
+    /** @param int|string|null $cost **/
     public function setCost($cost = null): void
     {
         $this->cost = $cost;

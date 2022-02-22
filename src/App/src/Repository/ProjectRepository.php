@@ -33,7 +33,7 @@ final class ProjectRepository extends EntityRepository
         return $selectables;
     }
 
-    public function getWorkflowStates(string $campaign = '')
+    public function getWorkflowStates(string $campaign = ''): array
     {
         $qb = $this->createQueryBuilder('p');
 
@@ -41,7 +41,7 @@ final class ProjectRepository extends EntityRepository
             ->where('p.workflowState NOT IN (:disableWorkflowStates)')
             ->groupBy('p.workflowState');
 
-        if ($campaign != '') {
+        if ($campaign !== '') {
             $qb->andWhere('p.campaign IN (:campaign)');
             $qb->setParameter('campaign', $campaign);
         }

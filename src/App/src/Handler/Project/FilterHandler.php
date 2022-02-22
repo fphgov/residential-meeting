@@ -83,10 +83,10 @@ final class FilterHandler implements RequestHandlerInterface
             ];
         }
 
-        foreach ($campaigns as $_campaign) {
+        foreach ($campaigns as $camp) {
             $filterParams['campaign'][] = [
-                'id'   => $_campaign->getId(),
-                'name' => $_campaign->getShortTitle(),
+                'id'   => $camp->getId(),
+                'name' => $camp->getShortTitle(),
             ];
         }
 

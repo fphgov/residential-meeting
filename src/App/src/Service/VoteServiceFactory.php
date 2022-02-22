@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Middleware\AuditMiddleware;
 use App\Service\MailServiceInterface;
 use App\Service\PhaseServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,7 +21,6 @@ final class VoteServiceFactory
         return new VoteService(
             $config,
             $container->get(EntityManagerInterface::class),
-            $container->get(AuditMiddleware::class)->getLogger(),
             $container->get(PhaseServiceInterface::class),
             $container->get(MailServiceInterface::class)
         );
