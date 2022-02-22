@@ -11,17 +11,14 @@ use App\Entity\UserPreference;
 use App\Entity\UserPreferenceInterface;
 use App\Exception\UserNotActiveException;
 use App\Exception\UserNotFoundException;
-use App\Helper\MailContentHelper;
 use App\Model\PBKDF2Password;
 use App\Repository\UserRepository;
-use App\Service\MailQueueServiceInterface;
+use App\Service\MailServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Exception;
 use Laminas\Log\Logger;
-use Mail\MailAdapter;
-use Throwable;
 
 use function error_log;
 
@@ -36,14 +33,8 @@ final class UserService implements UserServiceInterface
     /** @var Logger */
     private $audit;
 
-    /** @var MailAdapter */
-    private $mailAdapter;
-
-    /** @var MailContentHelper */
-    private $mailContentHelper;
-
-    /** @var MailQueueServiceInterface */
-    private $mailQueueService;
+    /** @var MailServiceInterface */
+    private $mailService;
 
     /** @var UserRepository */
     private $userRepository;
@@ -58,16 +49,12 @@ final class UserService implements UserServiceInterface
         array $config,
         EntityManagerInterface $em,
         Logger $audit,
-        MailAdapter $mailAdapter,
-        MailContentHelper $mailContentHelper,
-        MailQueueServiceInterface $mailQueueService
+        MailServiceInterface $mailService
     ) {
         $this->config                   = $config;
         $this->em                       = $em;
         $this->audit                    = $audit;
-        $this->mailAdapter              = $mailAdapter;
-        $this->mailContentHelper        = $mailContentHelper;
-        $this->mailQueueService         = $mailQueueService;
+        $this->mailService              = $mailService;
         $this->userRepository           = $this->em->getRepository(User::class);
         $this->userPreferenceRepository = $this->em->getRepository(UserPreference::class);
         $this->mailLogRepository        = $this->em->getRepository(MailLog::class);
@@ -286,155 +273,70 @@ final class UserService implements UserServiceInterface
 
     private function sendActivationEmail(UserInterface $user): void
     {
-        $this->mailAdapter->clear();
+        $tplData = [
+            'name'             => $user->getFirstname(),
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'activation'       => $this->config['app']['url'] . '/profil/aktivalas/' . $user->getHash(),
+        ];
 
-        try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Erősítsd meg a regisztrációdat az otlet.budapest.hu-n');
-
-            $tplData = [
-                'name'             => $user->getFirstname(),
-                'infoMunicipality' => $this->config['app']['municipality'],
-                'infoEmail'        => $this->config['app']['email'],
-                'activation'       => $this->config['app']['url'] . '/profil/aktivalas/' . $user->getHash(),
-            ];
-
-            $this->mailAdapter->setTemplate(
-                $this->mailContentHelper->create('user-created', $tplData)
-            );
-
-            $this->mailQueueService->add($user, $this->mailAdapter);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('New user notification no added to MailQueueService', [
-                'extra' => $user->getId() . " | " . $e->getMessage(),
-            ]);
-        }
+        $this->mailService->send('user-created', $tplData, $user);
     }
 
     private function sendPrizeActivationEmail(UserInterface $user): void
     {
-        $this->mailAdapter->clear();
+        $userPreference = $user->getUserPreference();
 
-        try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Nyereményjáték az otlet.budapest.hu-n');
+        $url = $this->config['app']['url'] . '/profil/nyeremeny-aktivalas/' . $userPreference->getPrizeHash();
 
-            $userPreference = $user->getUserPreference();
+        $tplData = [
+            'name'             => $user->getFirstname(),
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'prizeActivation'  => $url,
+        ];
 
-            $url = $this->config['app']['url'] . '/profil/nyeremeny-aktivalas/' . $userPreference->getPrizeHash();
-
-            $tplData = [
-                'name'             => $user->getFirstname(),
-                'infoMunicipality' => $this->config['app']['municipality'],
-                'infoEmail'        => $this->config['app']['email'],
-                'prizeActivation'  => $url,
-            ];
-
-            $this->mailAdapter->setTemplate(
-                $this->mailContentHelper->create('user-prize', $tplData)
-            );
-
-            $this->mailQueueService->add($user, $this->mailAdapter);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('User prize notification no added to MailQueueService', [
-                'extra' => $user->getId() . ' | ' . $e->getMessage(),
-            ]);
-        }
+        $this->mailService->send('user-prize', $tplData, $user);
     }
 
     private function forgotPasswordMail(UserInterface $user): void
     {
-        $this->mailAdapter->clear();
+        $tplData = [
+            'name'             => $user->getFirstname(),
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'forgotLink'       => $this->config['app']['url'] . '/profil/jelszo/' . $user->getHash(),
+        ];
 
-        try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('A fiók jelszavánának visszaállítása');
-
-            $tplData = [
-                'name'             => $user->getFirstname(),
-                'infoMunicipality' => $this->config['app']['municipality'],
-                'infoEmail'        => $this->config['app']['email'],
-                'forgotLink'       => $this->config['app']['url'] . '/profil/jelszo/' . $user->getHash(),
-            ];
-
-            $this->mailAdapter->setTemplate(
-                $this->mailContentHelper->create('user-password-recovery', $tplData)
-            );
-
-            $this->mailQueueService->add($user, $this->mailAdapter);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('User forgot password notification no added to MailQueueService', [
-                'extra' => $user->getId() . ' | ' . $e->getMessage(),
-            ]);
-        }
+        $this->mailService->send('user-password-recovery', $tplData, $user);
     }
 
     private function sendAccountConfirmationEmail(UserInterface $user): void
     {
-        $this->mailAdapter->clear();
+        $tplData = [
+            'name'             => $user->getFirstname(),
+            'firstname'        => $user->getFirstname(),
+            'lastname'         => $user->getLastname(),
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
+        ];
 
-        try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Őrizd meg a regisztrációdat az otlet.budapest.hu-n');
-
-            $tplData = [
-                'name'             => $user->getFirstname(),
-                'firstname'        => $user->getFirstname(),
-                'lastname'         => $user->getLastname(),
-                'infoMunicipality' => $this->config['app']['municipality'],
-                'infoEmail'        => $this->config['app']['email'],
-                'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
-            ];
-
-            $this->mailAdapter->setTemplate(
-                $this->mailContentHelper->create('account-confirmation', $tplData)
-            );
-
-            $this->mailQueueService->add($user, $this->mailAdapter);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('Account confirmation notification no added to MailQueueService', [
-                'extra' => $user->getId() . " | " . $e->getMessage(),
-            ]);
-        }
+        $this->mailService->send('account-confirmation', $tplData, $user);
     }
 
     private function sendAccountConfirmationReminderEmail(UserInterface $user): void
     {
-        $this->mailAdapter->clear();
+        $tplData = [
+            'name'             => $user->getFirstname(),
+            'firstname'        => $user->getFirstname(),
+            'lastname'         => $user->getLastname(),
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
+        ];
 
-        try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Emlékeztető: Őrizd meg a regisztrációdat az otlet.budapest.hu-n');
-
-            $tplData = [
-                'name'             => $user->getFirstname(),
-                'firstname'        => $user->getFirstname(),
-                'lastname'         => $user->getLastname(),
-                'infoMunicipality' => $this->config['app']['municipality'],
-                'infoEmail'        => $this->config['app']['email'],
-                'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
-            ];
-
-            $this->mailAdapter->setTemplate(
-                $this->mailContentHelper->create('account-confirmation-reminder', $tplData)
-            );
-
-            $this->mailQueueService->add($user, $this->mailAdapter);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('Account confirmation reminder notification no added to MailQueueService', [
-                'extra' => $user->getId() . " | " . $e->getMessage(),
-            ]);
-        }
+        $this->mailService->send('account-confirmation-reminder', $tplData, $user);
     }
 
     public function getRepository(): EntityRepository

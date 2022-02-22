@@ -39,7 +39,7 @@ final class IdeaInputFilterTest extends AbstractServiceTest
             'participate_comment' => 'Implementation',
             'cost'                => '1234',
             'theme'               => 1,
-            'file'                => [
+            'medias'              => [
                 $file,
             ],
         ];

@@ -8,6 +8,9 @@ use App\Serializer\Normalizer\ModelNormalizer;
 
 trait EntityTrait
 {
+    /**
+     * @return array|ArrayObject|bool|Countable|float|int|mixed|string|Traversable|null
+     */
     public function normalizer(?string $format = null, array $context = [])
     {
         $normalizer = new ModelNormalizer();

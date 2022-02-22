@@ -38,6 +38,15 @@ class Mail implements MailInterface
     private $name;
 
     /**
+     * @ORM\Column(name="subject", type="string")
+     *
+     * @Groups({"list", "detail", "full_detail"})
+     *
+     * @var string
+     */
+    private $subject;
+
+    /**
      * @ORM\Column(name="plain_text", type="text")
      *
      * @Groups({"list", "detail", "full_detail"})
@@ -73,6 +82,16 @@ class Mail implements MailInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setSubject(string $subject): void
+    {
+        $this->subject = $subject;
+    }
+
+    public function getSubject(): string
+    {
+        return $this->subject;
     }
 
     public function setPlainText(string $plainText): void

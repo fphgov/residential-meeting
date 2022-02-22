@@ -12,6 +12,9 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class UuidNormalizer implements NormalizerInterface, DenormalizerInterface, CacheableSupportsMethodInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function normalize($object, ?string $format = null, array $context = [])
     {
         return $object->serialize();

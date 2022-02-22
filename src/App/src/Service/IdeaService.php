@@ -17,19 +17,14 @@ use App\Entity\WorkflowStateExtra;
 use App\Entity\WorkflowStateInterface;
 use App\Exception\NoHasPhaseCategoryException;
 use App\Exception\NotPossibleSubmitIdeaWithAdminAccountException;
-use App\Helper\MailContentHelper;
-use App\Service\MailQueueServiceInterface;
+use App\Service\MailServiceInterface;
 use App\Service\PhaseServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Laminas\Log\Logger;
-use Mail\MailAdapter;
 use Psr\Http\Message\UploadedFileInterface;
-use Throwable;
 
 use function basename;
-use function error_log;
 use function in_array;
 use function is_array;
 use function is_countable;
@@ -64,39 +59,24 @@ final class IdeaService implements IdeaServiceInterface
     /** @var PhaseServiceInterface */
     private $phaseService;
 
-    /** @var Logger */
-    private $audit;
-
-    /** @var MailAdapter */
-    private $mailAdapter;
-
-    /** @var MailContentHelper */
-    private $mailContentHelper;
-
-    /** @var MailQueueServiceInterface */
-    private $mailQueueService;
+    /** @var MailServiceInterface */
+    private $mailService;
 
     public function __construct(
         array $config,
         EntityManagerInterface $em,
         PhaseServiceInterface $phaseService,
-        Logger $audit,
-        MailAdapter $mailAdapter,
-        MailContentHelper $mailContentHelper,
-        MailQueueServiceInterface $mailQueueService
+        MailServiceInterface $mailService
     ) {
         $this->config                       = $config;
         $this->em                           = $em;
+        $this->phaseService                 = $phaseService;
+        $this->mailService                  = $mailService;
         $this->ideaRepository               = $this->em->getRepository(Idea::class);
         $this->campaignThemeRepository      = $this->em->getRepository(CampaignTheme::class);
         $this->campaignLocationRepository   = $this->em->getRepository(CampaignLocation::class);
         $this->workflowStateRepository      = $this->em->getRepository(WorkflowState::class);
         $this->workflowStateExtraRepository = $this->em->getRepository(WorkflowStateExtra::class);
-        $this->phaseService                 = $phaseService;
-        $this->audit                        = $audit;
-        $this->mailAdapter                  = $mailAdapter;
-        $this->mailContentHelper            = $mailContentHelper;
-        $this->mailQueueService             = $mailQueueService;
     }
 
     public function addIdea(
@@ -160,8 +140,8 @@ final class IdeaService implements IdeaServiceInterface
             }
         }
 
-        if (is_array($filteredParams['file'])) {
-            $this->addAttachments($idea, $filteredParams['file'], $date);
+        if (isset($filteredParams['medias']) && is_array($filteredParams['medias'])) {
+            $this->addAttachments($idea, $filteredParams['medias'], $date);
         }
 
         if (isset($filteredParams['links']) && is_countable($filteredParams['links'])) {
@@ -239,6 +219,10 @@ final class IdeaService implements IdeaServiceInterface
             }
         }
 
+        if (isset($filteredParams['medias']) && is_array($filteredParams['medias'])) {
+            $this->addAttachments($idea, $filteredParams['medias'], $date);
+        }
+
         $idea->setUpdatedAt($date);
 
         $this->em->flush();
@@ -272,132 +256,58 @@ final class IdeaService implements IdeaServiceInterface
 
     public function sendIdeaConfirmationEmail(UserInterface $user, IdeaInterface $idea): void
     {
-        $this->mailAdapter->clear();
+        $tplData = [
+            'name'             => $user->getFirstname(),
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'idea'             => [
+                'title'       => $idea->getTitle(),
+                'solution'    => $idea->getSolution(),
+                'description' => $idea->getDescription(),
+            ],
+        ];
 
-        try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Sikeres ötlet beküldés');
-
-            $tplData = [
-                'name'             => $user->getFirstname(),
-                'infoMunicipality' => $this->config['app']['municipality'],
-                'infoEmail'        => $this->config['app']['email'],
-                'idea'             => [
-                    'title'       => $idea->getTitle(),
-                    'solution'    => $idea->getSolution(),
-                    'description' => $idea->getDescription(),
-                ],
-            ];
-
-            $this->mailAdapter->setTemplate(
-                $this->mailContentHelper->create('idea-confirmation', $tplData)
-            );
-
-            $this->mailQueueService->add($user, $this->mailAdapter);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('Idea confirmation notification no added to MailQueueService', [
-                'extra' => $user->getId() . " | " . $e->getMessage(),
-            ]);
-        }
+        $this->mailService->send('idea-confirmation', $tplData, $user);
     }
 
     public function sendIdeaWorkflowPublished(IdeaInterface $idea): void
     {
-        $this->mailAdapter->clear();
+        $tplData = [
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'ideaId'           => $idea->getId(),
+            'ideaTitle'        => $idea->getTitle(),
+            'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
+        ];
 
-        $user = $idea->getSubmitter();
-
-        try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Ötletedet közzétettük az otlet.budapest.hu-n');
-
-            $tplData = [
-                'infoMunicipality' => $this->config['app']['municipality'],
-                'infoEmail'        => $this->config['app']['email'],
-                'ideaId'           => $idea->getId(),
-                'ideaTitle'        => $idea->getTitle(),
-                'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
-            ];
-
-            $this->mailAdapter->setTemplate(
-                $this->mailContentHelper->create('workflow-idea-published', $tplData)
-            );
-
-            $this->mailQueueService->add($user, $this->mailAdapter);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('Idea published notification no added to MailQueueService', [
-                'extra' => $user->getId() . " | " . $e->getMessage(),
-            ]);
-        }
+        $this->mailService->send('workflow-idea-published', $tplData, $idea->getSubmitter());
     }
 
     public function sendIdeaWorkflowPublishedWithMod(IdeaInterface $idea): void
     {
-        $this->mailAdapter->clear();
+        $extra = $idea->getWorkflowStateExtra() ? $idea->getWorkflowStateExtra()->getEmailText() : '';
 
-        $user = $idea->getSubmitter();
+        $tplData = [
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'ideaId'           => $idea->getId(),
+            'ideaTitle'        => $idea->getTitle(),
+            'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
+            'ideaModText'      => $extra,
+            'ideaModFullText'  => wordwrap($extra, 78, "\n"),
+        ];
 
-        try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Ötletedet közzétettük az otlet.budapest.hu-n');
-
-            $extra = $idea->getWorkflowStateExtra() ? $idea->getWorkflowStateExtra()->getEmailText() : '';
-
-            $tplData = [
-                'infoMunicipality' => $this->config['app']['municipality'],
-                'infoEmail'        => $this->config['app']['email'],
-                'ideaId'           => $idea->getId(),
-                'ideaTitle'        => $idea->getTitle(),
-                'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
-                'ideaModText'      => $extra,
-                'ideaModFullText'  => wordwrap($extra, 78, "\n"),
-            ];
-
-            $this->mailAdapter->setTemplate(
-                $this->mailContentHelper->create('workflow-idea-published-mod', $tplData)
-            );
-
-            $this->mailQueueService->add($user, $this->mailAdapter);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('Idea published notification no added to MailQueueService', [
-                'extra' => $user->getId() . " | " . $e->getMessage(),
-            ]);
-        }
+        $this->mailService->send('workflow-idea-published-mod', $tplData, $idea->getSubmitter());
     }
 
     public function sendIdeaWorkflowTrashed(IdeaInterface $idea): void
     {
-        $this->mailAdapter->clear();
+        $tplData = [
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'ideaTitle'        => $idea->getTitle(),
+        ];
 
-        $user = $idea->getSubmitter();
-
-        try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
-            $this->mailAdapter->getMessage()->setSubject('Ötletedet nem tudtuk közzétenni az otlet.budapest.hu-n');
-
-            $tplData = [
-                'infoMunicipality' => $this->config['app']['municipality'],
-                'infoEmail'        => $this->config['app']['email'],
-                'ideaTitle'        => $idea->getTitle(),
-            ];
-
-            $this->mailAdapter->setTemplate(
-                $this->mailContentHelper->create('workflow-idea-rejected', $tplData)
-            );
-
-            $this->mailQueueService->add($user, $this->mailAdapter);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('Idea rejected notification no added to MailQueueService', [
-                'extra' => $user->getId() . " | " . $e->getMessage(),
-            ]);
-        }
+        $this->mailService->send('workflow-idea-rejected', $tplData, $idea->getSubmitter());
     }
 }

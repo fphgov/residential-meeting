@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Handler\Idea;
+namespace App\Handler\Project;
 
-use App\Entity\Idea;
-use App\Service\IdeaServiceInterface;
+use App\Entity\Project;
+use App\Middleware\UserMiddleware;
+use App\Service\ProjectServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -24,31 +25,33 @@ final class AdminModifyHandler implements RequestHandlerInterface
     /** @var EntityManagerInterface */
     protected $em;
 
-    /** @var IdeaServiceInterface */
-    protected $ideaService;
+    /** @var ProjectServiceInterface */
+    protected $projectService;
 
     public function __construct(
         InputFilterInterface $inputFilter,
         EntityManagerInterface $em,
-        IdeaServiceInterface $ideaService
+        ProjectServiceInterface $projectService
     ) {
-        $this->inputFilter = $inputFilter;
-        $this->em          = $em;
-        $this->ideaService = $ideaService;
+        $this->inputFilter    = $inputFilter;
+        $this->em             = $em;
+        $this->projectService = $projectService;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $user = $request->getAttribute(UserMiddleware::class);
+
         $body = array_merge_recursive(
             $request->getParsedBody(),
             $request->getUploadedFiles(),
         );
 
-        $entityRepository = $this->em->getRepository(Idea::class);
+        $entityRepository = $this->em->getRepository(Project::class);
 
-        $idea = $entityRepository->find($request->getAttribute('id'));
+        $project = $entityRepository->find($request->getAttribute('id'));
 
-        if ($idea === null) {
+        if ($project === null) {
             return new JsonResponse([
                 'errors' => 'Nincs ilyen azonosítójú ötlet, vagy még feldolgozás alatt áll',
             ], 404);
@@ -65,7 +68,7 @@ final class AdminModifyHandler implements RequestHandlerInterface
         }
 
         try {
-            $this->ideaService->modifyIdea($idea, $this->inputFilter->getValues());
+            $this->projectService->modifyProject($user, $project, $this->inputFilter->getValues());
         } catch (Exception $e) {
             return new JsonResponse([
                 'errors' => $e->getMessage(),

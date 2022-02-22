@@ -25,6 +25,6 @@ $em             = $container->get(EntityManagerInterface::class);
 $ideaService    = $container->get(IdeaServiceInterface::class);
 $ideaRepository = $em->getRepository(Idea::class);
 
-$idea = $ideaRepository->find(1);
+$idea = $ideaRepository->find(0);
 
 $ideaService->sendIdeaConfirmationEmail($idea->getSubmitter(), $idea);

@@ -16,6 +16,10 @@ interface ProjectInterface extends EntityInterface
 
     public const DISABLE_DEFAULT_SET = [];
 
+    public function getCampaign(): CampaignInterface;
+
+    public function setCampaign(CampaignInterface $campaign): void;
+
     public function getCampaignTheme(): CampaignTheme;
 
     public function setCampaignTheme(CampaignTheme $campaignTheme): void;
@@ -23,6 +27,10 @@ interface ProjectInterface extends EntityInterface
     public function getMedias(): array;
 
     public function getMediaCollection(): Collection;
+
+    public function addMedia(MediaInterface $media): self;
+
+    public function removeMedia(MediaInterface $media): self;
 
     public function getIdeas(): array;
 
@@ -37,6 +45,10 @@ interface ProjectInterface extends EntityInterface
     public function removeTag(Tag $tag): self;
 
     public function getCampaignLocations(): array;
+
+    public function addCampaignLocation(CampaignLocation $campaignLocation): self;
+
+    public function removeCampaignLocation(CampaignLocation $campaignLocation): self;
 
     public function setTitle(string $title): void;
 
@@ -58,7 +70,7 @@ interface ProjectInterface extends EntityInterface
 
     public function getVideo(): ?string;
 
-    /** @var int|string|null $cost **/
+    /** @param int|string|null $cost **/
     public function setCost($cost = null): void;
 
     public function getCost(): ?int;
@@ -72,4 +84,18 @@ interface ProjectInterface extends EntityInterface
     public function getWin(): bool;
 
     public function getShortDescription(): string;
+
+    public function getImplementationCollection(): Collection;
+
+    public function getImplementations(): array;
+
+    public function addImplementation(ImplementationInterface $implementation): self;
+
+    public function setLatitude(?float $latitude = null): void;
+
+    public function getLatitude(): ?float;
+
+    public function setLongitude(?float $longitude = null): void;
+
+    public function getLongitude(): ?float;
 }

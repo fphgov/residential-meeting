@@ -9,7 +9,7 @@ use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Ignore as ignore;
 
 /**
  * @ORM\Entity
@@ -25,7 +25,7 @@ class CampaignLocation implements CampaignLocationInterface
      * @ORM\ManyToOne(targetEntity="Campaign")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
      *
-     * @Ignore
+     * @ignore
      * @var Campaign
      */
     private $campaign;

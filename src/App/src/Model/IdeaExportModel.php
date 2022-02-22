@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Entity\Idea;
 use App\Service\IdeaServiceInterface;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\IWriter;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-use function in_array;
 use function implode;
+use function in_array;
 
 final class IdeaExportModel implements ExportModelInterface
 {
@@ -22,16 +23,19 @@ final class IdeaExportModel implements ExportModelInterface
         'Leírás',
         'Helyszín megnevezése',
         'Hivatkozások',
-        'Dokumentumok',
+        'Dokumentum',
         'Kategória',
         'Becsült költség',
         'Részvétel (I/N)',
         'Részvétel milyen módon',
+        'Közzététel',
+        'Közzétéve',
+        'Állapot',
     ];
 
     public const DISABLE_AUTO_RESIZE_COLS = [
         'D',
-        'E'
+        'E',
     ];
 
     private array $config;
@@ -68,11 +72,14 @@ final class IdeaExportModel implements ExportModelInterface
                 $idea->getDescription(),
                 $idea->getLocationDescription(),
                 implode(',', $idea->getLinks()),
-                $idea->getWorkflowState()->getTitle(),
+                implode(',', $this->getMedias($idea)),
                 $idea->getCampaignTheme()->getName(),
                 $idea->getCost(),
                 $idea->getParticipate() ? 'Igen' : 'Nem',
                 $idea->getParticipateComment(),
+                '',
+                '',
+                $idea->getWorkflowState()->getTitle(),
             ];
         }
 
@@ -91,5 +98,16 @@ final class IdeaExportModel implements ExportModelInterface
         $this->spreadsheet->removeSheetByIndex(0);
 
         return new Xlsx($this->spreadsheet);
+    }
+
+    private function getMedias(Idea $idea): array
+    {
+        $mediaLinks = [];
+
+        foreach ($idea->getMedias() as $media) {
+            $mediaLinks[] = $this->config['app']['url'] . '/app/api/media/' . $media['id']->serialize();
+        }
+
+        return $mediaLinks;
     }
 }

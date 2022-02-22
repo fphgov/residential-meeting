@@ -28,6 +28,14 @@ class Project implements ProjectInterface
     use EntityTrait;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="projects")
+     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
+     *
+     * @Groups({"list", "detail", "full_detail"})
+     */
+    private Campaign $campaign;
+
+    /**
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
      * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
      *
@@ -88,6 +96,15 @@ class Project implements ProjectInterface
     private WorkflowState $workflowState;
 
     /**
+     * @ORM\OneToMany(targetEntity="Implementation", mappedBy="project")
+     *
+     * @var Collection|Implementation[]
+     *
+     * @Groups({"detail", "full_detail"})
+     */
+    private $implementations;
+
+    /**
      * @ORM\Column(name="title", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
@@ -137,6 +154,30 @@ class Project implements ProjectInterface
      */
     private bool $win = false;
 
+    /**
+     * @ORM\Column(name="latitude", type="float", nullable=true)
+     *
+     * @Groups({"full_detail"})
+     */
+    private ?float $latitude;
+
+    /**
+     * @ORM\Column(name="longitude", type="float", nullable=true)
+     *
+     * @Groups({"full_detail"})
+     */
+    private ?float $longitude;
+
+    public function getCampaign(): CampaignInterface
+    {
+        return $this->campaign;
+    }
+
+    public function setCampaign(CampaignInterface $campaign): void
+    {
+        $this->campaign = $campaign;
+    }
+
     public function getCampaignTheme(): CampaignTheme
     {
         return $this->campaignTheme;
@@ -163,6 +204,24 @@ class Project implements ProjectInterface
         }
 
         return $medias;
+    }
+
+    public function addMedia(MediaInterface $media): self
+    {
+        if (! $this->medias->contains($media)) {
+            $this->medias[] = $media;
+        }
+
+        return $this;
+    }
+
+    public function removeMedia(MediaInterface $media): self
+    {
+        if ($this->medias->contains($media)) {
+            $this->medias->removeElement($media);
+        }
+
+        return $this;
     }
 
     public function getIdeaCollection(): Collection
@@ -223,6 +282,24 @@ class Project implements ProjectInterface
         return $this->campaignLocations->getValues();
     }
 
+    public function addCampaignLocation(CampaignLocation $campaignLocation): self
+    {
+        if (! $this->campaignLocations->contains($campaignLocation)) {
+            $this->campaignLocations[] = $campaignLocation;
+        }
+
+        return $this;
+    }
+
+    public function removeCampaignLocation(CampaignLocation $campaignLocation): self
+    {
+        if ($this->campaignLocations->contains($campaignLocation)) {
+            $this->campaignLocations->removeElement($campaignLocation);
+        }
+
+        return $this;
+    }
+
     public function setTitle(string $title): void
     {
         $this->title = $title;
@@ -273,7 +350,7 @@ class Project implements ProjectInterface
         return $this->video;
     }
 
-    /** @var int|string|null $cost **/
+    /** @param int|string|null $cost **/
     public function setCost($cost = null): void
     {
         $this->cost = $cost;
@@ -307,5 +384,49 @@ class Project implements ProjectInterface
         $description .= ' ...';
 
         return $description;
+    }
+
+    public function getImplementationCollection(): Collection
+    {
+        return $this->implementations;
+    }
+
+    public function getImplementations(): array
+    {
+        $implementations = [];
+        foreach ($this->implementations->getValues() as $implementation) {
+            $implementations[] = $implementation;
+        }
+
+        return $implementations;
+    }
+
+    public function addImplementation(ImplementationInterface $implementation): self
+    {
+        if (! $this->implementations->contains($implementation)) {
+            $this->implementations[] = $implementation;
+        }
+
+        return $this;
+    }
+
+    public function setLatitude(?float $latitude = null): void
+    {
+        $this->latitude = $latitude;
+    }
+
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function setLongitude(?float $longitude = null): void
+    {
+        $this->longitude = $longitude;
+    }
+
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
     }
 }

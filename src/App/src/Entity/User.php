@@ -75,7 +75,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(name="email", type="string", length=100, unique=true)
      *
-     * @Groups({"profile"})
+     * @Groups({"full_detail", "profile"})
      * @var string
      */
     private $email;
@@ -102,6 +102,14 @@ class User implements UserInterface
      * @var string|null
      */
     private $hash;
+
+    /**
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     *
+     * @Ignore()
+     * @var DateTime
+     */
+    protected $createdAt;
 
     public function __construct()
     {

@@ -18,7 +18,7 @@ use function getenv;
 class IdeaInputFilter extends InputFilter
 {
     /** @var AdapterInterface */
-    private $dbAdapter;
+    protected $dbAdapter;
 
     public function __construct(
         AdapterInterface $dbAdapter
@@ -139,7 +139,7 @@ class IdeaInputFilter extends InputFilter
         ]);
 
         $this->add([
-            'name'        => 'file',
+            'name'        => 'medias',
             'type'        => FileInput::class,
             'allow_empty' => true,
             'validators'  => [

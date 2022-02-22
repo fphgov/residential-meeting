@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Handler\Idea;
+namespace App\Handler\Project;
 
 use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
-use App\Entity\IdeaCollection;
-use App\Entity\User;
+use App\Entity\ProjectCollection;
 use App\Entity\WorkflowState;
-use App\Service\IdeaServiceInterface;
+use App\Service\ProjectServiceInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -26,8 +25,8 @@ use function strtoupper;
 
 final class AdminListHandler implements RequestHandlerInterface
 {
-    /** @var IdeaServiceInterface */
-    private $ideaService;
+    /** @var ProjectServiceInterface */
+    private $projectService;
 
     /** @var int */
     protected $pageCount;
@@ -39,12 +38,12 @@ final class AdminListHandler implements RequestHandlerInterface
     protected $resourceGenerator;
 
     public function __construct(
-        IdeaServiceInterface $ideaService,
+        ProjectServiceInterface $projectService,
         int $pageCount,
         HalResponseFactory $responseFactory,
         ResourceGenerator $resourceGenerator
     ) {
-        $this->ideaService       = $ideaService;
+        $this->projectService    = $projectService;
         $this->pageCount         = $pageCount;
         $this->responseFactory   = $responseFactory;
         $this->resourceGenerator = $resourceGenerator;
@@ -69,13 +68,12 @@ final class AdminListHandler implements RequestHandlerInterface
             return new JsonResponse([], 204);
         }
 
-        $qb = $this->ideaService->getRepository()->createQueryBuilder('p')
-            ->select('NEW IdeaListDTO(p.id, c.shortTitle, ct.code, ct.name, ct.rgb, p.title, p.description, w.id, w.code, w.title, CONCAT_WS(\' \', u.lastname, u.firstname), cl.name) as idea')
+        $qb = $this->projectService->getRepository()->createQueryBuilder('p')
+            ->select('NEW ProjectListDTO(p.id, c.shortTitle, ct.name, ct.rgb, p.title, p.description, w.code, w.title, cl.name) as project')
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
-            ->join(Campaign::class, 'c', Join::WITH, 'c.id = p.campaign')
+            ->join(Campaign::class, 'c', Join::WITH, 'c.id = ct.campaign')
             ->join(WorkflowState::class, 'w', Join::WITH, 'w.id = p.workflowState')
-            ->innerJoin(User::class, 'u', Join::WITH, 'u.id = p.submitter')
-            ->leftJoin('p.campaignLocation', 'cl')
+            ->leftJoin('p.campaignLocations', 'cl')
             ->groupBy('p.id');
 
         $qb->orderBy('p.id', $sort);
@@ -89,11 +87,9 @@ final class AdminListHandler implements RequestHandlerInterface
                 $qb->where('p.title LIKE :title')
                     ->orWhere('p.description LIKE :description')
                     ->orWhere('p.solution LIKE :solution')
-                    ->orWhere('u.email LIKE :email')
                     ->setParameter('title', '%' . $word . '%')
                     ->setParameter('description', '%' . $word . '%')
-                    ->setParameter('solution', '%' . $word . '%')
-                    ->setParameter('email', '%' . $word . '%');
+                    ->setParameter('solution', '%' . $word . '%');
             }
         }
 
@@ -119,7 +115,7 @@ final class AdminListHandler implements RequestHandlerInterface
 
         $qb->setMaxResults(1);
 
-        $paginator = new IdeaCollection($qb);
+        $paginator = new ProjectCollection($qb);
         $paginator->setUseOutputWalkers(false);
 
         $paginator->getQuery()->setFirstResult($this->pageCount * $page)->setMaxResults($this->pageCount);

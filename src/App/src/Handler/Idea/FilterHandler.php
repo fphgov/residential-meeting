@@ -23,6 +23,7 @@ final class FilterHandler implements RequestHandlerInterface
 {
     public const ENABLED_STATUSES = [
         'published',
+        'published_whith_mod',
         'pre_council',
         'voting_list',
         'under_construction',
@@ -55,81 +56,6 @@ final class FilterHandler implements RequestHandlerInterface
         $campaignLocationRepository = $this->em->getRepository(CampaignLocation::class);
         $workflowStateRepository    = $this->em->getRepository(WorkflowState::class);
 
-        // $ideaParams = [];
-
-        // if ($theme !== '') {
-        //     $campaignThemeCode = $campaignThemeRepository->findBy([
-        //         'code' => $theme
-        //     ]);
-
-        //     $ideaParams['campaignTheme'] = $campaignThemeCode;
-        // }
-
-        // if ($location !== '') {
-        //     $campaignLocationCode = $campaignLocationRepository->findBy([
-        //         'code' => $location
-        //     ]);
-
-        //     $ideaParams['campaignLocation'] = $campaignLocationCode;
-        // }
-
-        // if ($campaign !== '') {
-        //     $campaignId = $campaignLocationRepository->findBy([
-        //         'id' => $campaign
-        //     ]);
-
-        //     $ideaParams['campaign'] = $campaignId;
-        // }
-
-        // if ($status !== '') {
-        //     $statusCode = $campaignLocationRepository->findBy([
-        //         'code' => $status
-        //     ]);
-
-        //     $ideaParams['workflowState'] = $statusCode;
-        // }
-
-        // $ideas = $ideaRepository->findBy($ideaParams);
-
-        // // Campaign
-        // $campaignIds = array_filter(array_unique(array_map(function($idea) {
-        //     return $idea->getCampaign()->getId();
-        // }, $ideas)));
-
-        // if (isset($ideaParams['campaign'])) {
-        //     $campaignIds = array_merge($campaignIds, (array)$ideaParams['campaign']);
-        // }
-
-        // $campaigns = $campaignRepository->findBy([
-        //     'id' => $campaignIds,
-        // ]);
-
-        // // Theme
-        // $campaignThemeCodes = array_filter(array_unique(array_map(function($idea) {
-        //     return $idea->getCampaignTheme()->getCode();
-        // }, $ideas)));
-
-        // if (isset($ideaParams['campaignTheme'])) {
-        //     $campaignThemeCodes = array_merge($campaignThemeCodes, (array)$ideaParams['campaignTheme']);
-        // }
-
-        // $campaignThemes = $campaignThemeRepository->findBy([
-        //     'code' => $campaignThemeCodes,
-        // ]);
-
-        // Location
-        // $campaignLocationCodes = array_filter(array_unique(array_map(function($idea) {
-        //     if ($idea->getCampaignLocation() !== null) {
-        //         return $idea->getCampaignLocation()->getCode();
-        //     }
-
-        //     return null;
-        // }, $ideas)));
-
-        // if (isset($ideaParams['campaignLocation'])) {
-        //     $campaignLocationCodes = array_merge($campaignLocationCodes, (array)$ideaParams['campaignLocation']);
-        // }
-
         $campaignLocations = $campaignLocationRepository
             ->createQueryBuilder('cl')
             ->groupBy('cl.code')
@@ -138,7 +64,6 @@ final class FilterHandler implements RequestHandlerInterface
 
         $campaigns      = $campaignRepository->findBy([], ['id' => 'DESC']);
         $campaignThemes = $campaignThemeRepository->findAll();
-        $workflowStates = $workflowStateRepository->findAll();
 
         $filterParams = [
             'theme'    => [],
@@ -166,23 +91,34 @@ final class FilterHandler implements RequestHandlerInterface
             }
         }
 
-        foreach ($campaigns as $campaign) {
+        foreach ($campaigns as $camp) {
             $filterParams['campaign'][] = [
-                'id'   => $campaign->getId(),
-                'name' => $campaign->getShortTitle(),
+                'id'   => $camp->getId(),
+                'name' => $camp->getShortTitle(),
             ];
         }
 
-        foreach ($workflowStates as $workflowState) {
+        $ideaWorkflowStates = $ideaRepository->getWorkflowStates($campaign);
+
+        foreach ($ideaWorkflowStates as $workflowState) {
             $code = strtolower($workflowState->getCode());
 
             if (in_array($code, self::ENABLED_STATUSES, true)) {
-                $filterParams['status'][] = [
+                if (
+                    $code === 'published' && isset($filterParams['status']['published_whith_mod']) ||
+                    $code === 'published_whith_mod' && isset($filterParams['status']['published'])
+                ) {
+                    continue;
+                }
+
+                $filterParams['status'][$code] = [
                     'code' => $code,
                     'name' => $workflowState->getTitle(),
                 ];
             }
         }
+
+        $filterParams['status'] = array_values($filterParams['status']);
 
         return new JsonResponse($filterParams);
     }

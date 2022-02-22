@@ -10,7 +10,16 @@ use Doctrine\ORM\EntityRepository;
 
 interface ProjectServiceInterface
 {
-    public function addProject(UserInterface $submitter, array $filteredParams): ?ProjectInterface;
+    public function addProject(
+        UserInterface $submitter,
+        array $filteredParams
+    ): ?ProjectInterface;
+
+    public function modifyProject(
+        UserInterface $submitter,
+        ProjectInterface $project,
+        array $filteredParams
+    ): void;
 
     public function getRepository(): EntityRepository;
 }

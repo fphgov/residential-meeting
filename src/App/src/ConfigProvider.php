@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App;
 
 use Laminas\Hydrator;
-use Laminas\ServiceManager\Factory\InvokableFactory;
 use Mezzio\Hal\Metadata\MetadataMap;
 use Mezzio\Hal\Metadata\RouteBasedCollectionMetadata;
 use Mezzio\Hal\Metadata\RouteBasedResourceMetadata;
@@ -79,6 +78,9 @@ class ConfigProvider
                 Handler\Idea\AdminGetHandler::class          => Handler\Idea\AdminGetHandlerFactory::class,
                 Handler\Idea\AdminModifyHandler::class       => Handler\Idea\AdminModifyHandlerFactory::class,
                 Handler\Idea\ExportHandler::class            => Handler\Idea\ExportHandlerFactory::class,
+                Handler\Project\AdminListHandler::class      => Handler\Project\AdminListHandlerFactory::class,
+                Handler\Project\AdminGetHandler::class       => Handler\Project\AdminGetHandlerFactory::class,
+                Handler\Project\AdminModifyHandler::class    => Handler\Project\AdminModifyHandlerFactory::class,
                 Handler\Project\ListAdminHandler::class      => Handler\Project\ListAdminHandlerFactory::class,
                 Handler\Project\ListHandler::class           => Handler\Project\ListHandlerFactory::class,
                 Handler\Project\GetHandler::class            => Handler\Project\GetHandlerFactory::class,
@@ -115,12 +117,14 @@ class ConfigProvider
     {
         return [
             'factories' => [
-                InputFilter\ProjectInputFilter::class     => InvokableFactory::class,
-                InputFilter\UserRegistrationFilter::class => InputFilter\UserRegistrationFilterFactory::class,
-                InputFilter\VoteFilter::class             => InputFilter\VoteFilterFactory::class,
-                InputFilter\IdeaInputFilter::class        => InputFilter\IdeaInputFilterFactory::class,
-                InputFilter\OfflineVoteFilter::class      => InputFilter\OfflineVoteFilterFactory::class,
-                InputFilter\PostInputFilter::class        => InputFilter\PostInputFilterFactory::class,
+                InputFilter\AdminIdeaInputFilter::class    => InputFilter\AdminIdeaInputFilterFactory::class,
+                InputFilter\AdminProjectInputFilter::class => InputFilter\AdminProjectInputFilterFactory::class,
+                InputFilter\UserRegistrationFilter::class  => InputFilter\UserRegistrationFilterFactory::class,
+                InputFilter\IdeaInputFilter::class         => InputFilter\IdeaInputFilterFactory::class,
+                InputFilter\OfflineVoteFilter::class       => InputFilter\OfflineVoteFilterFactory::class,
+                InputFilter\ProjectInputFilter::class      => InputFilter\ProjectInputFilter::class,
+                InputFilter\PostInputFilter::class         => InputFilter\PostInputFilterFactory::class,
+                InputFilter\VoteFilter::class              => InputFilter\VoteFilterFactory::class,
             ],
         ];
     }

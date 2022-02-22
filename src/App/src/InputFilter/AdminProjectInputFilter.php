@@ -8,14 +8,12 @@ use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Diactoros\StreamFactory;
 use Laminas\Diactoros\UploadedFileFactory;
 use Laminas\Filter;
-use Laminas\I18n\Validator\IsInt;
 use Laminas\InputFilter\FileInput;
-use Laminas\InputFilter\InputFilter;
 use Laminas\Validator;
 
 use function getenv;
 
-class ProjectInputFilter extends InputFilter
+class AdminProjectInputFilter extends ProjectInputFilter
 {
     /** @var AdapterInterface */
     protected $dbAdapter;
@@ -23,115 +21,27 @@ class ProjectInputFilter extends InputFilter
     public function __construct(
         AdapterInterface $dbAdapter
     ) {
+        parent::__construct($dbAdapter);
+
         $this->dbAdapter = $dbAdapter;
     }
 
     public function init()
     {
-        $this->add([
-            'name'        => 'title',
-            'allow_empty' => false,
-            'validators'  => [
-                new Validator\StringLength([
-                    'min' => 3,
-                    'max' => 255,
-                ]),
-            ],
-            'filters'     => [
-                new Filter\StringTrim(),
-                new Filter\StripTags(),
-            ],
-        ]);
+        parent::init();
 
         $this->add([
-            'name'        => 'solution',
-            'allow_empty' => false,
-            'validators'  => [
-                new Validator\StringLength([
-                    'min' => 4,
-                    'max' => 10000,
-                ]),
-            ],
-            'filters'     => [
-                new Filter\StringTrim(),
-                new Filter\StripTags(),
-            ],
-        ]);
-
-        $this->add([
-            'name'        => 'description',
-            'allow_empty' => false,
-            'validators'  => [
-                new Validator\StringLength([
-                    'min' => 4,
-                    'max' => 10000,
-                ]),
-            ],
-            'filters'     => [
-                new Filter\StringTrim(),
-                new Filter\StripTags(),
-            ],
-        ]);
-
-        $this->add([
-            'name'        => 'location',
+            'name'        => 'workflowState',
             'allow_empty' => true,
-            'validators'  => [],
-            'filters'     => [
-                new Filter\StringTrim(),
-                new Filter\StripTags(),
-            ],
         ]);
 
         $this->add([
-            'name'        => 'cost',
+            'name'        => 'implementation',
             'allow_empty' => true,
-            'validators'  => [
-                new IsInt([
-                    'messages' => [
-                        IsInt::INVALID        => 'Csak számérték adható meg',
-                        IsInt::NOT_INT        => 'Csak egész számérték adható meg',
-                        IsInt::NOT_INT_STRICT => 'Csak egész számérték adható meg',
-                    ],
-                ]),
-                new Validator\GreaterThan([
-                    'messages'  => [
-                        Validator\GreaterThan::NOT_GREATER           => 'A "Becsült összeg" mezőértéke nem lehet negatív',
-                        Validator\GreaterThan::NOT_GREATER_INCLUSIVE => 'A "Becsült összeg" mezőértéke nem lehet negatív',
-                    ],
-                    'min'       => 0,
-                    'inclusive' => true,
-                ]),
-            ],
-            'filters'     => [
-                new Filter\ToInt(),
-            ],
         ]);
 
         $this->add([
-            'name'        => 'theme',
-            'allow_empty' => false,
-            'validators'  => [
-                new Validator\NotEmpty([
-                    'messages' => [
-                        Validator\NotEmpty::IS_EMPTY => 'Kötelező a "Kategória" mező kitöltése',
-                        Validator\NotEmpty::INVALID  => 'Hibás "Kategória" mező tipusa',
-                    ],
-                ]),
-                new Validator\Db\RecordExists([
-                    'table'    => 'campaign_themes',
-                    'field'    => 'id',
-                    'adapter'  => $this->dbAdapter,
-                    'messages' => [
-                        Validator\Db\RecordExists::ERROR_NO_RECORD_FOUND => 'Nem választható kategória',
-                        Validator\Db\RecordExists::ERROR_RECORD_FOUND    => '',
-                    ],
-                ]),
-            ],
-        ]);
-
-        $this->add([
-            'name'        => 'medias',
+            'name'        => 'implementationMedia',
             'type'        => FileInput::class,
             'allow_empty' => true,
             'validators'  => [
