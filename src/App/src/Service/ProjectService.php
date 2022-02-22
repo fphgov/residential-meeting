@@ -11,8 +11,10 @@ use App\Entity\Media;
 use App\Entity\ProjectInterface;
 use App\Entity\PhaseInterface;
 use App\Entity\UserInterface;
+use App\Entity\Implementation;
 use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateInterface;
+use App\Interfaces\EntityInterface;
 use App\Exception\NoHasPhaseCategoryException;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -64,7 +66,7 @@ final class ProjectService implements ProjectServiceInterface
             throw new NoHasPhaseCategoryException($filteredParams['theme']);
         }
 
-        $project->setSubmitter($user);
+        $project->setSubmitter($submitter);
         $project->setTitle($filteredParams['title']);
         $project->setDescription($filteredParams['description']);
         $project->setSolution($filteredParams['solution']);
@@ -111,6 +113,7 @@ final class ProjectService implements ProjectServiceInterface
     }
 
     public function modifyProject(
+        UserInterface $submitter,
         ProjectInterface $project,
         array $filteredParams
     ): void {
@@ -162,12 +165,30 @@ final class ProjectService implements ProjectServiceInterface
             }
         }
 
+        if (isset($filteredParams['implementation']) && ! empty($filteredParams['implementation'])) {
+            $implementation = new Implementation();
+            $implementation->setSubmitter($submitter);
+            $implementation->setProject($project);
+            $implementation->setContent($filteredParams['implementation']);
+            $implementation->setActive(true);
+            $implementation->setCreatedAt($date);
+            $implementation->setUpdatedAt($date);
+
+            if (isset($filteredParams['implementationMedia']) && ! empty($filteredParams['implementationMedia'])) {
+                $this->addAttachments($implementation, $filteredParams['implementationMedia'], $date);
+            }
+
+            $project->addImplementation($implementation);
+
+            $this->em->persist($implementation);
+        }
+
         $project->setUpdatedAt($date);
 
         $this->em->flush();
     }
 
-    private function addAttachments(ProjectInterface $project, array $files, DateTime $date): void
+    private function addAttachments(EntityInterface $entity, array $files, DateTime $date): void
     {
         foreach ($files as $file) {
             if (! $file instanceof UploadedFileInterface) {
@@ -184,7 +205,7 @@ final class ProjectService implements ProjectServiceInterface
 
             $this->em->persist($media);
 
-            $project->addMedia($media);
+            $entity->addMedia($media);
         }
     }
 

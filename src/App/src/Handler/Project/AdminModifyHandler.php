@@ -6,6 +6,7 @@ namespace App\Handler\Project;
 
 use App\Entity\Project;
 use App\Service\ProjectServiceInterface;
+use App\Middleware\UserMiddleware;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -39,6 +40,8 @@ final class AdminModifyHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $user = $request->getAttribute(UserMiddleware::class);
+
         $body = array_merge_recursive(
             $request->getParsedBody(),
             $request->getUploadedFiles(),
@@ -65,7 +68,7 @@ final class AdminModifyHandler implements RequestHandlerInterface
         }
 
         try {
-            $this->projectService->modifyProject($project, $this->inputFilter->getValues());
+            $this->projectService->modifyProject($user, $project, $this->inputFilter->getValues());
         } catch (Exception $e) {
             return new JsonResponse([
                 'errors' => $e->getMessage(),

@@ -7,6 +7,8 @@ namespace App\Entity;
 use App\Traits\EntityActiveTrait;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -55,6 +57,11 @@ class Implementation implements ImplementationInterface
      * @var string
      */
     private $content;
+
+    public function __construct()
+    {
+        $this->medias = new ArrayCollection();
+    }
 
     public function setContent(string $content): void
     {
