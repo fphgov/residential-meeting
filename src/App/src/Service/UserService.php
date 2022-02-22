@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Mail;
 use App\Entity\MailLog;
 use App\Entity\User;
 use App\Entity\UserInterface;
@@ -20,7 +19,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Exception;
 use Laminas\Log\Logger;
-use Throwable;
 
 use function error_log;
 

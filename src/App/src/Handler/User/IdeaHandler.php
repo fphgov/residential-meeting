@@ -18,8 +18,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 use function array_merge_recursive;
-use function strlen;
-use function trim;
 
 final class IdeaHandler implements RequestHandlerInterface
 {
@@ -84,8 +82,8 @@ final class IdeaHandler implements RequestHandlerInterface
                 'errors' => [
                     'form' => [
                         'notPossibleSubmitIdea' => 'Jelenleg nem lehetséges az ötlet beküldése',
-                    ]
-                ]
+                    ],
+                ],
             ], 422);
         } catch (Exception $e) {
             $this->audit->err('Failed insert new idea to database', [

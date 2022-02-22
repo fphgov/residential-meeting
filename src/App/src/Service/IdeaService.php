@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Mail;
 use App\Entity\CampaignLocation;
 use App\Entity\CampaignTheme;
 use App\Entity\Idea;
 use App\Entity\IdeaInterface;
 use App\Entity\Link;
+use App\Entity\Mail;
 use App\Entity\Media;
 use App\Entity\PhaseInterface;
 use App\Entity\UserInterface;
@@ -18,15 +18,14 @@ use App\Entity\WorkflowStateExtra;
 use App\Entity\WorkflowStateInterface;
 use App\Exception\NoHasPhaseCategoryException;
 use App\Exception\NotPossibleSubmitIdeaWithAdminAccountException;
-use App\Service\PhaseServiceInterface;
 use App\Service\MailServiceInterface;
+use App\Service\PhaseServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\UploadedFileInterface;
 
 use function basename;
-use function error_log;
 use function in_array;
 use function is_array;
 use function is_countable;

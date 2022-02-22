@@ -11,9 +11,9 @@ use App\Repository\MailRepository;
 use App\Service\MailQueueServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Throwable;
-use Mail\MailAdapterInterface;
 use Laminas\Log\Logger;
+use Mail\MailAdapterInterface;
+use Throwable;
 
 use function error_log;
 
@@ -43,8 +43,7 @@ final class MailService implements MailServiceInterface
         MailAdapterInterface $mailAdapter,
         MailContentHelper $mailContentHelper,
         MailQueueServiceInterface $mailQueueService
-    )
-    {
+    ) {
         $this->em                = $em;
         $this->audit             = $audit;
         $this->mailAdapter       = $mailAdapter;

@@ -7,7 +7,6 @@ namespace App\Handler\Project;
 use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
 use App\Entity\ProjectCollection;
-use App\Entity\User;
 use App\Entity\WorkflowState;
 use App\Service\ProjectServiceInterface;
 use Doctrine\ORM\Query\Expr\Join;

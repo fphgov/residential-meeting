@@ -38,8 +38,8 @@ class ConfigProvider
         return [
             'invokables' => [],
             'factories'  => [
-                TransportInterface::class  => Container\SmtpFactory::class,
-                Action\MailAction::class   => Action\MailActionFactory::class,
+                TransportInterface::class => Container\SmtpFactory::class,
+                Action\MailAction::class  => Action\MailActionFactory::class,
             ],
         ];
     }

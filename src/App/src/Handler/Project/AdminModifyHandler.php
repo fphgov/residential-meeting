@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Handler\Project;
 
 use App\Entity\Project;
-use App\Service\ProjectServiceInterface;
 use App\Middleware\UserMiddleware;
+use App\Service\ProjectServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;

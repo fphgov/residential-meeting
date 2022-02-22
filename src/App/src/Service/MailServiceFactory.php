@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Helper\MailContentHelper;
-use App\Service\MailQueueServiceInterface;
 use App\Middleware\AuditMiddleware;
+use App\Service\MailQueueServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Container\ContainerInterface;
 use Mail\Action\MailAction;
+use Psr\Container\ContainerInterface;
 
 final class MailServiceFactory
 {

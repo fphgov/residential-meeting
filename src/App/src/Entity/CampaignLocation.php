@@ -25,7 +25,7 @@ class CampaignLocation implements CampaignLocationInterface
      * @ORM\ManyToOne(targetEntity="Campaign")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
      *
-     * @Ignore
+     * @ignore
      * @var Campaign
      */
     private $campaign;

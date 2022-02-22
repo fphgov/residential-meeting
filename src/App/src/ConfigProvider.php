@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App;
 
 use Laminas\Hydrator;
-use Laminas\ServiceManager\Factory\InvokableFactory;
 use Mezzio\Hal\Metadata\MetadataMap;
 use Mezzio\Hal\Metadata\RouteBasedCollectionMetadata;
 use Mezzio\Hal\Metadata\RouteBasedResourceMetadata;

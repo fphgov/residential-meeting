@@ -13,9 +13,9 @@ use App\Entity\UserInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Exception;
 use Laminas\Diactoros\UploadedFile;
 use Laminas\Log\Logger;
-use Exception;
 
 use function basename;
 

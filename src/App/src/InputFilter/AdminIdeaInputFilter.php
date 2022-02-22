@@ -5,14 +5,6 @@ declare(strict_types=1);
 namespace App\InputFilter;
 
 use Laminas\Db\Adapter\AdapterInterface;
-use Laminas\Diactoros\StreamFactory;
-use Laminas\Diactoros\UploadedFileFactory;
-use Laminas\Filter;
-use Laminas\I18n\Validator\IsInt;
-use Laminas\InputFilter\InputFilter;
-use Laminas\Validator;
-
-use function getenv;
 
 class AdminIdeaInputFilter extends IdeaInputFilter
 {

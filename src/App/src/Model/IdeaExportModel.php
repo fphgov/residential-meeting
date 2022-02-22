@@ -10,8 +10,8 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\IWriter;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-use function in_array;
 use function implode;
+use function in_array;
 
 final class IdeaExportModel implements ExportModelInterface
 {
@@ -35,7 +35,7 @@ final class IdeaExportModel implements ExportModelInterface
 
     public const DISABLE_AUTO_RESIZE_COLS = [
         'D',
-        'E'
+        'E',
     ];
 
     private array $config;

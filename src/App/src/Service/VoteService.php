@@ -17,9 +17,6 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Laminas\Log\Logger;
-use Throwable;
-
-use function error_log;
 
 final class VoteService implements VoteServiceInterface
 {
@@ -48,11 +45,11 @@ final class VoteService implements VoteServiceInterface
         PhaseServiceInterface $phaseService,
         MailServiceInterface $mailService
     ) {
-        $this->config            = $config;
-        $this->em                = $em;
-        $this->audit             = $audit;
-        $this->voteRepository    = $this->em->getRepository(Vote::class);
-        $this->phaseService      = $phaseService;
+        $this->config         = $config;
+        $this->em             = $em;
+        $this->audit          = $audit;
+        $this->voteRepository = $this->em->getRepository(Vote::class);
+        $this->phaseService   = $phaseService;
     }
 
     public function addOfflineVote(UserInterface $user, array $filteredParams): void

@@ -127,7 +127,7 @@ final class ListHandler implements RequestHandlerInterface
 
             if ($status === 'published') {
                 $status .= ', published_with_mod';
-                $status = strtoupper($status);
+                $status  = strtoupper($status);
 
                 $qb->setParameter('status', explode(', ', $status));
             } else {

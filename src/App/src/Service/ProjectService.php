@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\CampaignTheme;
 use App\Entity\CampaignLocation;
-use App\Entity\Project;
-use App\Entity\Media;
-use App\Entity\ProjectInterface;
-use App\Entity\PhaseInterface;
-use App\Entity\UserInterface;
+use App\Entity\CampaignTheme;
 use App\Entity\Implementation;
+use App\Entity\Media;
+use App\Entity\Project;
+use App\Entity\ProjectInterface;
+use App\Entity\UserInterface;
 use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateInterface;
-use App\Interfaces\EntityInterface;
 use App\Exception\NoHasPhaseCategoryException;
+use App\Interfaces\EntityInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -23,7 +22,7 @@ use Psr\Http\Message\UploadedFileInterface;
 
 use function basename;
 use function is_countable;
-use function is_numberic;
+use function is_numeric;
 use function parse_str;
 use function str_replace;
 

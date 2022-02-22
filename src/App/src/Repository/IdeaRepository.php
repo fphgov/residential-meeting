@@ -7,8 +7,6 @@ namespace App\Repository;
 use App\Entity\WorkflowStateInterface;
 use Doctrine\ORM\EntityRepository;
 
-use function implode;
-
 final class IdeaRepository extends EntityRepository
 {
     public function getWorkflowStates(string $campaign = '')

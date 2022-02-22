@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Handler\Media;
 
 use App\Service\MediaServiceInterface;
+use Exception;
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Log\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Exception;
 
 final class GetHandler implements RequestHandlerInterface
 {
