@@ -40,7 +40,7 @@ services:
       - default
 
   nginx:
-    image: nginx:stable-alpine
+    image: fphgov/nginx
     container_name: participatory_nginx
     networks:
       - default
