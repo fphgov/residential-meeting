@@ -298,6 +298,34 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Project\AdminModifyHandler::class
     ], 'admin.api.project.modify');
 
+    $app->get('/admin/api/implementations', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Implementation\ListHandler::class,
+    ], 'admin.api.implementation.list');
+
+    $app->post('/admin/api/implementations', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Implementation\AddHandler::class,
+    ], 'admin.api.implementation.add');
+
+    $app->post('/admin/api/implementations/{id:\d+}', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Implementation\ModifyHandler::class,
+    ], 'admin.api.implementation.modify');
+
+    $app->delete('/admin/api/implementations/delete/{id:\d+}', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Implementation\DeleteHandler::class,
+    ], 'admin.api.implementation.delete');
+
     $app->get('/admin/api/workflow/states', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,

@@ -97,6 +97,7 @@ class Project implements ProjectInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Implementation", mappedBy="project")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      *
      * @var Collection|Implementation[]
      *
