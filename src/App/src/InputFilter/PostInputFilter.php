@@ -72,6 +72,15 @@ class PostInputFilter extends InputFilter
                     'min'      => 1,
                     'max'      => 255,
                 ]),
+                new Validator\Db\NoRecordExists([
+                    'table'    => 'posts',
+                    'field'    => 'slug',
+                    'adapter'  => $this->dbAdapter,
+                    'messages' => [
+                        Validator\Db\RecordExists::ERROR_NO_RECORD_FOUND => '',
+                        Validator\Db\RecordExists::ERROR_RECORD_FOUND    => 'Foglalt az URL hivatkozás. Válassz másikat',
+                    ],
+                ]),
             ],
             'filters'     => [
                 new Filter\StringTrim(),
