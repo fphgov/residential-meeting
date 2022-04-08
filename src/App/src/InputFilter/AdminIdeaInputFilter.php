@@ -62,6 +62,31 @@ class AdminIdeaInputFilter extends IdeaInputFilter
         ]);
 
         $this->add([
+            'name'        => 'answer',
+            'allow_empty' => true,
+            'validators'  => [
+                new Validator\NotEmpty([
+                    'messages' => [
+                        Validator\NotEmpty::IS_EMPTY => 'A "Hivatal válasza" kitöltése kötelező',
+                        Validator\NotEmpty::INVALID  => 'Hivatal válasza: Hibás mező tipus',
+                    ],
+                ]),
+                new Validator\StringLength([
+                    'messages' => [
+                        Validator\StringLength::TOO_SHORT => 'Legalább %min% karaktert kell tartalmaznia a "Hivatal válasza" mezőnek',
+                        Validator\StringLength::TOO_LONG  => 'Kevesebb karaktert kell tartalmaznia a "Hivatal válasza" mezőnek mint: %max%',
+                        Validator\StringLength::INVALID   => 'Hivatal válasza: Hibás mező tipus. Csak szöveg fogadható el.',
+                    ],
+                    'min'      => 0,
+                    'max'      => 4000,
+                ]),
+            ],
+            'filters'     => [
+                new Filter\StringTrim(),
+            ],
+        ]);
+
+        $this->add([
             'name'        => 'description',
             'allow_empty' => false,
             'validators'  => [
