@@ -95,6 +95,11 @@ final class ImplementationService implements ImplementationServiceInterface
 
         try {
             $this->em->remove($implementation);
+
+            foreach ($implementation->getMediaCollection() as $media) {
+                $this->em->remove($media);
+            }
+
             $this->em->flush();
 
             $this->audit->err('Success deleted implementation', [
