@@ -102,11 +102,11 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Project\StatisticsHandler::class
     ], 'app.api.project.statistics');
 
-    $app->get('/app/api/media/{id}', [
+    $app->get('/app/api/media/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
         App\Handler\Media\GetHandler::class
     ], 'app.api.media.show');
 
-    $app->get('/app/api/media/download/{id}', [
+    $app->get('/app/api/media/download/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
         App\Handler\Media\DownloadHandler::class
     ], 'app.api.media.download');
 
