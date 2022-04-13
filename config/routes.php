@@ -102,11 +102,11 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Project\StatisticsHandler::class
     ], 'app.api.project.statistics');
 
-    $app->get('/app/api/media/{id}', [
+    $app->get('/app/api/media/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
         App\Handler\Media\GetHandler::class
     ], 'app.api.media.show');
 
-    $app->get('/app/api/media/download/{id}', [
+    $app->get('/app/api/media/download/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
         App\Handler\Media\DownloadHandler::class
     ], 'app.api.media.download');
 
@@ -277,6 +277,13 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Idea\ExportHandler::class
     ], 'admin.api.idea.export');
 
+    $app->post('/admin/api/ideas/answer/import', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Idea\AdminImportAnswerHandler::class
+    ], 'admin.api.idea.answer.import');
+
     $app->post('/admin/api/projects', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
@@ -297,6 +304,34 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         \Mezzio\Authorization\AuthorizationMiddleware::class,
         App\Handler\Project\AdminModifyHandler::class
     ], 'admin.api.project.modify');
+
+    $app->get('/admin/api/implementations', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Implementation\ListHandler::class,
+    ], 'admin.api.implementation.list');
+
+    $app->post('/admin/api/implementations', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Implementation\AddHandler::class,
+    ], 'admin.api.implementation.add');
+
+    $app->post('/admin/api/implementations/{id:\d+}', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Implementation\ModifyHandler::class,
+    ], 'admin.api.implementation.modify');
+
+    $app->delete('/admin/api/implementations/delete/{id:\d+}', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Implementation\DeleteHandler::class,
+    ], 'admin.api.implementation.delete');
 
     $app->get('/admin/api/workflow/states', [
         Jwt\Handler\JwtAuthMiddleware::class,

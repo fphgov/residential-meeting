@@ -1,5 +1,5 @@
 diff --git a/src/File/Count.php b/src/File/Count.php
-index 1f8ee096..0ce361c7 100644
+index 1f8ee096..fc210ced 100644
 --- a/src/File/Count.php
 +++ b/src/File/Count.php
 @@ -4,6 +4,7 @@ namespace Laminas\Validator\File;
@@ -10,16 +10,15 @@ index 1f8ee096..0ce361c7 100644
  use Traversable;
 
  use function array_key_exists;
-@@ -177,7 +178,7 @@ class Count extends AbstractValidator
-     /**
+@@ -178,6 +179,7 @@ class Count extends AbstractValidator
       * Adds a file for validation
       *
--     * @param string|array $file
+      * @param string|array $file
 +     * @param string|array|UploadedFileInterface $file
       * @return $this
       */
      public function addFile($file)
-@@ -194,6 +195,10 @@ class Count extends AbstractValidator
+@@ -194,6 +196,10 @@ class Count extends AbstractValidator
              }
          }
 
@@ -30,12 +29,10 @@ index 1f8ee096..0ce361c7 100644
          return $this;
      }
 
-@@ -202,17 +207,23 @@ class Count extends AbstractValidator
-      * not bigger than max (when max is not null). Attention: When checking with set min you
-      * must give all files with the first call, otherwise you will get a false.
+@@ -204,15 +210,23 @@ class Count extends AbstractValidator
       *
--     * @param  string|array $value Filenames to check for count
--     * @param  array        $file  File data from \Laminas\File\Transfer\Transfer
+      * @param  string|array $value Filenames to check for count
+      * @param  array        $file  File data from \Laminas\File\Transfer\Transfer
 +     * @param  string|array|UploadedFileInterface $value Filenames to check for count
 +     * @param  array                              $file  File data from \Laminas\File\Transfer\Transfer
       * @return bool
@@ -43,18 +40,17 @@ index 1f8ee096..0ce361c7 100644
      public function isValid($value, $file = null)
      {
 -        if (($file !== null) && ! array_key_exists('destination', $file)) {
--            $file['destination'] = dirname($value);
 +        $isUploadedFileInterface = $value instanceof UploadedFileInterface;
 +
 +        if ($isUploadedFileInterface) {
 +            $this->addFile($value);
++        }
++
++        if (! $isUploadedFileInterface && ($file !== null) && ! array_key_exists('destination', $file)) {
+             $file['destination'] = dirname($value);
          }
 
 -        if (($file !== null) && array_key_exists('tmp_name', $file)) {
-+        if (! $isUploadedFileInterface && ($file !== null) && ! array_key_exists('destination', $file)) {
-+             $file['destination'] = dirname($value);
-+         }
-+
 +        if (! $isUploadedFileInterface && ($file !== null) && array_key_exists('tmp_name', $file)) {
              $value = $file['destination'] . DIRECTORY_SEPARATOR . $file['name'];
          }
