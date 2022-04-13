@@ -310,4 +310,16 @@ final class IdeaService implements IdeaServiceInterface
 
         $this->mailService->send('workflow-idea-rejected', $tplData, $idea->getSubmitter());
     }
+
+    public function sendIdeaWorkflowProfessionalTrashed(IdeaInterface $idea): void
+    {
+        $tplData = [
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'ideaTitle'        => $idea->getTitle(),
+            'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
+        ];
+
+        $this->mailService->send('workflow-idea-professional-rejected', $tplData, $idea->getSubmitter());
+    }
 }
