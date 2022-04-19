@@ -36,10 +36,10 @@ final class IdeaAnswerService implements IdeaAnswerServiceInterface
 
     public function importIdeaAnswers(StreamInterface $stream)
     {
-        $this->ideaAnswerImportModel = new IdeaAnswerImportModel();
-        $this->ideaAnswerImportModel->import($stream);
+        $ideaAnswerImportModel = new IdeaAnswerImportModel();
+        $ideaAnswerImportModel->import($stream);
 
-        $answers = $this->ideaAnswerImportModel->getData();
+        $answers = $ideaAnswerImportModel->getData();
 
         if (isset($answers[1])) {
             unset($answers[1]);
@@ -54,7 +54,8 @@ final class IdeaAnswerService implements IdeaAnswerServiceInterface
         $this->em->flush();
     }
 
-    private function modificationIdea(IdeaAnswerModel $ideaAnswerModel) {
+    private function modificationIdea(IdeaAnswerModel $ideaAnswerModel)
+    {
         $idea = $this->ideaRepository->find($ideaAnswerModel->getId());
 
         if (! $idea instanceof Idea) {
