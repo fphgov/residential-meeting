@@ -11,7 +11,7 @@ use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part as MimePart;
 use Mail\Entity\MailInterface;
-use Mail\Helper\MailContentHelperInterface;
+use Mail\Model\EmailTemplateRenderModelInterface;
 use Throwable;
 
 use function error_log;
@@ -48,7 +48,7 @@ class MailAdapter implements MailAdapterInterface
         $this->clear();
     }
 
-    public function setTemplate(MailContentHelperInterface $mailContent): self
+    public function setTemplate(EmailTemplateRenderModelInterface $mailContent): self
     {
         $this->name = $mailContent->getCode();
 

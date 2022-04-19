@@ -284,6 +284,13 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\Idea\AdminImportAnswerHandler::class
     ], 'admin.api.idea.answer.import');
 
+    $app->post('/admin/api/ideas/email/import', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class,
+        App\Handler\Idea\AdminSendEmailHandler::class
+    ], 'admin.api.idea.email.import');
+
     $app->post('/admin/api/projects', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,

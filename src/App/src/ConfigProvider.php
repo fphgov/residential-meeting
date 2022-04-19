@@ -76,6 +76,7 @@ class ConfigProvider
                 Handler\Idea\FilterHandler::class             => Handler\Idea\FilterHandlerFactory::class,
                 Handler\Idea\AdminListHandler::class          => Handler\Idea\AdminListHandlerFactory::class,
                 Handler\Idea\AdminGetHandler::class           => Handler\Idea\AdminGetHandlerFactory::class,
+                Handler\Idea\AdminSendEmailHandler::class     => Handler\Idea\AdminSendEmailHandlerFactory::class,
                 Handler\Idea\AdminModifyHandler::class        => Handler\Idea\AdminModifyHandlerFactory::class,
                 Handler\Idea\AdminImportAnswerHandler::class  => Handler\Idea\AdminImportAnswerHandlerFactory::class,
                 Handler\Idea\ExportHandler::class             => Handler\Idea\ExportHandlerFactory::class,
@@ -116,6 +117,7 @@ class ConfigProvider
                 Service\ImplementationServiceInterface::class => Service\ImplementationServiceFactory::class,
                 Model\IdeaExportModel::class                  => Model\IdeaExportModelFactory::class,
                 Helper\MailContentHelper::class               => Helper\MailContentHelperFactory::class,
+                Helper\MailContentRawHelper::class            => Helper\MailContentRawHelperFactory::class,
             ],
         ];
     }
