@@ -70,13 +70,13 @@ final class AdminSendEmailHandler implements RequestHandlerInterface
 
         if ($error) {
             return new JsonResponse([
-                'errors' => 'Sikertelen importálás',
+                'errors' => 'Sikertelen importálás, e-mail küldés nem történt',
             ], 500);
         }
 
         return new JsonResponse([
             'data' => [
-                'message' => 'Sikeres importálás'
+                'message' => 'Sikeres importálás, az e-mailek kiküldése megkezdődött'
             ],
         ]);
     }
