@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Mail\Helper;
 
-interface MailContentHelperInterface
+use Mail\Model\EmailTemplateRenderModelInterface;
+
+interface MailContentHelperInterface extends EmailTemplateRenderModelInterface
 {
     public function create(string $code, array $variables): self;
 
-    public function render(string $type): string;
-
     public function setCode(string $code): void;
-
-    public function getCode(): string;
 }

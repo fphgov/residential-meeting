@@ -15,6 +15,9 @@ use App\Entity\UserInterface;
 use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateExtra;
 use App\Entity\WorkflowStateInterface;
+use App\Model\IdeaEmailImportModel;
+use App\Model\IdeaEmailModel;
+use App\Model\IdeaEmailModelInterface;
 use App\Exception\NoHasPhaseCategoryException;
 use App\Exception\NotPossibleSubmitIdeaWithAdminAccountException;
 use App\Service\MailServiceInterface;
@@ -23,6 +26,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\StreamInterface;
 
 use function basename;
 use function in_array;
@@ -252,6 +256,77 @@ final class IdeaService implements IdeaServiceInterface
 
             $idea->addMedia($media);
         }
+    }
+
+    public function importIdeaEmails(StreamInterface $stream)
+    {
+        $ideaEmailImportModel = new IdeaEmailImportModel();
+        $ideaEmailImportModel->import($stream);
+
+        $ideaEmails = $ideaEmailImportModel->getData();
+
+        if (isset($ideaEmails[1])) {
+            unset($ideaEmails[1]);
+        }
+
+        foreach ($ideaEmails as $ideaEmail) {
+            $ideaEmailModel = new IdeaEmailModel($ideaEmail);
+
+            $this->modificationIdea($ideaEmailModel);
+        }
+
+        $this->em->flush();
+    }
+
+    private function modificationIdea(IdeaEmailModelInterface $ideaEmailModel)
+    {
+        $idea = $this->ideaRepository->find($ideaEmailModel->getId());
+
+        if (! $idea instanceof Idea) {
+            throw new IdeaNotFoundException(
+                'Idea not found | (Idea: ' . $ideaEmailModel->getId() . ')'
+            );
+        }
+
+        $workflowState = $this->workflowStateRepository->find(
+            $ideaEmailModel->getWorkflowStateId()
+        );
+
+        if (! $workflowState instanceof WorkflowState) {
+            throw new WorkflowStateNotFoundException(
+                'WorkflowState not found | (Idea: ' . $ideaEmailModel->getId() . ') ' . $ideaEmailModel->getWorkflowStateId()
+            );
+        }
+
+        $idea->setWorkflowState($workflowState);
+
+        if ($ideaEmailModel->getWorkflowStateExtraId() !== null) {
+            $workflowStateExtra = $this->workflowStateExtraRepository->find(
+                $ideaEmailModel->getWorkflowStateExtraId()
+            );
+
+            if (! $workflowStateExtra instanceof WorkflowStateExtra) {
+                throw new WorkflowStateExtraNotFoundException(
+                    'WorkflowStateExtra not found | (Idea: ' . $ideaEmailModel->getId() . ') ' . $ideaEmailModel->getWorkflowStateExtraId()
+                );
+            }
+
+            $idea->setWorkflowStateExtra($workflowStateExtra);
+        }
+
+        $this->sendIdeaEmail($ideaEmailModel, $idea);
+    }
+
+    private function sendIdeaEmail(IdeaEmailModelInterface $ideaEmailModel, IdeaInterface $idea)
+    {
+        $tplData = [
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'ideaTitle'        => $idea->getTitle(),
+            'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
+        ];
+
+        $this->mailService->sendRaw($ideaEmailModel->getEmailContent(), $tplData, $idea->getSubmitter());
     }
 
     public function sendIdeaConfirmationEmail(UserInterface $user, IdeaInterface $idea): void

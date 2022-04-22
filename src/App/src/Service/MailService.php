@@ -7,12 +7,14 @@ namespace App\Service;
 use App\Entity\Mail;
 use App\Entity\User;
 use App\Helper\MailContentHelper;
+use App\Helper\MailContentRawHelper;
 use App\Repository\MailRepository;
 use App\Service\MailQueueServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Log\Logger;
 use Mail\MailAdapterInterface;
+use Mail\Model\EmailContentModelInterface;
 use Throwable;
 
 use function error_log;
@@ -34,6 +36,9 @@ final class MailService implements MailServiceInterface
     /** @var MailContentHelper */
     private $mailContentHelper;
 
+    /** @var MailContentRawHelper */
+    private $mailContentRawHelper;
+
     /** @var MailQueueServiceInterface */
     private $mailQueueService;
 
@@ -42,14 +47,16 @@ final class MailService implements MailServiceInterface
         Logger $audit,
         MailAdapterInterface $mailAdapter,
         MailContentHelper $mailContentHelper,
+        MailContentRawHelper $mailContentRawHelper,
         MailQueueServiceInterface $mailQueueService
     ) {
-        $this->em                = $em;
-        $this->audit             = $audit;
-        $this->mailAdapter       = $mailAdapter;
-        $this->mailContentHelper = $mailContentHelper;
-        $this->mailQueueService  = $mailQueueService;
-        $this->mailRepository    = $this->em->getRepository(Mail::class);
+        $this->em                   = $em;
+        $this->audit                = $audit;
+        $this->mailAdapter          = $mailAdapter;
+        $this->mailContentHelper    = $mailContentHelper;
+        $this->mailContentRawHelper = $mailContentRawHelper;
+        $this->mailQueueService     = $mailQueueService;
+        $this->mailRepository       = $this->em->getRepository(Mail::class);
     }
 
     public function getRepository(): MailRepository
@@ -100,6 +107,28 @@ final class MailService implements MailServiceInterface
 
             $this->audit->err('Notification no added to MailQueueService', [
                 'extra' => $mailCode . " | " . $user->getId() . " | " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function sendRaw(EmailContentModelInterface $emailContentModel, array $tplData, User $user): void
+    {
+        $this->mailAdapter->clear();
+
+        try {
+            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->setSubject($emailContentModel->getSubject());
+
+            $this->mailAdapter->setTemplate(
+                $this->mailContentRawHelper->create($emailContentModel, $tplData)
+            );
+
+            $this->mailQueueService->add($user, $this->mailAdapter);
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $this->audit->err('Notification raw no added to MailQueueService', [
+                'extra' => $emailContentModel->getSubject() . " | " . $user->getId() . " | " . $e->getMessage(),
             ]);
         }
     }
