@@ -329,7 +329,7 @@ final class IdeaService implements IdeaServiceInterface
         $this->mailService->sendRaw($ideaEmailModel->getEmailContent(), $tplData, $idea->getSubmitter());
     }
 
-    private function sendIdeaConfirmationEmail(UserInterface $user, IdeaInterface $idea): void
+    public function sendIdeaConfirmationEmail(UserInterface $user, IdeaInterface $idea): void
     {
         $tplData = [
             'name'             => $user->getFirstname(),
