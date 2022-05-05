@@ -23,46 +23,36 @@ class Mail implements MailInterface
      * @ORM\Column(name="code", type="string")
      *
      * @Groups({"list", "option", "detail", "full_detail"})
-     *
-     * @var string
      */
-    private $code;
+    private string $code;
 
     /**
      * @ORM\Column(name="name", type="string")
      *
      * @Groups({"list", "option", "detail", "full_detail"})
-     *
-     * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(name="subject", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     *
-     * @var string
      */
-    private $subject;
+    private string $subject;
 
     /**
      * @ORM\Column(name="plain_text", type="text")
      *
      * @Groups({"list", "detail", "full_detail"})
-     *
-     * @var string
      */
-    private $plainText;
+    private string $plainText;
 
     /**
      * @ORM\Column(name="html", type="text")
      *
      * @Groups({"list", "detail", "full_detail"})
-     *
-     * @var string
      */
-    private $html;
+    private string $html;
 
     public function setCode(string $code): void
     {

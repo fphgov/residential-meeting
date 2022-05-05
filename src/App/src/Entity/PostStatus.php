@@ -22,25 +22,22 @@ class PostStatus implements PostStatusInterface
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\Column(name="code", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $code;
+    private string $code;
 
     /**
      * @ORM\Column(name="name", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $name;
+    private string $name;
 
     public function getId(): int
     {

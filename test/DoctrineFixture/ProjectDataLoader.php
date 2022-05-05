@@ -15,8 +15,11 @@ class ProjectDataLoader extends AbstractFixture implements FixtureInterface
     public function load(ObjectManager $manager)
     {
         $project = new Project();
+        $project->setCampaign(
+            $this->getReference('campaign-active-1')
+        );
         $project->setCampaignTheme(
-            $this->getReference('campaign-location-active-1')
+            $this->getReference('campaign-theme-active-1')
         );
         $project->addTag(
             $this->getReference('tag-active-1')
@@ -29,7 +32,6 @@ class ProjectDataLoader extends AbstractFixture implements FixtureInterface
         );
         $project->setLocation('Nem köthető konkrét helyszínhez');
         $project->setSolution('Esztétikusabb és a tűrőképessége is magasabb ezeknek a bokroknak a porral és az időjárással szemben, nem tapossák le a járókelők, nem parkolják le az autók, oxigént termel, port köt meg.');
-        $project->setActive(true);
         $project->setCreatedAt(new DateTime());
         $project->setUpdatedAt(new DateTime());
 

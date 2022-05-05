@@ -24,9 +24,8 @@ class Tag implements TagInterface
      * @ORM\Column(name="name", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $name;
+    private string $name;
 
     public function setName(string $name): void
     {

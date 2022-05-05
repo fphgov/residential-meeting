@@ -48,15 +48,14 @@ class Implementation implements ImplementationInterface
      * @Groups({"detail", "full_detail"})
      * @var Collection|Media[]
      */
-    private $medias;
+    private Collection $medias;
 
     /**
      * @ORM\Column(name="content", type="text")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $content;
+    private string $content;
 
     public function __construct()
     {

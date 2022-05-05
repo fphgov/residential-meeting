@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -49,7 +50,7 @@ class Project implements ProjectInterface
      * @Groups({"detail", "full_detail"})
      * @var Collection|Idea[]
      */
-    private $ideas;
+    private Collection $ideas;
 
     /**
      * @ORM\ManyToMany(targetEntity="Tag")
@@ -61,7 +62,7 @@ class Project implements ProjectInterface
      * @Groups({"detail", "full_detail"})
      * @var Collection|Tag[]
      */
-    private $tags;
+    private Collection $tags;
 
     /**
      * @ORM\ManyToMany(targetEntity="CampaignLocation")
@@ -73,7 +74,7 @@ class Project implements ProjectInterface
      * @Groups({"list", "detail", "full_detail"})
      * @var Collection|CampaignLocation[]
      */
-    private $campaignLocations;
+    private Collection $campaignLocations;
 
     /**
      * @ORM\ManyToMany(targetEntity="Media")
@@ -85,7 +86,7 @@ class Project implements ProjectInterface
      * @Groups({"detail", "full_detail"})
      * @var Collection|Media[]
      */
-    private $medias;
+    private Collection $medias;
 
     /**
      * @ORM\ManyToOne(targetEntity="WorkflowState")
@@ -103,7 +104,7 @@ class Project implements ProjectInterface
      *
      * @Groups({"detail", "full_detail"})
      */
-    private $implementations;
+    private Collection $implementations;
 
     /**
      * @ORM\Column(name="title", type="string")
@@ -168,6 +169,15 @@ class Project implements ProjectInterface
      * @Groups({"full_detail"})
      */
     private ?float $longitude;
+
+    public function __construct()
+    {
+        $this->tags              = new ArrayCollection();
+        $this->ideas             = new ArrayCollection();
+        $this->medias            = new ArrayCollection();
+        $this->implementations   = new ArrayCollection();
+        $this->campaignLocations = new ArrayCollection();
+    }
 
     public function getCampaign(): CampaignInterface
     {

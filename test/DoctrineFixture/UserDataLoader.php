@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DoctrineFixture;
 
 use App\Entity\User;
+use App\Entity\UserPreference;
 use App\Model\PBKDF2Password;
 use DateTime;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -19,9 +20,10 @@ class UserDataLoader extends AbstractFixture implements FixtureInterface
         $storablePassword = $passwordModel->getStorableRepresentation();
 
         $user = new User();
-        $user->setUserPreference(
-            $this->getReference('user-preference-active-1')
-        );
+        $userPreference = new UserPreference();
+
+        $user->setUserPreference($userPreference);
+        $user->setUsername('random-123');
         $user->setFirstname('John');
         $user->setLastname('Smith');
         $user->setEmail('hello@example.com');
@@ -30,9 +32,23 @@ class UserDataLoader extends AbstractFixture implements FixtureInterface
         $user->setCreatedAt(new DateTime());
         $user->setUpdatedAt(new DateTime());
 
+        $userPreference->setBirthyear(1990);
+        $userPreference->setLiveInCity(true);
+        $userPreference->setPostalCode("1052");
+        $userPreference->setHearAbout('facebook');
+        $userPreference->setPrivacy(true);
+        $userPreference->setPrize(false);
+        $userPreference->setPrizeHash(null);
+        $userPreference->setCampaignEmail(false);
+        $userPreference->setUser($user);
+        $userPreference->setCreatedAt(new DateTime());
+        $userPreference->setUpdatedAt(new DateTime());
+
+        $manager->persist($userPreference);
         $manager->persist($user);
         $manager->flush();
 
+        $this->addReference('user-preference-active-1', $userPreference);
         $this->addReference('user-active-1', $user);
     }
 }

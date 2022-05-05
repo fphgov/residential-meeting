@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PhaseRepository")
  * @ORM\Table(name="phases", indexes={
- *     @ORM\Index(name="search_idx", columns={"code", "title"})
+ *     @ORM\Index(name="phase_search_idx", columns={"code", "title"})
  * })
  */
 final class Phase implements PhaseInterface
@@ -30,45 +30,33 @@ final class Phase implements PhaseInterface
     /**
      * @ORM\ManyToOne(targetEntity="Campaign")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
-     *
-     * @var Campaign
      */
-    private $campaign;
+    private Campaign $campaign;
 
     /**
      * @ORM\Column(name="code", type="string", nullable=false)
-     *
-     * @var string
      */
-    private $code;
+    private string $code;
 
     /**
      * @ORM\Column(name="title", type="string", nullable=false)
-     *
-     * @var string
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=false)
-     *
-     * @var string
      */
-    private $description = '';
+    private string $description = '';
 
     /**
      * @ORM\Column(name="start", type="datetime", nullable=false)
-     *
-     * @var DateTime
      */
-    private $start;
+    private DateTime $start;
 
     /**
      * @ORM\Column(name="end", type="datetime", nullable=false)
-     *
-     * @var DateTime
      */
-    private $end;
+    private DateTime $end;
 
     public function getId(): int
     {

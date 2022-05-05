@@ -1,6 +1,5 @@
 <?php
 
-/*
 declare(strict_types=1);
 
 namespace AppTest\Service;
@@ -17,8 +16,9 @@ use DoctrineFixture\IdeaDataLoader;
 use DoctrineFixture\TagDataLoader;
 use DoctrineFixture\ProjectDataLoader;
 use DoctrineFixture\UserDataLoader;
+use DoctrineFixture\WorkflowStateDataLoader;
 
-final class UserServiceTest extends AbstractServiceTest
+final class VoteServiceTest extends AbstractServiceTest
 {
     protected function setUp(): void
     {
@@ -28,26 +28,21 @@ final class UserServiceTest extends AbstractServiceTest
         );
 
         $this->fixtureExecutor = FixtureManager::getFixtureExecutor();
-    }
 
-    public function testReturnPlaceInstance()
-    {
         $this->fixtureExecutor->execute([
+            new WorkflowStateDataLoader(),
+            new TagDataLoader(),
             new CampaignDataLoader(),
             new CampaignLocationDataLoader(),
             new CampaignThemeDataLoader(),
-            new IdeaDataLoader(),
-            new TagDataLoader(),
-            new ProjectDataLoader(),
             new UserDataLoader(),
+            new IdeaDataLoader(),
+            new ProjectDataLoader(),
         ]);
-
-        $this->assertInstanceOf(User::class, $this->userRepository->find(1));
     }
 
-    public function testRemovable()
+    public function testVote()
     {
-        $this->assertInstanceOf(User::class, new User());
+
     }
 }
-*/

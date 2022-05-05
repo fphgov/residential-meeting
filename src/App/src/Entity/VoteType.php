@@ -9,10 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PostCategoryRepository")
- * @ORM\Table(name="post_categories")
+ * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
+ * @ORM\Table(name="vote_types")
  */
-class PostCategory implements PostCategoryInterface
+final class VoteType implements VoteTypeInterface
 {
     use EntityTrait;
 
@@ -21,21 +21,14 @@ class PostCategory implements PostCategoryInterface
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "option", "detail", "full_detail"})
      */
-    protected int $id;
-
-    /**
-     * @ORM\Column(name="code", type="string")
-     *
-     * @Groups({"list", "detail", "full_detail"})
-     */
-    private string $code;
+    private int $id;
 
     /**
      * @ORM\Column(name="name", type="string")
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "option", "detail", "full_detail"})
      */
     private string $name;
 
@@ -49,23 +42,13 @@ class PostCategory implements PostCategoryInterface
         $this->id = $id;
     }
 
-    public function setCode(string $code): void
+    public function getName(): string
     {
-        $this->code = $code;
-    }
-
-    public function getCode(): string
-    {
-        return $this->code;
+        return $this->name;
     }
 
     public function setName(string $name): void
     {
         $this->name = $name;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 }

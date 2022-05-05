@@ -15,7 +15,8 @@ class WorkflowStateDataLoader extends AbstractFixture implements FixtureInterfac
     {
         $workflowState = new WorkflowState();
         $workflowState->setId(100);
-        $workflowState->setName('RECEIVED');
+        $workflowState->setTitle('Beküldött');
+        $workflowState->setPrivateTitle('Beküldött');
         $workflowState->setCode('RECEIVED');
         $workflowState->setDescription('Beküldött');
 

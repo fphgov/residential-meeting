@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Traits\EntityActiveTrait;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,9 +29,8 @@ class User implements UserInterface
      * @ORM\OneToOne(targetEntity="UserPreference", mappedBy="user")
      *
      * @Ignore()
-     * @var UserPreference|null
      */
-    private $userPreference;
+    private ?UserPreference $userPreference;
 
     /**
      * @ORM\OneToMany(targetEntity="Vote", mappedBy="user")
@@ -38,7 +38,7 @@ class User implements UserInterface
      * @Ignore()
      * @var Collection|Vote[]
      */
-    private $votes;
+    private Collection $votes;
 
     /**
      * @ORM\OneToMany(targetEntity="Idea", mappedBy="submitter")
@@ -46,70 +46,61 @@ class User implements UserInterface
      * @Ignore()
      * @var Collection|Idea[]
      */
-    private $ideas;
+    private Collection $ideas;
 
     /**
      * @ORM\Column(name="username", type="string")
      *
      * @Groups({"profile"})
-     * @var string
      */
-    private $username;
+    private string $username;
 
     /**
      * @ORM\Column(name="firstname", type="string")
      *
      * @Groups({"list", "detail", "full_detail", "profile"})
-     * @var string
      */
-    private $firstname;
+    private string $firstname;
 
     /**
      * @ORM\Column(name="lastname", type="string")
      *
      * @Groups({"list", "detail", "full_detail", "profile"})
-     * @var string
      */
-    private $lastname;
+    private string $lastname;
 
     /**
      * @ORM\Column(name="email", type="string", length=100, unique=true)
      *
      * @Groups({"full_detail", "profile"})
-     * @var string
      */
-    private $email;
+    private string $email;
 
     /**
      * @ORM\Column(name="password", type="text", length=100)
      *
      * @Ignore()
-     * @var string
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(name="role", type="string")
      *
      * @Ignore()
-     * @var string
      */
-    private $role = 'user';
+    private string $role = 'user';
 
     /**
      * @ORM\Column(name="hash", type="string", unique=true, nullable=true)
-     *
-     * @var string|null
      */
-    private $hash;
+    private ?string $hash;
 
     /**
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      *
      * @Ignore()
-     * @var DateTime
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     public function __construct()
     {

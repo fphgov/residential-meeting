@@ -20,66 +20,48 @@ class UserPreference implements UserPreferenceInterface
     /**
      * @ORM\OneToOne(targetEntity="User", inversedBy="userPreference")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     *
-     * @var User
      */
-    private $user;
+    private User $user;
 
     /**
      * @ORM\Column(name="birthyear", type="smallint", nullable=true)
-     *
-     * @var int|null
      */
-    private $birthyear;
+    private ?int $birthyear;
 
     /**
      * @ORM\Column(name="live_in_city", type="boolean")
-     *
-     * @var bool
      */
-    private $liveInCity = false;
+    private bool $liveInCity = false;
 
     /**
      * @ORM\Column(name="postal_code", type="text", length=4, nullable=true)
-     *
-     * @var string|null
      */
-    private $postalCode;
+    private ?string $postalCode;
 
     /**
      * @ORM\Column(name="hear_about", type="string")
-     *
-     * @var string
      */
-    private $hearAbout;
+    private string $hearAbout;
 
     /**
      * @ORM\Column(name="privacy", type="boolean")
-     *
-     * @var bool
      */
-    private $privacy;
+    private bool $privacy;
 
     /**
      * @ORM\Column(name="prize", type="boolean")
-     *
-     * @var bool
      */
-    private $prize = false;
+    private bool $prize = false;
 
     /**
      * @ORM\Column(name="prizeHash", type="string", unique=true, nullable=true)
-     *
-     * @var string|null
      */
-    private $prizeHash;
+    private ?string $prizeHash;
 
     /**
      * @ORM\Column(name="campaignEmail", type="boolean")
-     *
-     * @var bool
      */
-    private $campaignEmail = false;
+    private bool $campaignEmail = false;
 
     public function setUser(User $user): void
     {

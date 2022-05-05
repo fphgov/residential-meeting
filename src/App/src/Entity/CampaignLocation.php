@@ -34,25 +34,22 @@ class CampaignLocation implements CampaignLocationInterface
      * @ORM\Column(name="code", type="string")
      *
      * @Groups({"detail", "full_detail"})
-     * @var string
      */
-    private $code;
+    private string $code;
 
     /**
      * @ORM\Column(name="name", type="string")
      *
      * @Groups({"detail", "full_detail"})
-     * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(name="description", type="text")
      *
      * @Groups({"detail", "full_detail"})
-     * @var string
      */
-    private $description;
+    private string $description;
 
     public function getCampaign(): Campaign
     {

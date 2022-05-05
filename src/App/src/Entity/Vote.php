@@ -19,35 +19,21 @@ class Vote implements VoteInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="votes")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     *
-     * @var User
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", unique=false, nullable=false)
      */
-    private $user;
+    private User $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="VoteType")
+     * @ORM\JoinColumn(name="vote_type_id", referencedColumnName="id", nullable=false)
+     */
+    private VoteType $voteType;
 
     /**
      * @ORM\ManyToOne(targetEntity="Project")
-     * @ORM\JoinColumn(name="care_id", referencedColumnName="id", nullable=false)
-     *
-     * @var Project
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=false)
      */
-    private $projectCare;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Project")
-     * @ORM\JoinColumn(name="green_id", referencedColumnName="id", nullable=false)
-     *
-     * @var Project
-     */
-    private $projectGreen;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Project")
-     * @ORM\JoinColumn(name="whole_id", referencedColumnName="id", nullable=false)
-     *
-     * @var Project
-     */
-    private $projectWhole;
+    private Project $project;
 
     public function getUser(): UserInterface
     {
@@ -59,33 +45,23 @@ class Vote implements VoteInterface
         $this->user = $user;
     }
 
-    public function setProjectCare(ProjectInterface $projectCare): void
+    public function getVoteType(): VoteTypeInterface
     {
-        $this->projectCare = $projectCare;
+        return $this->voteType;
     }
 
-    public function getProjectCare(): ProjectInterface
+    public function setVoteType(VoteTypeInterface $voteType): void
     {
-        return $this->projectCare;
+        $this->voteType = $voteType;
     }
 
-    public function setProjectGreen(ProjectInterface $projectGreen): void
+    public function getProject(): ProjectInterface
     {
-        $this->projectGreen = $projectGreen;
+        return $this->project;
     }
 
-    public function getProjectGreen(): ProjectInterface
+    public function setProject(ProjectInterface $project): void
     {
-        return $this->projectGreen;
-    }
-
-    public function setProjectWhole(ProjectInterface $projectWhole): void
-    {
-        $this->projectWhole = $projectWhole;
-    }
-
-    public function getProjectWhole(): ProjectInterface
-    {
-        return $this->projectWhole;
+        $this->project = $project;
     }
 }

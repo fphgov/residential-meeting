@@ -34,33 +34,29 @@ class CampaignTheme implements CampaignThemeInterface
      * @ORM\Column(name="code", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $code;
+    private string $code;
 
     /**
      * @ORM\Column(name="name", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(name="description", type="text")
      *
      * @Groups({"detail", "full_detail"})
-     * @var string
      */
-    private $description;
+    private string $description;
 
     /**
      * @ORM\Column(name="rgb", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $rgb;
+    private string $rgb;
 
     public function getCampaign(): Campaign
     {

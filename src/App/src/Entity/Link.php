@@ -31,18 +31,15 @@ class Link implements LinkInterface
     /**
      * @ORM\ManyToOne(targetEntity="Idea", inversedBy="links")
      * @ORM\JoinColumn(name="idea_id", referencedColumnName="id", nullable=false)
-     *
-     * @var Idea
      */
-    private $idea;
+    private Idea $idea;
 
     /**
      * @ORM\Column(name="href", type="text")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $href;
+    private string $href;
 
     public function getId(): UuidInterface
     {

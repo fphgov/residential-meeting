@@ -21,7 +21,7 @@ use function strip_tags;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IdeaRepository")
  * @ORM\Table(name="ideas", indexes={
- *     @ORM\Index(name="search_idx", columns={"title"})
+ *     @ORM\Index(name="idea_search_idx", columns={"title"})
  * })
  */
 class Idea implements IdeaInterface
@@ -95,7 +95,7 @@ class Idea implements IdeaInterface
      * @Groups({"detail", "full_detail"})
      * @var Collection|Media[]
      */
-    private $medias;
+    private Collection $medias;
 
     /**
      * @ORM\OneToMany(targetEntity="Link", mappedBy="idea")
@@ -103,7 +103,7 @@ class Idea implements IdeaInterface
      * @Groups({"detail", "full_detail"})
      * @var Collection|Link[]
      */
-    private $links;
+    private Collection $links;
 
     /**
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="idea")
@@ -112,7 +112,7 @@ class Idea implements IdeaInterface
      *
      * @Groups({"detail", "full_detail"})
      */
-    private $comments;
+    private Collection $comments;
 
     /**
      * @ORM\Column(name="title", type="string")
@@ -187,8 +187,9 @@ class Idea implements IdeaInterface
 
     public function __construct()
     {
-        $this->medias = new ArrayCollection();
-        $this->links  = new ArrayCollection();
+        $this->links    = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->medias   = new ArrayCollection();
     }
 
     public function getSubmitter(): UserInterface

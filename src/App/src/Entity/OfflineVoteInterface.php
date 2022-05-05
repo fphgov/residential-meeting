@@ -23,4 +23,8 @@ interface OfflineVoteInterface extends EntityInterface
     public function setProject(ProjectInterface $project): void;
 
     public function getProject(): ProjectInterface;
+
+    public function getVoteType(): VoteTypeInterface;
+
+    public function setVoteType(VoteTypeInterface $voteType): void;
 }

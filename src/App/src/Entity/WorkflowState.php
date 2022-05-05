@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\WorkflowStateRepository")
  * @ORM\Table(name="workflow_states", indexes={
- *     @ORM\Index(name="search_idx", columns={"code"})
+ *     @ORM\Index(name="workflow_search_idx", columns={"code"})
  * })
  */
 class WorkflowState implements WorkflowStateInterface
@@ -23,41 +23,36 @@ class WorkflowState implements WorkflowStateInterface
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      *
      * @Groups({"detail", "option"})
-     * @var int
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(name="code", type="string")
      *
      * @Groups({"list", "detail", "full_detail", "option"})
-     * @var string
      */
-    private $code;
+    private string $code;
 
     /**
      * @ORM\Column(name="title", type="string")
      *
      * @Groups({"list", "detail", "full_detail", "option"})
-     * @var string
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(name="private_title", type="string")
      *
      * @Groups({"full_detail", "option"})
-     * @var string
      */
-    private $privateTitle;
+    private string $privateTitle;
 
     /**
      * @ORM\Column(name="description", type="string")
      *
      * @Groups({"detail", "full_detail"})
-     * @var string
      */
-    private $description;
+    private string $description;
 
     public function getId(): int
     {
