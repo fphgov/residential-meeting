@@ -59,6 +59,7 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     $app->post('/app/api/user/vote', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
+        App\Middleware\CampaignMiddleware::class,
         App\Handler\User\VoteHandler::class
     ], 'app.api.user.vote');
 

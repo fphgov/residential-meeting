@@ -13,7 +13,7 @@ use App\Repository\PhaseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
-final class PhaseService implements PhaseServiceInterface
+class PhaseService implements PhaseServiceInterface
 {
     /** @var EntityManagerInterface */
     private $em;

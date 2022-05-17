@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Ignore as ignore;
 
 use function array_slice;
 use function count;
@@ -21,99 +21,13 @@ use function strip_tags;
 use function trim;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
- * @ORM\Table(name="projects")
+ * @ORM\Entity(repositoryClass="App\Repository\ProjectTypeRepository")
+ * @ORM\Table(name="project_types")
  */
-class Project implements ProjectInterface
+class ProjectType implements ProjectInterface
 {
     use EntityMetaTrait;
     use EntityTrait;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="ProjectType", inversedBy="project")
-     * @ORM\JoinColumn(name="project_type_id", referencedColumnName="id", nullable=true)
-     *
-     * @Groups({"list", "detail", "full_detail"})
-     */
-    private ?ProjectType $projectType;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="projects")
-     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
-     *
-     * @Groups({"list", "detail", "full_detail"})
-     */
-    private Campaign $campaign;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="CampaignTheme")
-     * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
-     *
-     * @Groups({"list", "detail", "full_detail"})
-     */
-    private CampaignTheme $campaignTheme;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Idea", mappedBy="project")
-     *
-     * @Groups({"detail", "full_detail"})
-     * @var Collection|Idea[]
-     */
-    private Collection $ideas;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Tag")
-     * @ORM\JoinTable(name="projects_tags",
-     *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
-     * )
-     *
-     * @Groups({"detail", "full_detail"})
-     * @var Collection|Tag[]
-     */
-    private Collection $tags;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="CampaignLocation")
-     * @ORM\JoinTable(name="projects_campaign_locations",
-     *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="campaign_location_id", referencedColumnName="id")}
-     * )
-     *
-     * @Groups({"list", "detail", "full_detail"})
-     * @var Collection|CampaignLocation[]
-     */
-    private Collection $campaignLocations;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Media")
-     * @ORM\JoinTable(name="projects_medias",
-     *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
-     * )
-     *
-     * @Groups({"detail", "full_detail"})
-     * @var Collection|Media[]
-     */
-    private Collection $medias;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="WorkflowState")
-     * @ORM\JoinColumn(name="workflow_state_id", referencedColumnName="id", nullable=false)
-     *
-     * @Groups({"list", "detail", "full_detail"})
-     */
-    private WorkflowState $workflowState;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Implementation", mappedBy="project")
-     * @ORM\OrderBy({"createdAt" = "DESC"})
-     *
-     * @var Collection|Implementation[]
-     *
-     * @Groups({"detail", "full_detail"})
-     */
-    private Collection $implementations;
 
     /**
      * @ORM\Column(name="title", type="string")
@@ -129,73 +43,14 @@ class Project implements ProjectInterface
      */
     private string $description;
 
-    /**
-     * @ORM\Column(name="location", type="string")
-     *
-     * @Groups({"detail", "full_detail"})
-     */
-    private string $location;
-
-    /**
-     * @ORM\Column(name="solution", type="text")
-     *
-     * @Groups({"detail", "full_detail"})
-     */
-    private string $solution;
-
-    /**
-     * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
-     *
-     * @Groups({"detail", "full_detail"})
-     * @var string|null
-     */
-    private $cost;
-
-    /**
-     * @ORM\Column(name="video", type="string", nullable=true)
-     *
-     * @Groups({"detail", "full_detail"})
-     */
-    private ?string $video;
-
-    /**
-     * @ORM\Column(name="win", type="boolean", nullable=false)
-     *
-     * @Groups({"detail", "full_detail"})
-     */
-    private bool $win = false;
-
-    /**
-     * @ORM\Column(name="latitude", type="float", nullable=true)
-     *
-     * @Groups({"full_detail"})
-     */
-    private ?float $latitude;
-
-    /**
-     * @ORM\Column(name="longitude", type="float", nullable=true)
-     *
-     * @Groups({"full_detail"})
-     */
-    private ?float $longitude;
-
-    public function __construct()
+    public function getProject(): Project
     {
-        $this->tags              = new ArrayCollection();
-        $this->ideas             = new ArrayCollection();
-        $this->medias            = new ArrayCollection();
-        $this->implementations   = new ArrayCollection();
-        $this->campaignLocations = new ArrayCollection();
+        return $this->project;
     }
 
-    public function getProjectType(): ProjectType
+    public function setProject(Project $project): void
     {
-        return $this->projectType;
-    }
-
-    public function setProjectType(ProjectType $projectType): void
-    {
-        $this->projectType = $projectType;
+        $this->project = $project;
     }
 
     public function getCampaign(): CampaignInterface

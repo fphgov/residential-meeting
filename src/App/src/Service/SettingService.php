@@ -30,24 +30,22 @@ final class SettingService implements SettingServiceInterface
 
     public function modifySetting(array $body): Setting
     {
-        $id   = 1;
         $date = new DateTime();
 
-        $setting = $this->getRepository()->find($id);
+        $setting = $this->getRepository()->findBy([
+            'key' => 'close'
+        ]);
 
         $hasSettings = $setting instanceof Setting;
 
         if (! $hasSettings) {
             $setting = new Setting();
-
-            $setting->setId($id);
-            $setting->setCreatedAt($date);
         }
 
         $close = isset($body['close']) ? $body['close'] === true || $body['close'] === 'true' : false;
 
-        $setting->setClose((bool) $close);
-        $setting->setUpdatedAt($date);
+        $setting->setKey('close');
+        $setting->setValue((bool) $close);
 
         if (! $hasSettings) {
             $this->em->persist($setting);

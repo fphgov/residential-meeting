@@ -9,10 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\VoteTypeRepository")
  * @ORM\Table(name="vote_types")
  */
-final class VoteType implements VoteTypeInterface
+class VoteType implements VoteTypeInterface
 {
     use EntityTrait;
 

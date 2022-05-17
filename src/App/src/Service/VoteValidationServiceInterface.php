@@ -10,20 +10,11 @@ use App\Entity\VoteInterface;
 use App\Entity\VoteTypeInterface;
 use Doctrine\ORM\EntityRepository;
 
-interface VoteServiceInterface
+interface VoteValidationServiceInterface
 {
-    public function addOfflineVote(
-        UserInterface $user,
-        VoteTypeInterface $voteType,
-        ProjectInterface $project,
-        int $voteCount
-    ): void;
-
-    public function voting(
+    public function validation(
         UserInterface $user,
         VoteTypeInterface $voteType,
         array $projects
     ): void;
-
-    public function getRepository(): EntityRepository;
 }

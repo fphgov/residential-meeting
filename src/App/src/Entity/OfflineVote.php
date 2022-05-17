@@ -30,7 +30,7 @@ class OfflineVote implements OfflineVoteInterface
     private Project $project;
 
     /**
-     * @ORM\ManyToOne(targetEntity="VoteType")
+     * @ORM\ManyToOne(targetEntity="VoteType", cascade={"persist"})
      * @ORM\JoinColumn(name="vote_type_id", referencedColumnName="id", nullable=false)
      */
     private VoteType $voteType;

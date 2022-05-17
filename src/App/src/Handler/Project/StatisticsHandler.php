@@ -72,31 +72,37 @@ final class StatisticsHandler implements RequestHandlerInterface
     {
         $repository = $this->em->getRepository(Project::class);
 
-        $qb = $repository->createQueryBuilder('p')
-            ->select('NEW ProjectStatisticsDTO(p.id, ct.id, ct.name, ct.rgb, p.title, COUNT(care.id), COUNT(green.id), COUNT(whole.id), p.win) as ps')
-            ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
-            ->leftJoin($className, 'care', Join::WITH, 'care.projectCare = p.id')
-            ->leftJoin($className, 'green', Join::WITH, 'green.projectGreen = p.id')
-            ->leftJoin($className, 'whole', Join::WITH, 'whole.projectWhole = p.id')
-            ->groupBy('p.id')
-            ->orderBy('p.id', 'DESC')
-            ->orderBy('p.win', 'DESC');
+        // IMPLEMENT ME
 
-        return $qb->getQuery()->getResult();
+        // $qb = $repository->createQueryBuilder('p')
+        //     ->select('NEW ProjectStatisticsDTO(p.id, ct.id, ct.name, ct.rgb, p.title, COUNT(care.id), COUNT(green.id), COUNT(whole.id), p.win) as ps')
+        //     ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
+        //     ->leftJoin($className, 'care', Join::WITH, 'care.projectCare = p.id')
+        //     ->leftJoin($className, 'green', Join::WITH, 'green.projectGreen = p.id')
+        //     ->leftJoin($className, 'whole', Join::WITH, 'whole.projectWhole = p.id')
+        //     ->groupBy('p.id')
+        //     ->orderBy('p.id', 'DESC')
+        //     ->orderBy('p.win', 'DESC');
+
+        // return $qb->getQuery()->getResult();
+        return 0;
     }
 
     private function getProjectStatistics(string $className): array
     {
         $repository = $this->em->getRepository(Project::class);
 
-        $qb = $repository->createQueryBuilder('p')
-            ->select('NEW ProjectStatisticsDTO(p.id, ct.id, ct.name, ct.rgb, p.title, COUNT(care.id), 0, 0, p.win) as ps')
-            ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
-            ->leftJoin($className, 'care', Join::WITH, 'care.project = p.id')
-            ->groupBy('p.id')
-            ->orderBy('p.id', 'DESC')
-            ->orderBy('p.win', 'DESC');
+        // IMPLEMENT ME
 
-        return $qb->getQuery()->getResult();
+        // $qb = $repository->createQueryBuilder('p')
+        //     ->select('NEW ProjectStatisticsDTO(p.id, ct.id, ct.name, ct.rgb, p.title, COUNT(care.id), 0, 0, p.win) as ps')
+        //     ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
+        //     ->leftJoin($className, 'care', Join::WITH, 'care.project = p.id')
+        //     ->groupBy('p.id')
+        //     ->orderBy('p.id', 'DESC')
+        //     ->orderBy('p.win', 'DESC');
+
+        // return $qb->getQuery()->getResult();
+        return 0;
     }
 }

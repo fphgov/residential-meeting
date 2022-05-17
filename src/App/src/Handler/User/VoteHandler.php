@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Handler\User;
 
+use App\Entity\VoteType;
 use App\Exception\DifferentPhaseException;
 use App\Middleware\UserMiddleware;
+use App\Middleware\CampaignMiddleware;
 use App\Service\VoteServiceInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterInterface;
@@ -16,6 +19,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class VoteHandler implements RequestHandlerInterface
 {
+    /** @var EntityManagerInterface */
+    private $em;
+
     /** @var VoteServiceInterface **/
     private $voteService;
 
@@ -23,27 +29,20 @@ final class VoteHandler implements RequestHandlerInterface
     private $voteFilter;
 
     public function __construct(
+        EntityManagerInterface $em,
         VoteServiceInterface $voteService,
         InputFilterInterface $voteFilter
     ) {
+        $this->em          = $em;
         $this->voteService = $voteService;
         $this->voteFilter  = $voteFilter;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $user = $request->getAttribute(UserMiddleware::class);
-        $body = $request->getParsedBody();
-
-        $existsVote = $this->voteService->getRepository()->findOneBy([
-            'user' => $user->getId(),
-        ]);
-
-        if ($existsVote) {
-            return new JsonResponse([
-                'message' => 'Már leadta a végleges szavazatát',
-            ], 422);
-        }
+        $campaign = $request->getAttribute(CampaignMiddleware::class);
+        $user     = $request->getAttribute(UserMiddleware::class);
+        $body     = $request->getParsedBody();
 
         $this->voteFilter->setData($body);
 
@@ -53,8 +52,10 @@ final class VoteHandler implements RequestHandlerInterface
             ], 422);
         }
 
+        $type = $this->em->getReference(VoteType::class, 2);
+
         try {
-            $this->voteService->voting($user, $body);
+            $this->voteService->voting($user, $type, $body);
         } catch (DifferentPhaseException $e) {
             return new JsonResponse([
                 'message' => 'A szavazás zárva',

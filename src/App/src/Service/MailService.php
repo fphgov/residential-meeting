@@ -19,7 +19,7 @@ use Throwable;
 
 use function error_log;
 
-final class MailService implements MailServiceInterface
+class MailService implements MailServiceInterface
 {
     /** @var EntityManagerInterface */
     private $em;

@@ -8,7 +8,7 @@ use App\Entity\Phase;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
 
-final class PhaseRepository extends EntityRepository
+class PhaseRepository extends EntityRepository
 {
     public function getCurrentPhase(): ?Phase
     {

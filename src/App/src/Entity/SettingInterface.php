@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\EntityInterface;
+use App\Interfaces\EntitySimpleInterface;
 
-interface SettingInterface extends EntityInterface
+interface SettingInterface extends EntitySimpleInterface
 {
     public const DISABLE_SHOW_DEFAULT = [
         'createdAt',
@@ -18,7 +18,11 @@ interface SettingInterface extends EntityInterface
         'updatedAt',
     ];
 
-    public function setClose(bool $close): void;
+    public function setKey(string $key): void;
 
-    public function getClose(): bool;
+    public function getKey(): string;
+
+    public function setValue(string $value): void;
+
+    public function getValue(): string;
 }

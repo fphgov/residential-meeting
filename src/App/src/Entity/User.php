@@ -26,14 +26,14 @@ class User implements UserInterface
     use EntityTrait;
 
     /**
-     * @ORM\OneToOne(targetEntity="UserPreference", mappedBy="user")
+     * @ORM\OneToOne(targetEntity="UserPreference", mappedBy="user", cascade={"persist"})
      *
      * @Ignore()
      */
     private ?UserPreference $userPreference;
 
     /**
-     * @ORM\OneToMany(targetEntity="Vote", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Vote", mappedBy="user", cascade={"persist"})
      *
      * @Ignore()
      * @var Collection|Vote[]

@@ -18,19 +18,19 @@ class Vote implements VoteInterface
     use EntityTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="votes")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="votes", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", unique=false, nullable=false)
      */
     private User $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="VoteType")
-     * @ORM\JoinColumn(name="vote_type_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="VoteType", cascade={"persist"})
+     * @ORM\JoinColumn(name="vote_type_id", referencedColumnName="id", nullable=true)
      */
-    private VoteType $voteType;
+    private ?VoteType $voteType;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Project")
+     * @ORM\ManyToOne(targetEntity="Project", cascade={"persist"})
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=false)
      */
     private Project $project;

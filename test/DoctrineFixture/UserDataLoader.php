@@ -19,7 +19,7 @@ class UserDataLoader extends AbstractFixture implements FixtureInterface
         $passwordModel    = new PBKDF2Password('password', PBKDF2Password::PW_REPRESENTATION_CLEARTEXT);
         $storablePassword = $passwordModel->getStorableRepresentation();
 
-        $user = new User();
+        $user           = new User();
         $userPreference = new UserPreference();
 
         $user->setUserPreference($userPreference);
