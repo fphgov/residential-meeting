@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Handler\Project;
+namespace App\Handler\Plan;
 
 use App\Entity\Campaign;
 use App\Entity\CampaignLocation;
@@ -21,8 +21,11 @@ use function strtolower;
 class FilterHandler implements RequestHandlerInterface
 {
     public const ENABLED_STATUSES = [
+        'voting_list',
         'under_construction',
         'ready',
+        'council_rejected',
+        'not_voted',
     ];
 
     /** @var EntityManagerInterface */

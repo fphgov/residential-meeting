@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Handler\Project;
+namespace App\Handler\Plan;
 
 use App\Entity\Campaign;
 use App\Entity\CampaignTheme;
@@ -123,7 +123,7 @@ final class ListHandler implements RequestHandlerInterface
             $qb->setParameter('status', strtoupper($status));
         }
 
-        $qb->andWhere('w.id IN (140, 200)');
+        $qb->andWhere('w.id IN (130, 140, 200, 530, 540)');
 
         $qb->setMaxResults(1);
 
