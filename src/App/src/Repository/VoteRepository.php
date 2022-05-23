@@ -18,7 +18,7 @@ class VoteRepository extends EntityRepository
     {
         // IMPLEMENT ME
 
-        return 0;
+        return null;
         // $qb = $this->createQueryBuilder('v')
         //            ->select('COUNT(1)')
         //            ->where('v.projectCare = :id')
