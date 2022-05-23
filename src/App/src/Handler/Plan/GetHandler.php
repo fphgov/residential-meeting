@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handler\Plan;
 
-use App\Entity\OfflineVote;
 use App\Entity\Project;
-use App\Entity\Vote;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Mezzio\Hal\HalResponseFactory;
@@ -39,12 +37,8 @@ final class GetHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $entityRepository      = $this->entityManager->getRepository(Project::class);
-        $voteRepository        = $this->entityManager->getRepository(Vote::class);
-        $offlineVoteRepository = $this->entityManager->getRepository(OfflineVote::class);
 
         $result = $entityRepository->find($request->getAttribute('id'));
-        $count  = $voteRepository->numberOfVotes((int) $request->getAttribute('id'));
-        $count += $offlineVoteRepository->numberOfVotes((int) $request->getAttribute('id'));
 
         if ($result === null) {
             return new JsonResponse([
@@ -55,7 +49,7 @@ final class GetHandler implements RequestHandlerInterface
         $project = $result->normalizer(null, ['groups' => 'detail']);
 
         $resource = $this->resourceGenerator->fromArray($project, null);
-        $resource = $resource->withElement('voted', $count);
+        $resource = $resource->withElement('voted', null);
 
         return $this->responseFactory->createResponse($request, $resource);
     }
