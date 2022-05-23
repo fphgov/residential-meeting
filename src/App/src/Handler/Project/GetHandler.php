@@ -61,7 +61,8 @@ final class GetHandler implements RequestHandlerInterface
 
         if (
             in_array($result->getWorkflowState()->getId(), [
-                WorkflowStateInterface::STATUS_PRE_COUNCIL
+                WorkflowStateInterface::STATUS_PRE_COUNCIL,
+                WorkflowStateInterface::STATUS_COUNCIL_REJECTED
             ], true)
         ) {
             $resource = $resource->withElement('voted', null);
