@@ -123,7 +123,7 @@ final class ListHandler implements RequestHandlerInterface
             $qb->setParameter('status', strtoupper($status));
         }
 
-        $qb->andWhere('w.id IN (130, 140, 200, 530, 540)');
+        $qb->andWhere('w.id IN (120, 130, 140, 200, 530, 540)');
 
         $qb->setMaxResults(1);
 
