@@ -16,7 +16,6 @@ use DoctrineFixture\FixtureManager;
 use DoctrineFixture\IdeaDataLoader;
 use DoctrineFixture\TagDataLoader;
 use DoctrineFixture\ProjectDataLoader;
-use DoctrineFixture\UserPreferenceDataLoader;
 use DoctrineFixture\UserDataLoader;
 
 final class UserServiceTest extends AbstractServiceTest
@@ -40,7 +39,6 @@ final class UserServiceTest extends AbstractServiceTest
             new IdeaDataLoader(),
             new TagDataLoader(),
             new ProjectDataLoader(),
-            new UserPreferenceDataLoader(),
             new UserDataLoader(),
         ]);
 

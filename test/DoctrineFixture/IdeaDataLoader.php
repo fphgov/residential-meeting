@@ -15,6 +15,9 @@ class IdeaDataLoader extends AbstractFixture implements FixtureInterface
     public function load(ObjectManager $manager)
     {
         $idea = new Idea();
+        $idea->setCampaign(
+            $this->getReference('campaign-active-1')
+        );
         $idea->setCampaignTheme(
             $this->getReference('campaign-theme-active-1')
         );
@@ -26,12 +29,12 @@ class IdeaDataLoader extends AbstractFixture implements FixtureInterface
         );
         $idea->setTitle('Bokrok telepítése fű helyett a zöldsávokba');
         $idea->setDescription('Fű helyett bokrokat telepítsenek a járdaszigetekre, vagy a járda és az úttest között lévő zöldsávokba külső kerületekben, ahol ezek a felületek a legsérülékenyebbek.');
+        $idea->setSolution('Javítja az emberek közérzetét, kevésbé lesz betondzsungel jellege a városnak.');
         $idea->setParticipate(false);
         $idea->setCost(50000000);
         $idea->setWorkflowState(
             $this->getReference('workflow-state-1')
         );
-        $idea->setActive(true);
         $idea->setCreatedAt(new DateTime());
         $idea->setUpdatedAt(new DateTime());
 

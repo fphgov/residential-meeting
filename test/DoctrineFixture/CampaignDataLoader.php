@@ -16,6 +16,7 @@ class CampaignDataLoader extends AbstractFixture implements FixtureInterface
     {
         $campaign = new Campaign();
         $campaign->setTitle('Budapest Részvételi költségvetés');
+        $campaign->setShortTitle('2020/2021');
         $campaign->setDescription('Budapest Részvételi költségvetés 2020');
         $campaign->setActive(true);
         $campaign->setCreatedAt(new DateTime());

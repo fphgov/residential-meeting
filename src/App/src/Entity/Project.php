@@ -6,9 +6,11 @@ namespace App\Entity;
 
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 use function array_slice;
 use function count;
@@ -26,6 +28,14 @@ class Project implements ProjectInterface
 {
     use EntityMetaTrait;
     use EntityTrait;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ProjectType", inversedBy="project")
+     * @ORM\JoinColumn(name="project_type_id", referencedColumnName="id", nullable=true)
+     *
+     * @Groups({"list", "detail", "full_detail"})
+     */
+    private ?ProjectType $projectType;
 
     /**
      * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="projects")
@@ -49,7 +59,7 @@ class Project implements ProjectInterface
      * @Groups({"detail", "full_detail"})
      * @var Collection|Idea[]
      */
-    private $ideas;
+    private Collection $ideas;
 
     /**
      * @ORM\ManyToMany(targetEntity="Tag")
@@ -61,7 +71,7 @@ class Project implements ProjectInterface
      * @Groups({"detail", "full_detail"})
      * @var Collection|Tag[]
      */
-    private $tags;
+    private Collection $tags;
 
     /**
      * @ORM\ManyToMany(targetEntity="CampaignLocation")
@@ -73,7 +83,7 @@ class Project implements ProjectInterface
      * @Groups({"list", "detail", "full_detail"})
      * @var Collection|CampaignLocation[]
      */
-    private $campaignLocations;
+    private Collection $campaignLocations;
 
     /**
      * @ORM\ManyToMany(targetEntity="Media")
@@ -85,7 +95,7 @@ class Project implements ProjectInterface
      * @Groups({"detail", "full_detail"})
      * @var Collection|Media[]
      */
-    private $medias;
+    private Collection $medias;
 
     /**
      * @ORM\ManyToOne(targetEntity="WorkflowState")
@@ -103,7 +113,7 @@ class Project implements ProjectInterface
      *
      * @Groups({"detail", "full_detail"})
      */
-    private $implementations;
+    private Collection $implementations;
 
     /**
      * @ORM\Column(name="title", type="string")
@@ -168,6 +178,25 @@ class Project implements ProjectInterface
      * @Groups({"full_detail"})
      */
     private ?float $longitude;
+
+    public function __construct()
+    {
+        $this->tags              = new ArrayCollection();
+        $this->ideas             = new ArrayCollection();
+        $this->medias            = new ArrayCollection();
+        $this->implementations   = new ArrayCollection();
+        $this->campaignLocations = new ArrayCollection();
+    }
+
+    public function getProjectType(): ?ProjectType
+    {
+        return $this->projectType;
+    }
+
+    public function setProjectType(?ProjectType $projectType = null): void
+    {
+        $this->projectType = $projectType;
+    }
 
     public function getCampaign(): CampaignInterface
     {

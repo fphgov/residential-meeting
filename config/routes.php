@@ -59,6 +59,7 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     $app->post('/app/api/user/vote', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
+        App\Middleware\CampaignMiddleware::class,
         App\Handler\User\VoteHandler::class
     ], 'app.api.user.vote');
 
@@ -85,6 +86,18 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     $app->get('/app/api/projects/filter', [
         App\Handler\Project\FilterHandler::class
     ], 'app.api.project.filter');
+
+    $app->get('/app/api/plans', [
+        App\Handler\Plan\ListHandler::class
+    ], 'app.api.plans.list');
+
+    $app->get('/app/api/plans/{id:\d+}', [
+        App\Handler\Plan\GetHandler::class
+    ], 'app.api.plans.show');
+
+    $app->get('/app/api/plans/filter', [
+        App\Handler\Plan\FilterHandler::class
+    ], 'app.api.plan.filter');
 
     $app->get('/app/api/ideas', [
         App\Handler\Idea\ListHandler::class

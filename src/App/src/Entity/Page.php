@@ -20,34 +20,29 @@ class Page implements PageInterface
 
     /**
      * @ORM\Column(name="status", type="string")
-     *
-     * @var string
      */
-    private $status;
+    private string $status;
 
     /**
      * @ORM\Column(name="slug", type="string", unique=true)
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $slug;
+    private string $slug;
 
     /**
      * @ORM\Column(name="title", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(name="content", type="text")
      *
      * @Groups({"detail", "full_detail"})
-     * @var string
      */
-    private $content;
+    private string $content;
 
     public function setStatus(string $status): void
     {

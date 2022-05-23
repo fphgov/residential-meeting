@@ -24,17 +24,13 @@ class MailQueue implements MailQueueInterface
     /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
-     *
-     * @var User
      */
-    private $user;
+    private User $user;
 
     /**
      * @ORM\Column(name="mail_adapter", type="text")
-     *
-     * @var string
      */
-    private $mailAdapter;
+    private string $mailAdapter;
 
     public function getUser(): UserInterface
     {

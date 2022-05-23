@@ -15,24 +15,58 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Setting implements SettingInterface
 {
-    use EntityMetaTrait;
     use EntityTrait;
 
     /**
-     * @ORM\Column(name="close", type="boolean")
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
+     * @Groups({"list", "option", "detail", "full_detail"})
+     */
+    private int $id;
+
+    /**
+     * @ORM\Column(name="key", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var bool
      */
-    private $close = false;
+    private string $key;
 
-    public function setClose(bool $close): void
+    /**
+     * @ORM\Column(name="value", type="string")
+     *
+     * @Groups({"list", "detail", "full_detail"})
+     */
+    private string $value;
+
+    public function getId(): int
     {
-        $this->close = $close;
+        return $this->id;
     }
 
-    public function getClose(): bool
+    public function setId(int $id): void
     {
-        return (bool) $this->close;
+        $this->id = $id;
+    }
+
+    public function setKey(string $key): void
+    {
+        $this->key = $key;
+    }
+
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+
+    public function setValue(string $value): void
+    {
+        $this->value = $value;
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
     }
 }

@@ -34,31 +34,25 @@ class Media implements MediaInterface
      * @ORM\Column(name="filename", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $filename;
+    private string $filename;
 
     /**
      * @ORM\Column(name="type", type="string", nullable=true)
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string|null
      */
-    private $type;
+    private ?string $type;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
-     *
-     * @var DateTime
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
      * @ORM\Column(name="updated_at", type="datetime")
-     *
-     * @var DateTime
      */
-    protected $updatedAt;
+    protected DateTime $updatedAt;
 
     public function getId(): UuidInterface
     {

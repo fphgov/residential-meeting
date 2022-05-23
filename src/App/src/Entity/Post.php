@@ -24,68 +24,60 @@ class Post implements PostInterface
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      *
      * @ignore
-     * @var User
      */
-    private $author;
+    private User $author;
 
     /**
      * @ORM\ManyToOne(targetEntity="PostCategory")
      * @ORM\JoinColumn(name="post_category_id", referencedColumnName="id", nullable=false)
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var PostCategory
      */
-    private $category;
+    private PostCategory $category;
 
     /**
      * @ORM\ManyToOne(targetEntity="Media")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=true)
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var Media|null
      */
-    private $featuredImage;
+    private ?Media $featuredImage;
 
     /**
      * @ORM\ManyToOne(targetEntity="PostStatus")
      * @ORM\JoinColumn(name="post_status_id", referencedColumnName="id", nullable=false)
      *
      * @Groups({"list", "full_detail"})
-     * @var PostStatus
      */
-    private $status;
+    private PostStatus $status;
 
     /**
      * @ORM\Column(name="slug", type="string", unique=true, nullable=false)
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $slug;
+    private string $slug;
 
     /**
      * @ORM\Column(name="title", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(name="description", type="text")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $description;
+    private string $description;
 
     /**
      * @ORM\Column(name="content", type="text")
      *
      * @Groups({"detail", "full_detail"})
-     * @var string
      */
-    private $content;
+    private string $content;
 
     public function setAuthor(User $author): void
     {

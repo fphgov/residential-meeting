@@ -20,6 +20,7 @@ temp/
 #Doctrine 2
 data/DoctrineORMModule/Proxy/
 data/DoctrineORMModule/cache/
+test/data/cache/DoctrineEntityProxy
 
 # Legacy ZF1
 demos/

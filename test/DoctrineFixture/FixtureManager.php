@@ -17,6 +17,8 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Tools\ResolveTargetEntityListener;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
+use Doctrine\DBAL\Types\Type;
+use Ramsey\Uuid\Doctrine\UuidType;
 
 use function dirname;
 
@@ -60,6 +62,12 @@ final class FixtureManager
         $metadatas  = static::getEntityManager()
                             ->getMetadataFactory()
                             ->getAllMetadata();
+
+        if (Type::hasType(UuidType::NAME) === false) {
+            Type::addType(UuidType::NAME, UuidType::class);
+
+            $em->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('db_uuid', UuidType::NAME);
+        }
 
         $schemaTool->dropSchema($metadatas);
         $schemaTool->createSchema($metadatas);

@@ -18,12 +18,11 @@ use function array_values;
 use function in_array;
 use function strtolower;
 
-final class FilterHandler implements RequestHandlerInterface
+class FilterHandler implements RequestHandlerInterface
 {
     public const ENABLED_STATUSES = [
         'under_construction',
         'ready',
-        'not_voted',
     ];
 
     /** @var EntityManagerInterface */

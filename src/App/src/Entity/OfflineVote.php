@@ -20,18 +20,20 @@ class OfflineVote implements OfflineVoteInterface
     /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", unique=false, nullable=false)
-     *
-     * @var User
      */
-    private $user;
+    private User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Project")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=false)
-     *
-     * @var Project
      */
-    private $project;
+    private Project $project;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="VoteType", cascade={"persist"})
+     * @ORM\JoinColumn(name="vote_type_id", referencedColumnName="id", nullable=false)
+     */
+    private VoteType $voteType;
 
     public function getUser(): UserInterface
     {
@@ -51,5 +53,15 @@ class OfflineVote implements OfflineVoteInterface
     public function getProject(): ProjectInterface
     {
         return $this->project;
+    }
+
+    public function getVoteType(): VoteTypeInterface
+    {
+        return $this->voteType;
+    }
+
+    public function setVoteType(VoteTypeInterface $voteType): void
+    {
+        $this->voteType = $voteType;
     }
 }

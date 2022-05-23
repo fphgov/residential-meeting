@@ -43,7 +43,6 @@ class TokenHandler implements RequestHandlerInterface
         $routeResult = $request->getAttribute(RouteResult::class);
 
         $userRepository = $this->em->getRepository(User::class);
-        $voteRepository = $this->em->getRepository(Vote::class);
 
         if (! isset($postBody['email']) || ! isset($postBody['password'])) {
             return $this->badAuthentication();
@@ -78,33 +77,7 @@ class TokenHandler implements RequestHandlerInterface
             'lastname'  => $user->getLastname(),
             'email'     => $user->getEmail(),
             'role'      => $user->getRole(),
-            'votes'     => null,
-            'voted'     => count($user->getVotes()) !== 0,
         ];
-
-        $votes = $voteRepository->findOneBy([
-            'user' => $user->getId(),
-        ]);
-
-        if ($votes !== null) {
-            $userData['votes'] = [
-                'rk_vote_CARE'  => [
-                    'id'          => $votes->getProjectCare()->getId(),
-                    'title'       => $votes->getProjectCare()->getTitle(),
-                    'description' => $votes->getProjectCare()->getDescription(),
-                ],
-                'rk_vote_GREEN' => [
-                    'id'          => $votes->getProjectGreen()->getId(),
-                    'title'       => $votes->getProjectGreen()->getTitle(),
-                    'description' => $votes->getProjectGreen()->getDescription(),
-                ],
-                'rk_vote_WHOLE' => [
-                    'id'          => $votes->getProjectWhole()->getId(),
-                    'title'       => $votes->getProjectWhole()->getTitle(),
-                    'description' => $votes->getProjectWhole()->getDescription(),
-                ],
-            ];
-        }
 
         $token = $this->generateToken($userData);
 

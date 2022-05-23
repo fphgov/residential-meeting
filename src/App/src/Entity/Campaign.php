@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Traits\EntityActiveTrait;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -32,25 +33,27 @@ class Campaign implements CampaignInterface
      * @ORM\Column(name="title", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(name="short_title", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $shortTitle;
+    private string $shortTitle;
 
     /**
      * @ORM\Column(name="description", type="text")
      *
      * @Groups({"detail", "full_detail"})
-     * @var string
      */
-    private $description;
+    private string $description;
+
+    public function __construct()
+    {
+        $this->ideas = new ArrayCollection();
+    }
 
     public function getIdeas(): array
     {

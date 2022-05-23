@@ -8,6 +8,9 @@ use App\Interfaces\EntityInterface;
 
 interface VoteInterface extends EntityInterface
 {
+    public const TYPE_CAT_PER_ONE = 1;
+    public const TYPE_CAT_PER_TWO = 2;
+
     public const DISABLE_SHOW_DEFAULT = [
         'active',
         'createdAt',
@@ -20,15 +23,11 @@ interface VoteInterface extends EntityInterface
 
     public function setUser(UserInterface $user): void;
 
-    public function setProjectCare(ProjectInterface $projectCare): void;
+    public function getVoteType(): VoteTypeInterface;
 
-    public function getProjectCare(): ProjectInterface;
+    public function setVoteType(VoteTypeInterface $voteType): void;
 
-    public function setProjectGreen(ProjectInterface $projectGreen): void;
+    public function getProject(): ProjectInterface;
 
-    public function getProjectGreen(): ProjectInterface;
-
-    public function setProjectWhole(ProjectInterface $projectWhole): void;
-
-    public function getProjectWhole(): ProjectInterface;
+    public function setProject(ProjectInterface $project): void;
 }

@@ -16,24 +16,20 @@ trait EntityMetaTrait
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @Groups({"list", "option", "detail", "full_detail"})
-     * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var DateTime
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     *
-     * @var DateTime
      */
-    protected $updatedAt;
+    protected DateTime $updatedAt;
 
     public function getId(): int
     {

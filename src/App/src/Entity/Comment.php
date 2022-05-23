@@ -40,9 +40,8 @@ class Comment implements CommentInterface
      * @ORM\Column(name="content", type="text")
      *
      * @Groups({"list", "detail", "full_detail"})
-     * @var string
      */
-    private $content;
+    private string $content;
 
     /**
      * @ORM\ManyToOne(targetEntity="Comment")

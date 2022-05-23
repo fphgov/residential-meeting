@@ -18,7 +18,7 @@ final class MailContentRawHelper implements MailContentRawHelperInterface
 
     public function getCode(): string
     {
-        return 'Custom';
+        return MailContentRawHelperInterface::MAIL_CODE;
     }
 
     public function create(EmailContentModelInterface $emailContentModel, array $variables): self
