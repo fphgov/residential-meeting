@@ -7,6 +7,7 @@ namespace App\Handler\Project;
 use App\Entity\OfflineVote;
 use App\Entity\Project;
 use App\Entity\Vote;
+use App\Entity\WorkflowStateInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Mezzio\Hal\HalResponseFactory;
@@ -14,6 +15,8 @@ use Mezzio\Hal\ResourceGenerator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
+use function in_array;
 
 final class GetHandler implements RequestHandlerInterface
 {
@@ -55,7 +58,17 @@ final class GetHandler implements RequestHandlerInterface
         $project = $result->normalizer(null, ['groups' => 'detail']);
 
         $resource = $this->resourceGenerator->fromArray($project, null);
-        $resource = $resource->withElement('voted', $count);
+
+        if (
+            in_array($project->getWorkflowState()->getId(), [
+                WorkflowStateInterface::STATUS_PRE_COUNCIL
+            ], true)
+        ) {
+            $resource = $resource->withElement('voted', null);
+        } else {
+            $resource = $resource->withElement('voted', $count);
+        }
+
 
         return $this->responseFactory->createResponse($request, $resource);
     }
