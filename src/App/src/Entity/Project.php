@@ -188,12 +188,12 @@ class Project implements ProjectInterface
         $this->campaignLocations = new ArrayCollection();
     }
 
-    public function getProjectType(): ProjectType
+    public function getProjectType(): ?ProjectType
     {
         return $this->projectType;
     }
 
-    public function setProjectType(ProjectType $projectType): void
+    public function setProjectType(?ProjectType $projectType = null): void
     {
         $this->projectType = $projectType;
     }
