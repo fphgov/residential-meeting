@@ -60,7 +60,7 @@ final class GetHandler implements RequestHandlerInterface
         $resource = $this->resourceGenerator->fromArray($project, null);
 
         if (
-            in_array($project->getWorkflowState()->getId(), [
+            in_array($result->getWorkflowState()->getId(), [
                 WorkflowStateInterface::STATUS_PRE_COUNCIL
             ], true)
         ) {
