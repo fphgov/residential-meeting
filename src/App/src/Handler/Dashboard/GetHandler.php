@@ -71,7 +71,7 @@ final class GetHandler implements RequestHandlerInterface
                 'countIdeasPublished' => $countIdeasPublished,
                 'countIdeasRejected'  => $countIdeasRejected,
                 'countUsers'          => $countUsers,
-                'countVotes'          => $countVotes,
+                'countVotes'          => $countVotes / 3,
                 'countOfflineVotes'   => $countOfflineVotes / 3,
             ],
         ]);
