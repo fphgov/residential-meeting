@@ -16,22 +16,20 @@ class VoteRepository extends EntityRepository
     /** @return mixed|int */
     public function numberOfVotes(int $id)
     {
-        // IMPLEMENT ME
+        $qb = $this->createQueryBuilder('v');
 
-        return null;
-        // $qb = $this->createQueryBuilder('v')
-        //            ->select('COUNT(1)')
-        //            ->where('v.projectCare = :id')
-        //            ->orWhere('v.projectGreen = :id')
-        //            ->orWhere('v.projectWhole = :id')
-        //            ->setParameter('id', $id);
+        $qb
+            ->select('COUNT(1)')
+            ->where('v.project = :id')
+            ->setParameter('id', $id)
+        ;
 
-        // try {
-        //     return (int) $qb->getQuery()->getSingleScalarResult();
-        // } catch (Throwable $th) {
-        // }
+        try {
+            return (int) $qb->getQuery()->getSingleScalarResult();
+        } catch (Throwable $th) {
+        }
 
-        // return 0;
+        return 0;
     }
 
     public function checkExistsVoteInCampaign(User $user, Campaign $campaign): bool
