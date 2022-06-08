@@ -113,6 +113,7 @@ class ConfigProvider
                 Service\PostServiceInterface::class           => Service\PostServiceFactory::class,
                 Service\SettingServiceInterface::class        => Service\SettingServiceFactory::class,
                 Service\VoteServiceInterface::class           => Service\VoteServiceFactory::class,
+                Service\VoteValidationServiceInterface::class => Service\VoteValidationServiceFactory::class,
                 Service\IdeaServiceInterface::class           => Service\IdeaServiceFactory::class,
                 Service\IdeaAnswerServiceInterface::class     => Service\IdeaAnswerServiceFactory::class,
                 Service\PhaseServiceInterface::class          => Service\PhaseServiceFactory::class,

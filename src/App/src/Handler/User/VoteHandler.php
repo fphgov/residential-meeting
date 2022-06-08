@@ -6,6 +6,9 @@ namespace App\Handler\User;
 
 use App\Entity\VoteType;
 use App\Exception\DifferentPhaseException;
+use App\Exception\NoExistsAllProjectsException;
+use App\Exception\VoteUserExistsException;
+use App\Exception\MissingVoteTypeAndCampaignCategoriesException;
 use App\Middleware\UserMiddleware;
 use App\Middleware\CampaignMiddleware;
 use App\Service\VoteServiceInterface;
@@ -16,6 +19,7 @@ use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Doctrine\ORM\EntityRepository;
 
 final class VoteHandler implements RequestHandlerInterface
 {
@@ -55,10 +59,22 @@ final class VoteHandler implements RequestHandlerInterface
         $type = $this->em->getReference(VoteType::class, 2);
 
         try {
-            $this->voteService->voting($user, $type, $body);
+            $this->voteService->voting($user, $type, $body['projects']);
+        } catch (NoExistsAllProjectsException $e) {
+            return new JsonResponse([
+                'message' => 'Kiválasztott ötletek közül egy vagy több projekt nem található',
+            ], 422);
         } catch (DifferentPhaseException $e) {
             return new JsonResponse([
                 'message' => 'A szavazás zárva',
+            ], 422);
+        } catch (VoteUserExistsException $e) {
+            return new JsonResponse([
+                'message' => 'Idén már leadtad a szavazatodat',
+            ], 422);
+        } catch (MissingVoteTypeAndCampaignCategoriesException $e) {
+            return new JsonResponse([
+                'message' => 'Nincs minden kategóriában kiválasztott ötlet',
             ], 422);
         } catch (Exception $e) {
             return new JsonResponse([

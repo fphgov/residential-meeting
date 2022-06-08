@@ -22,7 +22,7 @@ class CampaignTheme implements CampaignThemeInterface
     use EntityTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Campaign")
+     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="campaignThemes")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
      *
      * @ignore

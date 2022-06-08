@@ -38,15 +38,18 @@ class VoteRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('v')
                 ->select('COUNT(1)')
-                ->innerJoin(Project::class, 'p', Join::WITH, 'p.id. = v.project')
-                ->innerJoin(Campaign::class, 'c', Join::WITH, 'c.id. = p.campaign')
+                ->innerJoin(Project::class, 'p', Join::WITH, 'p.id = v.project')
+                ->innerJoin(Campaign::class, 'c', Join::WITH, 'c.id = p.campaign')
                 ->where('v.user = :user')
-                ->andWhere('c.id = :campaignId')
+                ->andWhere('c.id = :campaign')
                 ->setParameter('user', $user)
-                ->setParameter('campaignId', $campaign->getId());
+                ->setParameter('campaign', $campaign)
+                ;
+
+        $result = $qb->getQuery()->getSingleScalarResult();
 
         try {
-            return (int) $qb->getQuery()->getSingleScalarResult() > 0;
+            return ((int)$result > 0);
         } catch (Throwable $th) {
         }
 
