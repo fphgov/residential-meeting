@@ -30,7 +30,7 @@ class VoteFilter extends InputFilter
             'validators'  => [
                 new Validator\NotEmpty([
                     'messages' => [
-                        Validator\NotEmpty::IS_EMPTY => 'Kötelező a mező kitöltése',
+                        Validator\NotEmpty::IS_EMPTY => 'Kötelező a projektek kiválasztása',
                         Validator\NotEmpty::INVALID  => 'Hibás mező tipus',
                     ],
                 ]),

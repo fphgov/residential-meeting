@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityRepository;
 
 interface PhaseServiceInterface
 {
+    public function getCurrentPhase(): PhaseInterface;
+
     public function phaseCheck(int $phaseCode): PhaseInterface;
 
     public function getRepository(): EntityRepository;
