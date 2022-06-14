@@ -8,6 +8,7 @@ use App\Entity\CampaignLocation;
 use App\Entity\CampaignTheme;
 use App\Entity\Idea;
 use App\Entity\IdeaInterface;
+use App\Entity\ProjectInterface;
 use App\Entity\Link;
 use App\Entity\Media;
 use App\Entity\PhaseInterface;
@@ -399,5 +400,41 @@ final class IdeaService implements IdeaServiceInterface
         ];
 
         $this->mailService->send('workflow-idea-professional-rejected', $tplData, $idea->getSubmitter());
+    }
+
+    public function sendIdeaWorkflowProjectRejected(IdeaInterface $idea): void
+    {
+        $project = $idea->getProject();
+
+        if ($project !== null) {
+            $tplData = [
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'ideaTitle'        => $idea->getTitle(),
+                'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
+                'projectTitle'     => $project->getTitle(),
+                'projectLink'      => $this->config['app']['url'] . '/projektek/' . $project->getId(),
+            ];
+
+            $this->mailService->send('workflow-project-idea-rejected', $tplData, $idea->getSubmitter());
+        }
+    }
+
+    public function sendIdeaWorkflowVotingListed(IdeaInterface $idea): void
+    {
+        $project = $idea->getProject();
+
+        if ($project !== null) {
+            $tplData = [
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'ideaTitle'        => $idea->getTitle(),
+                'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
+                'projectTitle'     => $project->getTitle(),
+                'projectLink'      => $this->config['app']['url'] . '/projektek/' . $project->getId(),
+            ];
+
+            $this->mailService->send('workflow-project-idea-accepted', $tplData, $idea->getSubmitter());
+        }
     }
 }
