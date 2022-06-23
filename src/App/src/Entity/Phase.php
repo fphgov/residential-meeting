@@ -33,29 +33,19 @@ final class Phase implements PhaseInterface
      */
     private Campaign $campaign;
 
-    /**
-     * @ORM\Column(name="code", type="string", nullable=false)
-     */
+    /** @ORM\Column(name="code", type="string", nullable=false) */
     private string $code;
 
-    /**
-     * @ORM\Column(name="title", type="string", nullable=false)
-     */
+    /** @ORM\Column(name="title", type="string", nullable=false) */
     private string $title;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
+    /** @ORM\Column(name="description", type="text", nullable=false) */
     private string $description = '';
 
-    /**
-     * @ORM\Column(name="start", type="datetime", nullable=false)
-     */
+    /** @ORM\Column(name="start", type="datetime", nullable=false) */
     private DateTime $start;
 
-    /**
-     * @ORM\Column(name="end", type="datetime", nullable=false)
-     */
+    /** @ORM\Column(name="end", type="datetime", nullable=false) */
     private DateTime $end;
 
     public function getId(): int

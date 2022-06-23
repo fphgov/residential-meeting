@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace AppTest\Service;
 
-use App\Entity\User;
-use App\Entity\UserInterface;
-use App\Entity\Project;
 use App\Entity\Phase;
+use App\Entity\Project;
+use App\Entity\User;
 use App\Entity\Vote;
-use App\Entity\VoteType;
-use App\Entity\VoteTypeInterface;
-use App\Entity\WorkflowState;
-use App\Repository\UserRepository;
-use App\Repository\VoteRepository;
-use App\Repository\VoteTypeRepository;
 use App\Repository\PhaseRepository;
 use App\Repository\ProjectRepository;
+use App\Repository\UserRepository;
+use App\Repository\VoteRepository;
 use App\Service\MailService;
 use App\Service\PhaseService;
 use App\Service\VoteService;
@@ -26,11 +21,11 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use DoctrineFixture\CampaignDataLoader;
 use DoctrineFixture\CampaignLocationDataLoader;
 use DoctrineFixture\CampaignThemeDataLoader;
-use DoctrineFixture\PhaseDataLoader;
 use DoctrineFixture\FixtureManager;
 use DoctrineFixture\IdeaDataLoader;
-use DoctrineFixture\TagDataLoader;
+use DoctrineFixture\PhaseDataLoader;
 use DoctrineFixture\ProjectDataLoader;
+use DoctrineFixture\TagDataLoader;
 use DoctrineFixture\UserDataLoader;
 use DoctrineFixture\VoteDataLoader;
 use DoctrineFixture\VoteTypeDataLoader;
@@ -85,7 +80,7 @@ final class VoteServiceTest extends AbstractServiceTest
             'app' => [
                 'municipality' => 'Municipality',
                 'email'        => 'vote-service@localhost.com',
-            ]
+            ],
         ];
 
         $phaseService = $this->createMock(PhaseService::class);

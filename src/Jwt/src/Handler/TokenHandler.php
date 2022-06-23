@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Jwt\Handler;
 
 use App\Entity\User;
-use App\Entity\Vote;
 use App\Model\PBKDF2Password;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +18,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-use function count;
 use function in_array;
 use function strtolower;
 

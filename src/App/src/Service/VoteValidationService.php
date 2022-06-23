@@ -5,27 +5,21 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\CampaignInterface;
-use App\Entity\OfflineVote;
 use App\Entity\PhaseInterface;
 use App\Entity\Project;
-use App\Entity\ProjectInterface;
 use App\Entity\ProjectTypeInterface;
-use App\Entity\UserInterface;
 use App\Entity\Setting;
+use App\Entity\UserInterface;
 use App\Entity\Vote;
-use App\Entity\VoteType;
 use App\Entity\VoteTypeInterface;
-use App\Entity\VoteInterface;
-use App\Exception\VoteUserExistsException;
 use App\Exception\MissingVoteTypeAndCampaignCategoriesException;
-use App\Service\MailServiceInterface;
-use App\Service\PhaseServiceInterface;
-use DateTime;
+use App\Exception\VoteUserExistsException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
 use function array_keys;
-use function array_key_exists;
+use function count;
+use function in_array;
 
 final class VoteValidationService implements VoteValidationServiceInterface
 {
@@ -63,7 +57,7 @@ final class VoteValidationService implements VoteValidationServiceInterface
         }
 
         $voteType = $this->settingRepository->findOneBy([
-            'key' => 'vote-type'
+            'key' => 'vote-type',
         ]);
 
         if (! $voteType) {
@@ -80,8 +74,7 @@ final class VoteValidationService implements VoteValidationServiceInterface
     private function validationNormal(
         UserInterface $user,
         array $projects
-    ): void
-    {
+    ): void {
         $types = [];
         foreach ($projects as $project) {
             $types[$project->getCampaignTheme()->getId() . '-' . $project->getProjectType()->getId()] = $project;
@@ -114,8 +107,7 @@ final class VoteValidationService implements VoteValidationServiceInterface
         UserInterface $user,
         CampaignInterface $campaign,
         array $projects
-    ): void
-    {
+    ): void {
         $types = [];
         foreach ($projects as $project) {
             $types[$project->getCampaignTheme()->getId() . '-' . $project->getProjectType()->getId()] = $project;

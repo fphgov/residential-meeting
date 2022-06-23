@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Handler\Project;
 
-use App\Entity\CampaignTheme;
 use App\Entity\OfflineVote;
 use App\Entity\Project;
 use App\Entity\Vote;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Query\Expr\Join;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

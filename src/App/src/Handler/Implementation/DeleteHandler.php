@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Handler\Implementation;
 
-use App\Entity\Implementation;
-use App\Service\ImplementationService;
 use App\Middleware\UserMiddleware;
+use App\Service\ImplementationService;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;

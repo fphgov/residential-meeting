@@ -33,7 +33,7 @@ final class SettingService implements SettingServiceInterface
         $date = new DateTime();
 
         $setting = $this->getRepository()->findBy([
-            'key' => 'close'
+            'key' => 'close',
         ]);
 
         $hasSettings = $setting instanceof Setting;

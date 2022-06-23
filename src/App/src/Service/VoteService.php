@@ -10,9 +10,9 @@ use App\Entity\Project;
 use App\Entity\ProjectInterface;
 use App\Entity\UserInterface;
 use App\Entity\Vote;
+use App\Entity\VoteInterface;
 use App\Entity\VoteType;
 use App\Entity\VoteTypeInterface;
-use App\Entity\VoteInterface;
 use App\Exception\NoExistsAllProjectsException;
 use App\Service\MailServiceInterface;
 use App\Service\PhaseServiceInterface;
@@ -21,6 +21,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
+use function count;
 use function strtolower;
 
 final class VoteService implements VoteServiceInterface
@@ -79,8 +80,7 @@ final class VoteService implements VoteServiceInterface
         ProjectInterface $project,
         DateTime $date,
         int $type
-    ): VoteInterface
-    {
+    ): VoteInterface {
         $vote = new OfflineVote();
 
         $vote->setUser($user);
@@ -101,8 +101,7 @@ final class VoteService implements VoteServiceInterface
         ProjectInterface $project,
         VoteTypeInterface $voteType,
         DateTime $date
-    ): VoteInterface
-    {
+    ): VoteInterface {
         $vote = new Vote();
 
         $vote->setUser($user);
@@ -128,7 +127,7 @@ final class VoteService implements VoteServiceInterface
         $phase = $this->phaseService->getCurrentPhase();
 
         $dbProjects = $this->projectRepository->findBy([
-            'id' => $projects
+            'id' => $projects,
         ]);
 
         if (count($dbProjects) !== count($projects)) {
@@ -155,9 +154,7 @@ final class VoteService implements VoteServiceInterface
     }
 
     /**
-     * @param UserInterface         $user
      * @param array[]|VoteInterface $votes
-     *
      **/
     private function successVote(UserInterface $user, array $votes): void
     {

@@ -47,9 +47,7 @@ class WorkflowStateExtra implements WorkflowStateExtraInterface
      */
     private string $description;
 
-    /**
-     * @ORM\Column(name="email_text", type="text")
-     */
+    /** @ORM\Column(name="email_text", type="text") */
     private string $emailText;
 
     public function getId(): int

@@ -6,11 +6,11 @@ namespace App\Handler\User;
 
 use App\Entity\VoteType;
 use App\Exception\DifferentPhaseException;
+use App\Exception\MissingVoteTypeAndCampaignCategoriesException;
 use App\Exception\NoExistsAllProjectsException;
 use App\Exception\VoteUserExistsException;
-use App\Exception\MissingVoteTypeAndCampaignCategoriesException;
-use App\Middleware\UserMiddleware;
 use App\Middleware\CampaignMiddleware;
+use App\Middleware\UserMiddleware;
 use App\Service\VoteServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -19,7 +19,6 @@ use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Doctrine\ORM\EntityRepository;
 
 final class VoteHandler implements RequestHandlerInterface
 {

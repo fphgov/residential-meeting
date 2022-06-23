@@ -26,9 +26,7 @@ trait EntityMetaTrait
      */
     protected DateTime $createdAt;
 
-    /**
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     */
+    /** @ORM\Column(name="updated_at", type="datetime", nullable=false) */
     protected DateTime $updatedAt;
 
     public function getId(): int
