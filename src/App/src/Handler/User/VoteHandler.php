@@ -61,23 +61,43 @@ final class VoteHandler implements RequestHandlerInterface
             $this->voteService->voting($user, $type, $body['projects']);
         } catch (NoExistsAllProjectsException $e) {
             return new JsonResponse([
-                'message' => 'Kiválasztott ötletek közül egy vagy több projekt nem található',
+                'errors' => [
+                    'form' => [
+                        'noExistsAllProjects' => 'Kiválasztott ötletek közül egy vagy több projekt nem található',
+                    ]
+                ]
             ], 422);
         } catch (DifferentPhaseException $e) {
             return new JsonResponse([
-                'message' => 'A szavazás zárva',
+                'errors' => [
+                    'form' => [
+                        'voteClosed' => 'A szavazás zárva',
+                    ]
+                ]
             ], 422);
         } catch (VoteUserExistsException $e) {
             return new JsonResponse([
-                'message' => 'Idén már leadtad a szavazatodat',
+                'errors' => [
+                    'form' => [
+                        'youAreVoted' => 'Idén már leadtad a szavazatodat',
+                    ]
+                ]
             ], 422);
         } catch (MissingVoteTypeAndCampaignCategoriesException $e) {
             return new JsonResponse([
-                'message' => 'Nincs minden kategóriában kiválasztott ötlet',
+                'errors' => [
+                    'form' => [
+                        'missingVoteType' => 'Nincs minden kategóriában kiválasztott ötlet',
+                    ]
+                ]
             ], 422);
         } catch (Exception $e) {
             return new JsonResponse([
-                'message' => 'Sikertelen szavazás',
+                'errors' => [
+                    'form' => [
+                        'unsuccessfulVote' => 'Sikertelen szavazás',
+                    ]
+                ]
             ], 400);
         }
 

@@ -178,6 +178,22 @@ final class VoteService implements VoteServiceInterface
         $this->mailService->send('vote-success', $tplData, $user);
     }
 
+    public function getVoteablesProjects(): array
+    {
+        $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
+
+        $campaign = $this->phaseService->getCurrentPhase()->getCampaign();
+
+        $projects = $this->projectRepository->getVoteables($campaign);
+
+        $normalizedProjects = [];
+        foreach ($projects as $project) {
+            $normalizedProjects[] = $project->normalizer(null, ['groups' => 'vote_list']);
+        }
+
+        return $normalizedProjects;
+    }
+
     public function getRepository(): EntityRepository
     {
         return $this->voteRepository;

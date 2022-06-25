@@ -15,7 +15,7 @@ trait EntityMetaTrait
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @Groups({"list", "option", "detail", "full_detail"})
+     * @Groups({"list", "option", "detail", "full_detail", "vote_list"})
      */
     protected int $id;
 

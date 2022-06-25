@@ -33,14 +33,14 @@ class CampaignTheme implements CampaignThemeInterface
     /**
      * @ORM\Column(name="code", type="string")
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail", "vote_list"})
      */
     private string $code;
 
     /**
      * @ORM\Column(name="name", type="string")
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail", "vote_list"})
      */
     private string $name;
 

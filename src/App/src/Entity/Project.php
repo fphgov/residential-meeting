@@ -32,7 +32,7 @@ class Project implements ProjectInterface
      * @ORM\ManyToOne(targetEntity="ProjectType", inversedBy="project")
      * @ORM\JoinColumn(name="project_type_id", referencedColumnName="id", nullable=true)
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail", "vote_list"})
      */
     private ?ProjectType $projectType;
 
@@ -48,7 +48,7 @@ class Project implements ProjectInterface
      * @ORM\ManyToOne(targetEntity="CampaignTheme")
      * @ORM\JoinColumn(name="campaign_theme_id", referencedColumnName="id", nullable=false)
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail", "vote_list"})
      */
     private CampaignTheme $campaignTheme;
 
@@ -117,35 +117,35 @@ class Project implements ProjectInterface
     /**
      * @ORM\Column(name="title", type="string")
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail", "vote_list"})
      */
     private string $title;
 
     /**
      * @ORM\Column(name="description", type="text")
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail", "vote_list"})
      */
     private string $description;
 
     /**
      * @ORM\Column(name="location", type="string")
      *
-     * @Groups({"detail", "full_detail"})
+     * @Groups({"detail", "full_detail", "vote_list"})
      */
     private string $location;
 
     /**
      * @ORM\Column(name="solution", type="text")
      *
-     * @Groups({"detail", "full_detail"})
+     * @Groups({"detail", "full_detail", "vote_list"})
      */
     private string $solution;
 
     /**
      * @ORM\Column(name="cost", type="bigint", options={"unsigned"=true}, nullable=true)
      *
-     * @Groups({"detail", "full_detail"})
+     * @Groups({"detail", "full_detail", "vote_list"})
      * @var string|null
      */
     private $cost;
@@ -167,14 +167,14 @@ class Project implements ProjectInterface
     /**
      * @ORM\Column(name="latitude", type="float", nullable=true)
      *
-     * @Groups({"full_detail"})
+     * @Groups({"full_detail", "vote_list"})
      */
     private ?float $latitude;
 
     /**
      * @ORM\Column(name="longitude", type="float", nullable=true)
      *
-     * @Groups({"full_detail"})
+     * @Groups({"full_detail", "vote_list"})
      */
     private ?float $longitude;
 

@@ -21,7 +21,7 @@ class ProjectType implements ProjectTypeInterface
     /**
      * @ORM\Column(name="title", type="string")
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail", "vote_list"})
      */
     private string $title;
 
