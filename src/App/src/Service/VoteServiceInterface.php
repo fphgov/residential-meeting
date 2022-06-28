@@ -25,4 +25,6 @@ interface VoteServiceInterface
     ): void;
 
     public function getRepository(): EntityRepository;
+
+    public function getVoteablesProjects(?string $rand = null): array;
 }

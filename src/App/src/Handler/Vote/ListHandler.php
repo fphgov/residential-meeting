@@ -24,8 +24,11 @@ final class ListHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $queryParams = $request->getQueryParams();
+        $rand        = $queryParams['rand'] ?? '';
+
         try {
-            $projects = $this->voteService->getVoteablesProjects();
+            $projects = $this->voteService->getVoteablesProjects($rand);
         } catch (DifferentPhaseException $e) {
             return new JsonResponse([
                 'message' => 'A szavazás zárva',
@@ -35,7 +38,7 @@ final class ListHandler implements RequestHandlerInterface
             return new JsonResponse([
                 'message' => 'Nem várt hiba történt',
                 'code'    => 'SERVER_ERROR'
-            ], 422);
+            ], 500);
         }
 
         return new JsonResponse([
