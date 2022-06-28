@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Handler\Vote;
 
 use App\Service\VoteServiceInterface;
+use App\Exception\DifferentPhaseException;
+use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -22,7 +24,19 @@ final class ListHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $projects = $this->voteService->getVoteablesProjects();
+        try {
+            $projects = $this->voteService->getVoteablesProjects();
+        } catch (DifferentPhaseException $e) {
+            return new JsonResponse([
+                'message' => 'A szavazás zárva',
+                'code'    => 'CLOSED'
+            ], 422);
+        } catch (Exception $e) {
+            return new JsonResponse([
+                'message' => 'Nem várt hiba történt',
+                'code'    => 'SERVER_ERROR'
+            ], 422);
+        }
 
         return new JsonResponse([
             'data' => $projects,

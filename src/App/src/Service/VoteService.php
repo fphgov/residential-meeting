@@ -122,9 +122,7 @@ final class VoteService implements VoteServiceInterface
         VoteTypeInterface $voteType,
         array $projects
     ): void {
-        $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
-
-        $phase = $this->phaseService->getCurrentPhase();
+        $phase = $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
 
         $dbProjects = $this->projectRepository->findBy([
             'id' => $projects,
@@ -180,11 +178,9 @@ final class VoteService implements VoteServiceInterface
 
     public function getVoteablesProjects(): array
     {
-        $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
+        $phase = $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
 
-        $campaign = $this->phaseService->getCurrentPhase()->getCampaign();
-
-        $projects = $this->projectRepository->getVoteables($campaign);
+        $projects = $this->projectRepository->getVoteables($phase->getCampaign());
 
         $normalizedProjects = [];
         foreach ($projects as $project) {
