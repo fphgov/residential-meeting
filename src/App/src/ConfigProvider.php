@@ -107,6 +107,7 @@ class ConfigProvider
                 Handler\Mail\AdminListHandler::class          => Handler\Mail\AdminListHandlerFactory::class,
                 Handler\Mail\AdminGetHandler::class           => Handler\Mail\AdminGetHandlerFactory::class,
                 Handler\Mail\AdminModifyHandler::class        => Handler\Mail\AdminModifyHandlerFactory::class,
+                Handler\Phase\CheckHandler::class             => Handler\Phase\CheckHandlerFactory::class,
                 Service\MailQueueServiceInterface::class      => Service\MailQueueServiceFactory::class,
                 Service\MediaServiceInterface::class          => Service\MediaServiceFactory::class,
                 Service\UserServiceInterface::class           => Service\UserServiceFactory::class,
