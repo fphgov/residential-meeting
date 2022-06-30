@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\OfflineVoteRepository")
  * @ORM\Table(name="votes_offline")
  */
-class OfflineVote implements OfflineVoteInterface
+class OfflineVote implements OfflineVoteInterface, VoteInterface
 {
     use EntityMetaTrait;
     use EntityTrait;

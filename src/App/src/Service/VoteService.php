@@ -62,14 +62,16 @@ final class VoteService implements VoteServiceInterface
 
     public function addOfflineVote(
         UserInterface $user,
-        VoteTypeInterface $voteType,
-        ProjectInterface $project,
+        int $projectId,
+        int $type,
         int $voteCount
     ): void {
         $date = new DateTime();
 
+        $project = $this->projectRepository->find($projectId);
+
         for ($i = 0; $i < $voteCount; $i++) {
-            $this->createOfflineVote($user, $project, $date);
+            $this->createOfflineVote($user, $project, $date, $type);
         }
 
         $this->em->flush();

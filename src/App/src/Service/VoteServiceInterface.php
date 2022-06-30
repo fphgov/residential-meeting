@@ -13,8 +13,8 @@ interface VoteServiceInterface
 {
     public function addOfflineVote(
         UserInterface $user,
-        VoteTypeInterface $voteType,
-        ProjectInterface $project,
+        int $projectId,
+        int $type,
         int $voteCount
     ): void;
 
