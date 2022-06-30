@@ -83,7 +83,7 @@ final class StatisticsHandler implements RequestHandlerInterface
         $repository = $this->em->getRepository(Project::class);
 
         $qb = $repository->createQueryBuilder('p')
-            ->select('NEW ProjectStatisticsDTO(p.id, ct.id, ct.name, ct.rgb, p.title, COUNT(votes.id), p.win) as ps')
+            ->select('NEW ProjectStatisticsDTO(p.id, ct.id, ct.name, ct.rgb, p.title, IDENTITY(p.projectType), COUNT(votes.id), p.win) as ps')
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
             ->leftJoin(Vote::class, 'votes', Join::WITH, 'votes.project = p.id')
             ->where('p.campaign = :campaign')
@@ -104,7 +104,7 @@ final class StatisticsHandler implements RequestHandlerInterface
         $repository = $this->em->getRepository(Project::class);
 
         $qb = $repository->createQueryBuilder('p')
-            ->select('NEW ProjectStatisticsDTO(p.id, ct.id, ct.name, ct.rgb, p.title, COUNT(votes.id), p.win) as ps')
+            ->select('NEW ProjectStatisticsDTO(p.id, ct.id, ct.name, ct.rgb, p.title, IDENTITY(p.projectType), COUNT(votes.id), p.win) as ps')
             ->join(CampaignTheme::class, 'ct', Join::WITH, 'ct.id = p.campaignTheme')
             ->leftJoin(OfflineVote::class, 'votes', Join::WITH, 'votes.project = p.id')
             ->where('p.campaign = :campaign')
