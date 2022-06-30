@@ -10,6 +10,11 @@ use App\Entity\VoteTypeInterface;
 
 interface VoteValidationServiceInterface
 {
+    public function checkExistsVote(
+        UserInterface $user,
+        PhaseInterface $phase
+    ): void;
+
     public function validation(
         UserInterface $user,
         PhaseInterface $phase,

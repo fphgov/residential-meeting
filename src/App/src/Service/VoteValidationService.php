@@ -44,17 +44,24 @@ final class VoteValidationService implements VoteValidationServiceInterface
         $this->projectRepository = $this->em->getRepository(Project::class);
     }
 
-    public function validation(
+    public function checkExistsVote(
         UserInterface $user,
-        PhaseInterface $phase,
-        VoteTypeInterface $voteType,
-        array $projects
+        PhaseInterface $phase
     ): void {
         $existsVote = $this->voteRepository->checkExistsVoteInCampaign($user, $phase->getCampaign());
 
         if ($existsVote) {
             throw new VoteUserExistsException('User already voted this campaign');
         }
+    }
+
+    public function validation(
+        UserInterface $user,
+        PhaseInterface $phase,
+        VoteTypeInterface $voteType,
+        array $projects
+    ): void {
+        $this->checkExistsVote($user, $phase);
 
         $voteType = $this->settingRepository->findOneBy([
             'key' => 'vote-type',
