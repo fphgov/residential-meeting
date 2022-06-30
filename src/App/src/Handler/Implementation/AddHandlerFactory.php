@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Handler\Implementation;
 
-use App\Service\ImplementationServiceInterface;
 use App\InputFilter\ImplementationFilter;
+use App\Service\ImplementationServiceInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Psr\Container\ContainerInterface;
 

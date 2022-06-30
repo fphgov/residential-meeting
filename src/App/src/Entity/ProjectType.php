@@ -6,19 +6,8 @@ namespace App\Entity;
 
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\Ignore as ignore;
-
-use function array_slice;
-use function count;
-use function explode;
-use function implode;
-use function min;
-use function strip_tags;
-use function trim;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProjectTypeRepository")
@@ -32,7 +21,7 @@ class ProjectType implements ProjectTypeInterface
     /**
      * @ORM\Column(name="title", type="string")
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail", "vote_list"})
      */
     private string $title;
 

@@ -6,12 +6,13 @@ namespace App\Handler\Idea;
 
 use App\Middleware\UserMiddleware;
 use App\Service\IdeaServiceInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Log\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
+use function array_merge_recursive;
 
 final class AdminSendEmailHandler implements RequestHandlerInterface
 {
@@ -76,7 +77,7 @@ final class AdminSendEmailHandler implements RequestHandlerInterface
 
         return new JsonResponse([
             'data' => [
-                'message' => 'Sikeres importálás, az e-mailek kiküldése megkezdődött'
+                'message' => 'Sikeres importálás, az e-mailek kiküldése megkezdődött',
             ],
         ]);
     }

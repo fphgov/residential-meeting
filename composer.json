@@ -89,7 +89,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "guzzlehttp/guzzle": "^7.3",
+        "guzzlehttp/guzzle": "7.4.5",
         "laminas/laminas-coding-standard": "2.1.x",
         "laminas/laminas-development-mode": "^3.3",
         "mezzio/mezzio-tooling": "^1.3",

@@ -63,6 +63,16 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\User\VoteHandler::class
     ], 'app.api.user.vote');
 
+    $app->get('/app/api/vote/list', [
+        App\Handler\Vote\ListHandler::class
+    ], 'app.api.vote.list');
+
+    $app->get('/app/api/vote/check', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        App\Handler\Vote\CheckHandler::class
+    ], 'app.api.vote.check');
+
     $app->post('/app/api/user/password', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
@@ -138,6 +148,10 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     $app->post('/app/api/geocoding', [
         App\Handler\Tools\GetAddressHandler::class
     ], 'app.api.geocoding');
+
+    $app->get('/app/api/phase/check', [
+        App\Handler\Phase\CheckHandler::class
+    ], 'app.api.phase.check');
 
     // Admin
     if (getenv('NODE_ENV') === 'development') {

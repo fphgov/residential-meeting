@@ -10,9 +10,9 @@ use App\Entity\Project;
 use App\Entity\ProjectInterface;
 use App\Entity\UserInterface;
 use App\Entity\Vote;
+use App\Entity\VoteInterface;
 use App\Entity\VoteType;
 use App\Entity\VoteTypeInterface;
-use App\Entity\VoteInterface;
 use App\Exception\NoExistsAllProjectsException;
 use App\Service\MailServiceInterface;
 use App\Service\PhaseServiceInterface;
@@ -21,6 +21,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
+use function count;
 use function strtolower;
 
 final class VoteService implements VoteServiceInterface
@@ -61,14 +62,16 @@ final class VoteService implements VoteServiceInterface
 
     public function addOfflineVote(
         UserInterface $user,
-        VoteTypeInterface $voteType,
-        ProjectInterface $project,
+        int $projectId,
+        int $type,
         int $voteCount
     ): void {
         $date = new DateTime();
 
+        $project = $this->projectRepository->find($projectId);
+
         for ($i = 0; $i < $voteCount; $i++) {
-            $this->createOfflineVote($user, $project, $date);
+            $this->createOfflineVote($user, $project, $date, $type);
         }
 
         $this->em->flush();
@@ -79,8 +82,7 @@ final class VoteService implements VoteServiceInterface
         ProjectInterface $project,
         DateTime $date,
         int $type
-    ): VoteInterface
-    {
+    ): VoteInterface {
         $vote = new OfflineVote();
 
         $vote->setUser($user);
@@ -101,8 +103,7 @@ final class VoteService implements VoteServiceInterface
         ProjectInterface $project,
         VoteTypeInterface $voteType,
         DateTime $date
-    ): VoteInterface
-    {
+    ): VoteInterface {
         $vote = new Vote();
 
         $vote->setUser($user);
@@ -123,12 +124,10 @@ final class VoteService implements VoteServiceInterface
         VoteTypeInterface $voteType,
         array $projects
     ): void {
-        $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
-
-        $phase = $this->phaseService->getCurrentPhase();
+        $phase = $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
 
         $dbProjects = $this->projectRepository->findBy([
-            'id' => $projects
+            'id' => $projects,
         ]);
 
         if (count($dbProjects) !== count($projects)) {
@@ -155,9 +154,7 @@ final class VoteService implements VoteServiceInterface
     }
 
     /**
-     * @param UserInterface         $user
      * @param array[]|VoteInterface $votes
-     *
      **/
     private function successVote(UserInterface $user, array $votes): void
     {
@@ -179,6 +176,20 @@ final class VoteService implements VoteServiceInterface
         ];
 
         $this->mailService->send('vote-success', $tplData, $user);
+    }
+
+    public function getVoteablesProjects(?string $rand = null): array
+    {
+        $phase = $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
+
+        $projects = $this->projectRepository->getVoteables($phase->getCampaign(), $rand);
+
+        $normalizedProjects = [];
+        foreach ($projects as $project) {
+            $normalizedProjects[] = $project->normalizer(null, ['groups' => 'vote_list']);
+        }
+
+        return $normalizedProjects;
     }
 
     public function getRepository(): EntityRepository

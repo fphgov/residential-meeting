@@ -36,7 +36,7 @@ final class GetHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $entityRepository      = $this->entityManager->getRepository(Project::class);
+        $entityRepository = $this->entityManager->getRepository(Project::class);
 
         $result = $entityRepository->find($request->getAttribute('id'));
 

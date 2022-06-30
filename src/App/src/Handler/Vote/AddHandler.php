@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Handler\Vote;
 
 use App\Entity\OfflineVote;
+use App\Entity\VoteTypeInterface;
 use App\Middleware\UserMiddleware;
 use App\Service\VoteServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,6 +15,8 @@ use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
+use function intval;
 
 final class AddHandler implements RequestHandlerInterface
 {
@@ -49,8 +52,10 @@ final class AddHandler implements RequestHandlerInterface
             ], 422);
         }
 
+        $values = $this->inputFilter->getValues();
+
         try {
-            $this->voteService->addOfflineVote($user, $this->inputFilter->getValues());
+            $this->voteService->addOfflineVote($user, intval($values['project']), 2, intval($values['voteCount']));
         } catch (Exception $e) {
             return new JsonResponse([
                 'errors' => $e->getMessage(),

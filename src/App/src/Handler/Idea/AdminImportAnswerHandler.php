@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Handler\Idea;
 
+use App\Exception\IdeaNotFoundException;
+use App\Exception\WorkflowStateExtraNotFoundException;
+use App\Exception\WorkflowStateNotFoundException;
 use App\Middleware\UserMiddleware;
 use App\Service\IdeaAnswerServiceInterface;
-use App\Model\IdeaAnswerImportModel;
-use App\Exception\IdeaNotFoundException;
-use App\Exception\WorkflowStateNotFoundException;
-use App\Exception\WorkflowStateExtraNotFoundException;
-use Laminas\Log\Logger;
+use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
+use Laminas\Log\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Exception;
 
 use function array_merge_recursive;
 
@@ -82,7 +81,7 @@ final class AdminImportAnswerHandler implements RequestHandlerInterface
 
         return new JsonResponse([
             'data' => [
-                'message' => 'Sikeres importálás'
+                'message' => 'Sikeres importálás',
             ],
         ]);
     }

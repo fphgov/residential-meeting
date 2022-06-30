@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Campaign;
-use App\Entity\User;
 use App\Entity\Project;
+use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Throwable;
@@ -21,8 +21,7 @@ class VoteRepository extends EntityRepository
         $qb
             ->select('COUNT(1)')
             ->where('v.project = :id')
-            ->setParameter('id', $id)
-        ;
+            ->setParameter('id', $id);
 
         try {
             return (int) $qb->getQuery()->getSingleScalarResult();
@@ -41,13 +40,12 @@ class VoteRepository extends EntityRepository
                 ->where('v.user = :user')
                 ->andWhere('c.id = :campaign')
                 ->setParameter('user', $user)
-                ->setParameter('campaign', $campaign)
-                ;
+                ->setParameter('campaign', $campaign);
 
         $result = $qb->getQuery()->getSingleScalarResult();
 
         try {
-            return ((int)$result > 0);
+            return (int) $result > 0;
         } catch (Throwable $th) {
         }
 

@@ -5,27 +5,21 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\CampaignInterface;
-use App\Entity\OfflineVote;
 use App\Entity\PhaseInterface;
 use App\Entity\Project;
-use App\Entity\ProjectInterface;
 use App\Entity\ProjectTypeInterface;
-use App\Entity\UserInterface;
 use App\Entity\Setting;
+use App\Entity\UserInterface;
 use App\Entity\Vote;
-use App\Entity\VoteType;
 use App\Entity\VoteTypeInterface;
-use App\Entity\VoteInterface;
-use App\Exception\VoteUserExistsException;
 use App\Exception\MissingVoteTypeAndCampaignCategoriesException;
-use App\Service\MailServiceInterface;
-use App\Service\PhaseServiceInterface;
-use DateTime;
+use App\Exception\VoteUserExistsException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
 use function array_keys;
-use function array_key_exists;
+use function count;
+use function in_array;
 
 final class VoteValidationService implements VoteValidationServiceInterface
 {
@@ -50,20 +44,27 @@ final class VoteValidationService implements VoteValidationServiceInterface
         $this->projectRepository = $this->em->getRepository(Project::class);
     }
 
-    public function validation(
+    public function checkExistsVote(
         UserInterface $user,
-        PhaseInterface $phase,
-        VoteTypeInterface $voteType,
-        array $projects
+        PhaseInterface $phase
     ): void {
         $existsVote = $this->voteRepository->checkExistsVoteInCampaign($user, $phase->getCampaign());
 
         if ($existsVote) {
             throw new VoteUserExistsException('User already voted this campaign');
         }
+    }
+
+    public function validation(
+        UserInterface $user,
+        PhaseInterface $phase,
+        VoteTypeInterface $voteType,
+        array $projects
+    ): void {
+        $this->checkExistsVote($user, $phase);
 
         $voteType = $this->settingRepository->findOneBy([
-            'key' => 'vote-type'
+            'key' => 'vote-type',
         ]);
 
         if (! $voteType) {
@@ -80,8 +81,7 @@ final class VoteValidationService implements VoteValidationServiceInterface
     private function validationNormal(
         UserInterface $user,
         array $projects
-    ): void
-    {
+    ): void {
         $types = [];
         foreach ($projects as $project) {
             $types[$project->getCampaignTheme()->getId() . '-' . $project->getProjectType()->getId()] = $project;
@@ -114,8 +114,7 @@ final class VoteValidationService implements VoteValidationServiceInterface
         UserInterface $user,
         CampaignInterface $campaign,
         array $projects
-    ): void
-    {
+    ): void {
         $types = [];
         foreach ($projects as $project) {
             $types[$project->getCampaignTheme()->getId() . '-' . $project->getProjectType()->getId()] = $project;

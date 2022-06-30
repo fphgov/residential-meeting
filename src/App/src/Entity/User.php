@@ -90,9 +90,7 @@ class User implements UserInterface
      */
     private string $role = 'user';
 
-    /**
-     * @ORM\Column(name="hash", type="string", unique=true, nullable=true)
-     */
+    /** @ORM\Column(name="hash", type="string", unique=true, nullable=true) */
     private ?string $hash;
 
     /**

@@ -15,7 +15,7 @@ trait EntityMetaTrait
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @Groups({"list", "option", "detail", "full_detail"})
+     * @Groups({"list", "option", "detail", "full_detail", "vote_list"})
      */
     protected int $id;
 
@@ -26,9 +26,7 @@ trait EntityMetaTrait
      */
     protected DateTime $createdAt;
 
-    /**
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     */
+    /** @ORM\Column(name="updated_at", type="datetime", nullable=false) */
     protected DateTime $updatedAt;
 
     public function getId(): int

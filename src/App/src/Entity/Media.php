@@ -44,14 +44,10 @@ class Media implements MediaInterface
      */
     private ?string $type;
 
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     */
+    /** @ORM\Column(name="created_at", type="datetime") */
     protected DateTime $createdAt;
 
-    /**
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
+    /** @ORM\Column(name="updated_at", type="datetime") */
     protected DateTime $updatedAt;
 
     public function getId(): UuidInterface

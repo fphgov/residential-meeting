@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\CampaignInterface;
 use App\Entity\WorkflowStateInterface;
 use Doctrine\ORM\EntityRepository;
 
@@ -59,5 +60,24 @@ final class ProjectRepository extends EntityRepository
         }
 
         return $workflowStates;
+    }
+
+    public function getVoteables(CampaignInterface $campaign, ?string $rand = null): array
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb
+            ->where('p.workflowState = :workflowState')
+            ->andWhere('p.campaign = :campaign')
+            ->setParameters([
+                'workflowState' => WorkflowStateInterface::STATUS_VOTING_LIST,
+                'campaign'      => $campaign,
+            ]);
+
+        if ($rand !== null) {
+            $qb->orderBy('RAND(:rand)');
+            $qb->setParameter('rand', $rand);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }
