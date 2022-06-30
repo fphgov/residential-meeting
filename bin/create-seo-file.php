@@ -54,6 +54,11 @@ foreach ($posts as $post) {
     ];
 }
 
+$ogMetas['/szavazas'] = [
+    'title'       => 'Közösségi költségvetés 2021/2022',
+    'description' => 'Szavazz 2022 legjobb ötleteire!'
+];
+
 $file = dirname(__FILE__, 2) . '/public/seo.json';
 touch($file, time());
 file_put_contents($file, json_encode($ogMetas));
