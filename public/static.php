@@ -31,7 +31,7 @@ class OpenGraph {
         $description = strip_tags($content);
 
         $descriptions = explode(" ", $description);
-        $descriptions = array_slice($descriptions, 0, min(18, count($descriptions) - 1));
+        $descriptions = array_slice($descriptions, 0, max(18, count($descriptions) - 1));
 
         $description  = implode(" ", $descriptions);
         $description .= ' ...';
