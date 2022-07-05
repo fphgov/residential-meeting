@@ -29,7 +29,7 @@ final class ResetPasswordHandler implements RequestHandlerInterface
             $this->userService->resetPassword($body['hash'], $body['password']);
         } catch (Exception $e) {
             return new JsonResponse([
-                'message' => 'Ismeretlen jelszó visszaállító kulcs',
+                'message' => 'Ez a jelszó visszaállító kulcs érvénytelen vagy már nem aktív. Lehet időközben újat kértél?',
             ], 404);
         }
 
