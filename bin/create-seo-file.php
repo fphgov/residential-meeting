@@ -21,7 +21,7 @@ $ogMetas = [];
 $em = $container->get(EntityManagerInterface::class);
 
 $ideaRepository    = $em->getRepository(Entity\Idea::class);
-$postRepository    = $em->getRepository(Entity\Post::class);
+$articleRepository = $em->getRepository(Entity\Article::class);
 $projectRepository = $em->getRepository(Entity\Project::class);
 
 // Ideas
@@ -45,12 +45,12 @@ foreach ($projects as $idea) {
 }
 
 // Posts
-$posts = $postRepository->findAll();
+$articles = $articleRepository->findAll();
 
-foreach ($posts as $post) {
-    $ogMetas['/hirek/' . $post->getSlug()] = [
-        'title'       => $post->getTitle(),
-        'description' => $post->getDescription(),
+foreach ($articles as $article) {
+    $ogMetas['/hirek/' . $article->getSlug()] = [
+        'title'       => $article->getTitle(),
+        'description' => $article->getDescription(),
     ];
 }
 
