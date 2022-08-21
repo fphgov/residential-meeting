@@ -73,7 +73,7 @@ final class ListHandler implements RequestHandlerInterface
             ->join(Campaign::class, 'c', Join::WITH, 'c.id = ct.campaign')
             ->join(WorkflowState::class, 'w', Join::WITH, 'w.id = p.workflowState')
             ->leftJoin('p.tags', 't')
-            ->leftJoin('p.campaignLocations', 'l')
+            ->leftJoin('p.campaignLocations', 'cl')
             ->groupBy('p.id');
 
         if ($rand === '' && is_string($sort) && in_array(strtoupper($sort), ['ASC', 'DESC'], true)) {
@@ -103,8 +103,13 @@ final class ListHandler implements RequestHandlerInterface
             $qb->setParameter('themes', strtoupper($theme));
         }
 
-        if ($location && $location !== 0) {
-            $qb->andWhere('l.id = :location');
+        if ($location && intval($location) && $location !== 0) {
+            $qb->andWhere('cl.id = :location');
+            $qb->setParameter('location', $location);
+        }
+
+        if ($location && is_string($location) && $location !== 0) {
+            $qb->andWhere('cl.code = :location');
             $qb->setParameter('location', $location);
         }
 
