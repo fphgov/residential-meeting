@@ -89,7 +89,11 @@ final class ArticleService implements ArticleServiceInterface
         $date = new DateTime();
 
         $post->setTitle($filteredParams['title']);
-        $post->setSlug($filteredParams['slug']);
+
+        if (isset($filteredParams['slug'])) {
+            $post->setSlug($filteredParams['slug']);
+        }
+
         $post->setDescription($filteredParams['description']);
         $post->setContent($filteredParams['content']);
 

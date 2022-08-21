@@ -57,6 +57,10 @@ final class AdminModifyHandler implements RequestHandlerInterface
 
         $modifiedArticleData = array_merge($article->normalizer(null, ['groups' => 'full_detail']), $body);
 
+        if ($body['slug'] === $article->getSlug()) {
+            $this->inputFilter->remove('slug');
+        }
+
         $this->inputFilter->setData($modifiedArticleData);
 
         if (! $this->inputFilter->isValid()) {
