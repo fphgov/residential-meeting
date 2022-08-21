@@ -27,9 +27,7 @@ class MailQueue implements MailQueueInterface
      */
     private User $user;
 
-    /**
-     * @ORM\Column(name="mail_adapter", type="text")
-     */
+    /** @ORM\Column(name="mail_adapter", type="text") */
     private string $mailAdapter;
 
     public function getUser(): UserInterface

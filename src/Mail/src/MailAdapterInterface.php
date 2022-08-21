@@ -6,11 +6,11 @@ namespace Mail;
 
 use Laminas\Mail\Message;
 use Laminas\Mime\Message as MimeMessage;
-use Mail\Helper\MailContentHelperInterface;
+use Mail\Model\EmailTemplateRenderModelInterface;
 
 interface MailAdapterInterface
 {
-    public function setTemplate(MailContentHelperInterface $mailContent): self;
+    public function setTemplate(EmailTemplateRenderModelInterface $mailContent): self;
 
     public function addPdfAttachment(string $filename, string $stream): self;
 

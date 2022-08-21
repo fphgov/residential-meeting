@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Project;
-use App\Entity\Media;
 use App\Entity\Implementation;
-use App\Entity\ImplementationCategory;
 use App\Entity\ImplementationInterface;
-use App\Entity\ImplementationStatus;
+use App\Entity\Media;
+use App\Entity\Project;
 use App\Entity\UserInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;

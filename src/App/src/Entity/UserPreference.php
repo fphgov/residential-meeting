@@ -23,44 +23,28 @@ class UserPreference implements UserPreferenceInterface
      */
     private User $user;
 
-    /**
-     * @ORM\Column(name="birthyear", type="smallint", nullable=true)
-     */
+    /** @ORM\Column(name="birthyear", type="smallint", nullable=true) */
     private ?int $birthyear;
 
-    /**
-     * @ORM\Column(name="live_in_city", type="boolean")
-     */
+    /** @ORM\Column(name="live_in_city", type="boolean") */
     private bool $liveInCity = false;
 
-    /**
-     * @ORM\Column(name="postal_code", type="text", length=4, nullable=true)
-     */
+    /** @ORM\Column(name="postal_code", type="text", length=4, nullable=true) */
     private ?string $postalCode;
 
-    /**
-     * @ORM\Column(name="hear_about", type="string")
-     */
+    /** @ORM\Column(name="hear_about", type="string") */
     private string $hearAbout;
 
-    /**
-     * @ORM\Column(name="privacy", type="boolean")
-     */
+    /** @ORM\Column(name="privacy", type="boolean") */
     private bool $privacy;
 
-    /**
-     * @ORM\Column(name="prize", type="boolean")
-     */
+    /** @ORM\Column(name="prize", type="boolean") */
     private bool $prize = false;
 
-    /**
-     * @ORM\Column(name="prizeHash", type="string", unique=true, nullable=true)
-     */
+    /** @ORM\Column(name="prizeHash", type="string", unique=true, nullable=true) */
     private ?string $prizeHash;
 
-    /**
-     * @ORM\Column(name="campaignEmail", type="boolean")
-     */
+    /** @ORM\Column(name="campaignEmail", type="boolean") */
     private bool $campaignEmail = false;
 
     public function setUser(User $user): void

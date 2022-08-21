@@ -22,7 +22,7 @@ class CampaignTheme implements CampaignThemeInterface
     use EntityTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Campaign")
+     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="campaignThemes")
      * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", nullable=false)
      *
      * @ignore
@@ -33,14 +33,14 @@ class CampaignTheme implements CampaignThemeInterface
     /**
      * @ORM\Column(name="code", type="string")
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail", "vote_list"})
      */
     private string $code;
 
     /**
      * @ORM\Column(name="name", type="string")
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail", "vote_list"})
      */
     private string $name;
 

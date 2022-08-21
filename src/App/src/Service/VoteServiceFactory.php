@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Service\MailServiceInterface;
 use App\Service\PhaseServiceInterface;
+use App\Service\VoteValidationServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 
@@ -22,7 +23,8 @@ final class VoteServiceFactory
             $config,
             $container->get(EntityManagerInterface::class),
             $container->get(PhaseServiceInterface::class),
-            $container->get(MailServiceInterface::class)
+            $container->get(MailServiceInterface::class),
+            $container->get(VoteValidationServiceInterface::class)
         );
     }
 }

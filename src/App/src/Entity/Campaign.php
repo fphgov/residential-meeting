@@ -30,6 +30,15 @@ class Campaign implements CampaignInterface
     private $ideas;
 
     /**
+     * @ORM\OneToMany(targetEntity="CampaignTheme", mappedBy="campaign")
+     *
+     * @var Collection|CampaignTheme[]
+     *
+     * @Groups({"detail", "full_detail"})
+     */
+    private Collection $campaignThemes;
+
+    /**
      * @ORM\Column(name="title", type="string")
      *
      * @Groups({"list", "detail", "full_detail"})
@@ -52,7 +61,8 @@ class Campaign implements CampaignInterface
 
     public function __construct()
     {
-        $this->ideas = new ArrayCollection();
+        $this->ideas          = new ArrayCollection();
+        $this->campaignThemes = new ArrayCollection();
     }
 
     public function getIdeas(): array
@@ -68,6 +78,21 @@ class Campaign implements CampaignInterface
     public function getIdeaCollection(): Collection
     {
         return $this->ideas;
+    }
+
+    public function getCampaignThemes(): array
+    {
+        $campaignThemes = [];
+        foreach ($this->campaignThemes->getValues() as $campaignTheme) {
+            $campaignThemes[] = $campaignTheme->getId();
+        }
+
+        return $campaignThemes;
+    }
+
+    public function getCampaignThemeCollection(): Collection
+    {
+        return $this->campaignThemes;
     }
 
     public function setTitle(string $title): void

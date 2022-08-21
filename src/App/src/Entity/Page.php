@@ -18,9 +18,7 @@ class Page implements PageInterface
     use EntityMetaTrait;
     use EntityTrait;
 
-    /**
-     * @ORM\Column(name="status", type="string")
-     */
+    /** @ORM\Column(name="status", type="string") */
     private string $status;
 
     /**

@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Entity\Idea;
-use App\Service\IdeaServiceInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Reader\IReader;
 use Psr\Http\Message\StreamInterface;
 
 final class IdeaAnswerImportModel implements ImportModelInterface

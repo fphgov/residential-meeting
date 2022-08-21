@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Idea;
-use App\Entity\IdeaInterface;
 use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateExtra;
+use App\Exception\IdeaNotFoundException;
+use App\Exception\WorkflowStateExtraNotFoundException;
+use App\Exception\WorkflowStateNotFoundException;
 use App\Model\IdeaAnswerImportModel;
 use App\Model\IdeaAnswerModel;
-use App\Exception\IdeaNotFoundException;
-use App\Exception\WorkflowStateNotFoundException;
-use App\Exception\WorkflowStateExtraNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Psr\Http\Message\StreamInterface;
@@ -27,7 +26,7 @@ final class IdeaAnswerService implements IdeaAnswerServiceInterface
 
     public function __construct(
         EntityManagerInterface $em
-    ){
+    ) {
         $this->em                           = $em;
         $this->ideaRepository               = $this->em->getRepository(Idea::class);
         $this->workflowStateRepository      = $this->em->getRepository(WorkflowState::class);

@@ -30,8 +30,7 @@ class ImplementationFilter extends InputFilter
         $this->add([
             'name'        => 'project',
             'allow_empty' => false,
-            'validators'  => [
-            ],
+            'validators'  => [],
             'filters'     => [
                 new Filter\StringTrim(),
                 new Filter\StripTags(),
@@ -41,8 +40,7 @@ class ImplementationFilter extends InputFilter
         $this->add([
             'name'        => 'content',
             'allow_empty' => false,
-            'validators'  => [
-            ],
+            'validators'  => [],
             'filters'     => [
                 new Filter\StringTrim(),
                 new Filter\StripTags(),

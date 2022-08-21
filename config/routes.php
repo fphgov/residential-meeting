@@ -63,6 +63,16 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         App\Handler\User\VoteHandler::class
     ], 'app.api.user.vote');
 
+    $app->get('/app/api/vote/list', [
+        App\Handler\Vote\ListHandler::class
+    ], 'app.api.vote.list');
+
+    $app->get('/app/api/vote/check', [
+        Jwt\Handler\JwtAuthMiddleware::class,
+        App\Middleware\UserMiddleware::class,
+        App\Handler\Vote\CheckHandler::class
+    ], 'app.api.vote.check');
+
     $app->post('/app/api/user/password', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
@@ -128,16 +138,20 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
     ], 'app.api.page.show');
 
     $app->get('/app/api/post', [
-        App\Handler\Post\GetAllHandler::class
-    ], 'app.api.post.all');
+        App\Handler\Article\GetAllHandler::class
+    ], 'app.api.article.all');
 
     $app->get('/app/api/post/{slug}', [
-        App\Handler\Post\GetHandler::class
-    ], 'app.api.post.show');
+        App\Handler\Article\GetHandler::class
+    ], 'app.api.article.show');
 
     $app->post('/app/api/geocoding', [
         App\Handler\Tools\GetAddressHandler::class
     ], 'app.api.geocoding');
+
+    $app->get('/app/api/phase/check', [
+        App\Handler\Phase\CheckHandler::class
+    ], 'app.api.phase.check');
 
     // Admin
     if (getenv('NODE_ENV') === 'development') {
@@ -217,50 +231,50 @@ return static function (Application $app, MiddlewareFactory $factory, ContainerI
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
         \Mezzio\Authorization\AuthorizationMiddleware::class,
-        App\Handler\Post\AdminListHandler::class
-    ], 'admin.api.post.list');
+        App\Handler\Article\AdminListHandler::class
+    ], 'admin.api.article.list');
 
     $app->get('/admin/api/posts/{id:\d+}', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
         \Mezzio\Authorization\AuthorizationMiddleware::class,
-        App\Handler\Post\AdminGetHandler::class
-    ], 'admin.api.post.get');
+        App\Handler\Article\AdminGetHandler::class
+    ], 'admin.api.article.get');
 
     $app->post('/admin/api/posts/{id:\d+}', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
         \Mezzio\Authorization\AuthorizationMiddleware::class,
-        App\Handler\Post\AdminModifyHandler::class
-    ], 'admin.api.post.modify');
+        App\Handler\Article\AdminModifyHandler::class
+    ], 'admin.api.article.modify');
 
     $app->post('/admin/api/posts/new', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
         \Mezzio\Authorization\AuthorizationMiddleware::class,
-        App\Handler\Post\AdminAddHandler::class
-    ], 'admin.api.post.new');
+        App\Handler\Article\AdminAddHandler::class
+    ], 'admin.api.article.new');
 
     $app->delete('/admin/api/posts/{id:\d+}', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
         \Mezzio\Authorization\AuthorizationMiddleware::class,
-        App\Handler\Post\AdminDeleteHandler::class
-    ], 'admin.api.post.delete');
+        App\Handler\Article\AdminDeleteHandler::class
+    ], 'admin.api.article.delete');
 
     $app->get('/admin/api/post/status', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
         \Mezzio\Authorization\AuthorizationMiddleware::class,
-        App\Handler\Post\GetStatusHandler::class
-    ], 'admin.api.post.status.list');
+        App\Handler\Article\GetStatusHandler::class
+    ], 'admin.api.article.status.list');
 
     $app->get('/admin/api/post/category', [
         Jwt\Handler\JwtAuthMiddleware::class,
         App\Middleware\UserMiddleware::class,
         \Mezzio\Authorization\AuthorizationMiddleware::class,
-        App\Handler\Post\GetCategoryHandler::class
-    ], 'admin.api.post.category.list');
+        App\Handler\Article\GetCategoryHandler::class
+    ], 'admin.api.article.category.list');
 
     $app->post('/admin/api/ideas', [
         Jwt\Handler\JwtAuthMiddleware::class,

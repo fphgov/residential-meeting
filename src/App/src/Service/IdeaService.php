@@ -15,21 +15,21 @@ use App\Entity\UserInterface;
 use App\Entity\WorkflowState;
 use App\Entity\WorkflowStateExtra;
 use App\Entity\WorkflowStateInterface;
-use App\Model\IdeaEmailImportModel;
-use App\Model\IdeaEmailModel;
-use App\Model\IdeaEmailModelInterface;
 use App\Exception\IdeaNotFoundException;
 use App\Exception\NoHasPhaseCategoryException;
 use App\Exception\NotPossibleSubmitIdeaWithAdminAccountException;
-use App\Exception\WorkflowStateNotFoundException;
 use App\Exception\WorkflowStateExtraNotFoundException;
+use App\Exception\WorkflowStateNotFoundException;
+use App\Model\IdeaEmailImportModel;
+use App\Model\IdeaEmailModel;
+use App\Model\IdeaEmailModelInterface;
 use App\Service\MailServiceInterface;
 use App\Service\PhaseServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
 
 use function basename;
 use function in_array;
@@ -399,5 +399,41 @@ final class IdeaService implements IdeaServiceInterface
         ];
 
         $this->mailService->send('workflow-idea-professional-rejected', $tplData, $idea->getSubmitter());
+    }
+
+    public function sendIdeaWorkflowProjectRejected(IdeaInterface $idea): void
+    {
+        $project = $idea->getProject();
+
+        if ($project !== null) {
+            $tplData = [
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'ideaTitle'        => $idea->getTitle(),
+                'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
+                'projectTitle'     => $project->getTitle(),
+                'projectLink'      => $this->config['app']['url'] . '/projektek/' . $project->getId(),
+            ];
+
+            $this->mailService->send('workflow-project-idea-rejected', $tplData, $idea->getSubmitter());
+        }
+    }
+
+    public function sendIdeaWorkflowVotingListed(IdeaInterface $idea): void
+    {
+        $project = $idea->getProject();
+
+        if ($project !== null) {
+            $tplData = [
+                'infoMunicipality' => $this->config['app']['municipality'],
+                'infoEmail'        => $this->config['app']['email'],
+                'ideaTitle'        => $idea->getTitle(),
+                'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
+                'projectTitle'     => $project->getTitle(),
+                'projectLink'      => $this->config['app']['url'] . '/projektek/' . $project->getId(),
+            ];
+
+            $this->mailService->send('workflow-project-idea-accepted', $tplData, $idea->getSubmitter());
+        }
     }
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Helper;
 
-use Mail\Model\EmailContentModelInterface;
 use Mail\Helper\MailContentRawHelperInterface;
+use Mail\Model\EmailContentModelInterface;
 use Mustache_Engine;
 
 final class MailContentRawHelper implements MailContentRawHelperInterface

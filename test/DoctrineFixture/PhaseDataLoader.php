@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace DoctrineFixture;
 
 use App\Entity\Phase;
-use DateTime;
 use DateInterval;
+use DateTime;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;

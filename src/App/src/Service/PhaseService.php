@@ -28,13 +28,20 @@ class PhaseService implements PhaseServiceInterface
         $this->phaseRepository = $this->em->getRepository(Phase::class);
     }
 
-    public function phaseCheck(int $phaseCode): PhaseInterface
+    public function getCurrentPhase(): PhaseInterface
     {
         $phase = $this->phaseRepository->getCurrentPhase();
 
         if (! $phase instanceof PhaseInterface) {
             throw new NoHasPhaseException();
         }
+
+        return $phase;
+    }
+
+    public function phaseCheck(int $phaseCode): PhaseInterface
+    {
+        $phase = $this->getCurrentPhase();
 
         if (! isset(PhaseInterface::PHASES[$phaseCode])) {
             throw new InvalidPhaseException((string) $phaseCode);
