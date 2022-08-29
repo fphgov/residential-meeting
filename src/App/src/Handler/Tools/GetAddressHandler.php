@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App\Handler\Tools;
 
-use App\Service\PostalClientServiceInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use FphGov\Arcgis\Service\ArcgisServiceInterface;
 
 final class GetAddressHandler implements RequestHandlerInterface
 {
-    /** @var PostalClientServiceInterface */
-    private $postalClientService;
+    /** @var ArcgisServiceInterface */
+    private $acrgisService;
 
     public function __construct(
-        PostalClientServiceInterface $postalClientService
+        ArcgisServiceInterface $acrgisService
     ) {
-        $this->postalClientService = $postalClientService;
+        $this->acrgisService = $acrgisService;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -29,7 +29,7 @@ final class GetAddressHandler implements RequestHandlerInterface
             return new JsonResponse([], 204);
         }
 
-        $results = $this->postalClientService->getAddress($body['address']);
+        $results = $this->acrgisService->findAddress($body['address']);
 
         return new JsonResponse([
             'data' => $results,

@@ -1,4 +1,4 @@
-FROM php:7-fpm-alpine
+FROM php:8.1-fpm-alpine
 
 # Locale
 ENV LANG "C.UTF-8"
@@ -47,25 +47,6 @@ RUN apk add --no-cache cmake freetype libpng libjpeg-turbo freetype-dev libpng-d
   docker-php-ext-configure gd && \
   NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
   docker-php-ext-install -j${NPROC} gd
-
-# Install libpostal
-RUN mkdir /datadir
-RUN git clone https://github.com/openvenues/libpostal && \
-    cd libpostal && \
-    ./bootstrap.sh && \
-    ./configure --datadir=/datadir --disable-dependency-tracking && \
-    make && \
-    make install
-
-# Install php-postal
-RUN git clone https://github.com/openvenues/php-postal && \
-    cd php-postal && \
-    phpize && \
-    ./configure && \
-    make && \
-    make install
-
-RUN pecl install -D 'enable-sockets="no" enable-openssl="no" enable-http2="no" enable-mysqlnd="no" enable-swoole-json="no" enable-swoole-curl="no" enable-cares="no"' openswoole
 
 # Install Xdebug
 RUN apk add --no-cache $PHPIZE_DEPS && pecl install xdebug; \
