@@ -34,8 +34,8 @@ final class UserRepository extends EntityRepository
     }
 
     public function getPrizeNotificationList(
-        ?int $limit = null,
         string $emailName,
+        ?int $limit = null,
         bool $hasVote = true
     ): array {
         $qb = $this->getNotificationQuery($emailName);

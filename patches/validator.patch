@@ -1,4 +1,3 @@
-diff --git a/src/File/Count.php b/src/File/Count.php
 index 1f8ee096..fc210ced 100644
 --- a/src/File/Count.php
 +++ b/src/File/Count.php
@@ -55,23 +54,18 @@ index 1f8ee096..fc210ced 100644
              $value = $file['destination'] . DIRECTORY_SEPARATOR . $file['name'];
          }
 
-diff --git a/test/File/CountTest.php b/test/File/CountTest.php
-index 35cc469e..7152ed78 100644
+index 06a370e6..f699a32c 100644
 --- a/test/File/CountTest.php
 +++ b/test/File/CountTest.php
-@@ -5,8 +5,11 @@ namespace LaminasTest\Validator\File;
+@@ -7,6 +7,7 @@ namespace LaminasTest\Validator\File;
  use Laminas\Validator\Exception\InvalidArgumentException;
  use Laminas\Validator\File;
  use PHPUnit\Framework\TestCase;
 +use Psr\Http\Message\UploadedFileInterface;
  use ReflectionClass;
 
-+use function basename;
-+
  /**
-  * @group      Laminas_Validator
-  */
-@@ -233,4 +236,17 @@ class CountTest extends TestCase
+@@ -235,4 +236,17 @@ class CountTest extends TestCase
          $this->assertSame($min, $validator->getMin());
          $this->assertSame($max, $validator->getMax());
      }

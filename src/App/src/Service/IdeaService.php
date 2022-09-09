@@ -329,6 +329,11 @@ final class IdeaService implements IdeaServiceInterface
             'ideaLink'         => $this->config['app']['url'] . '/otletek/' . $idea->getId(),
         ];
 
+        if ($idea->getProject()) {
+            $tplData['projectTitle'] = $idea->getProject()->getTitle();
+            $tplData['projectLink']  = $this->config['app']['url'] . '/projektek/' . $idea->getProject()->getId();
+        }
+
         $this->mailService->sendRaw($ideaEmailModel->getEmailContent(), $tplData, $idea->getSubmitter());
     }
 

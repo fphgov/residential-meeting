@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handler\Project;
 
+use App\Entity\Campaign;
 use App\Entity\OfflineVote;
 use App\Entity\Project;
 use Doctrine\ORM\EntityManager;
@@ -25,15 +26,18 @@ final class ListAdminHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $campaignRepository    = $this->em->getRepository(Campaign::class);
         $projectRepository     = $this->em->getRepository(Project::class);
         $offlineVoteRepository = $this->em->getRepository(OfflineVote::class);
 
+        $campaigns = $campaignRepository->getForSelection();
         $projects = $projectRepository->getForSelection();
         $stats    = $offlineVoteRepository->getStatistics();
 
         return new JsonResponse([
-            'projects' => $projects,
-            'stats'    => $stats,
+            'campaigns' => $campaigns,
+            'projects'  => $projects,
+            'stats'     => $stats,
         ]);
     }
 }

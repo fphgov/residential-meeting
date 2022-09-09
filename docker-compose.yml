@@ -63,6 +63,13 @@ services:
       - 1025:1025 # smtp server
       - 8025:8025 # web ui
 
+  libpostal:
+    image: fphgov/libpostal:latest
+    environment:
+      - LISTEN_PORT=9501
+    expose:
+      - 9501
+
 networks:
   default:
     driver: bridge

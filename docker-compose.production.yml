@@ -57,6 +57,13 @@ services:
       - pdb
       - webapp
 
+  libpostal:
+    image: fphgov/libpostal:latest
+    environment:
+      - LISTEN_PORT=9501
+    expose:
+      - 9501
+
 networks:
   proxy:
     external:

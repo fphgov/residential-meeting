@@ -18,10 +18,11 @@ final class ProjectRepository extends EntityRepository
         foreach ($filteredProjects as $project) {
             if (! isset($selectables[$project->getCampaignTheme()->getId()])) {
                 $selectables[$project->getCampaignTheme()->getId()] = [
-                    'id'    => $project->getCampaignTheme()->getId(),
-                    'name'  => $project->getCampaignTheme()->getName(),
-                    'code'  => $project->getCampaignTheme()->getCode(),
-                    'elems' => [],
+                    'id'       => $project->getCampaignTheme()->getId(),
+                    'name'     => $project->getCampaignTheme()->getName(),
+                    'code'     => $project->getCampaignTheme()->getCode(),
+                    'campaign' => $project->getCampaign()->getId(),
+                    'elems'    => [],
                 ];
             }
 
