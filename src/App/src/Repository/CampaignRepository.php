@@ -20,4 +20,19 @@ final class CampaignRepository extends EntityRepository
 
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    public function getForSelection(): array
+    {
+        $filteredProjects = $this->findAll();
+
+        $selectables = [];
+        foreach ($filteredProjects as $project) {
+            $selectables[] = [
+                'id'   => $project->getId(),
+                'name' => $project->getTitle(),
+            ];
+        }
+
+        return $selectables;
+    }
 }
