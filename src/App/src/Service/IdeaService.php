@@ -331,7 +331,7 @@ final class IdeaService implements IdeaServiceInterface
 
         if ($idea->getProject()) {
             $tplData['projectTitle'] = $idea->getProject()->getTitle();
-            $tplData['projectLink'] = $this->config['app']['url'] . '/projektek/' . $idea->getProject();
+            $tplData['projectLink']  = $this->config['app']['url'] . '/projektek/' . $idea->getProject()->getId();
         }
 
         $this->mailService->sendRaw($ideaEmailModel->getEmailContent(), $tplData, $idea->getSubmitter());
