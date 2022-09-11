@@ -7,9 +7,9 @@ services:
     command: --explicit_defaults_for_timestamp --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     env_file: .env
     expose:
-      - 33062
+      - 33063
     ports:
-      - 33062:3306
+      - 33063:3306
     volumes:
       - ./docker/data/mysql:/var/lib/mysql
       - ./docker/config/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
@@ -42,7 +42,7 @@ services:
       - proxy
 
   nginx:
-    image: nginx:stable-alpine
+    image: fphgov/nginx
     container_name: participatory_nginx
     networks:
       - proxy
