@@ -69,7 +69,13 @@ final class StatisticsHandler implements RequestHandlerInterface
             $result[] = $tmpDto;
         }
 
-        usort($result, fn($a, $b) => $a->getVoted() < $b->getVoted());
+        usort($result, function($a, $b): int {
+            if ($a->getVoted() == $b->getVoted()) {
+                return 0;
+            }
+
+            return $a->getVoted() < $b->getVoted() ? 1 : -1;
+        });
 
         return new JsonResponse([
             '_embedded' => [
