@@ -99,7 +99,11 @@ final class StatisticsHandler implements RequestHandlerInterface
             ->orderBy('p.win', 'DESC')
             ->setParameters([
                 'campaign'      => $campaign,
-                'workflowState' => WorkflowStateInterface::STATUS_VOTING_LIST,
+                'workflowState' => [
+                    WorkflowStateInterface::STATUS_VOTING_LIST,
+                    WorkflowStateInterface::STATUS_UNDER_CONSTRUCTION,
+                    WorkflowStateInterface::STATUS_NOT_VOTED,
+                ],
             ]);
 
         return $qb->getQuery()->getResult();
@@ -120,7 +124,11 @@ final class StatisticsHandler implements RequestHandlerInterface
             ->orderBy('p.win', 'DESC')
             ->setParameters([
                 'campaign'      => $campaign,
-                'workflowState' => WorkflowStateInterface::STATUS_VOTING_LIST,
+                'workflowState' => [
+                    WorkflowStateInterface::STATUS_VOTING_LIST,
+                    WorkflowStateInterface::STATUS_UNDER_CONSTRUCTION,
+                    WorkflowStateInterface::STATUS_NOT_VOTED,
+                ],
             ]);
 
         return $qb->getQuery()->getResult();
