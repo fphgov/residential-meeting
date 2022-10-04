@@ -11,6 +11,8 @@ interface UserServiceInterface
 {
     public function activate(string $hash): void;
 
+    public function confirmation(array $filteredData, string $hash): void;
+
     public function prizeActivate(string $prizeHash): void;
 
     public function resetPassword(string $hash, string $password): void;

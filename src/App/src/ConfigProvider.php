@@ -54,6 +54,7 @@ class ConfigProvider
                 Handler\User\ListHandler::class               => Handler\User\ListHandlerFactory::class,
                 Handler\User\GetHandler::class                => Handler\User\GetHandlerFactory::class,
                 Handler\User\ActivateHandler::class           => Handler\User\ActivateHandlerFactory::class,
+                Handler\User\ConfirmationHandler::class       => Handler\User\ConfirmationHandlerFactory::class,
                 Handler\User\ForgotPasswordHandler::class     => Handler\User\ForgotPasswordHandlerFactory::class,
                 Handler\User\ResetPasswordHandler::class      => Handler\User\ResetPasswordHandlerFactory::class,
                 Handler\User\RegistrationHandler::class       => Handler\User\RegistrationHandlerFactory::class,
@@ -132,15 +133,16 @@ class ConfigProvider
     {
         return [
             'factories' => [
-                InputFilter\AdminIdeaInputFilter::class    => InputFilter\AdminIdeaInputFilterFactory::class,
-                InputFilter\AdminProjectInputFilter::class => InputFilter\AdminProjectInputFilterFactory::class,
-                InputFilter\UserRegistrationFilter::class  => InputFilter\UserRegistrationFilterFactory::class,
-                InputFilter\IdeaInputFilter::class         => InputFilter\IdeaInputFilterFactory::class,
-                InputFilter\ImplementationFilter::class    => InputFilter\ImplementationFilterFactory::class,
-                InputFilter\OfflineVoteFilter::class       => InputFilter\OfflineVoteFilterFactory::class,
-                InputFilter\ProjectInputFilter::class      => InputFilter\ProjectInputFilter::class,
-                InputFilter\ArticleInputFilter::class      => InputFilter\ArticleInputFilterFactory::class,
-                InputFilter\VoteFilter::class              => InputFilter\VoteFilterFactory::class,
+                InputFilter\AdminIdeaInputFilter::class        => InputFilter\AdminIdeaInputFilterFactory::class,
+                InputFilter\AdminProjectInputFilter::class     => InputFilter\AdminProjectInputFilterFactory::class,
+                InputFilter\UserRegistrationFilter::class      => InputFilter\UserRegistrationFilterFactory::class,
+                InputFilter\IdeaInputFilter::class             => InputFilter\IdeaInputFilterFactory::class,
+                InputFilter\ImplementationFilter::class        => InputFilter\ImplementationFilterFactory::class,
+                InputFilter\OfflineVoteFilter::class           => InputFilter\OfflineVoteFilterFactory::class,
+                InputFilter\ProjectInputFilter::class          => InputFilter\ProjectInputFilter::class,
+                InputFilter\ArticleInputFilter::class          => InputFilter\ArticleInputFilterFactory::class,
+                InputFilter\VoteFilter::class                  => InputFilter\VoteFilterFactory::class,
+                InputFilter\ProfilActivationInputFilter::class => InputFilter\ProfilActivationInputFilterFactory::class,
             ],
         ];
     }

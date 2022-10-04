@@ -11,6 +11,7 @@ use Mail\MailAdapterInterface;
 
 use function serialize;
 use function unserialize;
+use function stream_get_contents;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MailQueueRepository")
@@ -27,8 +28,10 @@ class MailQueue implements MailQueueInterface
      */
     private User $user;
 
-    /** @ORM\Column(name="mail_adapter", type="blob") */
-    /** @var resource|null */
+    /**
+     * @ORM\Column(name="mail_adapter", type="blob")
+     * @var resource|null
+     */
     private $mailAdapter;
 
     public function getUser(): UserInterface

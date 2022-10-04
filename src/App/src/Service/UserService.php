@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\MailLog;
+use App\Entity\Newsletter;
 use App\Entity\User;
 use App\Entity\UserInterface;
 use App\Entity\UserPreference;
@@ -72,6 +73,39 @@ final class UserService implements UserServiceInterface
 
         $user->setHash(null);
         $user->setActive(true);
+        $user->setUpdatedAt(new DateTime());
+
+        $this->em->flush();
+    }
+
+    public function confirmation(array $filteredData, string $hash): void
+    {
+        $user = $this->userRepository->findOneBy([
+            'hash' => $hash,
+        ]);
+
+        if (! $user instanceof UserInterface) {
+            throw new UserNotFoundException($hash);
+        }
+
+        if ($filteredData['profile_save'] === 'true') {
+            $user->setHash(null);
+            $user->setActive(true);
+        }
+
+        if ($filteredData['newsletter'] === 'true') {
+            $date = new DateTime();
+
+            $newsletter = new Newsletter();
+            $newsletter->setEmail($user->getEmail());
+            $newsletter->setFirstname($user->getFirstname());
+            $newsletter->setLastname($user->getLastname());
+            $newsletter->setCreatedAt($date);
+            $newsletter->setUpdatedAt($date);
+
+            $this->em->persist($newsletter);
+        }
+
         $user->setUpdatedAt(new DateTime());
 
         $this->em->flush();
