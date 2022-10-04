@@ -6,7 +6,7 @@ namespace App\Handler\User;
 
 use App\InputFilter\ProfilActivationInputFilter;
 use App\Service\UserServiceInterface;
-use App\Entity\Entity;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Psr\Container\ContainerInterface;
@@ -24,7 +24,7 @@ final class ConfirmationHandlerFactory
         return new ConfirmationHandler(
             $container->get(UserServiceInterface::class),
             $inputFilter,
-            $em->getRepository(Entity\User::class)
+            $em->getRepository(User::class)
         );
     }
 }
