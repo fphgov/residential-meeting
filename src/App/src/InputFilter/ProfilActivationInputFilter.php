@@ -83,6 +83,24 @@ class ProfilActivationInputFilter extends InputFilter
                         return $value === true || $value === "true" || $value === "on";
                     },
                 ]),
+                new Validator\Callback([
+                    'messages' => [
+                        Validator\Callback::INVALID_VALUE    => 'Köszönjük, hogy elfogadod az adatkezlési nyilatkozatot. Azonban el kell fogadnod a fiók megőrzését és/vagy fel kell iratkozni hírlevél. Ha egyiket sem szeretnéd, az e-mailben jelzett határidővel megszüntetjük a fiókodat.',
+                        Validator\Callback::INVALID_CALLBACK => 'Ismeretlen hiba',
+                    ],
+                    'callback' => function ($value, $context = []) {
+                        if (
+                            $value === "true" && (
+                                $context['profile_save'] === 'false' &&
+                                $context['newsletter'] === 'false'
+                            )
+                        ) {
+                            return false;
+                        }
+
+                        return true;
+                    }
+                ]),
             ],
             'filters'     => [
                 new Filter\StringTrim(),
