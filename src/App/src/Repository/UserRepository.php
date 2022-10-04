@@ -84,11 +84,11 @@ final class UserRepository extends EntityRepository
 
     public function getUserByHash(string $hash): UserInterface
     {
-        $user = $this->userRepository->findOneBy([
+        $user = $this->findOneBy([
             'hash' => $hash,
         ]);
 
-        if (!$user instanceof UserInterface) {
+        if (! $user instanceof UserInterface) {
             throw new UserNotFoundException($hash);
         }
 
