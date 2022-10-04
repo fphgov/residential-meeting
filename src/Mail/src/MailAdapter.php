@@ -12,11 +12,14 @@ use Laminas\Mime\Mime;
 use Laminas\Mime\Part as MimePart;
 use Mail\Entity\MailInterface;
 use Mail\Model\EmailTemplateRenderModelInterface;
+use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 use Throwable;
 
 use function error_log;
 use function is_array;
 use function uniqid;
+use function str_replace;
+use function file_get_contents;
 
 class MailAdapter implements MailAdapterInterface
 {
@@ -31,6 +34,12 @@ class MailAdapter implements MailAdapterInterface
 
     /** @var MimeMessage */
     private $content;
+
+    /** @var string */
+    private $layout;
+
+    /** @var string */
+    private $css;
 
     /** @var string */
     private $messageId = '';
@@ -64,6 +73,19 @@ class MailAdapter implements MailAdapterInterface
         $this->content->addPart($bodyText);
 
         $html = $mailContent->render(MailInterface::FORMAT_HTML);
+
+        if ($this->layout) {
+            $html = str_replace(self::LAYOUT_BODY, $html, $this->layout);
+
+            if ($this->css) {
+                $cssToInlineStyles = new CssToInlineStyles();
+
+                $html = $cssToInlineStyles->convert(
+                    $html,
+                    $this->css
+                );
+            }
+        }
 
         $bodyHtml           = new MimePart($html);
         $bodyHtml->type     = Mime::TYPE_HTML;
@@ -101,6 +123,36 @@ class MailAdapter implements MailAdapterInterface
         if ($this->content instanceof MimeMessage) {
             $this->content->addPart($ics);
         }
+
+        return $this;
+    }
+
+    public function addImage(string $filename, string $path, string $type = 'image/png'): self
+    {
+        $image              = new MimePart(file_get_contents($path));
+        $image->id          = $filename;
+        $image->type        = $type;
+        $image->filename    = $filename;
+        $image->disposition = Mime::DISPOSITION_INLINE;
+        $image->encoding    = Mime::ENCODING_BASE64;
+
+        if ($this->content instanceof MimeMessage) {
+            $this->content->addPart($image);
+        }
+
+        return $this;
+    }
+
+    public function setLayout(string $layout): self
+    {
+        $this->layout = $layout;
+
+        return $this;
+    }
+
+    public function setCss(string $css): self
+    {
+        $this->css = $css;
 
         return $this;
     }

@@ -83,6 +83,7 @@
         "roave/psr-container-doctrine": "^3.5.0",
         "symfony/property-access": "^5.3",
         "symfony/serializer": "^5.3",
+        "tijsverkoyen/css-to-inline-styles": "^2.2",
         "tuupola/cors-middleware": "dev-master",
         "tuupola/slim-jwt-auth": "3.x-dev",
         "vlucas/phpdotenv": "^5.0@dev"

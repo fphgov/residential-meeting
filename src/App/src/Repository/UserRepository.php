@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\MailLog;
+use App\Entity\UserInterface;
 use App\Entity\UserPreference;
 use App\Entity\Vote;
+use App\Exception\UserNotFoundException;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -78,5 +80,18 @@ final class UserRepository extends EntityRepository
             ->orderBy('u.id', 'ASC');
 
         return $qb;
+    }
+
+    public function getUserByHash(string $hash): UserInterface
+    {
+        $user = $this->findOneBy([
+            'hash' => $hash,
+        ]);
+
+        if (! $user instanceof UserInterface) {
+            throw new UserNotFoundException($hash);
+        }
+
+        return $user;
     }
 }

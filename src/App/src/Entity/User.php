@@ -77,7 +77,7 @@ class User implements UserInterface
     private string $email;
 
     /**
-     * @ORM\Column(name="password", type="text", length=100)
+     * @ORM\Column(name="password", type="text")
      *
      * @Ignore()
      */

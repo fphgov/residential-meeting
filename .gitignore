@@ -50,6 +50,8 @@ public/**/*
 !public/.htaccess
 !public/files
 !public/files/.gitkeep
+!public/email
+!public/email/*.*
 
 supervisord.log
 supervisord.pid

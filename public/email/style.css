@@ -1,0 +1,200 @@
+/* Client-specific Styles */
+#outlook a {
+  padding: 0;
+}
+
+/* Force Outlook to provide a "view in browser" button. */
+body {
+  width: 100% !important;
+}
+
+.ReadMsgBody {
+  width: 100%;
+}
+
+.ExternalClass {
+  width: 100%;
+}
+
+/* Force Hotmail to display emails at full width */
+.ExternalClass,
+.ExternalClass p,
+.ExternalClass span,
+.ExternalClass font,
+.ExternalClass td,
+.ExternalClass div {
+  line-height: 100%;
+}
+
+/* Prevent Webkit platforms from changing default text sizes. */
+body {
+  -webkit-text-size-adjust: none;
+}
+
+/* Remove spacing between tables in Outlook 2007 and up */
+table,
+td {
+  mso-table-lspace: 0pt;
+  mso-table-rspace: 0pt;
+}
+
+/* Allow smoother rendering of resized image in Internet Explorer */
+img {
+  -ms-interpolation-mode: bicubic;
+}
+
+/* Reset Styles */
+body {
+  margin: 0 !important;
+  padding: 0;
+  background-color: #ffffff;
+}
+
+img {
+  border: 0;
+  height: auto;
+  line-height: 100%;
+  outline: none;
+  text-decoration: none;
+  display: block;
+}
+
+table {
+  border-spacing: 0;
+  font-family: sans-serif;
+  color: #000000;
+}
+
+table td {
+  vertical-align: top;
+  border-collapse: collapse;
+  padding: 0;
+}
+
+#backgroundTable {
+  height: 100% !important;
+  margin: 0;
+  padding: 0;
+  width: 100% !important;
+}
+
+.content {
+  width: 100%;
+  max-width: 600px;
+}
+
+.extra-description {
+  color: transparent;
+  display: none !important;
+  height: 0;
+  max-height: 0;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  mso-hide: all;
+  visibility: hidden;
+  width: 0;
+}
+
+/* Android 4.4 */
+div[style*="margin: 16px 0"] {
+  margin: 0 !important;
+}
+
+/* Apple Mail 6 and Outlook 2011 */
+.wrapper {
+  width: 100%;
+  table-layout: fixed;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+.webkit {
+  max-width: 600px;
+  margin: 0 auto;
+  /* Yahoo mail */
+}
+
+/*
+* Media query
+*/
+
+/* Apple Mail */
+@media only screen and (min-device-width: 601px) {
+  .content {
+    width: 600px !important;
+  }
+}
+
+/* Normalize end */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0EA6CE;
+  width: 100%;
+}
+
+body,
+td,
+p {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 24px;
+}
+
+h3 {
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 26px;
+}
+
+body {
+  color: #505050;
+  text-align: center;
+}
+
+#content {
+  text-align: left;
+  border: none;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  border: none;
+  background-color: #FFFFFF;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  border-radius: 6px;
+}
+
+.bg {
+  background-color: #f6d05f;
+}
+
+.bg-border td {
+  background-color: #f6d05f;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+}
+
+.center {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.btn {
+  font-size: 18px;
+  font-weight: bold;
+  display: inline-block;
+  padding: 15px 30px;
+  cursor: pointer;
+  border: 0;
+  outline: none;
+  text-decoration: none;
+  border-radius: 4px;
+  background-color: #f6d05f;
+  color: #12326E;
+}
