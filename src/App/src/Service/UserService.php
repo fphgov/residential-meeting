@@ -63,13 +63,7 @@ final class UserService implements UserServiceInterface
 
     public function activate(string $hash): void
     {
-        $user = $this->userRepository->findOneBy([
-            'hash' => $hash,
-        ]);
-
-        if (! $user instanceof UserInterface) {
-            throw new UserNotFoundException($hash);
-        }
+        $user = $this->userRepository->getUserByHash($hash);
 
         $user->setHash(null);
         $user->setActive(true);
@@ -80,13 +74,7 @@ final class UserService implements UserServiceInterface
 
     public function confirmation(array $filteredData, string $hash): void
     {
-        $user = $this->userRepository->findOneBy([
-            'hash' => $hash,
-        ]);
-
-        if (! $user instanceof UserInterface) {
-            throw new UserNotFoundException($hash);
-        }
+        $user = $this->userRepository->getUserByHash($hash);
 
         if ($filteredData['profile_save'] === 'true') {
             $user->setHash(null);

@@ -76,7 +76,7 @@ class ProfilActivationInputFilter extends InputFilter
                 ]),
                 new Validator\Callback([
                     'messages' => [
-                        Validator\Callback::INVALID_VALUE    => 'Csak elfogadás után tudjuk fogadni a regisztrációs űrlapot',
+                        Validator\Callback::INVALID_VALUE    => 'Fiókodat csak akkor tudjuk aktíválni, amennyiben megerősíted a fentieket',
                         Validator\Callback::INVALID_CALLBACK => 'Ismeretlen hiba',
                     ],
                     'callback' => function ($value) {
