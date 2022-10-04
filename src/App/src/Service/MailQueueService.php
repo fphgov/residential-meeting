@@ -97,7 +97,10 @@ final class MailQueueService implements MailQueueServiceInterface
 
             $mailAdapter->send();
 
-            $this->em->remove($mailQueue);
+            if ($mailQueue->getId() !== 0) {
+                $this->em->remove($mailQueue);
+            }
+
             $this->em->flush();
 
             usleep(250000); // 0.25 sec

@@ -18,7 +18,7 @@ final class UserRepository extends EntityRepository
         return $this->findBy([
             'active' => true,
             'role'   => 'user',
-        ]);
+        ], null, 1);
     }
 
     public function noActivatedUsers(int $hour): array

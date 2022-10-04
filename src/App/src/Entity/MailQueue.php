@@ -27,8 +27,9 @@ class MailQueue implements MailQueueInterface
      */
     private User $user;
 
-    /** @ORM\Column(name="mail_adapter", type="text") */
-    private string $mailAdapter;
+    /** @ORM\Column(name="mail_adapter", type="blob") */
+    /** @var resource|null */
+    private $mailAdapter;
 
     public function getUser(): UserInterface
     {
@@ -47,6 +48,8 @@ class MailQueue implements MailQueueInterface
 
     public function getMailAdapter(): MailAdapterInterface
     {
-        return unserialize($this->mailAdapter);
+        $mailAdapterContent = stream_get_contents($this->mailAdapter);
+
+        return unserialize((string)$mailAdapterContent);
     }
 }

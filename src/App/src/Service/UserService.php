@@ -319,6 +319,7 @@ final class UserService implements UserServiceInterface
             'lastname'         => $user->getLastname(),
             'infoMunicipality' => $this->config['app']['municipality'],
             'infoEmail'        => $this->config['app']['email'],
+            'newsletterLink'   => $this->config['app']['url'] . '/hirlevel',
             'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
         ];
 
@@ -333,6 +334,7 @@ final class UserService implements UserServiceInterface
             'lastname'         => $user->getLastname(),
             'infoMunicipality' => $this->config['app']['municipality'],
             'infoEmail'        => $this->config['app']['email'],
+            'newsletterLink'   => $this->config['app']['url'] . '/hirlevel',
             'activation'       => $this->config['app']['url'] . '/profil/megorzes/' . $user->getHash(),
         ];
 

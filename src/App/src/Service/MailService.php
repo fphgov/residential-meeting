@@ -17,7 +17,10 @@ use Mail\MailAdapterInterface;
 use Mail\Model\EmailContentModelInterface;
 use Throwable;
 
+use function basename;
 use function error_log;
+use function getenv;
+use function file_get_contents;
 
 class MailService implements MailServiceInterface
 {
@@ -97,9 +100,20 @@ class MailService implements MailServiceInterface
             $this->mailAdapter->getMessage()->addTo($user->getEmail());
             $this->mailAdapter->getMessage()->setSubject($mail->getSubject());
 
-            $this->mailAdapter->setTemplate(
+            $layout = $this->getLayout();
+
+            if ($layout) {
+                $this->mailAdapter->setLayout($layout);
+                $this->mailAdapter->setCss($this->getCss());
+            }
+
+            $template = $this->mailAdapter->setTemplate(
                 $this->mailContentHelper->create($mailCode, $tplData)
             );
+
+            if ($layout) {
+                $template->addImage(basename($this->getHeaderImagePath()), $this->getHeaderImagePath());
+            }
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
@@ -119,9 +133,20 @@ class MailService implements MailServiceInterface
             $this->mailAdapter->getMessage()->addTo($user->getEmail());
             $this->mailAdapter->getMessage()->setSubject($emailContentModel->getSubject());
 
-            $this->mailAdapter->setTemplate(
+            $layout = $this->getLayout();
+
+            if ($layout) {
+                $this->mailAdapter->setLayout($layout);
+                $this->mailAdapter->setCss($this->getCss());
+            }
+
+            $template = $this->mailAdapter->setTemplate(
                 $this->mailContentRawHelper->create($emailContentModel, $tplData)
             );
+
+            if ($layout) {
+                $template->addImage(basename($this->getHeaderImagePath()), $this->getHeaderImagePath());
+            }
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
@@ -131,5 +156,20 @@ class MailService implements MailServiceInterface
                 'extra' => $emailContentModel->getSubject() . " | " . $user->getId() . " | " . $e->getMessage(),
             ]);
         }
+    }
+
+    private function getCss(): string
+    {
+        return file_get_contents(getenv('APP_EMAIL_TEMPLATE') . '/style.css');
+    }
+
+    private function getHeaderImagePath(): string
+    {
+        return getenv('APP_EMAIL_TEMPLATE') . '/logo.png';
+    }
+
+    private function getLayout(): string|bool
+    {
+        return file_get_contents(getenv('APP_EMAIL_TEMPLATE') . '/layout.html');
     }
 }
