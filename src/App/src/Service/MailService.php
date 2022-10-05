@@ -107,13 +107,9 @@ class MailService implements MailServiceInterface
                 $this->mailAdapter->setCss($this->getCss());
             }
 
-            $template = $this->mailAdapter->setTemplate(
+            $this->mailAdapter->setTemplate(
                 $this->mailContentHelper->create($mailCode, $tplData)
             );
-
-            if ($layout) {
-                $template->addImage(basename($this->getHeaderImagePath()), $this->getHeaderImagePath());
-            }
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
@@ -140,13 +136,9 @@ class MailService implements MailServiceInterface
                 $this->mailAdapter->setCss($this->getCss());
             }
 
-            $template = $this->mailAdapter->setTemplate(
+            $this->mailAdapter->setTemplate(
                 $this->mailContentRawHelper->create($emailContentModel, $tplData)
             );
-
-            if ($layout) {
-                $template->addImage(basename($this->getHeaderImagePath()), $this->getHeaderImagePath());
-            }
 
             $this->mailQueueService->add($user, $this->mailAdapter);
         } catch (Throwable $e) {
@@ -161,11 +153,6 @@ class MailService implements MailServiceInterface
     private function getCss(): string
     {
         return file_get_contents(getenv('APP_EMAIL_TEMPLATE') . '/style.css');
-    }
-
-    private function getHeaderImagePath(): string
-    {
-        return getenv('APP_EMAIL_TEMPLATE') . '/logo.png';
     }
 
     private function getLayout(): string|bool

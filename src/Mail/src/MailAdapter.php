@@ -133,7 +133,7 @@ class MailAdapter implements MailAdapterInterface
         $image->id          = $filename;
         $image->type        = $type;
         $image->filename    = $filename;
-        $image->disposition = Mime::DISPOSITION_INLINE;
+        $image->disposition = Mime::DISPOSITION_ATTACHMENT;
         $image->encoding    = Mime::ENCODING_BASE64;
 
         if ($this->content instanceof MimeMessage) {
