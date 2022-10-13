@@ -66,6 +66,7 @@ final class ListHandler implements RequestHandlerInterface
         $sort        = $queryParams['sort'] ?? 'ASC';
         $rand        = $queryParams['rand'] ?? '';
         $status      = $queryParams['status'] ?? '';
+        $limit       = $queryParams['limit'] ?? '';
 
         $qb = $repository->createQueryBuilder('p')
             ->select('NEW ProjectListDTO(p.id, c.shortTitle, ct.name, ct.rgb, p.title, p.description, p.location, w.code, w.title, GROUP_CONCAT(t.id), GROUP_CONCAT(t.name)) as project')
@@ -135,7 +136,11 @@ final class ListHandler implements RequestHandlerInterface
         $paginator = new ProjectCollection($qb);
         $paginator->setUseOutputWalkers(false);
 
-        $paginator->getQuery()->setFirstResult($this->pageCount * $page)->setMaxResults($this->pageCount);
+        if ($limit && $limit !== 0) {
+            $paginator->getQuery()->setFirstResult(0)->setMaxResults((int)$limit);
+        } else {
+            $paginator->getQuery()->setFirstResult($this->pageCount * $page)->setMaxResults($this->pageCount);
+        }
 
         try {
             $resource = $this->resourceGenerator->fromObject($paginator, $request);
