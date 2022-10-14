@@ -61,16 +61,12 @@ class MailAdapter implements MailAdapterInterface
     {
         $this->name = $mailContent->getCode();
 
-        $this->content = new MimeMessage();
-
         $text = $mailContent->render(MailInterface::FORMAT_TEXT);
 
         $bodyText           = new MimePart($text);
         $bodyText->type     = Mime::TYPE_TEXT;
         $bodyText->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
         $bodyText->charset  = 'utf-8';
-
-        $this->content->addPart($bodyText);
 
         $html = $mailContent->render(MailInterface::FORMAT_HTML);
 
@@ -92,7 +88,16 @@ class MailAdapter implements MailAdapterInterface
         $bodyHtml->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
         $bodyHtml->charset  = 'utf-8';
 
-        $this->content->addPart($bodyHtml);
+        $multipartContent = new MimeMessage();
+        $multipartContent->setParts([$bodyText, $bodyHtml]);
+
+        $multipartPart = new MimePart($multipartContent->generateMessage());
+        $multipartPart->charset  = 'utf-8';
+        $multipartPart->type     = 'multipart/alternative';
+        $multipartPart->boundary = $multipartContent->getMime()->boundary();
+
+        $this->content = new MimeMessage();
+        $this->content->addPart($multipartPart);
 
         return $this;
     }
