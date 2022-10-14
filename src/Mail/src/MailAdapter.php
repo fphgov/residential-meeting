@@ -165,7 +165,7 @@ class MailAdapter implements MailAdapterInterface
         $contentTypeHeader = $this->message->getHeaders()->get('Content-Type');
 
         if ($contentTypeHeader instanceof Header\ContentType) {
-            $contentTypeHeader->setType('multipart/alternative');
+            $contentTypeHeader->setType('multipart/related');
         }
 
         $this->transport->send($this->message);
