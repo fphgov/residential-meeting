@@ -27,9 +27,7 @@ $userService       = $container->get(UserServiceInterface::class);
 $userRepository    = $em->getRepository(User::class);
 $mailLogRepository = $em->getRepository(MailLog::class);
 
-$mailLogs = $mailLogRepository->findBy([
-    'name' => 'account-confirmation',
-]);
+$mailLogs = $mailLogRepository->getSendedAccountConfirmation(new DateTime('2022-10-01'));
 
 foreach ($mailLogs as $mailLog) {
     $user = $userRepository->find($mailLog->getUser());
@@ -42,10 +40,7 @@ foreach ($mailLogs as $mailLog) {
         continue;
     }
 
-    $hasMailLogReminder = $mailLogRepository->findOneBy([
-        'user' => $user,
-        'name' => 'account-confirmation-reminder',
-    ]);
+    $hasMailLogReminder = $mailLogRepository->isSendedReminder($user, new DateTime('2022-10-01'));
 
     if (! $hasMailLogReminder) {
         $userService->accountConfirmationReminder($user);

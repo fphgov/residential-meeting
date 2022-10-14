@@ -133,7 +133,7 @@ class MailAdapter implements MailAdapterInterface
         $image->id          = $filename;
         $image->type        = $type;
         $image->filename    = $filename;
-        $image->disposition = Mime::DISPOSITION_ATTACHMENT;
+        $image->disposition = Mime::DISPOSITION_INLINE;
         $image->encoding    = Mime::ENCODING_BASE64;
 
         if ($this->content instanceof MimeMessage) {
@@ -165,7 +165,7 @@ class MailAdapter implements MailAdapterInterface
         $contentTypeHeader = $this->message->getHeaders()->get('Content-Type');
 
         if ($contentTypeHeader instanceof Header\ContentType) {
-            $contentTypeHeader->setType('multipart/alternative');
+            $contentTypeHeader->setType('multipart/related');
         }
 
         $this->transport->send($this->message);

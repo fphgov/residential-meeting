@@ -243,7 +243,7 @@ class UserRegistrationFilter extends InputFilter
 
         $this->add([
             'name'        => 'postal_code',
-            'allow_empty' => true,
+            'allow_empty' => false,
             'validators'  => [
                 new Validator\NotEmpty([
                     'messages' => [
@@ -316,6 +316,11 @@ class UserRegistrationFilter extends InputFilter
                     },
                 ]),
             ],
+        ]);
+
+        $this->add([
+            'name'        => 'newsletter',
+            'allow_empty' => true,
         ]);
 
         $this->add([
