@@ -340,7 +340,8 @@ final class IdeaService implements IdeaServiceInterface
     public function sendIdeaConfirmationEmail(UserInterface $user, IdeaInterface $idea): void
     {
         $tplData = [
-            'name'             => $user->getFirstname(),
+            'firstname'        => $user->getFirstname(),
+            'lastname'         => $user->getLastname(),
             'infoMunicipality' => $this->config['app']['municipality'],
             'infoEmail'        => $this->config['app']['email'],
             'idea'             => [

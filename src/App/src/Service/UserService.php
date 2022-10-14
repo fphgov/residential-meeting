@@ -296,7 +296,8 @@ final class UserService implements UserServiceInterface
     private function sendActivationEmail(UserInterface $user): void
     {
         $tplData = [
-            'name'             => $user->getFirstname(),
+            'firstname'        => $user->getFirstname(),
+            'lastname'         => $user->getLastname(),
             'infoMunicipality' => $this->config['app']['municipality'],
             'infoEmail'        => $this->config['app']['email'],
             'activation'       => $this->config['app']['url'] . '/profil/aktivalas/' . $user->getHash(),
@@ -312,7 +313,8 @@ final class UserService implements UserServiceInterface
         $url = $this->config['app']['url'] . '/profil/nyeremeny-aktivalas/' . $userPreference->getPrizeHash();
 
         $tplData = [
-            'name'             => $user->getFirstname(),
+            'firstname'        => $user->getFirstname(),
+            'lastname'         => $user->getLastname(),
             'infoMunicipality' => $this->config['app']['municipality'],
             'infoEmail'        => $this->config['app']['email'],
             'prizeActivation'  => $url,
@@ -324,7 +326,8 @@ final class UserService implements UserServiceInterface
     private function forgotPasswordMail(UserInterface $user): void
     {
         $tplData = [
-            'name'             => $user->getFirstname(),
+            'firstname'        => $user->getFirstname(),
+            'lastname'         => $user->getLastname(),
             'infoMunicipality' => $this->config['app']['municipality'],
             'infoEmail'        => $this->config['app']['email'],
             'forgotLink'       => $this->config['app']['url'] . '/profil/jelszo/' . $user->getHash(),
@@ -336,7 +339,6 @@ final class UserService implements UserServiceInterface
     private function sendAccountConfirmationEmail(UserInterface $user): void
     {
         $tplData = [
-            'name'             => $user->getFirstname(),
             'firstname'        => $user->getFirstname(),
             'lastname'         => $user->getLastname(),
             'infoMunicipality' => $this->config['app']['municipality'],
@@ -350,7 +352,6 @@ final class UserService implements UserServiceInterface
     private function sendAccountConfirmationReminderEmail(UserInterface $user): void
     {
         $tplData = [
-            'name'             => $user->getFirstname(),
             'firstname'        => $user->getFirstname(),
             'lastname'         => $user->getLastname(),
             'infoMunicipality' => $this->config['app']['municipality'],
