@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Handler\Account;
 
 use App\Service\AccountServiceInterface;
+use App\Service\VoteServiceInterface;
+use App\Exception\AccountNotVotableException;
+use App\Exception\CloseCampaignException;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterInterface;
@@ -19,8 +22,10 @@ final class CheckHandler implements RequestHandlerInterface
 {
     public function __construct(
         private AccountServiceInterface $accountService,
+        private VoteServiceInterface $voteService,
         private InputFilterInterface $accountCheckFilter
     ) {
+        $this->voteService        = $voteService;
         $this->accountService     = $accountService;
         $this->accountCheckFilter = $accountCheckFilter;
     }
@@ -34,6 +39,22 @@ final class CheckHandler implements RequestHandlerInterface
         if (! $this->accountCheckFilter->isValid()) {
             return new JsonResponse([
                 'errors' => $this->accountCheckFilter->getMessages(),
+            ], 422);
+        }
+
+        $account = $this->accountService->getAccount(
+            $this->accountCheckFilter->getValues()['auth_code']
+        );
+
+        try {
+            $this->voteService->checkVoteable($account);
+        } catch (CloseCampaignException $e) {
+            return new JsonResponse([
+                'message' => 'A szavazás jelenleg zárva tart',
+            ], 422);
+        } catch (AccountNotVotableException $e) {
+            return new JsonResponse([
+                'message' => 'Már leadtad a szavazatod',
             ], 422);
         }
 

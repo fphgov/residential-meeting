@@ -64,13 +64,7 @@ final class VoteService implements VoteServiceInterface
         AccountInterface $account,
         array $filteredData
     ): void {
-        if ($this->settingRepository->getIsCloseVote()) {
-            throw new CloseCampaignException('No votable');
-        }
-
-        if ($account->getVoted()) {
-            throw new AccountNotVotableException('Already voted ' . $account->geAuthCode());
-        }
+        $this->checkVoteable($account);
 
         foreach ($filteredData['questions'] as $id => $answer) {
             $question = $this->questionRepository->find($id);
@@ -120,6 +114,17 @@ final class VoteService implements VoteServiceInterface
 
         if ($successNotification !== null) {
             $this->successVote($successNotification);
+        }
+    }
+
+    public function checkVoteable(AccountInterface $account): void
+    {
+        if ($this->settingRepository->getIsCloseVote()) {
+            throw new CloseCampaignException('No votable');
+        }
+
+        if ($account->getVoted()) {
+            throw new AccountNotVotableException('Already voted ' . $account->geAuthCode());
         }
     }
 

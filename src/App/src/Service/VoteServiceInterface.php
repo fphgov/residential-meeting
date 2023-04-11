@@ -12,4 +12,6 @@ interface VoteServiceInterface
         AccountInterface $user,
         array $filteredData
     ): void;
+
+    public function checkVoteable(AccountInterface $account): void;
 }

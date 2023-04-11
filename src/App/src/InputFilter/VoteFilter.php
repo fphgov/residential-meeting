@@ -12,11 +12,8 @@ use Laminas\Validator;
 /** phpcs:disable */
 class VoteFilter extends InputFilter
 {
-    /** @var AdapterInterface */
-    private $dbAdapter;
-
     public function __construct(
-        AdapterInterface $dbAdapter
+        private AdapterInterface $dbAdapter
     ) {
         $this->dbAdapter = $dbAdapter;
     }

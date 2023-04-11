@@ -24,34 +24,16 @@ use function getenv;
 
 class MailService implements MailServiceInterface
 {
-    /** @var EntityManagerInterface */
-    private $em;
-
     /** @var MailRepository */
     private $mailRepository;
 
-    /** @var Logger */
-    private $audit;
-
-    /** @var MailAdapterInterface */
-    private $mailAdapter;
-
-    /** @var MailContentHelper */
-    private $mailContentHelper;
-
-    /** @var MailContentRawHelper */
-    private $mailContentRawHelper;
-
-    /** @var MailQueueServiceInterface */
-    private $mailQueueService;
-
     public function __construct(
-        EntityManagerInterface $em,
-        Logger $audit,
-        MailAdapterInterface $mailAdapter,
-        MailContentHelper $mailContentHelper,
-        MailContentRawHelper $mailContentRawHelper,
-        MailQueueServiceInterface $mailQueueService
+        private EntityManagerInterface $em,
+        private Logger $audit,
+        private MailAdapterInterface $mailAdapter,
+        private MailContentHelper $mailContentHelper,
+        private MailContentRawHelper $mailContentRawHelper,
+        private MailQueueServiceInterface $mailQueueService
     ) {
         $this->em                   = $em;
         $this->audit                = $audit;

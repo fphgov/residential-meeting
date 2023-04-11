@@ -10,10 +10,7 @@ use Psr\Container\ContainerInterface;
 
 final class VoteServiceFactory
 {
-    /**
-     * @return VoteService
-     */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): VoteService
     {
         $config = $container->has('config') ? $container->get('config') : [];
 

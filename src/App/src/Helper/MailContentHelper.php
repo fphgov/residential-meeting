@@ -12,9 +12,6 @@ use Mustache_Engine;
 
 final class MailContentHelper implements MailContentHelperInterface
 {
-    /** @var EntityManagerInterface */
-    private $em;
-
     /** @var EntityRepository */
     private $mailRepository;
 
@@ -28,7 +25,7 @@ final class MailContentHelper implements MailContentHelperInterface
     private $mail;
 
     public function __construct(
-        EntityManagerInterface $em
+        private EntityManagerInterface $em
     ) {
         $this->em             = $em;
         $this->mailRepository = $this->em->getRepository(Mail::class);

@@ -9,10 +9,7 @@ use Psr\Container\ContainerInterface;
 
 final class QuestionServiceFactory
 {
-    /**
-     * @return QuestionService
-     */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): QuestionService
     {
         return new QuestionService(
             $container->get(EntityManagerInterface::class)

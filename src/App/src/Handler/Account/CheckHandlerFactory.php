@@ -6,6 +6,7 @@ namespace App\Handler\Account;
 
 use App\InputFilter\AccountCheckFilter;
 use App\Service\AccountServiceInterface;
+use App\Service\VoteServiceInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Psr\Container\ContainerInterface;
 
@@ -19,6 +20,7 @@ final class CheckHandlerFactory
 
         return new CheckHandler(
             $container->get(AccountServiceInterface::class),
+            $container->get(VoteServiceInterface::class),
             $inputFilter
         );
     }

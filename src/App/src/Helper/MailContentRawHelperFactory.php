@@ -8,10 +8,7 @@ use Psr\Container\ContainerInterface;
 
 final class MailContentRawHelperFactory
 {
-    /**
-     * @return MailContentRawHelper
-     */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): MailContentRawHelper
     {
         return new MailContentRawHelper();
     }
