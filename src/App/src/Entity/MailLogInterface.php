@@ -8,16 +8,9 @@ use App\Interfaces\EntityInterface;
 
 interface MailLogInterface extends EntityInterface
 {
-    public const DISABLE_SHOW_DEFAULT = [
-        'createdAt',
-        'updatedAt',
-    ];
+    public function getNotification(): NotificationInterface;
 
-    public const DISABLE_DEFAULT_SET = [];
-
-    public function getAccount(): AccountInterface;
-
-    public function setAccount(AccountInterface $user): void;
+    public function setNotification(NotificationInterface $user): void;
 
     public function setMessageId(string $messageId): void;
 

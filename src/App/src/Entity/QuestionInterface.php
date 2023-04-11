@@ -9,13 +9,6 @@ use App\Interfaces\EntitySimpleInterface;
 
 interface QuestionInterface extends EntitySimpleInterface, EntityActiveInterface
 {
-    public const DISABLE_SHOW_DEFAULT = [
-        'createdAt',
-        'updatedAt',
-    ];
-
-    public const DISABLE_DEFAULT_SET = [];
-
     public function setQuestion(string $question): void;
 
     public function getQuestion(): string;

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\AccountInterface;
+use App\Entity\Notification;
+use App\Entity\Newsletter;
 use App\Entity\Question;
 use App\Entity\Setting;
 use App\Entity\Vote;
@@ -24,16 +26,24 @@ final class VoteService implements VoteServiceInterface
     /** @var EntityRepository */
     private $questionRepository;
 
+    /** @var EntityRepository */
+    private $notificationRepository;
+
+    /** @var EntityRepository */
+    private $newsletterRepository;
+
     public function __construct(
         private array $config,
         private EntityManagerInterface $em,
         private MailServiceInterface $mailService
     ) {
-        $this->config             = $config;
-        $this->em                 = $em;
-        $this->mailService        = $mailService;
-        $this->questionRepository = $this->em->getRepository(Question::class);
-        $this->settingRepository  = $this->em->getRepository(Setting::class);
+        $this->config                 = $config;
+        $this->em                     = $em;
+        $this->mailService            = $mailService;
+        $this->questionRepository     = $this->em->getRepository(Question::class);
+        $this->settingRepository      = $this->em->getRepository(Setting::class);
+        $this->notificationRepository = $this->em->getRepository(Notification::class);
+        $this->newsletterRepository   = $this->em->getRepository(Newsletter::class);
     }
 
     private function createVote(
@@ -70,12 +80,30 @@ final class VoteService implements VoteServiceInterface
             $this->createVote($question, $parsedAnswer);
         }
 
-        if ($filteredData['email']) {
-            $account->setEmail($filteredData['email']);
+        if (isset($filteredData['email'])) {
+            $email = $this->notificationRepository->findOneBy([
+                'email' => $filteredData['email']
+            ]);
+
+            if (! $email) {
+                $notification = new Notification();
+                $notification->setEmail($filteredData['email']);
+
+                $this->em->persist($notification);
+            }
         }
 
-        if ($filteredData['newsletter']) {
-            $account->setNewsletter(true);
+        if (isset($filteredData['newsletter'])) {
+            $email = $this->newsletterRepository->findOneBy([
+                'email' => $filteredData['email']
+            ]);
+
+            if (! $email) {
+                $newsletter = new Newsletter();
+                $newsletter->setEmail($filteredData['email']);
+
+                $this->em->persist($newsletter);
+            }
         }
 
         $account->setPrivacy(true);

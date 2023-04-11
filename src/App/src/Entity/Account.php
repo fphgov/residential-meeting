@@ -7,7 +7,6 @@ namespace App\Entity;
 use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -27,13 +26,6 @@ class Account implements AccountInterface
     private string $authCode;
 
     /**
-     * @ORM\Column(name="email", type="string", length=100, unique=false, nullable=true)
-     *
-     * @Groups({"full_detail"})
-     */
-    private ?string $email;
-
-    /**
      * @ORM\Column(name="voted", type="boolean", nullable=false)
      *
      * @Groups({"full_detail"})
@@ -47,13 +39,6 @@ class Account implements AccountInterface
      */
     private bool $privacy = false;
 
-    /**
-     * @ORM\Column(name="newsletter", type="boolean", nullable=false)
-     *
-     * @Groups({"full_detail"})
-     */
-    private bool $newsletter = false;
-
     public function seAuthCode(string $authCode): void
     {
         $this->authCode = $authCode;
@@ -62,16 +47,6 @@ class Account implements AccountInterface
     public function geAuthCode(): string
     {
         return $this->authCode;
-    }
-
-    public function setEmail(?string $email = null): void
-    {
-        $this->email = $email;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
     }
 
     public function setVoted(bool $voted): void
@@ -92,22 +67,5 @@ class Account implements AccountInterface
     public function getPrivacy(): bool
     {
         return $this->privacy;
-    }
-
-    public function setNewsletter(bool $newsletter): void
-    {
-        $this->newsletter = $newsletter;
-    }
-
-    public function getNewsletter(): bool
-    {
-        return $this->newsletter;
-    }
-
-    public function generateToken(): string
-    {
-        $uuid4 = Uuid::uuid4();
-
-        return $uuid4->toString();
     }
 }

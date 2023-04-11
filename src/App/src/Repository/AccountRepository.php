@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\AccountInterface;
-use App\Exception\AccountNotFoundException;
+use App\Exception\AccountNotVotableException;
 use Doctrine\ORM\EntityRepository;
 
 final class AccountRepository extends EntityRepository
@@ -17,7 +17,7 @@ final class AccountRepository extends EntityRepository
         ]);
 
         if (! $account instanceof AccountInterface) {
-            throw new AccountNotFoundException($authCode);
+            throw new AccountNotVotableException($authCode);
         }
 
         return $account;
