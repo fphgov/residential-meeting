@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Handler\Vote;
 
-use App\Entity\OfflineVote;
-use App\Entity\VoteTypeInterface;
-use App\Middleware\UserMiddleware;
+use App\Exception\AccountNotVotableException;
+use App\Exception\CloseCampaignException;
+use App\Middleware\AccountMiddleware;
 use App\Service\VoteServiceInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterInterface;
@@ -16,57 +15,48 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-use function intval;
-
 final class AddHandler implements RequestHandlerInterface
 {
-    /** @var EntityManagerInterface */
-    private $em;
-
-    /** @var InputFilterInterface */
-    private $inputFilter;
-
-    /** @var VoteServiceInterface */
-    private $voteService;
-
     public function __construct(
-        EntityManagerInterface $em,
-        InputFilterInterface $inputFilter,
-        VoteServiceInterface $voteService
+        private VoteServiceInterface $voteService,
+        private InputFilterInterface $voteFilter
     ) {
-        $this->em          = $em;
-        $this->inputFilter = $inputFilter;
         $this->voteService = $voteService;
+        $this->voteFilter  = $voteFilter;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $user                  = $request->getAttribute(UserMiddleware::class);
-        $offlineVoteRepository = $this->em->getRepository(OfflineVote::class);
+        $account = $request->getAttribute(AccountMiddleware::class);
 
-        $this->inputFilter->setData($request->getParsedBody());
+        $body = $request->getParsedBody();
 
-        if (! $this->inputFilter->isValid()) {
+        $this->voteFilter->setData($body);
+
+        if (! $this->voteFilter->isValid()) {
             return new JsonResponse([
-                'errors' => $this->inputFilter->getMessages(),
+                'errors' => $this->voteFilter->getMessages(),
             ], 422);
         }
 
-        $values = $this->inputFilter->getValues();
-
         try {
-            $this->voteService->addOfflineVote($user, intval($values['project']), 2, intval($values['voteCount']));
+            $this->voteService->voting($account, $this->voteFilter->getValues());
+        } catch (CloseCampaignException $e) {
+            return new JsonResponse([
+                'message' => 'A szavazás jelenleg zárva tart',
+            ], 422);
+        } catch (AccountNotVotableException $e) {
+            return new JsonResponse([
+                'message' => 'Már leadtad a szavazatod',
+            ], 422);
         } catch (Exception $e) {
             return new JsonResponse([
-                'errors' => $e->getMessage(),
-            ], 500);
+                'message' => 'Sikertelen szavazás',
+            ], 400);
         }
 
-        $stats = $offlineVoteRepository->getStatistics();
-
         return new JsonResponse([
-            'success' => true,
-            'stats'   => $stats,
+            'message' => 'Sikeres szavazás',
         ]);
     }
 }

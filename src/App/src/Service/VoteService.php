@@ -4,115 +4,46 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\OfflineVote;
-use App\Entity\PhaseInterface;
-use App\Entity\Project;
-use App\Entity\ProjectInterface;
-use App\Entity\UserInterface;
+use App\Entity\AccountInterface;
+use App\Entity\Question;
+use App\Entity\Setting;
 use App\Entity\Vote;
 use App\Entity\VoteInterface;
-use App\Entity\VoteType;
-use App\Entity\VoteTypeInterface;
-use App\Exception\NoExistsAllProjectsException;
+use App\Exception\AccountNotVotableException;
+use App\Exception\CloseCampaignException;
 use App\Service\MailServiceInterface;
-use App\Service\PhaseServiceInterface;
-use App\Service\VoteValidationService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
-use function count;
-use function strtolower;
-
 final class VoteService implements VoteServiceInterface
 {
-    /** @var array */
-    private $config;
-
-    /** @var EntityManagerInterface */
-    private $em;
+    /** @var EntityRepository */
+    private $settingRepository;
 
     /** @var EntityRepository */
-    private $voteRepository;
-
-    /** @var PhaseServiceInterface */
-    private $phaseService;
-
-    /** @var MailServiceInterface */
-    private $mailService;
-
-    /** @var EntityRepository */
-    private $projectRepository;
+    private $questionRepository;
 
     public function __construct(
-        array $config,
-        EntityManagerInterface $em,
-        PhaseServiceInterface $phaseService,
-        MailServiceInterface $mailService,
-        VoteValidationService $voteValidationService
+        private array $config,
+        private EntityManagerInterface $em,
+        private MailServiceInterface $mailService
     ) {
-        $this->config                = $config;
-        $this->em                    = $em;
-        $this->phaseService          = $phaseService;
-        $this->mailService           = $mailService;
-        $this->voteValidationService = $voteValidationService;
-        $this->projectRepository     = $this->em->getRepository(Project::class);
-        $this->voteRepository        = $this->em->getRepository(Vote::class);
+        $this->config             = $config;
+        $this->em                 = $em;
+        $this->mailService        = $mailService;
+        $this->questionRepository = $this->em->getRepository(Question::class);
+        $this->settingRepository  = $this->em->getRepository(Setting::class);
     }
 
-    public function addOfflineVote(
-        UserInterface $user,
-        int $projectId,
-        int $type,
-        int $voteCount
-    ): void {
-        $date = new DateTime();
-
-        $project = $this->projectRepository->find($projectId);
-
-        for ($i = 0; $i < $voteCount; $i++) {
-            $this->createOfflineVote($user, $project, $date, $type);
-        }
-
-        $this->em->flush();
-    }
-
-    private function createOfflineVote(
-        UserInterface $user,
-        ProjectInterface $project,
-        DateTime $date,
-        int $type
-    ): VoteInterface {
-        $vote = new OfflineVote();
-
-        $vote->setUser($user);
-        $vote->setProject($project);
-        $vote->setVoteType(
-            $this->em->getReference(VoteType::class, $type)
-        );
-        $vote->setCreatedAt($date);
-        $vote->setUpdatedAt($date);
-
-        $this->em->persist($vote);
-
-        return $vote;
-    }
-
-    private function createOnlineVote(
-        UserInterface $user,
-        ProjectInterface $project,
-        VoteTypeInterface $voteType,
-        DateTime $date
+    private function createVote(
+        Question $question,
+        ?bool $answer
     ): VoteInterface {
         $vote = new Vote();
 
-        $vote->setUser($user);
-        $vote->setProject($project);
-        $vote->setVoteType($voteType);
-        $vote->setCreatedAt($date);
-        $vote->setUpdatedAt($date);
-
-        $user->addVote($vote);
+        $vote->setQuestion($question);
+        $vote->setAnswer($answer);
 
         $this->em->persist($vote);
 
@@ -120,80 +51,62 @@ final class VoteService implements VoteServiceInterface
     }
 
     public function voting(
-        UserInterface $user,
-        VoteTypeInterface $voteType,
-        array $projects
+        AccountInterface $account,
+        array $filteredData
     ): void {
-        $phase = $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
-
-        $dbProjects = $this->projectRepository->findBy([
-            'id' => $projects,
-        ]);
-
-        if (count($dbProjects) !== count($projects)) {
-            throw new NoExistsAllProjectsException('There are 1 or more ideas specified');
+        if ($this->settingRepository->getIsCloseVote()) {
+            throw new CloseCampaignException('No votable');
         }
 
-        $this->voteValidationService->validation(
-            $user,
-            $phase,
-            $voteType,
-            $dbProjects
-        );
-
-        $date = new DateTime();
-
-        $votes = [];
-        foreach ($dbProjects as $project) {
-            $votes[] = $this->createOnlineVote($user, $project, $voteType, $date);
+        if ($account->getVoted()) {
+            throw new AccountNotVotableException('Already voted ' . $account->geAuthCode());
         }
+
+        foreach ($filteredData['questions'] as $id => $answer) {
+            $question = $this->questionRepository->find($id);
+
+            $parsedAnswer = $this->parseAnswer($answer);
+
+            $this->createVote($question, $parsedAnswer);
+        }
+
+        if ($filteredData['email']) {
+            $account->setEmail($filteredData['email']);
+        }
+
+        if ($filteredData['newsletter']) {
+            $account->setNewsletter(true);
+        }
+
+        $account->setPrivacy(true);
+        $account->setVoted(true);
+        $account->setUpdatedAt(new DateTime());
 
         $this->em->flush();
 
-        $this->successVote($user, $votes);
+        $this->successVote($account);
     }
 
-    /**
-     * @param array[]|VoteInterface $votes
-     **/
-    private function successVote(UserInterface $user, array $votes): void
+    private function parseAnswer(mixed $answer): ?bool
     {
-        $projects = [];
-
-        foreach ($votes as $vote) {
-            $projects[] = [
-                'title'        => $vote->getProject()->getTitle(),
-                'campaignName' => $vote->getProject()->getCampaignTheme()->getName(),
-                'projectType'  => strtolower($vote->getProject()->getProjectType()->getTitle()),
-            ];
+        if ($answer === null || $answer === "null") {
+            return null;
         }
 
+        if ($answer === true || $answer === "true" || $answer === "on" || $answer === "yes") {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function successVote(AccountInterface $account): void
+    {
         $tplData = [
-            'name'             => $user->getFirstname(),
             'infoMunicipality' => $this->config['app']['municipality'],
             'infoEmail'        => $this->config['app']['email'],
-            'projects'         => $projects,
         ];
 
-        $this->mailService->send('vote-success', $tplData, $user);
-    }
-
-    public function getVoteablesProjects(?string $rand = null): array
-    {
-        $phase = $this->phaseService->phaseCheck(PhaseInterface::PHASE_VOTE);
-
-        $projects = $this->projectRepository->getVoteables($phase->getCampaign(), $rand);
-
-        $normalizedProjects = [];
-        foreach ($projects as $project) {
-            $normalizedProjects[] = $project->normalizer(null, ['groups' => 'vote_list']);
-        }
-
-        return $normalizedProjects;
-    }
-
-    public function getRepository(): EntityRepository
-    {
-        return $this->voteRepository;
+        $this->mailService->send('vote-success', $tplData, $account);
     }
 }

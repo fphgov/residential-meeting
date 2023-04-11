@@ -12,7 +12,7 @@ done
 if [ $MODE = "development" ]; then
   cd /var/www/html
 
-  php -d allow_url_fopen=on /usr/local/bin/composer install --ignore-platform-req=ext-postal
+  php -d allow_url_fopen=on /usr/local/bin/composer install
 
   composer db-update
 
@@ -22,7 +22,7 @@ fi
 if [ $MODE = "production" ]; then
   cd /var/www/html
 
-  php -d allow_url_fopen=on /usr/local/bin/composer install --ignore-platform-req=ext-postal --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
+  php -d allow_url_fopen=on /usr/local/bin/composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
 
   composer db-update
 

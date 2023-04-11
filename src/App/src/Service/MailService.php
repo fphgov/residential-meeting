@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Account;
 use App\Entity\Mail;
-use App\Entity\User;
 use App\Helper\MailContentHelper;
 use App\Helper\MailContentRawHelper;
 use App\Repository\MailRepository;
@@ -19,8 +19,8 @@ use Throwable;
 
 use function basename;
 use function error_log;
-use function getenv;
 use function file_get_contents;
+use function getenv;
 
 class MailService implements MailServiceInterface
 {
@@ -88,7 +88,7 @@ class MailService implements MailServiceInterface
         $this->em->flush();
     }
 
-    public function send(string $mailCode, array $tplData, User $user): void
+    public function send(string $mailCode, array $tplData, Account $account): void
     {
         $this->mailAdapter->clear();
 
@@ -97,7 +97,7 @@ class MailService implements MailServiceInterface
         ]);
 
         try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->addTo($account->getEmail());
             $this->mailAdapter->getMessage()->setSubject($mail->getSubject());
 
             $layout = $this->getLayout();
@@ -115,22 +115,22 @@ class MailService implements MailServiceInterface
                 $template->addImage(basename($this->getHeaderImagePath()), $this->getHeaderImagePath());
             }
 
-            $this->mailQueueService->add($user, $this->mailAdapter);
+            $this->mailQueueService->add($account, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
             $this->audit->err('Notification no added to MailQueueService', [
-                'extra' => $mailCode . " | " . $user->getId() . " | " . $e->getMessage(),
+                'extra' => $mailCode . " | " . $account->getId() . " | " . $e->getMessage(),
             ]);
         }
     }
 
-    public function sendRaw(EmailContentModelInterface $emailContentModel, array $tplData, User $user): void
+    public function sendRaw(EmailContentModelInterface $emailContentModel, array $tplData, Account $account): void
     {
         $this->mailAdapter->clear();
 
         try {
-            $this->mailAdapter->getMessage()->addTo($user->getEmail());
+            $this->mailAdapter->getMessage()->addTo($account->getEmail());
             $this->mailAdapter->getMessage()->setSubject($emailContentModel->getSubject());
 
             $layout = $this->getLayout();
@@ -148,12 +148,12 @@ class MailService implements MailServiceInterface
                 $template->addImage(basename($this->getHeaderImagePath()), $this->getHeaderImagePath());
             }
 
-            $this->mailQueueService->add($user, $this->mailAdapter);
+            $this->mailQueueService->add($account, $this->mailAdapter);
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
             $this->audit->err('Notification raw no added to MailQueueService', [
-                'extra' => $emailContentModel->getSubject() . " | " . $user->getId() . " | " . $e->getMessage(),
+                'extra' => $emailContentModel->getSubject() . " | " . $account->getId() . " | " . $e->getMessage(),
             ]);
         }
     }

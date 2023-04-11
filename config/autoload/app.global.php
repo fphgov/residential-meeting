@@ -8,9 +8,6 @@ return [
         'phone'               => str_replace('"', '', getenv('APP_PHONE')),
         'url'                 => str_replace('"', '', getenv('APP_URL')),
         'email'               => str_replace('"', '', getenv('APP_EMAIL')),
-        'account'             => [
-            'clearTimeHour' => (int)getenv('APP_ACCOUNT_CLEAR_TIME_HOUR'),
-        ],
         'notification'        => [
             'frequency' => (int)getenv('APP_NOTIFICATION_FREQUENCY'),
             'mail'      => [
@@ -20,11 +17,5 @@ return [
             ],
             'force' => (string)getenv('APP_NOTIFICATION_FORCE') === "true",
         ],
-        'pagination' => [
-            'maxPageSize' => (int)getenv('APP_PAGINATION_MAX_PAGE_SIZE'),
-        ],
-        'paths' => [
-            'files' => getenv('APP_UPLOAD'),
-        ]
     ],
 ];

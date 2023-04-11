@@ -15,9 +15,9 @@ interface MailLogInterface extends EntityInterface
 
     public const DISABLE_DEFAULT_SET = [];
 
-    public function getUser(): UserInterface;
+    public function getAccount(): AccountInterface;
 
-    public function setUser(UserInterface $user): void;
+    public function setAccount(AccountInterface $user): void;
 
     public function setMessageId(string $messageId): void;
 

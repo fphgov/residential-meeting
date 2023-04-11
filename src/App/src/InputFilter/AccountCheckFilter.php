@@ -10,13 +10,10 @@ use Laminas\InputFilter\InputFilter;
 use Laminas\Validator;
 
 /** phpcs:disable */
-class VoteFilter extends InputFilter
+class AccountCheckFilter extends InputFilter
 {
-    /** @var AdapterInterface */
-    private $dbAdapter;
-
     public function __construct(
-        AdapterInterface $dbAdapter
+        private AdapterInterface $dbAdapter
     ) {
         $this->dbAdapter = $dbAdapter;
     }
@@ -110,22 +107,18 @@ class VoteFilter extends InputFilter
         $this->add([
             'name'        => 'newsletter',
             'allow_empty' => true,
-        ]);
+            'validators' => [
+                new Validator\Callback([
+                    'messages' => [
+                        Validator\Callback::INVALID_VALUE => 'Adjon meg e-mail címet feliratkozáshoz',
+                    ],
+                    'callback' => function ($value, $context = []) {
+                        if ($context['email'] === null || empty($context['email'])) {
+                            return false;
+                        }
 
-        $this->add([
-            'name'        => 'questions',
-            'allow_empty' => false,
-            'validators'  => [
-                new Validator\NotEmpty([
-                    'messages' => [
-                        Validator\NotEmpty::IS_EMPTY => 'Kötelező a mező kitöltése',
-                        Validator\NotEmpty::INVALID  => 'Hibás mező tipus',
-                    ],
-                ]),
-                new Validator\IsCountable([
-                    'messages' => [
-                        Validator\IsCountable::NOT_COUNTABLE => 'Hibás szavazat beküldés',
-                    ],
+                        return true;
+                    }
                 ]),
             ],
         ]);

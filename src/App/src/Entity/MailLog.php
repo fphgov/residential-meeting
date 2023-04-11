@@ -18,15 +18,15 @@ class MailLog implements MailLogInterface
     use EntityTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Account")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", nullable=true)
      *
-     * @var User
+     * @var Account
      */
-    private $user;
+    private $account;
 
     /**
-     * @ORM\Column(name="messageId", type="string")
+     * @ORM\Column(name="message_id", type="string")
      *
      * @var string
      */
@@ -39,14 +39,14 @@ class MailLog implements MailLogInterface
      */
     private $name;
 
-    public function getUser(): UserInterface
+    public function getAccount(): AccountInterface
     {
-        return $this->user;
+        return $this->account;
     }
 
-    public function setUser(UserInterface $user): void
+    public function setAccount(AccountInterface $account): void
     {
-        $this->user = $user;
+        $this->account = $account;
     }
 
     public function setMessageId(string $messageId): void

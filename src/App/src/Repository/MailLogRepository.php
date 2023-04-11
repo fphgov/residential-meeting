@@ -8,6 +8,8 @@ use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
 
+use function count;
+
 final class MailLogRepository extends EntityRepository
 {
     public function getSendedAccountConfirmation(DateTime $date): array
@@ -22,9 +24,7 @@ final class MailLogRepository extends EntityRepository
                 'date' => $date,
             ]);
 
-        $result = $qb->getQuery()->getResult();
-
-        return $result;
+        return $qb->getQuery()->getResult();
     }
 
     public function isSendedReminder(User $user, DateTime $date): bool

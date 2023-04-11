@@ -29,7 +29,6 @@ $aggregator = new ConfigAggregator([
     \Laminas\Mail\ConfigProvider::class,
     \Laminas\HttpHandlerRunner\ConfigProvider::class,
     \Mezzio\Router\FastRouteRouter\ConfigProvider::class,
-    \FphGov\Arcgis\ConfigProvider::class,
     // Include cache configuration
     new ArrayProvider($cacheConfig),
     \Mezzio\Helper\ConfigProvider::class,
@@ -42,7 +41,6 @@ $aggregator = new ConfigAggregator([
         : function(){ return[]; },
     // Default App module config
     App\ConfigProvider::class,
-    Jwt\ConfigProvider::class,
     Mail\ConfigProvider::class,
     // Load application config in a pre-defined order in such a way that local settings
     // overwrite global settings. (Loaded as first to last):

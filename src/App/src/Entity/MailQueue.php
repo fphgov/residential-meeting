@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Mail\MailAdapterInterface;
 
 use function serialize;
-use function unserialize;
 use function stream_get_contents;
+use function unserialize;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MailQueueRepository")
@@ -23,25 +23,26 @@ class MailQueue implements MailQueueInterface
     use EntityTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Account")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", nullable=true)
      */
-    private User $user;
+    private Account $account;
 
     /**
      * @ORM\Column(name="mail_adapter", type="blob")
+     *
      * @var resource|null
      */
     private $mailAdapter;
 
-    public function getUser(): UserInterface
+    public function getAccount(): AccountInterface
     {
-        return $this->user;
+        return $this->account;
     }
 
-    public function setUser(UserInterface $user): void
+    public function setAccount(AccountInterface $account): void
     {
-        $this->user = $user;
+        $this->account = $account;
     }
 
     public function setMailAdapter(MailAdapterInterface $mailAdapter): void
@@ -53,6 +54,6 @@ class MailQueue implements MailQueueInterface
     {
         $mailAdapterContent = stream_get_contents($this->mailAdapter);
 
-        return unserialize((string)$mailAdapterContent);
+        return unserialize((string) $mailAdapterContent);
     }
 }

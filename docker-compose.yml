@@ -3,7 +3,7 @@ version: '3.5'
 services:
   db:
     image: mysql:5.7
-    container_name: participatory_db
+    container_name: residential_meeting_db
     command: --explicit_defaults_for_timestamp --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     env_file: .env
     ports:
@@ -18,7 +18,7 @@ services:
     build:
       context: .
       dockerfile: docker/config/webapp/Dockerfile
-    container_name: participatory_webapp
+    container_name: residential_meeting_webapp
     expose:
       - 9004
     volumes:
@@ -27,9 +27,8 @@ services:
       - ./docker/config/webapp/php/ini/security.ini:/usr/local/etc/php/conf.d/security.ini
       - ./docker/config/webapp/php/ini/upload.ini:/usr/local/etc/php/conf.d/upload.ini
       - ./docker/config/webapp/php/ini/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
-      - ./docker/config/webapp/php/ini/postal.ini:/usr/local/etc/php/conf.d/postal.ini
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: [ "CMD", "curl", "-f", "http://localhost" ]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -41,7 +40,7 @@ services:
 
   nginx:
     image: fphgov/nginx
-    container_name: participatory_nginx
+    container_name: residential_meeting_nginx
     networks:
       - default
     ports:
@@ -52,7 +51,6 @@ services:
       - ./docker/data/nginx/logs:/var/log/nginx
       - ./:/var/www/html
       - ./docker/config/cert:/opt/cert
-    restart: always
     depends_on:
       - db
       - webapp
@@ -62,13 +60,6 @@ services:
     ports:
       - 1025:1025 # smtp server
       - 8025:8025 # web ui
-
-  libpostal:
-    image: fphgov/libpostal:latest
-    environment:
-      - LISTEN_PORT=9501
-    expose:
-      - 9501
 
 networks:
   default:

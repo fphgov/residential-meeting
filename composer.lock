@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4638fea283543fedc854a02bc720627e",
+    "content-hash": "12c5bd491eac06e61e72f22372b23837",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -1507,77 +1507,6 @@
             "time": "2021-11-08T20:18:51+00:00"
         },
         {
-            "name": "fphgov/module-arcgis-api",
-            "version": "v2.0.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:fphgov/module-arcgis-api.git",
-                "reference": "223d26b86ee6dee2424d312d41ada85a828816b4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fphgov/module-arcgis-api/zipball/223d26b86ee6dee2424d312d41ada85a828816b4",
-                "reference": "223d26b86ee6dee2424d312d41ada85a828816b4",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "laminas/laminas-config-aggregator": "^1.3.1",
-                "php": "^8.1"
-            },
-            "require-dev": {
-                "laminas/laminas-coding-standard": "^2.1.0",
-                "laminas/laminas-diactoros": "^1.6",
-                "laminas/laminas-inputfilter": "^2.10",
-                "laminas/laminas-servicemanager": "^3.4",
-                "phpspec/prophecy-phpunit": "^2.0",
-                "phpunit/phpunit": "^9.5.4"
-            },
-            "type": "library",
-            "extra": {
-                "fphgov": {
-                    "config-provider": "FphGov\\Arcgis\\ConfigProvider"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "FphGov\\Arcgis\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "FphGovTest\\Arcgis\\": "test/"
-                }
-            },
-            "scripts": {
-                "check": [
-                    "@cs-check",
-                    "@test"
-                ],
-                "cs-check": [
-                    "phpcs"
-                ],
-                "cs-fix": [
-                    "phpcbf"
-                ],
-                "test": [
-                    "phpunit --colors=always"
-                ],
-                "test-coverage": [
-                    "phpunit --colors=always --coverage-clover clover.xml"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Mezzio Module ARCGIS",
-            "support": {
-                "source": "https://github.com/fphgov/module-arcgis-api/tree/v2.0.0",
-                "issues": "https://github.com/fphgov/module-arcgis-api/issues"
-            },
-            "time": "2022-08-25T13:34:33+00:00"
-        },
-        {
             "name": "friendsofphp/proxy-manager-lts",
             "version": "v1.0.12",
             "source": {
@@ -2517,35 +2446,36 @@
         },
         {
             "name": "laminas/laminas-inputfilter",
-            "version": "2.19.1",
+            "version": "2.24.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-inputfilter.git",
-                "reference": "864a98cd869fc732274e0045eff63f5775d3f107"
+                "reference": "c5a53b1e72a2270b441391728291f7136e9461d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-inputfilter/zipball/864a98cd869fc732274e0045eff63f5775d3f107",
-                "reference": "864a98cd869fc732274e0045eff63f5775d3f107",
+                "url": "https://api.github.com/repos/laminas/laminas-inputfilter/zipball/c5a53b1e72a2270b441391728291f7136e9461d1",
+                "reference": "c5a53b1e72a2270b441391728291f7136e9461d1",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-filter": "^2.13",
-                "laminas/laminas-servicemanager": "^3.12.0",
+                "laminas/laminas-servicemanager": "^3.16.0",
                 "laminas/laminas-stdlib": "^3.0",
                 "laminas/laminas-validator": "^2.15",
-                "php": "^7.4 || ~8.0.0 || ~8.1.0"
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
             },
             "conflict": {
                 "zendframework/zend-inputfilter": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~2.3.0",
-                "laminas/laminas-db": "^2.13.4",
-                "phpunit/phpunit": "^9.5.21",
-                "psalm/plugin-phpunit": "^0.17.0",
-                "psr/http-message": "^1.0",
-                "vimeo/psalm": "^4.24.0"
+                "ext-json": "*",
+                "laminas/laminas-coding-standard": "~2.5.0",
+                "phpunit/phpunit": "^9.5.27",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "psr/http-message": "^1.0.1",
+                "vimeo/psalm": "^5.4",
+                "webmozart/assert": "^1.11"
             },
             "suggest": {
                 "psr/http-message-implementation": "PSR-7 is required if you wish to validate PSR-7 UploadedFileInterface payloads"
@@ -2586,7 +2516,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-07-25T15:08:16+00:00"
+            "time": "2023-04-05T08:44:05+00:00"
         },
         {
             "name": "laminas/laminas-loader",
@@ -13081,8 +13011,5 @@
         "ext-openssl": "*"
     },
     "platform-dev": [],
-    "platform-overrides": {
-        "ext-postal": "1.0"
-    },
     "plugin-api-version": "2.3.0"
 }

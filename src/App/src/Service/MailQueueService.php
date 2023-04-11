@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\AccountInterface;
 use App\Entity\MailLog;
 use App\Entity\MailQueue;
-use App\Entity\UserInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Log\Logger;
@@ -39,27 +39,27 @@ final class MailQueueService implements MailQueueServiceInterface
         $this->audit  = $audit;
     }
 
-    public function add(UserInterface $user, MailAdapterInterface $mailAdapter): void
+    public function add(AccountInterface $account, MailAdapterInterface $mailAdapter): void
     {
         if (
             isset($this->config['app']['notification']['force']) &&
             $this->config['app']['notification']['force'] === true
         ) {
-            $mailQueue = $this->createMailQueue($user, $mailAdapter);
+            $mailQueue = $this->createMailQueue($account, $mailAdapter);
             $mailQueue->setId(0);
 
             $this->sendMail($mailQueue);
         } else {
-            $this->push($user, $mailAdapter);
+            $this->push($account, $mailAdapter);
         }
     }
 
-    private function createMailQueue(UserInterface $user, MailAdapterInterface $mailAdapter): MailQueue
+    private function createMailQueue(AccountInterface $account, MailAdapterInterface $mailAdapter): MailQueue
     {
         $date = new DateTime();
 
         $mailQueue = new MailQueue();
-        $mailQueue->setUser($user);
+        $mailQueue->setAccount($account);
         $mailQueue->setMailAdapter($mailAdapter);
         $mailQueue->setCreatedAt($date);
         $mailQueue->setUpdatedAt($date);
@@ -67,9 +67,9 @@ final class MailQueueService implements MailQueueServiceInterface
         return $mailQueue;
     }
 
-    private function push(UserInterface $user, MailAdapterInterface $mailAdapter): void
+    private function push(AccountInterface $account, MailAdapterInterface $mailAdapter): void
     {
-        $mailQueue = $this->createMailQueue($user, $mailAdapter);
+        $mailQueue = $this->createMailQueue($account, $mailAdapter);
 
         $this->em->persist($mailQueue);
         $this->em->flush();
@@ -93,7 +93,7 @@ final class MailQueueService implements MailQueueServiceInterface
         $mailAdapter = $mailQueue->getMailAdapter();
 
         try {
-            $this->createMailLog($mailQueue->getUser(), $mailAdapter);
+            $this->createMailLog($mailQueue->getAccount(), $mailAdapter);
 
             $mailAdapter->send();
 
@@ -111,12 +111,12 @@ final class MailQueueService implements MailQueueServiceInterface
         }
     }
 
-    private function createMailLog(UserInterface $user, MailAdapterInterface $mailAdapter): void
+    private function createMailLog(AccountInterface $account, MailAdapterInterface $mailAdapter): void
     {
         $date = new DateTime();
 
         $mailLog = new MailLog();
-        $mailLog->setUser($user);
+        $mailLog->setAccount($account);
         $mailLog->setName($mailAdapter->getName());
         $mailLog->setMessageId($mailAdapter->getMessageId());
         $mailLog->setCreatedAt($date);

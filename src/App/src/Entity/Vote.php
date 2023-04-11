@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
@@ -14,54 +14,57 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Vote implements VoteInterface
 {
-    use EntityMetaTrait;
     use EntityTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="votes", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", unique=false, nullable=false)
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
+     * @Groups({"list", "option", "detail", "full_detail", "vote_list"})
      */
-    private User $user;
+    protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="VoteType", cascade={"persist"})
-     * @ORM\JoinColumn(name="vote_type_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Question", cascade={"persist"})
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="id", nullable=true)
      */
-    private ?VoteType $voteType;
+    private Question $question;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Project", cascade={"persist"})
-     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(name="answer", type="boolean", nullable=true)
+     *
+     * @Groups({"full_detail"})
      */
-    private Project $project;
+    private ?bool $answer;
 
-    public function getUser(): UserInterface
+    public function getId(): int
     {
-        return $this->user;
+        return $this->id;
     }
 
-    public function setUser(UserInterface $user): void
+    public function setId(int $id): void
     {
-        $this->user = $user;
+        $this->id = $id;
     }
 
-    public function getVoteType(): VoteTypeInterface
+    public function getQuestion(): Question
     {
-        return $this->voteType;
+        return $this->question;
     }
 
-    public function setVoteType(VoteTypeInterface $voteType): void
+    public function setQuestion(Question $question): void
     {
-        $this->voteType = $voteType;
+        $this->question = $question;
     }
 
-    public function getProject(): ProjectInterface
+    public function getAnswer(): ?bool
     {
-        return $this->project;
+        return $this->answer;
     }
 
-    public function setProject(ProjectInterface $project): void
+    public function setAnswer(?bool $answer = null): void
     {
-        $this->project = $project;
+        $this->answer = $answer;
     }
 }

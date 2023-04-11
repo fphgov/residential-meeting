@@ -12,14 +12,14 @@ use Laminas\Mime\Mime;
 use Laminas\Mime\Part as MimePart;
 use Mail\Entity\MailInterface;
 use Mail\Model\EmailTemplateRenderModelInterface;
-use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 use Throwable;
+use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 use function error_log;
-use function is_array;
-use function uniqid;
-use function str_replace;
 use function file_get_contents;
+use function is_array;
+use function str_replace;
+use function uniqid;
 
 class MailAdapter implements MailAdapterInterface
 {
@@ -91,7 +91,7 @@ class MailAdapter implements MailAdapterInterface
         $multipartContent = new MimeMessage();
         $multipartContent->setParts([$bodyText, $bodyHtml]);
 
-        $multipartPart = new MimePart($multipartContent->generateMessage());
+        $multipartPart           = new MimePart($multipartContent->generateMessage());
         $multipartPart->charset  = 'utf-8';
         $multipartPart->type     = 'multipart/alternative';
         $multipartPart->boundary = $multipartContent->getMime()->boundary();

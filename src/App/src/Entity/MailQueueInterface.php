@@ -16,9 +16,9 @@ interface MailQueueInterface extends EntityInterface
 
     public const DISABLE_DEFAULT_SET = [];
 
-    public function getUser(): UserInterface;
+    public function getAccount(): AccountInterface;
 
-    public function setUser(UserInterface $user): void;
+    public function setAccount(AccountInterface $account): void;
 
     public function setMailAdapter(MailAdapterInterface $mailAdapter): void;
 
