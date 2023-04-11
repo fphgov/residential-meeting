@@ -7,7 +7,6 @@ namespace App\Entity;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\NewsletterRepository")
@@ -27,9 +26,7 @@ class Newsletter implements NewsletterInterface
      */
     protected string $id;
 
-    /**
-     * @ORM\Column(name="email", type="string", length=200, unique=true, nullable=true)
-     */
+    /** @ORM\Column(name="email", type="string", length=200, unique=true, nullable=true) */
     private string $email;
 
     public function getId(): string

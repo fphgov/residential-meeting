@@ -26,9 +26,7 @@ class Notification implements NotificationInterface
      */
     protected string $id;
 
-    /**
-     * @ORM\Column(name="email", type="string", length=200, unique=true, nullable=true)
-     */
+    /** @ORM\Column(name="email", type="string", length=200, unique=true, nullable=true) */
     private string $email;
 
     public function getId(): string
