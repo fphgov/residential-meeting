@@ -2,7 +2,7 @@ replicaCount: 1
 
 php:
   image:
-    repository: registry.dev.intra.fph.hu/docker/residential-meeting-php
+    repository: registry.prod.intra.fph.hu/docker/residential-meeting-php
     pullPolicy: IfNotPresent
     tag: "latest"
   resources: {}
@@ -15,7 +15,7 @@ php:
 
 nginx:
   image:
-    repository: registry.dev.intra.fph.hu/docker/residential-meeting-nginx
+    repository: registry.prod.intra.fph.hu/docker/residential-meeting-nginx
     pullPolicy: IfNotPresent
     tag: "latest"
   resources: {}
