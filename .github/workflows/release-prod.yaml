@@ -1,0 +1,119 @@
+name: Release prod
+on:
+  push:
+    tags:
+      - 'prod-*'
+
+  workflow_dispatch:
+
+env:
+  DOCKER_REGISTRY_URL: 'registry.prod.intra.fph.hu'
+  DOCKER_BUILD_TARGET: 'production'
+  DOCKER_APP_BUILD_FILE: 'k8s/php/Dockerfile'
+  DOCKER_INIT_BUILD_FILE: 'k8s/nginx/Dockerfile'
+  DOCKER_PHP_IMAGE: 'docker/residential-meeting-php'
+  DOCKER_NGINX_IMAGE: 'docker/residential-meeting-nginx'
+  HELM_REPOSITORY_URL: 'nexus.prod.intra.fph.hu'
+  HELM_REPOSITORY_NAME: 'helm'
+  HELM_REPOSITORY_ALIAS: 'fph'
+  HELM_CHART_NAME: 'php-nginx'
+  HELM_RELEASE_NAME: 'backend'
+  HELM_VALUES_FILE: 'values.prod.yaml'
+  APP_NAMESPACE: 'residential-meeting'
+
+
+jobs:
+  create-image-tag:
+    name: Create container image tag
+    runs-on: ["fph-prod-cluster"]
+
+    outputs:
+      imageTag: ${{ steps.tag-helper.outputs.imageTag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: 'Tag helper'
+        id: tag-helper
+        uses: 'fphgov/actions-image-tag-helper@master'
+        with:
+          is_add_short_commit_hash: false
+
+  build-php-image:
+    name: Build php contanier image
+    runs-on: ["fph-prod-cluster"]
+
+    needs:
+      - create-image-tag
+
+    timeout-minutes: 600
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Build image
+        uses: aevea/action-kaniko@master
+        with:
+          image: ${{ env.DOCKER_PHP_IMAGE }}
+          build_file: ${{ env.DOCKER_PHP_BUILD_FILE }}
+          target: ${{ env.DOCKER_BUILD_TARGET }}
+          registry: ${{ env.DOCKER_REGISTRY_URL }}
+          extra_args: "--skip-tls-verify"
+          username: ${{ secrets.PROD_NEXUS_USER }}
+          password: ${{ secrets.PROD_NEXUS_PASSWD }}
+          tag_with_latest: true
+          tag: ${{ needs.create-image-tag.outputs.imageTag }}
+
+  build-nginx-image:
+    name: Build nginx container image
+    runs-on: ["fph-prod-cluster"]
+
+    needs:
+      - create-image-tag
+
+    timeout-minutes: 600
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Build image
+        uses: aevea/action-kaniko@master
+        with:
+          image: ${{ env.DOCKER_NGINX_IMAGE }}
+          build_file: ${{ env.DOCKER_NGINX_BUILD_FILE }}
+          registry: ${{ env.DOCKER_REGISTRY_URL }}
+          extra_args: "--skip-tls-verify"
+          username: ${{ secrets.PROD_NEXUS_USER }}
+          password: ${{ secrets.PROD_NEXUS_PASSWD }}
+          tag_with_latest: true
+          tag: ${{ needs.create-image-tag.outputs.imageTag }}
+
+  deploy:
+    name: Deploy
+    runs-on: ["fph-prod-cluster"]
+    needs:
+      - build-php-image
+      - build-nginx-image
+      - create-image-tag
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Deploy
+        uses: 'fphgov/actions-helm-deploy@master'
+        with:
+          helm_repository_url: ${{ env.HELM_REPOSITORY_URL }}
+          helm_repository_name: ${{ env.HELM_REPOSITORY_NAME }}
+          helm_repository_alias: ${{ env.HELM_REPOSITORY_ALIAS }}
+          helm_repository_user: ${{ secrets.PROD_NEXUS_USER }}
+          helm_repository_password: ${{ secrets.PROD_NEXUS_PASSWD }}
+          helm_repository_insecure: 'true'
+          helm_chart: ${{ env.HELM_CHART_NAME }}
+          namespace: ${{ env.APP_NAMESPACE }}
+          app_name: ${{ env.HELM_RELEASE_NAME }}
+          kubeconfig: ${{ secrets.PROD_KUBECONFIG }}
+          helm_values_file: ${{ env.HELM_VALUES_FILE }}
+          helm_repository_upgrade_extra_args: |
+            --set php.image.tag=${{ needs.create-image-tag.outputs.imageTag }}
+            --set nginx.mage.tag=${{ needs.create-image-tag.outputs.imageTag }}
