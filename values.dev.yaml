@@ -34,15 +34,15 @@ env:
         key: mariadb-password
         optional: false
   - name: COMPOSER_MEMORY_LIMIT
-    value: -1
+    value: "-1"
   - name: COMPOSER_PROCESS_TIMEOUT
-    value: 2000
+    value: "2000"
   - name: DB_DRIVER
     value: Mysqli
   - name: DB_HOSTNAME
     value: mariadb
   - name: DB_PORT
-    value: 3307
+    value: "3307"
   - name: DB_DATABASE
     value: residental_meeting
   - name: DB_USER
@@ -54,7 +54,7 @@ env:
   - name: SMTP_HOST
     value: ""
   - name: SMTP_PORT
-    value: 25
+    value: "25"
   - name: SMTP_CONNECTION_CLASS
     value: plain
   - name: SMTP_CONNECTION_CONFIG_USERNAME
@@ -78,7 +78,7 @@ env:
   - name: APP_URL
     value: https://lakogyules.onkormanyzat.hu
   - name: APP_NOTIFICATION_FREQUENCY
-    value: 20
+    value: "20"
   - name: APP_NOTIFICATION_MAIL_TESTTO
     value: test@onkormanyzat.hu
   - name: APP_NOTIFICATION_MAIL_SUBJECT
@@ -86,7 +86,7 @@ env:
   - name: APP_NOTIFICATION_MAIL_REPLAYTO
     value: ugyfelszolgalat@onkormanyzat.hu
   - name: APP_NOTIFICATION_FORCE
-    value: false
+    value: "false"
   - name: APP_EMAIL_TEMPLATE
     value: /var/www/html/public/email
   - name: RECAPTCHA_SECRET
