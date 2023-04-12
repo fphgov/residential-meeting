@@ -9,8 +9,8 @@ on:
 env:
   DOCKER_REGISTRY_URL: 'registry.prod.intra.fph.hu'
   DOCKER_BUILD_TARGET: 'production'
-  DOCKER_APP_BUILD_FILE: 'k8s/php/Dockerfile'
-  DOCKER_INIT_BUILD_FILE: 'k8s/nginx/Dockerfile'
+  DOCKER_PHP_BUILD_FILE: 'k8s/php/Dockerfile'
+  DOCKER_NGINX_BUILD_FILE: 'k8s/nginx/Dockerfile'
   DOCKER_PHP_IMAGE: 'docker/residential-meeting-php'
   DOCKER_NGINX_IMAGE: 'docker/residential-meeting-nginx'
   HELM_REPOSITORY_URL: 'nexus.prod.intra.fph.hu'
