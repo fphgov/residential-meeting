@@ -50,11 +50,11 @@ final class CheckHandler implements RequestHandlerInterface
             $this->voteService->checkVoteable($account);
         } catch (CloseCampaignException $e) {
             return new JsonResponse([
-                'message' => 'A szavazás jelenleg zárva tart',
+                'error' => 'A szavazás jelenleg zárva tart',
             ], 422);
         } catch (AccountNotVotableException $e) {
             return new JsonResponse([
-                'message' => 'Már leadtad a szavazatod',
+                'error' => 'Már leadtad a szavazatod',
             ], 422);
         }
 

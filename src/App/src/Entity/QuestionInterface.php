@@ -13,13 +13,13 @@ interface QuestionInterface extends EntitySimpleInterface, EntityActiveInterface
 
     public function getQuestion(): string;
 
-    public function setOptionYesLabel(string $optionYesLabel): void;
+    public function setOptionLabelYes(string $optionLabelYes): void;
 
-    public function getOptionYesLabel(): string;
+    public function getoptionLabelYes(): string;
 
-    public function setOptionNoLabel(string $optionNoLabel): void;
+    public function setOptionLabelNo(string $optionLabelNo): void;
 
-    public function getOptionNoLabel(): string;
+    public function getoptionLabelNo(): string;
 
     public function setDescription(string $description): void;
 

@@ -120,6 +120,6 @@
         "serve": "php -S 0.0.0.0:8080 -t public public/index.php",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
-        "db-update": "vendor/bin/doctrine orm:schema-tool:update"
+        "db-update": "vendor/bin/doctrine orm:schema-tool:update --force"
     }
 }
