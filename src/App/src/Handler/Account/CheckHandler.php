@@ -75,8 +75,7 @@ final class CheckHandler implements RequestHandlerInterface
         }
 
         return new JsonResponse([
-            'message'   => 'Sikeres hitelesítés',
-            'auth_code' => $this->accountCheckFilter->getValues()['auth_code'],
+            'message' => 'Sikeres hitelesítés',
         ]);
     }
 }
