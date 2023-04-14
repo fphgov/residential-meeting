@@ -91,6 +91,8 @@ env:
     value: /var/www/html/public/email
   - name: RECAPTCHA_SECRET
     value: _from_google_
+  - name: NODE_ENV
+    value: production
 
 imagePullSecrets: []
 nameOverride: ""
