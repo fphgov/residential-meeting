@@ -42,10 +42,6 @@ final class CheckHandler implements RequestHandlerInterface
             ], 422);
         }
 
-        $account = $this->accountService->getAccount(
-            $this->accountCheckFilter->getValues()['auth_code']
-        );
-
         try {
             $this->voteService->checkVoteable($account);
         } catch (CloseCampaignException $e) {

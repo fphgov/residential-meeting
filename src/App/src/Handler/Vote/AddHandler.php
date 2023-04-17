@@ -47,7 +47,7 @@ final class AddHandler implements RequestHandlerInterface
             ], 422);
         } catch (AccountNotVotableException $e) {
             return new JsonResponse([
-                'error' => 'Már leadtad a szavazatod',
+                'error' => 'Már leadtad a szavazatod, nem szavazhatsz újra',
             ], 422);
         } catch (Exception $e) {
             return new JsonResponse([
