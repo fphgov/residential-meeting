@@ -14,9 +14,6 @@ use Psr\Container\ContainerInterface;
 
 final class MailServiceFactory
 {
-    /**
-     * @return MailService
-     */
     public function __invoke(ContainerInterface $container): MailServiceInterface
     {
         return new MailService(

@@ -11,10 +11,7 @@ use Psr\Container\ContainerInterface;
 
 final class AccountServiceFactory
 {
-    /**
-     * @return AccountService
-     */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): AccountService
     {
         $config = $container->has('config') ? $container->get('config') : [];
 

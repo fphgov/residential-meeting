@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\AccountInterface;
+use App\Entity\Newsletter;
+use App\Entity\Notification;
 use App\Entity\Question;
 use App\Entity\Setting;
 use App\Entity\Vote;
@@ -24,16 +26,24 @@ final class VoteService implements VoteServiceInterface
     /** @var EntityRepository */
     private $questionRepository;
 
+    /** @var EntityRepository */
+    private $notificationRepository;
+
+    /** @var EntityRepository */
+    private $newsletterRepository;
+
     public function __construct(
         private array $config,
         private EntityManagerInterface $em,
         private MailServiceInterface $mailService
     ) {
-        $this->config             = $config;
-        $this->em                 = $em;
-        $this->mailService        = $mailService;
-        $this->questionRepository = $this->em->getRepository(Question::class);
-        $this->settingRepository  = $this->em->getRepository(Setting::class);
+        $this->config                 = $config;
+        $this->em                     = $em;
+        $this->mailService            = $mailService;
+        $this->questionRepository     = $this->em->getRepository(Question::class);
+        $this->settingRepository      = $this->em->getRepository(Setting::class);
+        $this->notificationRepository = $this->em->getRepository(Notification::class);
+        $this->newsletterRepository   = $this->em->getRepository(Newsletter::class);
     }
 
     private function createVote(
@@ -54,6 +64,61 @@ final class VoteService implements VoteServiceInterface
         AccountInterface $account,
         array $filteredData
     ): void {
+        $this->checkVoteable($account);
+
+        foreach ($filteredData['questions'] as $id => $answer) {
+            $question = $this->questionRepository->find($id);
+
+            $parsedAnswer = $this->parse($answer);
+
+            $this->createVote($question, $parsedAnswer);
+        }
+
+        $successNotification = null;
+
+        if (isset($filteredData['email'])) {
+            $email = $this->notificationRepository->findOneBy([
+                'email' => $filteredData['email'],
+            ]);
+
+            if (! $email) {
+                $notification = new Notification();
+                $notification->setEmail($filteredData['email']);
+
+                $email = $notification;
+
+                $this->em->persist($notification);
+            }
+
+            $successNotification = $email;
+        }
+
+        if (isset($filteredData['email']) && isset($filteredData['newsletter'])) {
+            $email = $this->newsletterRepository->findOneBy([
+                'email' => $filteredData['email'],
+            ]);
+
+            if (! $email) {
+                $newsletter = new Newsletter();
+                $newsletter->setEmail($filteredData['email']);
+
+                $this->em->persist($newsletter);
+            }
+        }
+
+        $account->setPrivacy($this->parse($filteredData['privacy']));
+        $account->setVoted(true);
+        $account->setUpdatedAt(new DateTime());
+
+        $this->em->flush();
+
+        if ($successNotification !== null) {
+            $this->successVote($successNotification);
+        }
+    }
+
+    public function checkVoteable(AccountInterface $account): void
+    {
         if ($this->settingRepository->getIsCloseVote()) {
             throw new CloseCampaignException('No votable');
         }
@@ -61,33 +126,9 @@ final class VoteService implements VoteServiceInterface
         if ($account->getVoted()) {
             throw new AccountNotVotableException('Already voted ' . $account->geAuthCode());
         }
-
-        foreach ($filteredData['questions'] as $id => $answer) {
-            $question = $this->questionRepository->find($id);
-
-            $parsedAnswer = $this->parseAnswer($answer);
-
-            $this->createVote($question, $parsedAnswer);
-        }
-
-        if ($filteredData['email']) {
-            $account->setEmail($filteredData['email']);
-        }
-
-        if ($filteredData['newsletter']) {
-            $account->setNewsletter(true);
-        }
-
-        $account->setPrivacy(true);
-        $account->setVoted(true);
-        $account->setUpdatedAt(new DateTime());
-
-        $this->em->flush();
-
-        $this->successVote($account);
     }
 
-    private function parseAnswer(mixed $answer): ?bool
+    private function parse(mixed $answer): ?bool
     {
         if ($answer === null || $answer === "null") {
             return null;
@@ -100,13 +141,13 @@ final class VoteService implements VoteServiceInterface
         return false;
     }
 
-    private function successVote(AccountInterface $account): void
+    private function successVote(Notification $successNotification): void
     {
         $tplData = [
             'infoMunicipality' => $this->config['app']['municipality'],
             'infoEmail'        => $this->config['app']['email'],
         ];
 
-        $this->mailService->send('vote-success', $tplData, $account);
+        $this->mailService->send('vote-success', $tplData, $successNotification);
     }
 }

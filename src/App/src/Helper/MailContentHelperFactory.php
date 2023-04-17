@@ -9,10 +9,7 @@ use Psr\Container\ContainerInterface;
 
 final class MailContentHelperFactory
 {
-    /**
-     * @return MailContentHelper
-     */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): MailContentHelper
     {
         return new MailContentHelper(
             $container->get(EntityManagerInterface::class),

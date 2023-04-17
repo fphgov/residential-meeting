@@ -11,14 +11,12 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class SettingService implements SettingServiceInterface
 {
-    /** @var EntityManagerInterface */
-    protected $em;
-
     /** @var SettingRepositoryInterface */
-    protected $settingRepository;
+    private $settingRepository;
 
-    public function __construct(EntityManagerInterface $em)
-    {
+    public function __construct(
+        private EntityManagerInterface $em
+    ) {
         $this->em                = $em;
         $this->settingRepository = $this->em->getRepository(Setting::class);
     }

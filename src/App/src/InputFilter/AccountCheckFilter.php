@@ -9,6 +9,8 @@ use Laminas\Filter;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator;
 
+use function strval;
+
 /** phpcs:disable */
 class AccountCheckFilter extends InputFilter
 {
@@ -113,11 +115,10 @@ class AccountCheckFilter extends InputFilter
                         Validator\Callback::INVALID_VALUE => 'Adjon meg e-mail címet feliratkozáshoz',
                     ],
                     'callback' => function ($value, $context = []) {
-                        if ($value === "false") {
-                            return true;
-                        }
-
-                        if ($value === "false" || $context['email'] === null || empty($context['email'])) {
+                        if (strval($value) === "true" && (
+                            $context['email'] === null ||
+                            empty($context['email'])
+                        )) {
                             return false;
                         }
 

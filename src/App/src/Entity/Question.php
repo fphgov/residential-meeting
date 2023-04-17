@@ -35,18 +35,25 @@ class Question implements QuestionInterface
     private string $question;
 
     /**
-     * @ORM\Column(name="option_yes_label", type="string")
+     * @ORM\Column(name="question_short", type="string")
      *
-     * @Groups({"detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail"})
      */
-    private string $optionYesLabel;
+    private string $questionShort;
 
     /**
-     * @ORM\Column(name="option_no_label", type="string")
+     * @ORM\Column(name="option_label_yes", type="string")
      *
      * @Groups({"detail", "full_detail"})
      */
-    private string $optionNoLabel;
+    private string $optionLabelYes;
+
+    /**
+     * @ORM\Column(name="option_label_no", type="string")
+     *
+     * @Groups({"detail", "full_detail"})
+     */
+    private string $optionLabelNo;
 
     /**
      * @ORM\Column(name="description", type="text")
@@ -89,24 +96,34 @@ class Question implements QuestionInterface
         return $this->question;
     }
 
-    public function setOptionYesLabel(string $optionYesLabel): void
+    public function setQuestionShort(string $questionShort): void
     {
-        $this->optionYesLabel = $optionYesLabel;
+        $this->questionShort = $questionShort;
     }
 
-    public function getOptionYesLabel(): string
+    public function getQuestionShort(): string
     {
-        return $this->optionYesLabel;
+        return $this->questionShort;
     }
 
-    public function setOptionNoLabel(string $optionNoLabel): void
+    public function setOptionLabelYes(string $optionLabelYes): void
     {
-        $this->optionNoLabel = $optionNoLabel;
+        $this->optionLabelYes = $optionLabelYes;
     }
 
-    public function getOptionNoLabel(): string
+    public function getoptionLabelYes(): string
     {
-        return $this->optionNoLabel;
+        return $this->optionLabelYes;
+    }
+
+    public function setOptionLabelNo(string $optionLabelNo): void
+    {
+        $this->optionLabelNo = $optionLabelNo;
+    }
+
+    public function getoptionLabelNo(): string
+    {
+        return $this->optionLabelNo;
     }
 
     public function setDescription(string $description): void

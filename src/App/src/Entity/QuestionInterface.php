@@ -9,24 +9,17 @@ use App\Interfaces\EntitySimpleInterface;
 
 interface QuestionInterface extends EntitySimpleInterface, EntityActiveInterface
 {
-    public const DISABLE_SHOW_DEFAULT = [
-        'createdAt',
-        'updatedAt',
-    ];
-
-    public const DISABLE_DEFAULT_SET = [];
-
     public function setQuestion(string $question): void;
 
     public function getQuestion(): string;
 
-    public function setOptionYesLabel(string $optionYesLabel): void;
+    public function setOptionLabelYes(string $optionLabelYes): void;
 
-    public function getOptionYesLabel(): string;
+    public function getoptionLabelYes(): string;
 
-    public function setOptionNoLabel(string $optionNoLabel): void;
+    public function setOptionLabelNo(string $optionLabelNo): void;
 
-    public function getOptionNoLabel(): string;
+    public function getoptionLabelNo(): string;
 
     public function setDescription(string $description): void;
 

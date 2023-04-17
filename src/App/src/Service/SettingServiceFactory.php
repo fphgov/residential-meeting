@@ -9,10 +9,7 @@ use Psr\Container\ContainerInterface;
 
 final class SettingServiceFactory
 {
-    /**
-     * @return SettingService
-     */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): SettingService
     {
         return new SettingService(
             $container->get(EntityManagerInterface::class)

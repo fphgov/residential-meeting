@@ -14,14 +14,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class GetHandler implements RequestHandlerInterface
 {
-    /** @var EntityManagerInterface **/
-    private $em;
-
     /** @var SettingRepositoryInterface **/
     private $settingRepository;
 
-    public function __construct(EntityManagerInterface $em)
-    {
+    public function __construct(
+        private EntityManagerInterface $em
+    ) {
         $this->em                = $em;
         $this->settingRepository = $this->em->getRepository(Setting::class);
     }

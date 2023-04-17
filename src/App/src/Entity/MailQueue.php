@@ -23,10 +23,10 @@ class MailQueue implements MailQueueInterface
     use EntityTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Notification")
+     * @ORM\JoinColumn(name="notification_id", referencedColumnName="id", nullable=true)
      */
-    private Account $account;
+    private Notification $notification;
 
     /**
      * @ORM\Column(name="mail_adapter", type="blob")
@@ -35,14 +35,14 @@ class MailQueue implements MailQueueInterface
      */
     private $mailAdapter;
 
-    public function getAccount(): AccountInterface
+    public function getNotification(): NotificationInterface
     {
-        return $this->account;
+        return $this->notification;
     }
 
-    public function setAccount(AccountInterface $account): void
+    public function setNotification(NotificationInterface $notification): void
     {
-        $this->account = $account;
+        $this->notification = $notification;
     }
 
     public function setMailAdapter(MailAdapterInterface $mailAdapter): void

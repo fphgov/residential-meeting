@@ -8,16 +8,6 @@ use App\Interfaces\EntitySimpleInterface;
 
 interface SettingInterface extends EntitySimpleInterface
 {
-    public const DISABLE_SHOW_DEFAULT = [
-        'createdAt',
-        'updatedAt',
-    ];
-
-    public const DISABLE_DEFAULT_SET = [
-        'createdAt',
-        'updatedAt',
-    ];
-
     public function setKey(string $key): void;
 
     public function getKey(): string;
