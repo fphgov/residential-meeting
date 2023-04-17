@@ -37,6 +37,16 @@ final class CheckHandler implements RequestHandlerInterface
             ], 422);
         }
 
+        try {
+            $this->accountService->getAccount(
+                $this->accountCheckFilter->getValues()['auth_code']
+            );
+        } catch (Exception $e) {
+            return new JsonResponse([
+                'error' => 'Már leadtad a szavazatod, nem szavazhatsz újra',
+            ], 422);
+        }
+
         if ($this->accountCheckFilter->getValues()['email']) {
             $email = strtolower($this->accountCheckFilter->getValues()['email']);
 
