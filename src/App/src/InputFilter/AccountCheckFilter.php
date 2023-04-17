@@ -113,7 +113,11 @@ class AccountCheckFilter extends InputFilter
                         Validator\Callback::INVALID_VALUE => 'Adjon meg e-mail címet feliratkozáshoz',
                     ],
                     'callback' => function ($value, $context = []) {
-                        if ($context['email'] === null || empty($context['email'])) {
+                        if ($value === "false") {
+                            return true;
+                        }
+
+                        if ($value === "false" || $context['email'] === null || empty($context['email'])) {
                             return false;
                         }
 
