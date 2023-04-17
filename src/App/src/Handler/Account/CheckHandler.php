@@ -43,6 +43,10 @@ final class CheckHandler implements RequestHandlerInterface
         }
 
         try {
+            $account = $this->accountService->getAccount(
+                $this->accountCheckFilter->getValues()['auth_code']
+            );
+
             $this->voteService->checkVoteable($account);
         } catch (CloseCampaignException $e) {
             return new JsonResponse([
@@ -50,7 +54,7 @@ final class CheckHandler implements RequestHandlerInterface
             ], 422);
         } catch (AccountNotVotableException $e) {
             return new JsonResponse([
-                'error' => 'Már leadtad a szavazatod',
+                'error' => 'Már leadtad a szavazatod, nem szavazhatsz újra',
             ], 422);
         }
 
