@@ -43,15 +43,15 @@ final class AddHandler implements RequestHandlerInterface
             $this->voteService->voting($account, $this->voteFilter->getValues());
         } catch (CloseCampaignException $e) {
             return new JsonResponse([
-                'message' => 'A szavazás jelenleg zárva tart',
+                'error' => 'A szavazás jelenleg zárva tart',
             ], 422);
         } catch (AccountNotVotableException $e) {
             return new JsonResponse([
-                'message' => 'Már leadtad a szavazatod',
+                'error' => 'Már leadtad a szavazatod, nem szavazhatsz újra',
             ], 422);
         } catch (Exception $e) {
             return new JsonResponse([
-                'message' => 'Sikertelen szavazás',
+                'error' => 'Sikertelen szavazás',
             ], 400);
         }
 
