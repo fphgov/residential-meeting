@@ -24,25 +24,6 @@ return [
                     ],
                 ],
             ],
-            'stream' => [
-                'name'     => 'stream',
-                'priority' => Laminas\Log\Logger::ALERT,
-                'options'  => [
-                    'stream'    => __DIR__ . '/../../data/log/error.log',
-                    'formatter' => [
-                        'name'    => Laminas\Log\Formatter\Simple::class
-                    ],
-                    'filters'   => [
-                        'priority' => [
-                            'name'    => 'priority',
-                            'options' => [
-                                'operator' => '<=',
-                                'priority' => Laminas\Log\Logger::INFO,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
             'db'     => [
                 'name'     => 'db',
                 'priority' => Laminas\Log\Logger::ALERT,
@@ -89,29 +70,6 @@ return [
     'logger' => [
         'AuditLogger' => [
             'writers'    => [
-                'stream' => [
-                    'name'     => 'stream',
-                    'priority' => Laminas\Log\Logger::ALERT,
-                    'options'  => [
-                        'stream'    => __DIR__ . '/../../data/log/audit.log',
-                        'formatter' => [
-                            'name'    => Laminas\Log\Formatter\Simple::class,
-                            'options' => [
-                                'format'         => '%timestamp% %priorityName% (%priority%): %message% %extra%',
-                                'dateTimeFormat' => 'c',
-                            ],
-                        ],
-                        'filters'   => [
-                            'priority' => [
-                                'name'    => 'priority',
-                                'options' => [
-                                    'operator' => '<=',
-                                    'priority' => Laminas\Log\Logger::INFO,
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
                 'db'     => [
                     'name'     => 'db',
                     'priority' => Laminas\Log\Logger::ALERT,
