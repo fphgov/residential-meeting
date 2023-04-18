@@ -30,13 +30,3 @@ if [ $MODE = "production" ]; then
 fi
 
 mkdir -p data/cache/DoctrineEntityProxy
-
-if [[ ! -e data/log/audit.log ]]; then
-    mkdir -p data/log
-    touch data/log/audit.log
-fi
-
-if [[ ! -e data/log/error.log ]]; then
-    mkdir -p data/log
-    touch data/log/error.log
-fi
