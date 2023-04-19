@@ -120,18 +120,18 @@ jobs:
           helm_values_file: ${{ env.HELM_VALUES_FILE }}
           helm_repository_upgrade_extra_args: |
             --set php.image.tag=${{ needs.create-image-tag.outputs.imageTag }}
-            --set nginx.mage.tag=${{ needs.create-image-tag.outputs.imageTag }}
-            --set env[0].value=${{ secrets.SMTP_NAME }}
-            --set env[1].value=${{ secrets.SMTP_HOST }}
-            --set env[2].value=${{ secrets.SMTP_PORT }}
-            --set env[3].value=${{ secrets.SMTP_CONNECTION_CLASS }}
-            --set env[4].value=${{ secrets.SMTP_CONNECTION_CONFIG_USERNAME }}
-            --set env[5].value=${{ secrets.SMTP_CONNECTION_CONFIG_PASSWORD }}
-            --set env[6].value=${{ secrets.SMTP_DEFAULTS_ADD_FROM }}
-            --set env[7].value=${{ secrets.SMTP_DEFAULTS_ADD_FROM_NAME }}
-            --set env[8].value=${{ secrets.SMTP_HEADERS_MESSAGE_ID_DOMAIN }}
-            --set env[9].value=${{ secrets.APP_MUNICIPALITY }}
-            --set env[10].value=${{ secrets.APP_EMAIL }}
-            --set env[11].value=${{ secrets.APP_PHONE }}
-            --set env[12].value=${{ secrets.APP_URL }}
-            --set env[13].value=${{ secrets.RECAPTCHA_SECRET }}
+            --set nginx.image.tag=${{ needs.create-image-tag.outputs.imageTag }}
+            --set "env[0].value=${{ secrets.SMTP_NAME }}"
+            --set "env[1].value=${{ secrets.SMTP_HOST }}"
+            --set "env[2].value=${{ secrets.SMTP_PORT }}"
+            --set "env[3].value=${{ secrets.SMTP_CONNECTION_CLASS }}"
+            --set "env[4].value=${{ secrets.SMTP_CONNECTION_CONFIG_USERNAME }}"
+            --set "env[5].value=${{ secrets.SMTP_CONNECTION_CONFIG_PASSWORD }}"
+            --set "env[6].value=${{ secrets.SMTP_DEFAULTS_ADD_FROM }}"
+            --set "env[7].value=${{ secrets.SMTP_DEFAULTS_ADD_FROM_NAME }}"
+            --set "env[8].value=${{ secrets.SMTP_HEADERS_MESSAGE_ID_DOMAIN }}"
+            --set "env[9].value=${{ secrets.APP_MUNICIPALITY }}"
+            --set "env[10].value=${{ secrets.APP_EMAIL }}"
+            --set "env[11].value=${{ secrets.APP_PHONE }}"
+            --set "env[12].value=${{ secrets.APP_URL }}"
+            --set "env[13].value=${{ secrets.RECAPTCHA_SECRET }}"
