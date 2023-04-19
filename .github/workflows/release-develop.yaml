@@ -84,7 +84,7 @@ jobs:
           image: ${{ env.DOCKER_NGINX_IMAGE }}
           build_file: ${{ env.DOCKER_NGINX_BUILD_FILE }}
           path: .
-          target: app
+          target: appcla
           registry: ${{ env.DOCKER_REGISTRY_URL }}
           extra_args: "--skip-tls-verify"
           username: ${{ secrets.DEV_NEXUS_USER }}
@@ -121,17 +121,17 @@ jobs:
           helm_repository_upgrade_extra_args: |
             --set php.image.tag=${{ needs.create-image-tag.outputs.imageTag }}
             --set nginx.mage.tag=${{ needs.create-image-tag.outputs.imageTag }}
-            --set env.SMTP_HOST=${{ secrets.SMTP_HOST }}
-            --set env.SMTP_NAME=${{ secrets.SMTP_NAME }}
-            --set env.SMTP_PORT=${{ secrets.SMTP_PORT }}
-            --set env.SMTP_CONNECTION_CLASS=${{ secrets.SMTP_CONNECTION_CLASS }}
-            --set env.SMTP_CONNECTION_CONFIG_USERNAME=${{ secrets.SMTP_CONNECTION_CONFIG_USERNAME }}
-            --set env.SMTP_CONNECTION_CONFIG_PASSWORD=${{ secrets.SMTP_CONNECTION_CONFIG_PASSWORD }}
-            --set env.SMTP_DEFAULTS_ADD_FROM=${{ secrets.SMTP_DEFAULTS_ADD_FROM }}
-            --set env.SMTP_DEFAULTS_ADD_FROM_NAME=${{ secrets.SMTP_DEFAULTS_ADD_FROM_NAME }}
-            --set env.SMTP_HEADERS_MESSAGE_ID_DOMAIN=${{ secrets.SMTP_HEADERS_MESSAGE_ID_DOMAIN }}
-            --set env.APP_MUNICIPALITY=${{ secrets.APP_MUNICIPALITY }}
-            --set env.APP_EMAIL=${{ secrets.APP_EMAIL }}
-            --set env.APP_PHONE=${{ secrets.APP_PHONE }}
-            --set env.APP_URL=${{ secrets.APP_URL }}
-            --set env.RECAPTCHA_SECRET=${{ secrets.RECAPTCHA_SECRET }}
+            --set env[0].value=${{ secrets.SMTP_NAME }}
+            --set env[1].value=${{ secrets.SMTP_HOST }}
+            --set env[2].value=${{ secrets.SMTP_PORT }}
+            --set env[3].value=${{ secrets.SMTP_CONNECTION_CLASS }}
+            --set env[4].value=${{ secrets.SMTP_CONNECTION_CONFIG_USERNAME }}
+            --set env[5].value=${{ secrets.SMTP_CONNECTION_CONFIG_PASSWORD }}
+            --set env[6].value=${{ secrets.SMTP_DEFAULTS_ADD_FROM }}
+            --set env[7].value=${{ secrets.SMTP_DEFAULTS_ADD_FROM_NAME }}
+            --set env[8].value=${{ secrets.SMTP_HEADERS_MESSAGE_ID_DOMAIN }}
+            --set env[9].value=${{ secrets.APP_MUNICIPALITY }}
+            --set env[10].value=${{ secrets.APP_EMAIL }}
+            --set env[11].value=${{ secrets.APP_PHONE }}
+            --set env[12].value=${{ secrets.APP_URL }}
+            --set env[13].value=${{ secrets.RECAPTCHA_SECRET }}

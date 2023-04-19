@@ -27,6 +27,16 @@ nginx:
   #   memory: 128Mi
 
 env: 
+  - name: SMTP_NAME
+    value: ""
+  - name: SMTP_HOST
+    value: ""
+  - name: SMTP_CONNECTION_CONFIG_USERNAME
+    value: ""
+  - name: SMTP_CONNECTION_CONFIG_PASSWORD
+    value: ""
+  - name: SMTP_CONNECTION_CONFIG_SSL
+    value: ""
   - name: DB_PASSWORD
     valueFrom:
       secretKeyRef:
@@ -49,20 +59,10 @@ env:
     value: residental_meeting
   - name: DB_CHARSET
     value: utf8mb4
-  - name: SMTP_NAME
-    value: ""
-  - name: SMTP_HOST
-    value: ""
   - name: SMTP_PORT
     value: 25
   - name: SMTP_CONNECTION_CLASS
     value: plain
-  - name: SMTP_CONNECTION_CONFIG_USERNAME
-    value: ""
-  - name: SMTP_CONNECTION_CONFIG_PASSWORD
-    value: ""
-  - name: SMTP_CONNECTION_CONFIG_SSL
-    value: ""
   - name: SMTP_DEFAULTS_ADD_FROM
     value: noreply@
   - name: SMTP_DEFAULTS_ADD_FROM_NAME
