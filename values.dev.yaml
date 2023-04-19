@@ -31,10 +31,30 @@ env:
     value: ""
   - name: SMTP_HOST
     value: ""
+  - name: SMTP_PORT
+    value: "25"
+  - name: SMTP_CONNECTION_CLASS
+    value: plain
   - name: SMTP_CONNECTION_CONFIG_USERNAME
     value: ""
   - name: SMTP_CONNECTION_CONFIG_PASSWORD
     value: ""
+  - name: SMTP_DEFAULTS_ADD_FROM
+    value: noreply@
+  - name: SMTP_DEFAULTS_ADD_FROM_NAME
+    value: noreply@
+  - name: SMTP_HEADERS_MESSAGE_ID_DOMAIN
+    value: onkormanyzat.hu
+  - name: APP_MUNICIPALITY
+    value: "Önkormányzat 1"
+  - name: APP_EMAIL
+    value: ugyfelszolgalat@onkormanyzat.hu
+  - name: APP_PHONE
+    value: 06-1-000-0001
+  - name: APP_URL
+    value: https://lakogyules.onkormanyzat.hu
+  - name: RECAPTCHA_SECRET
+    value: _from_google_
   - name: SMTP_CONNECTION_CONFIG_SSL
     value: ""
   - name: DB_PASSWORD
@@ -59,24 +79,6 @@ env:
     value: residental_meeting
   - name: DB_CHARSET
     value: utf8mb4
-  - name: SMTP_PORT
-    value: "25"
-  - name: SMTP_CONNECTION_CLASS
-    value: plain
-  - name: SMTP_DEFAULTS_ADD_FROM
-    value: noreply@
-  - name: SMTP_DEFAULTS_ADD_FROM_NAME
-    value: noreply@
-  - name: SMTP_HEADERS_MESSAGE_ID_DOMAIN
-    value: onkormanyzat.hu
-  - name: APP_MUNICIPALITY
-    value: "Önkormányzat 1"
-  - name: APP_EMAIL
-    value: ugyfelszolgalat@onkormanyzat.hu
-  - name: APP_PHONE
-    value: 06-1-000-0001
-  - name: APP_URL
-    value: https://lakogyules.onkormanyzat.hu
   - name: APP_NOTIFICATION_FREQUENCY
     value: "20"
   - name: APP_NOTIFICATION_MAIL_TESTTO
@@ -89,8 +91,6 @@ env:
     value: "false"
   - name: APP_EMAIL_TEMPLATE
     value: /var/www/html/public/email
-  - name: RECAPTCHA_SECRET
-    value: _from_google_
   - name: NODE_ENV
     value: production
 
