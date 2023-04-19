@@ -84,7 +84,7 @@ jobs:
           image: ${{ env.DOCKER_NGINX_IMAGE }}
           build_file: ${{ env.DOCKER_NGINX_BUILD_FILE }}
           path: .
-          target: appcla
+          target: app
           registry: ${{ env.DOCKER_REGISTRY_URL }}
           extra_args: "--skip-tls-verify"
           username: ${{ secrets.DEV_NEXUS_USER }}
