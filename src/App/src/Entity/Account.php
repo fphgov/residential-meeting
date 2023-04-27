@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AccountRepository")
- * @ORM\Table(name="accounts")
+ * @ORM\Table(name="accounts", indexes={@ORM\Index(name="account_idx", columns={"auth_code"})})
  */
 class Account implements AccountInterface
 {
@@ -19,14 +19,14 @@ class Account implements AccountInterface
     use EntityTrait;
 
     /**
-     * @ORM\Column(name="auth_code", type="string")
+     * @ORM\Column(name="auth_code", type="string", length=13)
      *
      * @Groups({"full_detail", "profile"})
      */
     private string $authCode;
 
     /**
-     * @ORM\Column(name="zip_code", type="string", nullable=true)
+     * @ORM\Column(name="zip_code", type="string", length=4, nullable=true)
      *
      * @Groups({"full_detail"})
      */
