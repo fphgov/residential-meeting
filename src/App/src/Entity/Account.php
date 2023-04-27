@@ -30,7 +30,7 @@ class Account implements AccountInterface
      *
      * @Groups({"full_detail"})
      */
-    private ?string $zipCode;
+    private ?string $zipCode = null;
 
     /**
      * @ORM\Column(name="voted", type="boolean", nullable=false)

@@ -58,7 +58,7 @@ final class VoteService implements VoteServiceInterface
         $vote->setAnswer($answer);
         $vote->setZipCode($account->getZipCode());
 
-        $account->setZipCode('');
+        $account->setZipCode(null);
 
         $this->em->persist($vote);
 
