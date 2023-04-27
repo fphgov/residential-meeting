@@ -20,7 +20,7 @@ return static function (
     } else {
         $app->post('/app/api/account/check', [
             \Middlewares\Recaptcha::class,
-            App\Handler\account\CheckHandler::class
+            App\Handler\Account\CheckHandler::class
         ], 'app.api.account.check');
     }
 
