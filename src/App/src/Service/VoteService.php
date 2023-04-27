@@ -59,7 +59,6 @@ final class VoteService implements VoteServiceInterface
         $vote->setZipCode($account->getZipCode());
 
         $account->setZipCode('');
-        $account->setCluster('');
 
         $this->em->persist($vote);
 

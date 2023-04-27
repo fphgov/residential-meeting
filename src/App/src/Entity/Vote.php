@@ -45,13 +45,6 @@ class Vote implements VoteInterface
      */
     private string $zipCode;
 
-    /**
-     * @ORM\Column(name="cluster", type="string")
-     *
-     * @Groups({"full_detail"})
-     */
-    private string $cluster;
-
     public function getId(): int
     {
         return $this->id;
@@ -90,15 +83,5 @@ class Vote implements VoteInterface
     public function setZipCode(string $zipCode): void
     {
         $this->zipCode = $zipCode;
-    }
-
-    public function getCluster(): string
-    {
-        return $this->cluster;
-    }
-
-    public function setCluster(string $cluster): void
-    {
-        $this->cluster = $cluster;
     }
 }

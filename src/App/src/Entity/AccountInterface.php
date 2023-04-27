@@ -23,8 +23,4 @@ interface AccountInterface extends EntityInterface
     public function getZipCode(): ?string;
 
     public function setZipCode(?string $zipCode): void;
-
-    public function getCluster(): ?string;
-
-    public function setCluster(?string $cluster): void;
 }
