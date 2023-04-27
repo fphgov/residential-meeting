@@ -26,6 +26,20 @@ class Account implements AccountInterface
     private string $authCode;
 
     /**
+     * @ORM\Column(name="zip_code", type="string", nullable=true)
+     *
+     * @Groups({"full_detail"})
+     */
+    private ?string $zipCode;
+
+    /**
+     * @ORM\Column(name="cluster", type="string", nullable=true)
+     *
+     * @Groups({"full_detail"})
+     */
+    private ?string $cluster;
+
+    /**
      * @ORM\Column(name="voted", type="boolean", nullable=false)
      *
      * @Groups({"full_detail"})
@@ -67,5 +81,25 @@ class Account implements AccountInterface
     public function getPrivacy(): bool
     {
         return $this->privacy;
+    }
+
+    public function getZipCode(): ?string
+    {
+        return $this->zipCode;
+    }
+
+    public function setZipCode(?string $zipCode = null): void
+    {
+        $this->zipCode = $zipCode;
+    }
+
+    public function getCluster(): ?string
+    {
+        return $this->cluster;
+    }
+
+    public function setCluster(?string $cluster = null): void
+    {
+        $this->cluster = $cluster;
     }
 }

@@ -38,6 +38,20 @@ class Vote implements VoteInterface
      */
     private ?bool $answer;
 
+    /**
+     * @ORM\Column(name="zip_code", type="string")
+     *
+     * @Groups({"full_detail"})
+     */
+    private string $zipCode;
+
+    /**
+     * @ORM\Column(name="cluster", type="string")
+     *
+     * @Groups({"full_detail"})
+     */
+    private string $cluster;
+
     public function getId(): int
     {
         return $this->id;
@@ -66,5 +80,25 @@ class Vote implements VoteInterface
     public function setAnswer(?bool $answer = null): void
     {
         $this->answer = $answer;
+    }
+
+    public function getZipCode(): string
+    {
+        return $this->zipCode;
+    }
+
+    public function setZipCode(string $zipCode): void
+    {
+        $this->zipCode = $zipCode;
+    }
+
+    public function getCluster(): string
+    {
+        return $this->cluster;
+    }
+
+    public function setCluster(string $cluster): void
+    {
+        $this->cluster = $cluster;
     }
 }

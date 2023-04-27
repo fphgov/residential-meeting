@@ -15,4 +15,12 @@ interface VoteInterface extends EntitySimpleInterface
     public function getAnswer(): ?bool;
 
     public function setAnswer(?bool $answer): void;
+
+    public function getZipCode(): string;
+
+    public function setZipCode(string $zipCode): void;
+
+    public function getCluster(): string;
+
+    public function setCluster(string $cluster): void;
 }
