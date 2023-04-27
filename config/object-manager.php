@@ -8,8 +8,10 @@ chdir(__DIR__ . '/../');
 
 require_once 'vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createUnsafeMutable(dirname(__DIR__));
-$dotenv->load();
+if (getenv('NODE_ENV') === 'development') {
+    $dotenv = Dotenv\Dotenv::createUnsafeMutable(dirname(__DIR__, 2));
+    $dotenv->load();
+}
 
 $container = require __DIR__ . '/container.php';
 
