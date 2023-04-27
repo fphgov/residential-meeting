@@ -11,7 +11,7 @@ use Symfony\Component\Console\Helper\HelperSet;
 require_once BASIC_PATH . '/vendor/autoload.php';
 
 if (getenv('NODE_ENV') === 'development') {
-    $dotenv = Dotenv\Dotenv::createUnsafeMutable(dirname(__DIR__, 2));
+    $dotenv = Dotenv\Dotenv::createUnsafeMutable(dirname(__DIR__, 1));
     $dotenv->load();
 }
 

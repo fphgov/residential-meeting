@@ -9,7 +9,7 @@ chdir(__DIR__ . '/../');
 require_once 'vendor/autoload.php';
 
 if (getenv('NODE_ENV') === 'development') {
-    $dotenv = Dotenv\Dotenv::createUnsafeMutable(dirname(__DIR__, 2));
+    $dotenv = Dotenv\Dotenv::createUnsafeMutable(dirname(__DIR__, 1));
     $dotenv->load();
 }
 
