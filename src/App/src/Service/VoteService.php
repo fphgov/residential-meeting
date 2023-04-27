@@ -58,8 +58,6 @@ final class VoteService implements VoteServiceInterface
         $vote->setAnswer($answer);
         $vote->setZipCode($account->getZipCode());
 
-        $account->setZipCode(null);
-
         $this->em->persist($vote);
 
         return $vote;
@@ -113,6 +111,7 @@ final class VoteService implements VoteServiceInterface
 
         $account->setPrivacy($this->parse($filteredData['privacy']));
         $account->setVoted(true);
+        $account->setZipCode(null);
         $account->setUpdatedAt(new DateTime());
 
         $this->em->flush();
