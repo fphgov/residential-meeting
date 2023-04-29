@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\EntityInterface;
+use App\Interfaces\EntitySimpleInterface;
 
-interface AccountInterface extends EntityInterface
+interface AccountInterface extends EntitySimpleInterface
 {
     public function seAuthCode(string $authCode): void;
 

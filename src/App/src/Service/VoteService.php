@@ -15,7 +15,6 @@ use App\Entity\VoteInterface;
 use App\Exception\AccountNotVotableException;
 use App\Exception\CloseCampaignException;
 use App\Service\MailServiceInterface;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
@@ -112,7 +111,6 @@ final class VoteService implements VoteServiceInterface
         $account->setPrivacy($this->parse($filteredData['privacy']));
         $account->setVoted(true);
         $account->setZipCode(null);
-        $account->setUpdatedAt(new DateTime());
 
         $this->em->flush();
 

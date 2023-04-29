@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Traits\EntityMetaTrait;
 use App\Traits\EntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -15,8 +14,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Account implements AccountInterface
 {
-    use EntityMetaTrait;
     use EntityTrait;
+
+    /**
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
+     * @Groups({"list", "option", "detail", "full_detail", "vote_list"})
+     */
+    protected int $id;
 
     /**
      * @ORM\Column(name="auth_code", type="string", length=14)
@@ -45,6 +52,16 @@ class Account implements AccountInterface
      * @Groups({"full_detail"})
      */
     private bool $privacy = false;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 
     public function seAuthCode(string $authCode): void
     {
