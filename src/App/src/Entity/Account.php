@@ -19,7 +19,7 @@ class Account implements AccountInterface
     use EntityTrait;
 
     /**
-     * @ORM\Column(name="auth_code", type="string", length=13)
+     * @ORM\Column(name="auth_code", type="string", length=14)
      *
      * @Groups({"full_detail", "profile"})
      */

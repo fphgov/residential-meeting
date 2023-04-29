@@ -23,7 +23,7 @@ class Question implements QuestionInterface
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @Groups({"list", "option", "detail", "full_detail", "vote_list"})
+     * @Groups({"list", "option", "detail", "full_detail", "navigation"})
      */
     protected int $id;
 
@@ -37,7 +37,7 @@ class Question implements QuestionInterface
     /**
      * @ORM\Column(name="question_short", type="string")
      *
-     * @Groups({"list", "detail", "full_detail"})
+     * @Groups({"list", "detail", "full_detail", "navigation"})
      */
     private string $questionShort;
 
@@ -75,6 +75,20 @@ class Question implements QuestionInterface
      * @Groups({"detail", "full_detail"})
      */
     private string $descriptionOptionNo;
+
+    /**
+     * @ORM\Column(name="summary_option_yes", type="text")
+     *
+     * @Groups({"detail", "full_detail"})
+     */
+    private string $summaryOptionYes;
+
+    /**
+     * @ORM\Column(name="summary_option_no", type="text")
+     *
+     * @Groups({"detail", "full_detail"})
+     */
+    private string $summaryOptionNo;
 
     public function getId(): int
     {
@@ -154,5 +168,25 @@ class Question implements QuestionInterface
     public function getDescriptionOptionNo(): string
     {
         return $this->descriptionOptionNo;
+    }
+
+    public function setSummaryOptionYes(string $summaryOptionYes): void
+    {
+        $this->summaryOptionYes = $summaryOptionYes;
+    }
+
+    public function getSummaryOptionYes(): string
+    {
+        return $this->summaryOptionYes;
+    }
+
+    public function setSummaryOptionNo(string $summaryOptionNo): void
+    {
+        $this->summaryOptionNo = $summaryOptionNo;
+    }
+
+    public function getSummaryOptionNo(): string
+    {
+        return $this->summaryOptionNo;
     }
 }

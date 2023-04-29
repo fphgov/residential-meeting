@@ -12,7 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class GetHandler implements RequestHandlerInterface
+final class GetNavigationHandler implements RequestHandlerInterface
 {
     /** @var QuestionRepositoryInterface **/
     private $questionRepository;
@@ -26,15 +26,18 @@ final class GetHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $question = $this->questionRepository->findOneBy([
-            'id'     => $request->getAttribute('id'),
+        $questions = $this->questionRepository->findAll([
             'active' => true,
         ]);
 
-        $normalizedQuestion = $question->normalizer(null, ['groups' => 'detail']);
+        $normalizedQuestions = [];
+
+        foreach ($questions as $question) {
+            $normalizedQuestions[] = $question->normalizer(null, ['groups' => 'navigation']);
+        }
 
         return new JsonResponse([
-            'question' => $normalizedQuestion,
+            'questions' => $normalizedQuestions,
         ]);
     }
 }
