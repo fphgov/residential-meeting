@@ -8,7 +8,6 @@ on:
 
 env:
   DOCKER_REGISTRY_URL: 'registry.prod.intra.fph.hu'
-  DOCKER_BUILD_TARGET: 'production'
   DOCKER_PHP_BUILD_FILE: 'k8s/php/Dockerfile'
   DOCKER_NGINX_BUILD_FILE: 'k8s/nginx/Dockerfile'
   DOCKER_PHP_IMAGE: 'docker/residential-meeting-php'
@@ -57,7 +56,6 @@ jobs:
           image: ${{ env.DOCKER_PHP_IMAGE }}
           build_file: ${{ env.DOCKER_PHP_BUILD_FILE }}
           path: .
-          target: ${{ env.DOCKER_BUILD_TARGET }}
           registry: ${{ env.DOCKER_REGISTRY_URL }}
           extra_args: "--skip-tls-verify"
           username: ${{ secrets.PROD_NEXUS_USER }}
