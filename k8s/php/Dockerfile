@@ -65,5 +65,8 @@ RUN sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 25/' /usr/local/et
 EXPOSE 9000
 
 COPY supervisord.conf /etc/supervisord.conf
+RUN chmod +x /var/www/html/docker/config/webapp/setup.sh
+
+RUN php -d allow_url_fopen=on /usr/local/bin/composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

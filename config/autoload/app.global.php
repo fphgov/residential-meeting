@@ -9,7 +9,7 @@ return [
         'url'                 => str_replace('"', '', getenv('APP_URL')),
         'email'               => str_replace('"', '', getenv('APP_EMAIL')),
         'notification'        => [
-            'frequency' => (int)getenv('APP_NOTIFICATION_FREQUENCY'),
+            'frequency' => (int)str_replace(['"',"'"], "", getenv('APP_NOTIFICATION_FREQUENCY')),
             'mail'      => [
                 'testTo'   => getenv('APP_NOTIFICATION_MAIL_TESTTO'),
                 'subject'  => getenv('APP_NOTIFICATION_MAIL_SUBJECT'),

@@ -15,4 +15,8 @@ interface VoteInterface extends EntitySimpleInterface
     public function getAnswer(): ?bool;
 
     public function setAnswer(?bool $answer): void;
+
+    public function getZipCode(): string;
+
+    public function setZipCode(string $zipCode): void;
 }

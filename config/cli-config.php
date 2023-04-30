@@ -10,8 +10,10 @@ use Symfony\Component\Console\Helper\HelperSet;
 
 require_once BASIC_PATH . '/vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createUnsafeMutable(BASIC_PATH);
-$dotenv->load();
+if (getenv('NODE_ENV') === 'development') {
+    $dotenv = Dotenv\Dotenv::createUnsafeMutable(dirname(__DIR__, 1));
+    $dotenv->load();
+}
 
 $container = require __DIR__ . '/container.php';
 

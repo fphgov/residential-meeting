@@ -107,6 +107,22 @@ class VoteFilter extends InputFilter
         $this->add([
             'name'        => 'newsletter',
             'allow_empty' => true,
+            'validators' => [
+                new Validator\Callback([
+                    'messages' => [
+                        Validator\Callback::INVALID_VALUE => 'Adjon meg e-mail címet feliratkozáshoz',
+                    ],
+                    'callback' => function ($value, $context = []) {
+                        if (strval($value) === "true" && ($context['email'] === null ||
+                            empty($context['email'])
+                        )) {
+                            return false;
+                        }
+
+                        return true;
+                    }
+                ]),
+            ],
         ]);
 
         $this->add([

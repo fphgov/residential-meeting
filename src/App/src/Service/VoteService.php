@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Account;
 use App\Entity\AccountInterface;
 use App\Entity\Newsletter;
 use App\Entity\Notification;
@@ -14,7 +15,6 @@ use App\Entity\VoteInterface;
 use App\Exception\AccountNotVotableException;
 use App\Exception\CloseCampaignException;
 use App\Service\MailServiceInterface;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
@@ -48,12 +48,14 @@ final class VoteService implements VoteServiceInterface
 
     private function createVote(
         Question $question,
+        Account $account,
         ?bool $answer
     ): VoteInterface {
         $vote = new Vote();
 
         $vote->setQuestion($question);
         $vote->setAnswer($answer);
+        $vote->setZipCode($account->getZipCode());
 
         $this->em->persist($vote);
 
@@ -71,7 +73,7 @@ final class VoteService implements VoteServiceInterface
 
             $parsedAnswer = $this->parse($answer);
 
-            $this->createVote($question, $parsedAnswer);
+            $this->createVote($question, $account, $parsedAnswer);
         }
 
         $successNotification = null;
@@ -108,7 +110,7 @@ final class VoteService implements VoteServiceInterface
 
         $account->setPrivacy($this->parse($filteredData['privacy']));
         $account->setVoted(true);
-        $account->setUpdatedAt(new DateTime());
+        $account->setZipCode(null);
 
         $this->em->flush();
 

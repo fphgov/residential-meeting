@@ -15,8 +15,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 require 'vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createUnsafeMutable(dirname(__DIR__, 2));
-$dotenv->load();
+if (getenv('NODE_ENV') === 'development') {
+    $dotenv = Dotenv\Dotenv::createUnsafeMutable(dirname(__DIR__, 2));
+    $dotenv->load();
+}
 
 $container = require 'config/container.php';
 

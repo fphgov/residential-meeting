@@ -38,6 +38,13 @@ class Vote implements VoteInterface
      */
     private ?bool $answer;
 
+    /**
+     * @ORM\Column(name="zip_code", type="string")
+     *
+     * @Groups({"full_detail"})
+     */
+    private string $zipCode;
+
     public function getId(): int
     {
         return $this->id;
@@ -66,5 +73,15 @@ class Vote implements VoteInterface
     public function setAnswer(?bool $answer = null): void
     {
         $this->answer = $answer;
+    }
+
+    public function getZipCode(): string
+    {
+        return $this->zipCode;
+    }
+
+    public function setZipCode(string $zipCode): void
+    {
+        $this->zipCode = $zipCode;
     }
 }

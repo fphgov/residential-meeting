@@ -26,7 +26,37 @@ nginx:
   #   cpu: 100m
   #   memory: 128Mi
 
-env: 
+env:
+  - name: SMTP_NAME
+    value: ""
+  - name: SMTP_HOST
+    value: ""
+  - name: SMTP_PORT
+    value: "25"
+  - name: SMTP_CONNECTION_CLASS
+    value: plain
+  - name: SMTP_CONNECTION_CONFIG_USERNAME
+    value: "INFORMATIKA\\hirlevel"
+  - name: SMTP_CONNECTION_CONFIG_PASSWORD
+    value: ""
+  - name: SMTP_DEFAULTS_ADD_FROM
+    value: noreply@
+  - name: SMTP_DEFAULTS_ADD_FROM_NAME
+    value: "Budapest Főpolgármesteri Hivatal"
+  - name: SMTP_HEADERS_MESSAGE_ID_DOMAIN
+    value: onkormanyzat.hu
+  - name: APP_MUNICIPALITY
+    value: "Budapest Főpolgármesteri Hivatal"
+  - name: APP_EMAIL
+    value: ugyfelszolgalat@onkormanyzat.hu
+  - name: APP_PHONE
+    value: 06-1-000-0001
+  - name: APP_URL
+    value: https://lakogyules.budapest.hu
+  - name: RECAPTCHA_SECRET
+    value: _from_google_
+  - name: SMTP_CONNECTION_CONFIG_SSL
+    value: ""
   - name: DB_PASSWORD
     valueFrom:
       secretKeyRef:
@@ -44,39 +74,11 @@ env:
   - name: DB_PORT
     value: "3307"
   - name: DB_DATABASE
-    value: residental_meeting
+    value: residential_meeting
   - name: DB_USER
-    value: residental_meeting
+    value: residential_meeting
   - name: DB_CHARSET
     value: utf8mb4
-  - name: SMTP_NAME
-    value: ""
-  - name: SMTP_HOST
-    value: ""
-  - name: SMTP_PORT
-    value: "25"
-  - name: SMTP_CONNECTION_CLASS
-    value: plain
-  - name: SMTP_CONNECTION_CONFIG_USERNAME
-    value: ""
-  - name: SMTP_CONNECTION_CONFIG_PASSWORD
-    value: ""
-  - name: SMTP_CONNECTION_CONFIG_SSL
-    value: ""
-  - name: SMTP_DEFAULTS_ADD_FROM
-    value: noreply@
-  - name: SMTP_DEFAULTS_ADD_FROM_NAME
-    value: noreply@
-  - name: SMTP_HEADERS_MESSAGE_ID_DOMAIN
-    value: onkormanyzat.hu
-  - name: APP_MUNICIPALITY
-    value: "Önkormányzat 1"
-  - name: APP_EMAIL
-    value: ugyfelszolgalat@onkormanyzat.hu
-  - name: APP_PHONE
-    value: 06-1-000-0001
-  - name: APP_URL
-    value: https://lakogyules.onkormanyzat.hu
   - name: APP_NOTIFICATION_FREQUENCY
     value: "20"
   - name: APP_NOTIFICATION_MAIL_TESTTO
@@ -89,8 +91,6 @@ env:
     value: "false"
   - name: APP_EMAIL_TEMPLATE
     value: /var/www/html/public/email
-  - name: RECAPTCHA_SECRET
-    value: _from_google_
   - name: NODE_ENV
     value: production
 
@@ -122,19 +122,17 @@ service:
 
 ingress:
   enabled: false
-  className: ""
+  className: "public"
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: vote-api.dev.fph.hu
+    - host: vote-api.dev.intra.fph.hu
       paths:
         - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: wildcard-dev-intra-fph-hu
-  #    hosts:
-  #      - vote-api.dev.fph.hu
+          pathType: Prefix
+  tls:
+   - secretName: wildcard-dev-intra-fph-hu-tls
+     hosts:
+       - vote-api.dev.intra.fph.hu
 
 autoscaling:
   enabled: false

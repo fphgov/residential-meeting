@@ -9,7 +9,7 @@ return [
         'smtp'     => [
             'name'              => getenv('SMTP_NAME'),
             'host'              => getenv('SMTP_HOST'),
-            'port'              => getenv('SMTP_PORT'),
+            'port'              => (int)str_replace(['"',"'"], "", getenv('SMTP_PORT')),
             'connection_class'  => getenv('SMTP_CONNECTION_CLASS'),
             'connection_config' => [
                 'username' => getenv('SMTP_CONNECTION_CONFIG_USERNAME'),

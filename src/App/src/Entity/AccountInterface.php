@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\EntityInterface;
+use App\Interfaces\EntitySimpleInterface;
 
-interface AccountInterface extends EntityInterface
+interface AccountInterface extends EntitySimpleInterface
 {
     public function seAuthCode(string $authCode): void;
 
@@ -19,4 +19,8 @@ interface AccountInterface extends EntityInterface
     public function setPrivacy(bool $privacy): void;
 
     public function getPrivacy(): bool;
+
+    public function getZipCode(): ?string;
+
+    public function setZipCode(?string $zipCode): void;
 }

@@ -18,16 +18,23 @@ return static function (
             App\Handler\Account\CheckHandler::class
         ], 'app.api.account.check');
     } else {
-        $app->post('/app/api/user/check', [
+        $app->post('/app/api/account/check', [
             \Middlewares\Recaptcha::class,
-            App\Handler\account\CheckHandler::class
+            App\Handler\Account\CheckHandler::class
         ], 'app.api.account.check');
     }
 
-    $app->get('/app/api/question', [
-        App\Middleware\AccountMiddleware::class,
+    $app->get('/app/api/question/{id:\d+}', [
         App\Handler\Question\GetHandler::class
     ], 'app.api.question.get');
+
+    $app->get('/app/api/question/all', [
+        App\Handler\Question\GetAllHandler::class
+    ], 'app.api.question.all');
+
+    $app->get('/app/api/question/navigation', [
+        App\Handler\Question\GetNavigationHandler::class
+    ], 'app.api.question.navigation');
 
     $app->post('/app/api/vote', [
         App\Middleware\AccountMiddleware::class,
