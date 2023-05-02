@@ -49,6 +49,7 @@ class ConfigProvider
                 Service\VoteServiceInterface::class           => Service\VoteServiceFactory::class,
                 Service\VoteValidationServiceInterface::class => Service\VoteValidationServiceFactory::class,
                 Service\MailServiceInterface::class           => Service\MailServiceFactory::class,
+                Service\NewsletterServiceInterface::class     => Service\NewsletterServiceFactory::class,
                 Helper\MailContentHelper::class               => Helper\MailContentHelperFactory::class,
                 Helper\MailContentRawHelper::class            => Helper\MailContentRawHelperFactory::class,
             ],
