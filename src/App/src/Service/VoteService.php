@@ -79,7 +79,7 @@ final class VoteService implements VoteServiceInterface
 
         $successNotification = null;
 
-        if (isset($filteredData['email'])) {
+        if (isset($filteredData['email']) && ! empty($filteredData['email'])) {
             $email = $this->notificationRepository->findOneBy([
                 'email' => $filteredData['email'],
             ]);
