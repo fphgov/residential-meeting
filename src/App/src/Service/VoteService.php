@@ -96,7 +96,12 @@ final class VoteService implements VoteServiceInterface
             $successNotification = $email;
         }
 
-        if (isset($filteredData['email']) && isset($filteredData['newsletter'])) {
+        if (
+            isset($filteredData['email']) &&
+            !empty($filteredData['email']) &&
+            isset($filteredData['newsletter']) &&
+            $filteredData['newsletter'] === "true"
+        ) {
             try {
                 $this->newsletterService->subscribe(
                     '8ILl2QAD-',
