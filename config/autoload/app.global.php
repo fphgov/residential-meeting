@@ -18,7 +18,8 @@ return [
             'force' => (string)getenv('APP_NOTIFICATION_FORCE') === "true",
         ],
         'newsletter'          => [
-            'url' => 'https://hirlevel.budapest.hu/subscr_api.php'
+            'url'   => 'https://hirlevel.budapest.hu/subscr_api.php',
+            'limit' => 20,
         ]
     ],
 ];

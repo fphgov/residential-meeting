@@ -11,13 +11,13 @@ use App\Entity\Question;
 use App\Entity\Setting;
 use App\Entity\Vote;
 use App\Entity\VoteInterface;
+use App\Entity\Newsletter;
 use App\Exception\AccountNotVotableException;
 use App\Exception\CloseCampaignException;
 use App\Service\MailServiceInterface;
 use App\Service\NewsletterServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Exception;
 use Laminas\Log\Logger;
 
 final class VoteService implements VoteServiceInterface
@@ -30,6 +30,9 @@ final class VoteService implements VoteServiceInterface
 
     /** @var EntityRepository */
     private $notificationRepository;
+
+    /** @var EntityRepository */
+    private $newsletterRepository;
 
     public function __construct(
         private array $config,
@@ -45,6 +48,7 @@ final class VoteService implements VoteServiceInterface
         $this->questionRepository     = $this->em->getRepository(Question::class);
         $this->settingRepository      = $this->em->getRepository(Setting::class);
         $this->notificationRepository = $this->em->getRepository(Notification::class);
+        $this->newsletterRepository   = $this->em->getRepository(Newsletter::class);
     }
 
     private function createVote(
@@ -100,17 +104,17 @@ final class VoteService implements VoteServiceInterface
             isset($filteredData['email']) &&
             !empty($filteredData['email']) &&
             isset($filteredData['newsletter']) &&
-            $filteredData['newsletter'] === "true"
+            $this->parse($filteredData['newsletter']) === true
         ) {
-            try {
-                $this->newsletterService->subscribe(
-                    '8ILl2QAD-',
-                    $filteredData['email']
-                );
-            } catch (Exception $e) {
-                $this->audit->err('Newsletter subscription failed', [
-                    'extra' => $e->getMessage(),
-                ]);
+            $email = $this->newsletterRepository->findOneBy([
+                'email' => $filteredData['email'],
+            ]);
+
+            if (!$email) {
+                $newsletter = new Newsletter();
+                $newsletter->setEmail($filteredData['email']);
+
+                $this->em->persist($newsletter);
             }
         }
 

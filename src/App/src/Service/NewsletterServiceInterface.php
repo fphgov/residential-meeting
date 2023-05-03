@@ -6,5 +6,5 @@ namespace App\Service;
 
 interface NewsletterServiceInterface
 {
-    public function subscribe(string $cid, string $email): void;
+    public function process(string $cid): void;
 }

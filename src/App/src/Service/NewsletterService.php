@@ -4,20 +4,47 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Newsletter;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use Laminas\Log\Logger;
+use Exception;
 
 class NewsletterService implements NewsletterServiceInterface
 {
-    private string $url = '';
+    private EntityRepository $newsletterRepository;
 
     public function __construct(
-        array $config
+        private array $config,
+        private EntityManagerInterface $em,
+        private Logger $audit
     ) {
-        $this->url = $config['app']['newsletter']['url'];
+        $this->em                   = $em;
+        $this->newsletterRepository = $this->em->getRepository(Newsletter::class);
     }
 
-    public function subscribe(string $cid, string $email): void
+    public function process(string $cid): void
+    {
+        $limit       = (int)$this->config['app']['newsletter']['limit'];
+        $subscribers = $this->newsletterRepository->findBy([], null, $limit);
+
+        foreach ($subscribers as $subscriber) {
+            try {
+                $this->subscribe($cid, $subscriber->getEmail());
+
+                $this->em->remove($subscriber);
+                $this->em->flush();
+            } catch (Exception $e) {
+                $this->audit->err('Newsletter subscription failed', [
+                    'extra' => $e->getMessage(),
+                ]);
+            }
+        }
+    }
+
+    private function subscribe(string $cid, string $email): void
     {
         $client = new Client([
             'verify' => false
@@ -34,7 +61,9 @@ class NewsletterService implements NewsletterServiceInterface
             ]
         ];
 
-        $request = new Request('POST', $this->url, $headers);
+        $url = $this->config['app']['newsletter']['url'];
+
+        $request = new Request('POST', $url, $headers);
 
         $client->sendAsync($request, $options)->wait();
     }
