@@ -118,7 +118,6 @@ final class VoteService implements VoteServiceInterface
             }
         }
 
-        $account->setPrivacy($this->parse($filteredData['privacy']));
         $account->setVoted(true);
         $account->setZipCode(null);
 
