@@ -40,4 +40,8 @@ interface QuestionInterface extends EntitySimpleInterface, EntityActiveInterface
     public function setSummaryOptionNo(string $summaryOptionNo): void;
 
     public function getSummaryOptionNo(): string;
+
+    public function setSummaryHeadline(string $summaryHeadline): void;
+
+    public function getSummaryHeadline(): string;
 }
