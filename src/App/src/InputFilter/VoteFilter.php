@@ -94,11 +94,23 @@ class VoteFilter extends InputFilter
                 ]),
                 new Validator\Callback([
                     'messages' => [
-                        Validator\Callback::INVALID_VALUE    => 'Ha megadtad az e-mail címed, akkor hozzá kell járulnod ahhoz, hogy ezt az adatot kezeljük. Ezután lesz elérhető a szavazás.',
+                        Validator\Callback::INVALID_VALUE    => 'Megadtad az e-mail címed, de nem adtál hozzájárulást annak kezeléséhez. Ha mégsem kívánsz hozzájárulni az e-mail címed kezeléséhez, akkor töröld az e-mail mező tartalmát.',
                         Validator\Callback::INVALID_CALLBACK => 'Ismeretlen hiba',
                     ],
-                    'callback' => function ($value) {
-                        return $value === true || $value === "true" || $value === "on";
+                    'callback' => function ($value, $context = []) {
+                        if ($context['email'] === null || empty($context['email'])) {
+                            return true;
+                        }
+
+                        if (strval($value) === "true" || strval($value) === "on") {
+                            return true;
+                        }
+
+                        if ($context['newsletter'] === "true") {
+                            return true;
+                        }
+
+                        return false;
                     },
                 ]),
             ],
@@ -106,20 +118,32 @@ class VoteFilter extends InputFilter
 
         $this->add([
             'name'        => 'newsletter',
-            'allow_empty' => true,
+            'allow_empty' => false,
             'validators' => [
+                new Validator\NotEmpty([
+                    'messages' => [
+                        Validator\NotEmpty::IS_EMPTY => 'Kötelező a mező kitöltése',
+                        Validator\NotEmpty::INVALID  => 'Hibás mező tipus',
+                    ],
+                ]),
                 new Validator\Callback([
                     'messages' => [
-                        Validator\Callback::INVALID_VALUE => 'Adjon meg e-mail címet feliratkozáshoz',
+                        Validator\Callback::INVALID_VALUE => 'Megadtad az e-mail címed, de nem adtál hozzájárulást annak kezeléséhez. Ha mégsem kívánsz hozzájárulni az e-mail címed kezeléséhez, akkor töröld az e-mail mező tartalmát.',
                     ],
                     'callback' => function ($value, $context = []) {
-                        if (strval($value) === "true" && ($context['email'] === null ||
-                            empty($context['email'])
-                        )) {
-                            return false;
+                        if ($context['email'] === null || empty($context['email'])) {
+                            return true;
                         }
 
-                        return true;
+                        if (strval($value) === "true" || strval($value) === "on") {
+                            return true;
+                        }
+
+                        if ($context['privacy'] === "true") {
+                            return true;
+                        }
+
+                        return false;
                     }
                 ]),
             ],
