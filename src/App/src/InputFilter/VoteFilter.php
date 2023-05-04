@@ -94,7 +94,7 @@ class VoteFilter extends InputFilter
                 ]),
                 new Validator\Callback([
                     'messages' => [
-                        Validator\Callback::INVALID_VALUE    => 'Csak elfogadás után tudjuk fogadni a regisztrációs űrlapot',
+                        Validator\Callback::INVALID_VALUE    => 'Ha megadtad az e-mail címed, akkor hozzá kell járulnod ahhoz, hogy ezt az adatot kezeljük. Ezután lesz elérhető a szavazás.',
                         Validator\Callback::INVALID_CALLBACK => 'Ismeretlen hiba',
                     ],
                     'callback' => function ($value) {
