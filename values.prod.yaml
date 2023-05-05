@@ -5,7 +5,7 @@ php:
     repository: registry.prod.intra.fph.hu/docker/residential-meeting-php
     pullPolicy: IfNotPresent
     tag: "latest"
-  resources: 
+  resources:
     limits:
       cpu: 2000m
       memory: 4Gi
@@ -137,7 +137,7 @@ ingress:
   #      - vote-api.dev.fph.hu
 
 autoscaling:
-  enabled: ture
+  enabled: true
   minReplicas: 5
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
