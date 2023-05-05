@@ -16,10 +16,6 @@ interface AccountInterface extends EntitySimpleInterface
 
     public function getVoted(): bool;
 
-    public function setPrivacy(bool $privacy): void;
-
-    public function getPrivacy(): bool;
-
     public function getZipCode(): ?string;
 
     public function setZipCode(?string $zipCode): void;

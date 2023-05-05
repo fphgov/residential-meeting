@@ -46,13 +46,6 @@ class Account implements AccountInterface
      */
     private bool $voted = false;
 
-    /**
-     * @ORM\Column(name="privacy", type="boolean", nullable=false)
-     *
-     * @Groups({"full_detail"})
-     */
-    private bool $privacy = false;
-
     public function getId(): int
     {
         return $this->id;
@@ -81,16 +74,6 @@ class Account implements AccountInterface
     public function getVoted(): bool
     {
         return $this->voted;
-    }
-
-    public function setPrivacy(bool $privacy): void
-    {
-        $this->privacy = $privacy;
-    }
-
-    public function getPrivacy(): bool
-    {
-        return $this->privacy;
     }
 
     public function getZipCode(): ?string

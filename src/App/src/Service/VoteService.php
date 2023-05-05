@@ -6,17 +6,19 @@ namespace App\Service;
 
 use App\Entity\Account;
 use App\Entity\AccountInterface;
-use App\Entity\Newsletter;
 use App\Entity\Notification;
 use App\Entity\Question;
 use App\Entity\Setting;
 use App\Entity\Vote;
 use App\Entity\VoteInterface;
+use App\Entity\Newsletter;
 use App\Exception\AccountNotVotableException;
 use App\Exception\CloseCampaignException;
 use App\Service\MailServiceInterface;
+use App\Service\NewsletterServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Laminas\Log\Logger;
 
 final class VoteService implements VoteServiceInterface
 {
@@ -35,11 +37,14 @@ final class VoteService implements VoteServiceInterface
     public function __construct(
         private array $config,
         private EntityManagerInterface $em,
-        private MailServiceInterface $mailService
+        private MailServiceInterface $mailService,
+        private Logger $audit,
+        private NewsletterServiceInterface $newsletterService
     ) {
         $this->config                 = $config;
         $this->em                     = $em;
         $this->mailService            = $mailService;
+        $this->newsletterService      = $newsletterService;
         $this->questionRepository     = $this->em->getRepository(Question::class);
         $this->settingRepository      = $this->em->getRepository(Setting::class);
         $this->notificationRepository = $this->em->getRepository(Notification::class);
@@ -78,7 +83,7 @@ final class VoteService implements VoteServiceInterface
 
         $successNotification = null;
 
-        if (isset($filteredData['email'])) {
+        if (isset($filteredData['email']) && ! empty($filteredData['email'])) {
             $email = $this->notificationRepository->findOneBy([
                 'email' => $filteredData['email'],
             ]);
@@ -95,12 +100,17 @@ final class VoteService implements VoteServiceInterface
             $successNotification = $email;
         }
 
-        if (isset($filteredData['email']) && isset($filteredData['newsletter'])) {
+        if (
+            isset($filteredData['email']) &&
+            !empty($filteredData['email']) &&
+            isset($filteredData['newsletter']) &&
+            $this->parse($filteredData['newsletter']) === true
+        ) {
             $email = $this->newsletterRepository->findOneBy([
                 'email' => $filteredData['email'],
             ]);
 
-            if (! $email) {
+            if (!$email) {
                 $newsletter = new Newsletter();
                 $newsletter->setEmail($filteredData['email']);
 
@@ -108,7 +118,6 @@ final class VoteService implements VoteServiceInterface
             }
         }
 
-        $account->setPrivacy($this->parse($filteredData['privacy']));
         $account->setVoted(true);
         $account->setZipCode(null);
 

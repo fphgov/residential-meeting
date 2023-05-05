@@ -90,6 +90,13 @@ class Question implements QuestionInterface
      */
     private string $summaryOptionNo;
 
+    /**
+     * @ORM\Column(name="summary_headline", type="string")
+     *
+     * @Groups({"detail", "full_detail"})
+     */
+    private string $summaryHeadline;
+
     public function getId(): int
     {
         return $this->id;
@@ -188,5 +195,15 @@ class Question implements QuestionInterface
     public function getSummaryOptionNo(): string
     {
         return $this->summaryOptionNo;
+    }
+
+    public function setSummaryHeadline(string $summaryHeadline): void
+    {
+        $this->summaryHeadline = $summaryHeadline;
+    }
+
+    public function getSummaryHeadline(): string
+    {
+        return $this->summaryHeadline;
     }
 }
