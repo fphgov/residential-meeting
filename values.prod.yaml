@@ -5,13 +5,13 @@ php:
     repository: registry.prod.intra.fph.hu/docker/residential-meeting-php
     pullPolicy: IfNotPresent
     tag: "latest"
-  resources: 
-  limits:
-    cpu: 2000m
-    memory: 4Gi
-  requests:
-    cpu: 100m
-    memory: 128Mi
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 nginx:
   image:
@@ -19,12 +19,12 @@ nginx:
     pullPolicy: IfNotPresent
     tag: "latest"
   resources:
-  limits:
-    cpu: 1000m
-    memory: 1Gi
-  requests:
-    cpu: 100m
-    memory: 128Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 env:
   - name: SMTP_NAME
@@ -137,7 +137,7 @@ ingress:
   #      - vote-api.dev.fph.hu
 
 autoscaling:
-  enabled: ture
+  enabled: true
   minReplicas: 5
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
