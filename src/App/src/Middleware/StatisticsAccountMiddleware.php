@@ -11,6 +11,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function strlen;
+
 class StatisticsAccountMiddleware implements MiddlewareInterface
 {
     public function __construct(
@@ -26,7 +28,10 @@ class StatisticsAccountMiddleware implements MiddlewareInterface
     ): ResponseInterface {
         $authCode = $request->getHeaderLine('Authorization');
 
-        if ($authCode !== $this->config['app']['stat']['token']) {
+        if (
+            $authCode !== $this->config['app']['stat']['token'] ||
+            strlen($authCode) === 0
+        ) {
             return new JsonResponse([
                 'message' => 'No authentication',
             ], 401);
