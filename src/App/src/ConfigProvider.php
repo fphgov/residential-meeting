@@ -42,6 +42,8 @@ class ConfigProvider
                 Handler\Question\GetHandler::class            => Handler\Question\GetHandlerFactory::class,
                 Handler\Question\GetAllHandler::class         => Handler\Question\GetAllHandlerFactory::class,
                 Handler\Question\GetNavigationHandler::class  => Handler\Question\GetNavigationHandlerFactory::class,
+                Handler\Stat\GetVoteHandler::class            => Handler\Stat\GetVoteHandlerFactory::class,
+                Model\VoteExportModel::class                  => Model\VoteExportModelFactory::class,
                 Service\AccountServiceInterface::class        => Service\AccountServiceFactory::class,
                 Service\MailQueueServiceInterface::class      => Service\MailQueueServiceFactory::class,
                 Service\UserServiceInterface::class           => Service\UserServiceFactory::class,

@@ -20,6 +20,9 @@ return [
         'newsletter'          => [
             'url'   => 'https://hirlevel.budapest.hu/subscr_api.php',
             'limit' => 20,
-        ]
+        ],
+        'stat'                => [
+            'token' => getenv('APP_STAT_TOKEN')
+        ],
     ],
 ];
