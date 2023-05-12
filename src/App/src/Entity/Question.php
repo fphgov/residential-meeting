@@ -23,7 +23,7 @@ class Question implements QuestionInterface
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @Groups({"list", "option", "detail", "full_detail", "navigation"})
+     * @Groups({"list", "option", "detail", "stat", "full_detail", "navigation"})
      */
     protected int $id;
 

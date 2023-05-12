@@ -55,6 +55,8 @@ env:
     value: https://lakogyules.budapest.hu
   - name: RECAPTCHA_SECRET
     value: _from_google_
+  - name: APP_STAT_TOKEN
+    value: ""
   - name: SMTP_CONNECTION_CONFIG_SSL
     value: ""
   - name: DB_PASSWORD

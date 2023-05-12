@@ -131,3 +131,4 @@ jobs:
             --set env[10].value=${{ secrets.APP_EMAIL }}
             --set env[11].value="${{ secrets.APP_PHONE }}"
             --set env[13].value=${{ secrets.RECAPTCHA_SECRET }}
+            --set env[14].value=${{ secrets.APP_STAT_TOKEN }}

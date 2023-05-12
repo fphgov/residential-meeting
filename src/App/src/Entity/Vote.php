@@ -21,27 +21,29 @@ class Vote implements VoteInterface
      * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @Groups({"list", "option", "detail", "full_detail", "vote_list"})
+     * @Groups({"list", "option", "stat", "detail", "full_detail", "vote_list"})
      */
     protected int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Question", cascade={"persist"})
      * @ORM\JoinColumn(name="question_id", referencedColumnName="id", nullable=true)
+     *
+     * @Groups({"stat", "full_detail"})
      */
     private Question $question;
 
     /**
      * @ORM\Column(name="answer", type="boolean", nullable=true)
      *
-     * @Groups({"full_detail"})
+     * @Groups({"stat", "full_detail"})
      */
     private ?bool $answer;
 
     /**
      * @ORM\Column(name="zip_code", type="string")
      *
-     * @Groups({"full_detail"})
+     * @Groups({"stat", "full_detail"})
      */
     private string $zipCode;
 

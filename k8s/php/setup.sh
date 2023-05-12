@@ -26,3 +26,4 @@ if [ $MODE = "production" ]; then
 fi
 
 mkdir -p data/cache/DoctrineEntityProxy
+chmod 777 -R data/cache/DoctrineEntityProxy

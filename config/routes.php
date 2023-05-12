@@ -40,4 +40,14 @@ return static function (
         App\Middleware\AccountMiddleware::class,
         App\Handler\Vote\AddHandler::class
     ], 'app.api.vote');
+
+    $app->get('/app/api/stat/votes', [
+        App\Middleware\StatisticsAccountMiddleware::class,
+        App\Handler\Stat\GetVoteHandler::class
+    ], 'app.api.stat.votes');
+
+    $app->get('/app/api/stat/history', [
+        App\Middleware\StatisticsAccountMiddleware::class,
+        App\Handler\Stat\GetHistoryHandler::class
+    ], 'app.api.stat.history');
 };
