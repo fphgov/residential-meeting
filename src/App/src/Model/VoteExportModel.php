@@ -39,7 +39,7 @@ final class VoteExportModel implements ExportCsvModelInterface
             $data = [
                 $vote->getId(),
                 $vote->getQuestion()->getId(),
-                $vote->getAnswer(),
+                $this->parseNullBool($vote->getAnswer()),
                 $vote->getZipCode()
             ];
 
@@ -47,5 +47,18 @@ final class VoteExportModel implements ExportCsvModelInterface
         }
 
         return $exportData;
+    }
+
+    private function parseNullBool(?bool $value): ?int
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if ($value === true) {
+            return 1;
+        }
+
+        return 0;
     }
 }
