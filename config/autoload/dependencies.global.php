@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Mezzio\Authorization\Acl\LaminasAcl;
 use Mezzio\Authorization\AuthorizationInterface;
+use RabbitMQ\Interfaces\RabbitMQServiceInterface;
+use RabbitMQ\Service\RabbitMQServiceFactory;
 
 return [
     'dependencies' => [
@@ -30,6 +32,8 @@ return [
 
             // For tests
             App\InputFilter\IdeaInputFilter::class => App\InputFilter\IdeaInputFilterFactory::class,
+
+            RabbitMQServiceInterface::class => RabbitMQServiceFactory::class,
         ],
         'delegators' => [
             Laminas\Stratigility\Middleware\ErrorHandler::class => [

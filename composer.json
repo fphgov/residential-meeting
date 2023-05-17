@@ -12,6 +12,12 @@
             "cweagans/composer-patches": true
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/icetee/laminas-rabbitmq"
+        }
+    ],
     "minimum-stability": "stable",
     "extra": {
         "laminas": {
@@ -45,6 +51,7 @@
         "cweagans/composer-patches": "^1.7",
         "doctrine/annotations": "^1.13",
         "guzzlehttp/guzzle": "^7.5",
+        "icetee/laminas-rabbitmq": "dev-master",
         "laminas/laminas-component-installer": "^2.4",
         "laminas/laminas-config-aggregator": "^1.5",
         "laminas/laminas-db": "^2.12",

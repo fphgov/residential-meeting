@@ -35,7 +35,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "unlink('composer-setup.php');" \
     && mv composer.phar /usr/local/bin/composer
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql zip opcache && \
+RUN docker-php-ext-install mysqli pdo pdo_mysql zip opcache sockets && \
     docker-php-ext-enable opcache
 
 RUN apk add --no-cache cmake freetype libpng libjpeg-turbo freetype-dev libpng-dev libjpeg-turbo-dev && \

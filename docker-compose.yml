@@ -35,6 +35,7 @@ services:
     env_file: .env
     depends_on:
       - db
+      - rabbitmq
     networks:
       - default
 
@@ -53,6 +54,7 @@ services:
       - ./docker/config/cert:/opt/cert
     depends_on:
       - db
+      - rabbitmq
       - webapp
 
   mailhog:
@@ -60,6 +62,19 @@ services:
     ports:
       - 1025:1025 # smtp server
       - 8025:8025 # web ui
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    env_file:
+      - .env
+    environment:
+      RABBITMQ_USERNAME: ~
+      RABBITMQ_PASSWORD: ~
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./data/mq:/bitnami
 
 networks:
   default:

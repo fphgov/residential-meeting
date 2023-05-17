@@ -5,20 +5,19 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Mail;
-use App\Entity\Notification;
 use App\Helper\MailContentHelper;
 use App\Helper\MailContentRawHelper;
 use App\Repository\MailRepository;
-use App\Service\MailQueueServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Laminas\Log\Logger;
 use Mail\MailAdapterInterface;
+use Mail\Entity\EmailNotificationInterface;
 use Mail\Model\EmailContentModelInterface;
 use Throwable;
 
 use function basename;
-use function error_log;
 use function file_get_contents;
 use function getenv;
 
@@ -32,15 +31,13 @@ class MailService implements MailServiceInterface
         private Logger $audit,
         private MailAdapterInterface $mailAdapter,
         private MailContentHelper $mailContentHelper,
-        private MailContentRawHelper $mailContentRawHelper,
-        private MailQueueServiceInterface $mailQueueService
+        private MailContentRawHelper $mailContentRawHelper
     ) {
         $this->em                   = $em;
         $this->audit                = $audit;
         $this->mailAdapter          = $mailAdapter;
         $this->mailContentHelper    = $mailContentHelper;
         $this->mailContentRawHelper = $mailContentRawHelper;
-        $this->mailQueueService     = $mailQueueService;
         $this->mailRepository       = $this->em->getRepository(Mail::class);
     }
 
@@ -70,12 +67,16 @@ class MailService implements MailServiceInterface
         $this->em->flush();
     }
 
-    public function send(string $mailCode, array $tplData, Notification $notification): void
+    public function send(
+        array $tplData,
+        EmailNotificationInterface $notification,
+        bool $useException = false
+    ): void
     {
         $this->mailAdapter->clear();
 
         $mail = $this->mailRepository->findOneBy([
-            'code' => $mailCode,
+            'code' => $notification->getEmailCode(),
         ]);
 
         try {
@@ -90,24 +91,31 @@ class MailService implements MailServiceInterface
             }
 
             $template = $this->mailAdapter->setTemplate(
-                $this->mailContentHelper->create($mailCode, $tplData)
+                $this->mailContentHelper->create($notification->getEmailCode(), $tplData)
             );
 
             if ($layout) {
                 $template->addImage(basename($this->getHeaderImagePath()), $this->getHeaderImagePath());
             }
 
-            $this->mailQueueService->add($notification, $this->mailAdapter);
+            $this->mailAdapter->send();
         } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('Notification no added to MailQueueService', [
-                'extra' => $mailCode . " | " . $notification->getId() . " | " . $e->getMessage(),
+            $this->audit->err('Notification no send', [
+                'extra' => $notification->getEmailCode() . " | " . $notification->getId() . " | " . $e->getMessage(),
             ]);
+
+            if ($useException) {
+                throw new Exception($e->getMessage(), $e->getCode());
+            }
         }
     }
 
-    public function sendRaw(EmailContentModelInterface $emailContentModel, array $tplData, Notification $notification): void
+    public function sendRaw(
+        EmailContentModelInterface $emailContentModel,
+        array $tplData,
+        EmailNotificationInterface $notification,
+        bool $useException = false
+    ): void
     {
         $this->mailAdapter->clear();
 
@@ -130,13 +138,15 @@ class MailService implements MailServiceInterface
                 $template->addImage(basename($this->getHeaderImagePath()), $this->getHeaderImagePath());
             }
 
-            $this->mailQueueService->add($notification, $this->mailAdapter);
+            $this->mailAdapter->send();
         } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $this->audit->err('Notification raw no added to MailQueueService', [
+            $this->audit->err('Notification raw no send', [
                 'extra' => $emailContentModel->getSubject() . " | " . $notification->getId() . " | " . $e->getMessage(),
             ]);
+
+            if ($useException) {
+                throw new Exception($e->getMessage(), $e->getCode());
+            }
         }
     }
 

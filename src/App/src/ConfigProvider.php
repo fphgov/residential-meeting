@@ -47,7 +47,7 @@ class ConfigProvider
                 Model\VoteExportModel::class                  => Model\VoteExportModelFactory::class,
                 Model\StatExportModel::class                  => Model\StatExportModelFactory::class,
                 Service\AccountServiceInterface::class        => Service\AccountServiceFactory::class,
-                Service\MailQueueServiceInterface::class      => Service\MailQueueServiceFactory::class,
+                Service\AmpqServiceInterface::class           => Service\AmpqServiceFactory::class,
                 Service\UserServiceInterface::class           => Service\UserServiceFactory::class,
                 Service\SettingServiceInterface::class        => Service\SettingServiceFactory::class,
                 Service\VoteServiceInterface::class           => Service\VoteServiceFactory::class,

@@ -14,11 +14,12 @@ use App\Entity\VoteInterface;
 use App\Entity\Newsletter;
 use App\Exception\AccountNotVotableException;
 use App\Exception\CloseCampaignException;
-use App\Service\MailServiceInterface;
+use App\Service\AmpqServiceInterface;
 use App\Service\NewsletterServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Laminas\Log\Logger;
+use Mail\Entity\SimpleNotification;
 
 final class VoteService implements VoteServiceInterface
 {
@@ -35,15 +36,13 @@ final class VoteService implements VoteServiceInterface
     private $newsletterRepository;
 
     public function __construct(
-        private array $config,
         private EntityManagerInterface $em,
-        private MailServiceInterface $mailService,
+        private AmpqServiceInterface $mq,
         private Logger $audit,
         private NewsletterServiceInterface $newsletterService
     ) {
-        $this->config                 = $config;
         $this->em                     = $em;
-        $this->mailService            = $mailService;
+        $this->mq                     = $mq;
         $this->newsletterService      = $newsletterService;
         $this->questionRepository     = $this->em->getRepository(Question::class);
         $this->settingRepository      = $this->em->getRepository(Setting::class);
@@ -124,7 +123,13 @@ final class VoteService implements VoteServiceInterface
         $this->em->flush();
 
         if ($successNotification !== null) {
-            $this->successVote($successNotification);
+            $simpleNotification = new SimpleNotification(
+                $successNotification->getId(),
+                $successNotification->getEmail(),
+                'vote-success'
+            );
+
+            $this->mq->add('notification_queue', $simpleNotification);
         }
     }
 
@@ -150,15 +155,5 @@ final class VoteService implements VoteServiceInterface
         }
 
         return false;
-    }
-
-    private function successVote(Notification $successNotification): void
-    {
-        $tplData = [
-            'infoMunicipality' => $this->config['app']['municipality'],
-            'infoEmail'        => $this->config['app']['email'],
-        ];
-
-        $this->mailService->send('vote-success', $tplData, $successNotification);
     }
 }
