@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Mail;
-use App\Entity\Notification;
+use App\Entity\NotificationInterface;
 use App\Helper\MailContentHelper;
 use App\Helper\MailContentRawHelper;
 use App\Repository\MailRepository;
@@ -70,7 +70,7 @@ class MailService implements MailServiceInterface
         $this->em->flush();
     }
 
-    public function send(string $mailCode, array $tplData, Notification $notification): void
+    public function send(string $mailCode, array $tplData, NotificationInterface $notification): void
     {
         $this->mailAdapter->clear();
 
@@ -107,7 +107,7 @@ class MailService implements MailServiceInterface
         }
     }
 
-    public function sendRaw(EmailContentModelInterface $emailContentModel, array $tplData, Notification $notification): void
+    public function sendRaw(EmailContentModelInterface $emailContentModel, array $tplData, NotificationInterface $notification): void
     {
         $this->mailAdapter->clear();
 

@@ -7,4 +7,6 @@ namespace App\Service;
 interface ForgotAccountServiceInterface
 {
     public function checkAvailable(string $districtName): bool;
+
+    public function generateToken(string $email): void;
 }
