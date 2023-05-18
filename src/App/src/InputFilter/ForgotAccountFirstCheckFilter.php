@@ -8,6 +8,8 @@ use Laminas\Filter;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator;
 
+use function strval;
+
 /** phpcs:disable */
 class ForgotAccountFirstCheckFilter extends InputFilter
 {
@@ -59,11 +61,11 @@ class ForgotAccountFirstCheckFilter extends InputFilter
                 ]),
                 new Validator\Callback([
                     'messages' => [
-                        Validator\Callback::INVALID_VALUE    => 'Csak elfogadás utána tudjuk fogadni a patkány bejelentést',
+                        Validator\Callback::INVALID_VALUE    => 'Csak az adatkezelési tájékoztató elfogadás utána tudjuk fogadni az űrlapot',
                         Validator\Callback::INVALID_CALLBACK => 'Ismeretlen hiba',
                     ],
                     'callback' => function ($value) {
-                        return $value === true || $value === "true";
+                        return strval($value) === "true" || strval($value) === "on";
                     },
                 ]),
             ],
