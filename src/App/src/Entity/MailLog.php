@@ -21,9 +21,9 @@ class MailLog implements MailLogInterface
      * @ORM\ManyToOne(targetEntity="Notification")
      * @ORM\JoinColumn(name="notification_id", referencedColumnName="id", nullable=true)
      *
-     * @var Notification
+     * @var NotificationInterface
      */
-    private $notification;
+    private Notification|NotificationInterface|null $notification = null;
 
     /**
      * @ORM\Column(name="message_id", type="string")
@@ -39,12 +39,12 @@ class MailLog implements MailLogInterface
      */
     private $name;
 
-    public function getNotification(): NotificationInterface
+    public function getNotification(): ?NotificationInterface
     {
         return $this->notification;
     }
 
-    public function setNotification(NotificationInterface $notification): void
+    public function setNotification(?NotificationInterface $notification = null): void
     {
         $this->notification = $notification;
     }

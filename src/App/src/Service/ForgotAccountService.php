@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\ForgotAccount;
+use App\Entity\ForgotAccountInterface;
+use App\Entity\NotificationInterface;
 use App\Entity\ForgotDistrict;
+use App\Model\SimpleNotification;
 use App\Repository\ForgotDistrictRepository;
 use App\Service\MailServiceInterface;
+use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Log\Logger;
@@ -43,5 +48,42 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
         }
 
         return false;
+    }
+
+    public function generateToken(string $email): void
+    {
+        $forgotAccount = $this->createToken($email);
+
+        $notification = new SimpleNotification(
+            $forgotAccount->getToken()->toString(),
+            $email
+        );
+
+        $this->sendEmail($notification);
+    }
+
+    private function createToken(string $email): ForgotAccountInterface
+    {
+        $expiration = (new DateTime())->add(new DateInterval("PT24H"));
+
+        $forgotAccount = new ForgotAccount();
+        $forgotAccount->setEmail($email);
+        $forgotAccount->setExpirationDate($expiration);
+
+        $this->em->persist($forgotAccount);
+        $this->em->flush();
+
+        return $forgotAccount;
+    }
+
+    private function sendEmail(NotificationInterface $notification): void
+    {
+        $tplData = [
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'tokenLink'        => $this->config['app']['url'] . '/elfelejtett-kod/' . $notification->getId(),
+        ];
+
+        $this->mailService->send('forgot-account-confirmation', $tplData, $notification);
     }
 }

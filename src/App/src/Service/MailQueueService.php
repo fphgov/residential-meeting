@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\MailLog;
 use App\Entity\MailQueue;
+use App\Entity\Notification;
 use App\Entity\NotificationInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,10 +51,13 @@ final class MailQueueService implements MailQueueServiceInterface
         $date = new DateTime();
 
         $mailQueue = new MailQueue();
-        $mailQueue->setNotification($notification);
         $mailQueue->setMailAdapter($mailAdapter);
         $mailQueue->setCreatedAt($date);
         $mailQueue->setUpdatedAt($date);
+
+        if ($notification instanceof Notification) {
+            $mailQueue->setNotification($notification);
+        }
 
         return $mailQueue;
     }
@@ -102,16 +106,19 @@ final class MailQueueService implements MailQueueServiceInterface
         }
     }
 
-    private function createMailLog(NotificationInterface $notification, MailAdapterInterface $mailAdapter): void
+    private function createMailLog(?NotificationInterface $notification, MailAdapterInterface $mailAdapter): void
     {
         $date = new DateTime();
 
         $mailLog = new MailLog();
-        $mailLog->setNotification($notification);
         $mailLog->setName($mailAdapter->getName());
         $mailLog->setMessageId($mailAdapter->getMessageId());
         $mailLog->setCreatedAt($date);
         $mailLog->setUpdatedAt($date);
+
+        if ($notification instanceof Notification) {
+            $mailLog->setNotification($notification);
+        }
 
         $this->em->persist($mailLog);
     }
