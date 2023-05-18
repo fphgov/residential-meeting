@@ -8,6 +8,7 @@ return [
         'phone'               => str_replace('"', '', getenv('APP_PHONE')),
         'url'                 => str_replace('"', '', getenv('APP_URL')),
         'email'               => str_replace('"', '', getenv('APP_EMAIL')),
+        'forgotEmail'         => str_replace('"', '', getenv('APP_FORGOT_EMAIL')),
         'notification'        => [
             'frequency' => (int)str_replace(['"',"'"], "", getenv('APP_NOTIFICATION_FREQUENCY')),
             'mail'      => [

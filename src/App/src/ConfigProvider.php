@@ -39,6 +39,7 @@ class ConfigProvider
                 Handler\Account\CheckHandler::class           => Handler\Account\CheckHandlerFactory::class,
                 Handler\Account\ForgotCheckHandler::class     => Handler\Account\ForgotCheckHandlerFactory::class,
                 Handler\Account\ForgotFirstHandler::class     => Handler\Account\ForgotFirstHandlerFactory::class,
+                Handler\Account\ForgotSecondHandler::class    => Handler\Account\ForgotSecondHandlerFactory::class,
                 Handler\Vote\AddHandler::class                => Handler\Vote\AddHandlerFactory::class,
                 Handler\Setting\GetHandler::class             => Handler\Setting\GetHandlerFactory::class,
                 Handler\Question\GetHandler::class            => Handler\Question\GetHandlerFactory::class,
