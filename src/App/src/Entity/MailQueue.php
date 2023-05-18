@@ -26,7 +26,7 @@ class MailQueue implements MailQueueInterface
      * @ORM\ManyToOne(targetEntity="Notification")
      * @ORM\JoinColumn(name="notification_id", referencedColumnName="id", nullable=true)
      */
-    private Notification $notification;
+    private Notification|NotificationInterface|null $notification = null;
 
     /**
      * @ORM\Column(name="mail_adapter", type="blob")
@@ -35,12 +35,12 @@ class MailQueue implements MailQueueInterface
      */
     private $mailAdapter;
 
-    public function getNotification(): NotificationInterface
+    public function getNotification(): ?NotificationInterface
     {
         return $this->notification;
     }
 
-    public function setNotification(NotificationInterface $notification): void
+    public function setNotification(?NotificationInterface $notification = null): void
     {
         $this->notification = $notification;
     }
