@@ -10,6 +10,8 @@ interface ForgotAccountServiceInterface
 {
     public function checkAvailable(string $districtName): bool;
 
+    public function checkValidToken(string $token): bool;
+
     public function generateToken(string $email): void;
 
     public function storeAccountRequest(string $token, UploadedFile $file): void;
