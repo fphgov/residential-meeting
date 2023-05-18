@@ -1,4 +1,5 @@
 * * * * * /usr/local/bin/php -f /var/www/html/bin/cron/clear-expired-media.php
+* * * * * /usr/local/bin/php -f /var/www/html/bin/cron/clear-expired-forgot-account.php
 * * * * * /usr/local/bin/php -f /var/www/html/bin/cron/newsletters.php
 * * * * * /usr/local/bin/php -f /var/www/html/bin/cron/notifications.php
 * * * * * sleep 15; /usr/local/bin/php -f /var/www/html/bin/cron/notifications.php
