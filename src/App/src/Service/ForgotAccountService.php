@@ -87,6 +87,7 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
         );
 
         $this->sendForgotEmail($forgotAccount->getEmail(), $notification, $filename);
+        $this->sendForgotSuccessEmail($notification, $filename);
         $this->removeForgotAccount($forgotAccount);
     }
 
@@ -131,5 +132,16 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
         ];
 
         $this->mailService->send('forgot-account-request', $tplData, $notification);
+    }
+
+    private function sendForgotSuccessEmail(NotificationInterface $notification, string $filename): void
+    {
+        $tplData = [
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'imageLink'        => $this->config['app']['url'] . '/files/' . $filename,
+        ];
+
+        $this->mailService->send('forgot-account-success', $tplData, $notification);
     }
 }
