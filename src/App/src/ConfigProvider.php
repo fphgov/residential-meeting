@@ -37,6 +37,7 @@ class ConfigProvider
             'delegators' => [],
             'factories'  => [
                 Handler\Account\CheckHandler::class           => Handler\Account\CheckHandlerFactory::class,
+                Handler\Account\ForgotCheckHandler::class     => Handler\Account\ForgotCheckHandlerFactory::class,
                 Handler\Vote\AddHandler::class                => Handler\Vote\AddHandlerFactory::class,
                 Handler\Setting\GetHandler::class             => Handler\Setting\GetHandlerFactory::class,
                 Handler\Question\GetHandler::class            => Handler\Question\GetHandlerFactory::class,
@@ -47,6 +48,7 @@ class ConfigProvider
                 Model\VoteExportModel::class                  => Model\VoteExportModelFactory::class,
                 Model\StatExportModel::class                  => Model\StatExportModelFactory::class,
                 Service\AccountServiceInterface::class        => Service\AccountServiceFactory::class,
+                Service\ForgotAccountServiceInterface::class  => Service\ForgotAccountServiceFactory::class,
                 Service\MailQueueServiceInterface::class      => Service\MailQueueServiceFactory::class,
                 Service\UserServiceInterface::class           => Service\UserServiceFactory::class,
                 Service\SettingServiceInterface::class        => Service\SettingServiceFactory::class,
@@ -64,8 +66,9 @@ class ConfigProvider
     {
         return [
             'factories'  => [
-                InputFilter\AccountCheckFilter::class => InputFilter\AccountCheckFilterFactory::class,
-                InputFilter\VoteFilter::class         => InputFilter\VoteFilterFactory::class,
+                InputFilter\AccountCheckFilter::class        => InputFilter\AccountCheckFilterFactory::class,
+                InputFilter\ForgotDistrictCheckFilter::class => InputFilter\ForgotDistrictCheckFilterFactory::class,
+                InputFilter\VoteFilter::class                => InputFilter\VoteFilterFactory::class,
             ],
             'invokables' => [],
         ];
