@@ -59,7 +59,7 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
             $email
         );
 
-        $this->sendEmail($notification);
+        $this->sendTokenEmail($notification);
     }
 
     private function createToken(string $email): ForgotAccountInterface
@@ -76,7 +76,7 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
         return $forgotAccount;
     }
 
-    private function sendEmail(NotificationInterface $notification): void
+    private function sendTokenEmail(NotificationInterface $notification): void
     {
         $tplData = [
             'infoMunicipality' => $this->config['app']['municipality'],
