@@ -17,20 +17,11 @@ return static function (
         $app->post('/app/api/account/check', [
             App\Handler\Account\CheckHandler::class
         ], 'app.api.account.check');
-
-        $app->post('/app/api/account/forgot/check', [
-            App\Handler\Account\ForgotCheckHandler::class
-        ], 'app.api.account.forgot.check');
     } else {
         $app->post('/app/api/account/check', [
             \Middlewares\Recaptcha::class,
             App\Handler\Account\CheckHandler::class
         ], 'app.api.account.check');
-
-        $app->post('/app/api/account/forgot/check', [
-            \Middlewares\Recaptcha::class,
-            App\Handler\Account\ForgotCheckHandler::class
-        ], 'app.api.account.forgot.check');
     }
 
     $app->get('/app/api/question/{id:\d+}', [
