@@ -58,6 +58,19 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
         return false;
     }
 
+    public function checkValidToken(string $token): bool
+    {
+        $forgotAccount = $this->forgotAccountRepository->findOneBy([
+            'token' => $token,
+        ]);
+
+        if (!$forgotAccount) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function generateToken(string $email): void
     {
         $forgotAccount = $this->createToken($email);
