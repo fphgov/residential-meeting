@@ -31,3 +31,4 @@ fi
 
 mkdir -p data/cache/DoctrineEntityProxy
 chmod 777 -R data/cache/DoctrineEntityProxy
+chmod 777 -R public/files/

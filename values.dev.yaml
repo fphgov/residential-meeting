@@ -48,7 +48,9 @@ env:
   - name: APP_MUNICIPALITY
     value: "Budapest Főpolgármesteri Hivatal"
   - name: APP_EMAIL
-    value: ugyfelszolgalat@onkormanyzat.hu
+    value: info.lakogyules@budapest.hu
+  - name: APP_FORGOT_EMAIL
+    value: kod.lakogyules@budapest.hu
   - name: APP_PHONE
     value: 06-1-000-0001
   - name: APP_URL

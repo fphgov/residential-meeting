@@ -25,6 +25,10 @@ return static function (
         $app->post('/app/api/account/forgot/first', [
             App\Handler\Account\ForgotFirstHandler::class
         ], 'app.api.account.forgot.first');
+
+        $app->post('/app/api/account/forgot/second', [
+            App\Handler\Account\ForgotSecondHandler::class
+        ], 'app.api.account.forgot.second');
     } else {
         $app->post('/app/api/account/check', [
             \Middlewares\Recaptcha::class,
@@ -40,6 +44,11 @@ return static function (
             \Middlewares\Recaptcha::class,
             App\Handler\Account\ForgotFirstHandler::class
         ], 'app.api.account.forgot.first');
+
+        $app->post('/app/api/account/forgot/second', [
+            \Middlewares\Recaptcha::class,
+            App\Handler\Account\ForgotSecondHandler::class
+        ], 'app.api.account.forgot.second');
     }
 
     $app->get('/app/api/question/{id:\d+}', [
