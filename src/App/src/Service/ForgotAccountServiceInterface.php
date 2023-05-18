@@ -12,5 +12,5 @@ interface ForgotAccountServiceInterface
 
     public function generateToken(string $email): void;
 
-    public function storeAccountRequest(string $token, UploadedFile $media): void;
+    public function storeAccountRequest(string $token, UploadedFile $file): void;
 }

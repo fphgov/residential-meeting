@@ -77,4 +77,8 @@ return static function (
         App\Middleware\StatisticsAccountMiddleware::class,
         App\Handler\Stat\GetHistoryHandler::class
     ], 'app.api.stat.history');
+
+    $app->get('/app/api/media/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
+        App\Handler\Media\GetHandler::class
+    ], 'app.api.media.show');
 };
