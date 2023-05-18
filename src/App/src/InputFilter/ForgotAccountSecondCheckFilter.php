@@ -102,33 +102,6 @@ class ForgotAccountSecondCheckFilter extends InputFilter
                 ]),
             ],
         ]);
-
-        $this->add([
-            'name'        => 'privacy',
-            'allow_empty' => false,
-            'validators'  => [
-                new Validator\NotEmpty([
-                    'messages' => [
-                        Validator\NotEmpty::IS_EMPTY => 'Kötelező a mező kitöltése',
-                        Validator\NotEmpty::INVALID  => 'Hibás mező tipus',
-                    ],
-                ]),
-                new Validator\Callback([
-                    'messages' => [
-                        Validator\Callback::INVALID_VALUE    => 'Csak az adatkezelési tájékoztató elfogadás utána tudjuk fogadni az űrlapot',
-                        Validator\Callback::INVALID_CALLBACK => 'Ismeretlen hiba',
-                    ],
-                    'callback' => function ($value) {
-                        return strval($value) === "true" || strval($value) === "on";
-                    },
-                ]),
-            ],
-            'filters'     => [
-                new Filter\Boolean([
-                    'casting' => false,
-                ]),
-            ],
-        ]);
     }
 }
 /** phpcs:enable */
