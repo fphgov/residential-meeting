@@ -93,6 +93,19 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
         $this->removeForgotAccount($forgotAccount);
     }
 
+    public function process(): void
+    {
+        $forgotAccounts = $this->forgotAccountRepository->getExpiredForgotAccounts(
+            new DateTime()
+        );
+
+        foreach ($forgotAccounts as $forgotAccount) {
+            $this->em->remove($forgotAccount);
+        }
+
+        $this->em->flush();
+    }
+
     private function storeMedia(UploadedFile $file): Media
     {
         $expiration = (new DateTime())->add(new DateInterval("PT72H"));
