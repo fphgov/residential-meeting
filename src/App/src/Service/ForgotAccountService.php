@@ -9,16 +9,22 @@ use App\Entity\ForgotAccountInterface;
 use App\Entity\NotificationInterface;
 use App\Entity\ForgotDistrict;
 use App\Model\SimpleNotification;
+use App\Repository\ForgotAccountRepository;
 use App\Repository\ForgotDistrictRepository;
 use App\Service\MailServiceInterface;
+use App\Exception\TokenInvalidException;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Laminas\Diactoros\UploadedFile;
 use Laminas\Log\Logger;
+
+use function basename;
 
 final class ForgotAccountService implements ForgotAccountServiceInterface
 {
     private ForgotDistrictRepository $forgotDistrictRepository;
+    private ForgotAccountRepository $forgotAccountRepository;
 
     public function __construct(
         private array $config,
@@ -31,6 +37,7 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
         $this->audit                    = $audit;
         $this->mailService              = $mailService;
         $this->forgotDistrictRepository = $this->em->getRepository(ForgotDistrict::class);
+        $this->forgotAccountRepository  = $this->em->getRepository(ForgotAccount::class);
     }
 
     public function checkAvailable(string $districtName): bool
@@ -62,6 +69,27 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
         $this->sendTokenEmail($notification);
     }
 
+    public function storeAccountRequest(string $token, UploadedFile $media): void
+    {
+        $filename = basename($media->getStream()->getMetaData('uri'));
+
+        $forgotAccount = $this->forgotAccountRepository->findOneBy([
+            'token' => $token
+        ]);
+
+        if (!$forgotAccount) {
+            throw new TokenInvalidException('Not found token');
+        }
+
+        $notification = new SimpleNotification(
+            $forgotAccount->getToken()->toString(),
+            $this->config['app']['forgotEmail']
+        );
+
+        $this->sendForgotEmail($forgotAccount->getEmail(), $notification, $filename);
+        $this->removeForgotAccount($forgotAccount);
+    }
+
     private function createToken(string $email): ForgotAccountInterface
     {
         $expiration = (new DateTime())->add(new DateInterval("PT24H"));
@@ -76,6 +104,12 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
         return $forgotAccount;
     }
 
+    private function removeForgotAccount(ForgotAccount $forgotAccount): void
+    {
+        $this->em->remove($forgotAccount);
+        $this->em->flush();
+    }
+
     private function sendTokenEmail(NotificationInterface $notification): void
     {
         $tplData = [
@@ -85,5 +119,17 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
         ];
 
         $this->mailService->send('forgot-account-confirmation', $tplData, $notification);
+    }
+
+    private function sendForgotEmail(string $originalEmail, NotificationInterface $notification, string $filename): void
+    {
+        $tplData = [
+            'infoMunicipality' => $this->config['app']['municipality'],
+            'infoEmail'        => $this->config['app']['email'],
+            'email'            => $originalEmail,
+            'imageLink'        => $this->config['app']['url'] . '/files/' . $filename,
+        ];
+
+        $this->mailService->send('forgot-account-request', $tplData, $notification);
     }
 }
