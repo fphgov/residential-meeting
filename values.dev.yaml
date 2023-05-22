@@ -54,7 +54,7 @@ env:
   - name: APP_PHONE
     value: 06-1-000-0001
   - name: APP_URL
-    value: https://lakogyules.budapest.hu
+    value: https://lakogyules-szavazas.dev.intra.fph.hu
   - name: RECAPTCHA_SECRET
     value: _from_google_
   - name: APP_STAT_TOKEN
@@ -151,7 +151,7 @@ tolerations: []
 
 affinity: {}
 
-volumes: 
+volumes:
   - name: app-storage-vol
     mountPath: /var/www/html/public/files
     claimName: app-storage
