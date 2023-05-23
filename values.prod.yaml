@@ -97,6 +97,8 @@ env:
     value: /var/www/html/public/email
   - name: NODE_ENV
     value: production
+  - name: APP_UPLOAD
+    value: /var/www/html/public/files
 
 imagePullSecrets: []
 nameOverride: ""
