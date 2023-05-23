@@ -101,8 +101,13 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
             $this->config['app']['forgotEmail']
         );
 
+        $notificationAccount = new SimpleNotification(
+            $forgotAccount->getToken()->toString(),
+            $forgotAccount->getEmail()
+        );
+
         $this->sendForgotEmail($forgotAccount->getEmail(), $notification, $mediaId);
-        $this->sendForgotSuccessEmail($notification, $mediaId);
+        $this->sendForgotSuccessEmail($notificationAccount, $mediaId);
         $this->removeForgotAccount($forgotAccount);
     }
 
