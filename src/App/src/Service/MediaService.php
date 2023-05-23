@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\Media;
 use App\Entity\MediaInterface;
 use DateTime;
+use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Stream;
 use Psr\Http\Message\StreamInterface;
@@ -49,6 +50,14 @@ final class MediaService implements MediaServiceInterface
     public function getMediaStream(MediaInterface $media): StreamInterface
     {
         $filePath = getenv('APP_UPLOAD') . '/' . $media->getFilename();
+
+        if ($media->getExpirationDate() === null) {
+            $expiration = (new DateTime())->add(new DateInterval("PT24H"));
+
+            $media->setExpirationDate($expiration);
+
+            $this->em->flush();
+        }
 
         return new Stream($filePath);
     }

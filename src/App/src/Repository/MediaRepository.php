@@ -15,7 +15,7 @@ final class MediaRepository extends EntityRepository
 
         $qb
             ->where('m.expirationDate <= :date')
-            ->orWhere('m.expirationDate IS NULL')
+            ->andWhere('m.expirationDate IS NOT NULL')
             ->setParameters([
                 'date' => $date,
             ]);
