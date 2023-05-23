@@ -126,14 +126,11 @@ final class ForgotAccountService implements ForgotAccountServiceInterface
 
     private function storeMedia(UploadedFile $file): Media
     {
-        $expiration = (new DateTime())->add(new DateInterval("PT24H"));
-
         $filename = basename($file->getStream()->getMetaData('uri'));
 
         $media = new Media();
         $media->setFilename($filename);
         $media->setType($file->getClientMediaType());
-        $media->setExpirationDate($expiration);
 
         $this->em->persist($media);
 
