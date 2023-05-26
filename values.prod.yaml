@@ -154,3 +154,10 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+volumes:
+  - name: app-storage-vol
+    mountPath: /var/www/html/public/files
+    claimName: app-storage
+    usePhp: true
+    useNginx: false
