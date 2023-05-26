@@ -63,6 +63,14 @@ final class MediaService implements MediaServiceInterface
             $this->em->flush();
         }
 
+        if ($media->getExpirationDate() === null) {
+            $expiration = (new DateTime())->add(new DateInterval("PT24H"));
+
+            $media->setExpirationDate($expiration);
+
+            $this->em->flush();
+        }
+
         return new Stream($filePath);
     }
 
