@@ -10,9 +10,13 @@ use DateTime;
 use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Diactoros\Stream;
+use Imagick;
+use Exception;
 use Psr\Http\Message\StreamInterface;
 
 use function unlink;
+use function pathinfo;
+use function fopen;
 
 final class MediaService implements MediaServiceInterface
 {
@@ -49,7 +53,7 @@ final class MediaService implements MediaServiceInterface
 
     public function getMediaStream(MediaInterface $media): StreamInterface
     {
-        $filePath = getenv('APP_UPLOAD') . '/' . $media->getFilename();
+        $filePath = $this->checkImage($media);
 
         if ($media->getExpirationDate() === null) {
             $expiration = (new DateTime())->add(new DateInterval("PT24H"));
@@ -60,5 +64,53 @@ final class MediaService implements MediaServiceInterface
         }
 
         return new Stream($filePath);
+    }
+
+    private function checkImage(MediaInterface $media): string
+    {
+        $filePath = getenv('APP_UPLOAD') . '/' . $media->getFilename();
+
+        $uploadedImage = fopen($filePath, 'rb');
+
+        $image = new Imagick();
+        $image->readImageFile($uploadedImage);
+
+        if (! $image->valid()) {
+            throw new Exception('Image not valid');
+        }
+
+        return $this->normalizeImage($image, $media, $filePath);
+    }
+
+    private function normalizeImage(
+        Imagick $image,
+        MediaInterface $media,
+        string $filePath
+    ): string
+    {
+        $filename = pathinfo($filePath, PATHINFO_FILENAME);
+
+        $mimeType = $image->getImageMimeType();
+
+        if (in_array($mimeType, ["image/avif", "image/heic"])) {
+            $newImageBasename = $filename . '.jpeg';
+            $newImagePath     = getenv('APP_UPLOAD') . '/' . $newImageBasename;
+
+            $image->setImageFormat('jpeg');
+            $image->writeImage($newImagePath);
+            $image->clear();
+            $image->destroy();
+
+            $media->setFilename($newImageBasename);
+            $media->setType('image/jpeg');
+
+            unlink($filePath);
+
+            $this->em->flush();
+
+            return $newImagePath;
+        }
+
+        return $filePath;
     }
 }
