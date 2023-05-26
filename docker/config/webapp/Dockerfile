@@ -48,6 +48,14 @@ RUN apk add --no-cache cmake freetype libpng libjpeg-turbo freetype-dev libpng-d
   NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) && \
   docker-php-ext-install -j${NPROC} gd
 
+RUN set -ex \
+    && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS imagemagick-dev libtool \
+    && export CFLAGS="$PHP_CFLAGS" CPPFLAGS="$PHP_CPPFLAGS" LDFLAGS="$PHP_LDFLAGS" \
+    && pecl install imagick-3.7.0 \
+    && docker-php-ext-enable imagick \
+    && apk add --no-cache --virtual .imagick-runtime-deps imagemagick \
+    && apk del .phpize-deps
+
 # Install Xdebug
 RUN apk add --no-cache $PHPIZE_DEPS && pecl install xdebug-3.1.5; \
     docker-php-ext-enable xdebug;
