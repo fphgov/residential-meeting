@@ -61,7 +61,7 @@ class ForgotAccountFirstCheckFilter extends InputFilter
                 ]),
                 new Validator\Callback([
                     'messages' => [
-                        Validator\Callback::INVALID_VALUE    => 'Csak az adatkezelési tájékoztató tudomásulvétele utána tudjuk fogadni az űrlapot',
+                        Validator\Callback::INVALID_VALUE    => 'Csak az adatkezelési tájékoztató tudomásulvétele után tudjuk fogadni az űrlapot',
                         Validator\Callback::INVALID_CALLBACK => 'Ismeretlen hiba',
                     ],
                     'callback' => function ($value) {
