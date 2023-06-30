@@ -13,4 +13,8 @@ interface NotificationInterface
     public function setEmail(string $email): void;
 
     public function getEmail(): string;
+
+    public function setSend(bool $send): void;
+
+    public function getSend(): bool;
 }

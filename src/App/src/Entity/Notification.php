@@ -29,6 +29,9 @@ class Notification implements NotificationInterface
     /** @ORM\Column(name="email", type="string", length=200, unique=true, nullable=true) */
     private string $email;
 
+    /** @ORM\Column(name="send", type="boolean", length=200, nullable=false) */
+    private bool $send = false;
+
     public function getId(): string
     {
         return $this->id;
@@ -47,5 +50,15 @@ class Notification implements NotificationInterface
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    public function setSend(bool $send): void
+    {
+        $this->send = $send;
+    }
+
+    public function getSend(): bool
+    {
+        return $this->send;
     }
 }

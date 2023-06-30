@@ -30,7 +30,9 @@ $mailService = $container->get(MailServiceInterface::class);
 $notificationRepository = $em->getRepository(Notification::class);
 
 try {
-    $notificationClients = $notificationRepository->findAll();
+    $notificationClients = $notificationRepository->findBy([
+        'send' => false,
+    ]);
 
     foreach ($notificationClients as $client) {
         $notification = new SimpleNotification(
@@ -38,7 +40,15 @@ try {
             $client->getEmail()
         );
 
+        echo $client->getId() . "\n";
+
         $mailService->send('result-notification', [], $notification);
+
+        $client->setSend(true);
+
+        $em->flush();
+
+        usleep(250000); # 0.25 sec
     }
 } catch (\Throwable $th) {
     error_log($th->getMessage());
