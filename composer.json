@@ -67,7 +67,7 @@
         "mezzio/mezzio-helpers": "^5.5.1",
         "middlewares/recaptcha": "^2.0",
         "mustache/mustache": "^2.14",
-        "phpoffice/phpspreadsheet": "^1.17.1",
+        "phpoffice/phpspreadsheet": "^2.2.1",
         "ramsey/uuid": "^4.7.4",
         "ramsey/uuid-doctrine": "^2.0.0",
         "roave/psr-container-doctrine": "^3.5.0",
